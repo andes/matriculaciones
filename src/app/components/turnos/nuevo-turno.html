@@ -1,0 +1,31 @@
+<plex-box title="Fecha y Hora del Turno"  type="{{boxType}}" >
+    <div class="row">
+        <div class="col-lg-12" *ngIf="turnoElegido">
+            <h2>{{ lblTurno }}</h2>
+        </div>
+    </div>
+    <div class="row" *ngIf="!turnoElegido">
+        <div class="col-sm-4">
+            <div #div class="datepicker"></div>
+            <input #input type="hidden">
+        </div>
+        <div class="col-sm-8" *ngIf="fechaElegida != undefined">
+            <span style="height: 40px; display: block"></span>
+            <div *ngFor="let turno of horariosDisponibles; let idx = index">
+                <div class="btn-group btn-group-justified" *ngIf="idx % 3 == 0">
+                    <button *ngFor="let i of [0, 1, 2]" [disabled]="horariosDisponibles[idx + i] && horariosDisponibles[idx + i].ocupado" style="width: 33%" class="btn btn-primary" (click)="buildFechaTurno(horariosDisponibles[idx + i])">
+                        <span *ngIf="horariosDisponibles[idx + i]">
+                            {{ horariosDisponibles[idx + i].hora }}:{{ (horariosDisponibles[idx + i].minutos == 0) ? '00' : horariosDisponibles[idx + i].minutos }}
+                        </span>
+                    </button>                    
+                </div>                    
+            </div>
+        </div>
+    </div>
+    <div class="row" *ngIf="!turnoElegido">
+        <div class="col-sm-12">
+            <button class="btn btn-success pull-right" style="margin-right: 8px; margin-top: 8px" (click)="confirmTurno()">Confirmar Turno</button>
+        </div>
+    </div>
+    
+</plex-box>

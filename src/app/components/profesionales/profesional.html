@@ -1,0 +1,123 @@
+<form [formGroup]="formProfesionalComp">
+<plex-box title="Datos del Profesional">
+
+
+    <plex-box title="Datos Generales">
+        <div class="row">
+            <div class="col-md-6">
+                <plex-text label="Apellidos" formControlName="apellidos"></plex-text>
+            </div>
+            <div class="col-md-6">
+                <plex-text label="Nombres" formControlName="nombres"></plex-text>
+            </div>            
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <plex-select label="Sexo" formControlName="sexo" [data]="sexos"></plex-select>
+            </div>
+            <div class="col-md-4">
+                <plex-select label="Estado Civíl" formControlName="estadoCivil" [data]="estadosCiviles"></plex-select>
+            </div>
+            <div class="col-md-4">
+                <plex-select label="Nacionalidad" formControlName="nacionalidad" (get-data)="loadPaises($event)"></plex-select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <plex-int label="C.U.I.T. / C.U.I.L." formControlName="cuitCuil"></plex-int>
+            </div>
+            <div class="col-md-4">
+                <plex-datetime type="date" label="Fecha de Nacimiento" formControlName="fechaNacimiento"></plex-datetime>
+            </div>
+            <div class="col-md-4">
+                <plex-text label="Lugar de Nacimiento" formControlName="lugarNacimiento"></plex-text>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <plex-int label="Nº de Documento" formControlName="documentoNumero"></plex-int>
+            </div>
+            <div class="col-md-4">
+                <plex-datetime type="date" label="Vencimiento" formControlName="documentoVencimiento"></plex-datetime>
+            </div>
+            
+        </div>    
+
+    </plex-box>
+
+    <plex-box title="Datos de Contacto">    
+        <div class="row" formArrayName="contactos">
+            <div class="col-md-4" *ngFor="let contacto of formProfesionalComp.controls.contactos.controls; let idx = index">
+                <div [formGroupName]="idx">
+                    <input type="hidden" formControlName="tipo" />
+                    <input type="hidden" formControlName="rank" />
+                    <input type="hidden" formControlName="ultimaActualizacion" />
+                    <input type="hidden" formControlName="activo" />
+                    <plex-text label="{{ contacto.value.tipo }}" formControlName="valor"></plex-text>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row" formArrayName="domicilios">
+            <div class="col-md-12">            
+                <div class="row" *ngFor="let domicilio of formProfesionalComp.controls.domicilios.controls; let idx = index">
+                    <div class="col-md-12" [formGroupName]="idx">
+                        <h5>Domicilio {{domicilio.value.tipo}}</h5>
+                        <input type="hidden" formControlName="tipo" />
+                        <input type="hidden" formControlName="activo" />
+                        <div class="row">
+                            <div class="col-md-9">
+                                <plex-text label="Dirección" formControlName="valor"></plex-text>
+                            </div>
+                            <div class="col-md-3">
+                                <plex-text label="Código Postal" formControlName="codigoPostal"></plex-text>
+                            </div>
+                        </div>
+                        <div class="row" formGroupName="ubicacion">
+                            <div class="col-md-4">
+                                <plex-select label="País" formControlName="pais" [data]="paises" (get-data)="loadPaises($event)"></plex-select>
+                            </div>
+                            <div class="col-md-4">
+                            <plex-select label="Provincia" formControlName="provincia" (get-data)="loadProvincias($event, domicilio.controls.ubicacion.controls.pais)"></plex-select>
+                            </div>
+                            <div class="col-md-4">
+                                <plex-select label="Localidad" formControlName="localidad" (get-data)="loadLocalidades($event, domicilio.controls.ubicacion.controls.provincia)"></plex-select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+        </div>
+    </plex-box>
+
+<!--
+-->
+    <plex-box title="Profesión">
+        <div class="row">
+            <div class="col-md-4">
+                <plex-select label="Profesión" formControlName="profesion" (get-data)="loadProfesiones($event)"></plex-select>
+            </div>
+            <div class="col-md-4">
+                <plex-text label="Título" formControlName="titulo"></plex-text>
+            </div>
+            <div class="col-md-4">
+                <plex-datetime type="date" label="Fecha de Egreso" formControlName="fechaEgreso"></plex-datetime>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <plex-select label="Entidad Formadora" formControlName="entidadFormadora" (change)="showOtra(formProfesionalComp.controls.entidadFormadora)" (get-data)="loadEntidadesFormadoras($event)"></plex-select>
+            </div>
+            <div class="col-md-4" *ngIf="showOtraEntidadFormadora">
+                <plex-text label="Otra Entidad Formadora" formControlName="otraEntidadFormadora"></plex-text>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <plex-button type="success" label="Confirmar Datos" (click)="confirmarDatos(formProfesionalComp.value, formProfesionalComp.valid)" class="pull-right"></plex-button>
+            </div>
+        </div>
+
+    </plex-box>
+</plex-box>
+</form>

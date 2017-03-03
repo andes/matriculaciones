@@ -1,0 +1,65 @@
+<div class="row">
+    <div class="col-sm-12">
+        <h3>Requisitos para Matriculación de Profesionales Técnicos y Auxiliares</h3>
+	  <h4><i class="glyphicon glyphicon-info-sign"></i> Información</h4>
+      <ul class="requisitos-check">
+          <li>
+	        a) Presentación de la "Planilla de Turno Otorgado", con los datos pre-incorporados por el usuario de conformidad a lo establecido sobre el particular, la que deberá ser firmada por el peticionante delante del agente matriculador a modo de Declaración Jurada.
+          </li>
+          <li>
+	        b) Acreditación de Identidad presentando el original del Documento Nacional de Identidad, Libreta de Enrolamiento o Libreta Cívica. Sólo en casos de excepción fundada será aceptada la acreditación de identidad por medio de la Cédula de Identidad, en vigencia y expedida conforme la normativa MERCOSUR.
+          </li>
+          <li>
+            c) Fotocopia del Documento Nacional de Identidad, Libreta de Enrolamiento o Libreta Cívica, hojas 1, 2, la correspondiente al último cambio de domicilio y la correspondiente a la fecha del vencimiento del mismo, en caso de no contar con Residencia Permanente. Si excepcionalmente se aceptare la presentación de la Cédula de Identidad MERCOSUR, deberá presentar fotocopia de ambas caras de la misma, acompañando fotocopia del Certificado o Denuncia Policial o Exposición Civil de pérdida o sustracción del Documento Nacional de Identidad.
+          </li>
+          <li>
+            d) Original del Título/Diploma de Técnico o Auxiliar, previa y debidamente legalizado por la Entidad Formadora que lo expidió. El Título o Diploma deberá estar legalizado por el Ministerio de Educación de la Jurisdicción que lo expidió, y deberá además estar legalizado por el MINISTERIO DEL INTERIOR, sito en la calle 25 de Mayo Nº 179 Planta Baja de la Ciudad de Buenos Aires.
+          </li>
+          <li>
+            e) Fotocopia doble faz en tamaño A4 del Título/Diploma de egreso debidamente certificado ante escribano público.
+          </li>
+          <li>
+            f) Fotocopia de constancia de número de CUIT o CUIL.
+          </li>
+          <li>
+            g) Quienes cuenten con matrículas otorgadas por otras jurisdicciones del país, deberán presentar Certificado de Ética Profesional actualizado y extendido por Autoridad Sanitaria o Colegios Profesionales de dichas jurisdicciones (de todas en las que se encuentre registrado), o en su defecto podrá presentarse la norma legal de baja de dichas matrículas.
+          </li>
+          <li>
+            h) Los Agentes de Propaganda Médica (APM) además deberán presentar una declaración jurada ante escribano público, dejando constancia de no estar inhibido para ejercer el comercio.
+          </li>
+          <li>
+            i) Declaración de Domicilio Real, no pudiendo establecerse en dependencias públicas o privadas donde realiza su actividad.
+          </li>
+          <li>
+            j) Además de cumplimentar el punto i), el profesional deberá constituir Domicilio Legal o Profesional, al solo efecto de cursar en éste las notificaciones que pudieren corresponder.
+          </li>
+          <li>
+            k) Declaración del número de teléfono de línea.
+          </li>
+          <li>
+            l) Declaración del número de teléfono celular.
+          </li>
+          <li>
+            m) Dirección de correo electrónico.
+          </li>
+          <li>
+            n) Abonar el arancel establecido para el trámite de matriculación que corresponda al grado de Tecnicatura o al grado de Auxiliar, conforme la titulación del tramitante.
+          </li>
+      </ul>
+      <p>
+        Nota: Los datos requeridos en los puntos h), i), j), k) y l) serán consignados en la “planilla de turno otorgado”, la que al ser firmada en presencia del agente matriculador adquiere la característica de Declaración Jurada; por tal motivo no es necesaria la presentación de ninguna otra documentación relacionada con los mencionados ítems.
+      </p>
+    </div>
+</div>
+<form>
+    <div class="row">
+        <div class="col-sm-12" style="text-align: center; margin-top: 15px;">
+            <plex-bool [(ngModel)]="terminosLeidos" label="He leído y acepto los requisitos" name="terminosLeidos"></plex-bool><br />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12" style="text-align: center; margin-top: 15px;">
+            <plex-button label="Solicitar Turno" type="primary" [disabled]="!terminosLeidos" (click)="onClick()"></plex-button>
+        </div>
+    </div>
+</form>

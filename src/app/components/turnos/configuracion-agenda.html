@@ -1,0 +1,46 @@
+<form [formGroup]="configForm">
+    <input type="hidden" formControlName="id" />
+    <plex-box title="Configuración de Turnos" type="{{boxType}}">
+        <div class="row">
+            <div class="col-md-12">                
+                <plex-select label="Días Habilitados" formControlName="diasHabilitados" [data]="dias" [multiple]="true"></plex-select>                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">                
+                <plex-int label="Horario de Inicio" formControlName="horarioInicioTurnos"></plex-int>                
+            </div>
+            <div class="col-md-6">                
+                <plex-int label="Horario de Fin" formControlName="horarioFinTurnos"></plex-int>                
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <plex-int label="Duración de los Turnos (En minutos)" formControlName="duracionTurno"></plex-int>
+            </div>
+            <div class="col-md-4">                
+                <plex-datetime label="Nueva Fecha" type="date" formControlName="nuevaFechaEximida"></plex-datetime>
+            </div>
+            <div class="col-md-2">
+                <label>&nbsp;</label>
+                <br>
+                <plex-button label="Agregar Fecha" (click)="agregarFeriado()"></plex-button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <label class="control-label">Feriados</label>
+                <ul class="horizontal-list" style="margin-bottom: 20px; margin-left: -40px;">
+                    <li *ngFor="let fecha of feriados; let idx = index">{{ fecha | date:"dd/MM/yyyy" }}
+                        <plex-button icon="delete" type="xs" (click)="eliminarFeriado(idx)"></plex-button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <plex-button (click)="guardarConfiguracion(configForm.value, configForm.valid)" label="Guardar" type="primary"></plex-button>
+            </div>
+        </div>
+    </plex-box>
+</form>

@@ -40,4 +40,3 @@ testem.log
 Thumbs.db
 
 .vscode/launch.json
-*.js

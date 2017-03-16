@@ -6,6 +6,7 @@ import {
 } from './../utils/enumerados';
 
 export interface IProfesional {
+    _id: string;
     cuitCuil: string;
     apellidos: string;
     nombres: string;
@@ -13,7 +14,10 @@ export interface IProfesional {
     documentoVencimiento: Date;
     lugarNacimiento: string;
     fechaNacimiento: Date;
-    nacionalidad: string;
+    nacionalidad: {
+        nombre: string;
+        codigo: number;
+    };
     sexo: Sexo;
     estadoCivil: EstadoCivil;
     contacto: [{
@@ -36,29 +40,62 @@ export interface IProfesional {
         activo: boolean;
     }];
     foto: string;
-    rol: string;
-    profesion: {
-        nombre: string;
-        codigoSISA: number;
+    firmas: [{
+        archivo: string;
+        fecha: Date;
+    }];
+    formacionProfesional: {
+        profesion: {
+            nombre: string;
+            codigo: number;
+        };
+        entidadFormadora: {
+            nombre: string;
+            codigo: number;
+        };
+        titulo: string;
+        fechaEgreso: Date;
+        matriculaNumero: number;
+        libro: string;
+        folio: string;
+        periodos: [{
+            inicio: Date;
+            fin: Date;
+            numero: number;
+        }],
+        revalida: boolean;
+        revalidaciones: [{
+            numero: number;
+            fecha: Date;
+        }];
     };
-    entidadFormadora: {
-        nombre: string;
-        codigoSISA: number;
-    };
-    titulo: string;
-    fechaEgreso: Date;
-    matriculas: [{
-        numero: number;
-        activo: boolean;
-        rank: number;
+    matriculasEspecialidades: [{
         especialidad: {
             nombre: string;
-            codigoSISA: string;
+            codigo: number;
         };
-        periodo: {
-            incio: Date;
-            fin: Date;
-        }
-     }];
-     origen: string;
+        entidadRevalidadora: {
+            nombre: string;
+            codigo: number;
+        };
+        numero: Number;
+        certificacion: {
+            nombre: string;
+            codigo: number;
+        };
+        libro: String;
+        folio:  String;
+        periodos: [{
+            incio: Date,
+            fin: Date,
+            numero: number;
+        }],
+        revalida: Boolean;
+        revalidaciones: [{
+            numero: Number;
+            fecha: Date;
+        }]
+    }];
+    rematriculado: Boolean;
+    origen: String;
 }

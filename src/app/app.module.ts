@@ -7,6 +7,7 @@ import { routing, appRoutingProviders } from './app.routing';
 // Plex
 import { PlexModule } from 'andes-plex/src/lib/module';
 import { Plex } from 'andes-plex/src/lib/core/service';
+import { FileUploadModule, FileSelectDirective } from 'ng2-file-upload';
 
 // Components
 import { AppComponent } from './app.component';
@@ -20,6 +21,10 @@ import { SolicitarTurnoMatriculacionComponent } from './components/turnos/solici
 import { ConfiguracionAgendaComponent } from './components/turnos/configuracion-agenda.component';
 import { ProfesionalComponent } from './components/profesionales/profesional.component';
 import { ListadoTurnosComponent } from './components/turnos/listado-turnos.component';
+import { DetalleProfesionalComponent } from './components/profesionales/detalle-profesional.component';
+import { ListadoNumeracionMatriculasComponent } from './components/numeracion/listado-numeracion-matriculas.component';
+import { NumeracionMatriculasComponent } from './components/numeracion/numeracion-matriculas.component';
+import { ListadoComponent } from './components/base/mat-listado.component'
 
 // Services
 import { AgendaService } from './services/agenda.service';
@@ -31,6 +36,8 @@ import { EntidadFormadoraService } from './services/entidadFormadora.service';
 import { Server } from './../../node_modules/andes-shared/src/lib/server/server.service';
 import { TurnoService } from './services/turno.service';
 import { ProfesionalService } from './services/profesional.service';
+import { SexoService } from './services/sexo.service';
+import { NumeracionMatriculasService } from './services/numeracionMatriculas.service';
 
 // Utils
 import { PDFUtils } from './utils/PDFUtils';
@@ -38,14 +45,16 @@ import { PDFUtils } from './utils/PDFUtils';
 @NgModule({
   declarations: [
     AppComponent,
+    /*FileSelectDirective,*/
     HomeComponent,
+    ListadoComponent,
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent,
     AgendaComponent, ConfiguracionAgendaComponent,
     NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent,
-    ProfesionalComponent,
-    ListadoTurnosComponent
+    ProfesionalComponent, DetalleProfesionalComponent,
+    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent
   ],
   imports: [
     BrowserModule,
@@ -53,6 +62,7 @@ import { PDFUtils } from './utils/PDFUtils';
     FormsModule,
     HttpModule,
     PlexModule,
+    FileUploadModule,
     routing
   ],
   providers: [
@@ -66,7 +76,9 @@ import { PDFUtils } from './utils/PDFUtils';
     EntidadFormadoraService,
     TurnoService,
     ProfesionalService,
-    PDFUtils
+    SexoService,
+    PDFUtils,
+    NumeracionMatriculasService
   ],
   bootstrap: [AppComponent]
 })

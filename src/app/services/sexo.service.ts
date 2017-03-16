@@ -1,5 +1,5 @@
 import { AppSettings } from './../app.settings';
-import { IProfesion } from './../interfaces/IProfesion';
+import { ISiisa } from './../interfaces/ISiisa';
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import 'rxjs/add/operator/toPromise';
@@ -10,11 +10,11 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 
 @Injectable()
-export class ProfesionService extends BaseService {
+export class SexoService extends BaseService {
 
-    private profesionesUrl = this.siisaURL + '/profesion';
+    private sexosUrl = this.siisaURL + '/sexo';
 
-    getProfesiones(): Observable<any[]> {
-        return this.get(this.profesionesUrl);
+    getSexos(): Observable<ISiisa[]> {
+        return this.get(this.sexosUrl);
     }
 }

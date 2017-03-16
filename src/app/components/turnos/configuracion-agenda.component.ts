@@ -14,7 +14,7 @@ import { AgendaService } from './../../services/agenda.service';
 import * as enumerados from './../../utils/enumerados';
 
 @Component({
-    selector: 'configuracion-agenda',
+    selector: 'app-configuracion-agenda',
     templateUrl: 'configuracion-agenda.html'
 })
 
@@ -37,8 +37,8 @@ export class ConfiguracionAgendaComponent implements OnInit {
             .subscribe(datos => {
                 this.currentAgenda = datos[0];
                 this.loadFormulario(this.currentAgenda);
-            })
-        
+            });
+
         // Inicio el formulario.
         this.loadFormulario();
     }
@@ -55,28 +55,30 @@ export class ConfiguracionAgendaComponent implements OnInit {
         this.configForm = this.formBuilder.group({
             id: [agenda ? agenda._id : null],
             diasHabilitados: [ diasActuales ? diasActuales : null, [Validators.required]],
-            horarioInicioTurnos: [ agenda ? agenda.horarioInicioTurnos : null, [Validators.required, PlexValidator.min(8), PlexValidator.max(16)]],
-            horarioFinTurnos: [ agenda ? agenda.horarioFinTurnos : null, [Validators.required, PlexValidator.min(8), PlexValidator.max(16)]],
+            horarioInicioTurnos: [
+                agenda ? agenda.horarioInicioTurnos : null,
+                [Validators.required, PlexValidator.min(8), PlexValidator.max(16)]],
+            horarioFinTurnos: [
+                agenda ? agenda.horarioFinTurnos : null,
+                [Validators.required, PlexValidator.min(8), PlexValidator.max(16)]],
             duracionTurno: [agenda ? agenda.duracionTurno : null, [Validators.required, PlexValidator.min(1), PlexValidator.max(60)]],
             nuevaFechaEximida: [null]
         });
     }
 
     agregarFeriado() {
-        this.feriados.push(this.configForm.controls["nuevaFechaEximida"].value);
-        this.configForm.controls["nuevaFechaEximida"].reset();
+        this.feriados.push(this.configForm.controls['nuevaFechaEximida'].value);
+        this.configForm.controls['nuevaFechaEximida'].reset();
     }
 
     eliminarFeriado(idx: number) {
-        console.log(idx)
         this.feriados.splice(idx, 1);
-
     }
 
     guardarConfiguracion(model: any, isValid: boolean) {
 
         if (isValid) {
-            let diasSeleccionados = model.diasHabilitados;
+            const diasSeleccionados = model.diasHabilitados;
 
             model.diasHabilitados = [];
             model.diasHabilitados = diasSeleccionados.map(element => {
@@ -91,7 +93,7 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
             agendaOperation.subscribe(resultado => {
                 console.log('Configuración Actaulizada');
-                this.boxType = "success";
+                this.boxType = 'success';
             });
         }
     }

@@ -1,0 +1,54 @@
+<div class="row">
+    <div class="col-sm-9">
+        <plex-box [formGroup]="formBuscarNumeracion" *ngIf="showListado">
+            <div class="row">
+                <div class="col-md-6">
+                    <plex-select label="Profesión" formControlName="profesion" (get-data)="loadProfesiones($event)"></plex-select>                   
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <plex-button class="pull-right" label="Buscar" type="primary" (click)="buscar()"></plex-button>
+                </div>
+            </div>
+        </plex-box>
+        
+        <app-numeracion-matriculas [numeracion]="numeracionElegida" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
+
+
+        <app-mat-listado *ngIf="showListado" [data]="numeraciones" (updateData)="buscar($event)">
+            <thead>
+                <tr>
+                    <th>Profesión</th>
+                    <th>Próximo Número</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngIf="numeraciones.length === 0">
+                    <td colspan="5">
+                        No se encontraron resultados.
+                    </td>
+                </tr>
+                <tr *ngFor="let numeracion of numeraciones" (click)="showNumeracion(numeracion)" class="listado-row" [ngClass]="{'selected-row': numeracionElegida && numeracion._id === numeracionElegida._id}">
+                    <td>{{ numeracion.profesion.nombre }}</td>
+                    <td>{{ numeracion.proximoNumero }}</td>
+                </tr>
+            </tbody>
+        </app-mat-listado>
+
+    </div>
+
+    <div class="col-sm-3" *ngIf="numeracionElegida && showListado">
+        <plex-box title="Detalle de Numeración" *ngIf="numeracionElegida">
+            <div class="row">
+                <div class="col-sm-12">
+                    <label>Profesión: &nbsp;</label>{{numeracionElegida.profesion.nombre}}<br />
+                    <label>Próximo Nº: &nbsp;</label>{{numeracionElegida.proximoNumero}}
+                    <hr>
+                    <plex-button label="Editar" type="primary" class="pull-right" (click)="toggleListado(false)"></plex-button>
+                    <plex-button label="Generar Matricula" type="danger" class="pull-left" (click)="generarMatricula()"></plex-button>
+                </div>
+            </div>
+        </plex-box>
+    </div>
+</div>

@@ -25,6 +25,7 @@ export class BaseService {
     protected paisesURL = AppSettings.API_ENDPOINT + '/core/tm/paises';
     protected profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
     protected siisaURL = AppSettings.API_ENDPOINT + '/core/tm/siisa';
+    protected numeracionesURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/numeraciones';
 
     constructor(protected _http: Http) { }
 
@@ -34,6 +35,10 @@ export class BaseService {
 
     protected post(url: string, data: Observable<any>): Observable<any> {
         return this._http.post(url, data).map(this.extractData).catch(this.handleError);
+    }
+
+    protected put(url: string, data: Observable<any>): Observable<any> {
+        return this._http.put(url, data).map(this.extractData).catch(this.handleError);
     }
 
     protected getById(url: string, id: string): Observable<any> {

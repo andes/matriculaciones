@@ -1,4 +1,4 @@
-export interface IEntidadFormadora {
+export interface ISiisa {
     nombre: String;
     codigoSISA: Number;
 }

@@ -3,6 +3,42 @@ const jsPDF = require('jspdf');
 
 export class PDFUtils {
 
+    public generarCredencial(imgsData: any, profesional: any): any {
+
+        const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
+        doc.setFontSize(6);
+        doc.setFontStyle('bold');
+        doc.text(/*'Argentina'*/ profesional.nacionalidad.nombre.toUpperCase(), 14, 14);
+        doc.text(/*'TEC. EN LABORATORIO CLINICO E HISTOPATOLOGIA'*/profesional.formacionProfesional.titulo.toUpperCase(), 20, 17);
+        doc.text(/*'UNIV. NAC. DE CORDOBA'*/profesional.formacionProfesional.entidadFormadora.nombre, 20, 20);
+        doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionProfesional.fechaEgreso), 28, 24);
+        doc.addImage(imgsData.firmaSupervisor, 'jpg', 38, 25, 30, 14);
+        doc.text('Dr. Ruben Monsalvo', 42, 41);
+        doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionProfesional.fechaEgreso), 50, 48);
+        doc.addPage();
+        doc.setFillColor(0, 153, 0);
+        doc.rect(9, 9, 30, 30, 'F');
+        doc.addImage(imgsData.foto, 'jpg', 10, 10, 28, 28);
+        doc.text(/*'BO TEC. EN LABORATORIO'*/profesional.formacionProfesional.profesion.nombre.toUpperCase(), 43, 13);
+        doc.text(/*'PINO'*/profesional.apellidos.toUpperCase(), 43, 18);
+        doc.text(/*'JORGE PABLO'*/profesional.nombres.toUpperCase(), 43, 23);
+        doc.text(/*'Masculino'*/ profesional.sexo.nombre, 74, 23);
+        doc.text('DNI ' + profesional.documentoNumero, 43, 28);
+        doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
+        doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.ultimoPeriodoMatriculaProfesional[0].inicio), 43, 40);
+        doc.text(/*'29/01/2015'*/ this.getDateStr(profesional.ultimoPeriodoMatriculaProfesional[0].fin), 66, 40);
+        doc.addImage(imgsData.firmaProfesional, 'jpg', 54, 41, 31, 10);
+        doc.setFontSize(8);
+        doc.text(/*'82'*/profesional.formacionProfesional.matriculaNumero.toString(), 74, 13);
+
+        return doc;
+    }
+
+    private getDateStr(date: Date): String {
+        const dt = new Date(date);
+        return dt.getDate() + '/' + (dt.getMonth() + 1) + '/' + dt.getFullYear();
+    }
+
     public comprobanteTurno(turno: any): any {
         const fechaTurno = new Date(turno.fecha);
 
@@ -56,7 +92,7 @@ export class PDFUtils {
 
         // Domicilios
         let offsetLoop = 0;
-        turno._profesional.domicilios.forEach(domicilio => {
+        turno.profesional.domicilios.forEach(domicilio => {
             doc.setFontSize(14);
             doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
             doc.line(20, 143 + offsetLoop , 190, 143 + offsetLoop);
@@ -77,7 +113,7 @@ export class PDFUtils {
         doc.line(20, 220 , 190, 220);
         doc.setFontSize(12);
         offsetLoop = 0;
-        turno._profesional.contactos.forEach(contacto => {
+        turno.profesional.contactos.forEach(contacto => {
             doc.text(20, 225 + offsetLoop, contacto.tipo + ':');
             offsetLoop += 6;
         });
@@ -92,22 +128,22 @@ export class PDFUtils {
 
         // Completado
         doc.setFont('courier');
-        doc.text(65, 65, turno._profesional.apellidos);
-        doc.text(65, 71, turno._profesional.nombres);
-        doc.text(65, 77, 'DNI ' + turno._profesional.documentoNumero);
-        doc.text(65, 83, this.getSimpleFormatedDate(turno._profesional.fechaNacimiento));
-        doc.text(65, 89, turno._profesional.lugarNacimiento);
-        doc.text(65, 95, turno._profesional.sexo);
-        doc.text(65, 101, turno._profesional.nacionalidad.nombre);
+        doc.text(65, 65, turno.profesional.apellidos);
+        doc.text(65, 71, turno.profesional.nombres);
+        doc.text(65, 77, 'DNI ' + turno.profesional.documentoNumero);
+        doc.text(65, 83, this.getSimpleFormatedDate(turno.profesional.fechaNacimiento));
+        doc.text(65, 89, turno.profesional.lugarNacimiento);
+        doc.text(65, 95, turno.profesional.sexo.nombre);
+        doc.text(65, 101, turno.profesional.nacionalidad.nombre);
 
-        doc.text(65, 111, turno._profesional.profesion.nombre);
-        doc.text(65, 117, turno._profesional.titulo);
-        doc.text(65, 123, turno._profesional.entidadFormadora.nombre);
-        doc.text(65, 129, this.getSimpleFormatedDate(turno._profesional.fechaEgreso));
+        doc.text(65, 111, turno.profesional.formacionProfesional.profesion.nombre);
+        doc.text(65, 117, turno.profesional.formacionProfesional.titulo);
+        doc.text(65, 123, turno.profesional.formacionProfesional.entidadFormadora.nombre);
+        doc.text(65, 129, this.getSimpleFormatedDate(turno.profesional.formacionProfesional.fechaEgreso));
 
         // completado domicilios
         offsetLoop = 0;
-        turno._profesional.domicilios.forEach(domicilio => {
+        turno.profesional.domicilios.forEach(domicilio => {
             doc.setFontSize(12);
             doc.text(35, 148 + offsetLoop, domicilio.valor);
             doc.text(35, 154 + offsetLoop, domicilio.codigoPostal);
@@ -119,7 +155,7 @@ export class PDFUtils {
 
         // Completado contactos
         offsetLoop = 0;
-        turno._profesional.contactos.forEach(contacto => {
+        turno.profesional.contactos.forEach(contacto => {
             doc.text(35, 225 + offsetLoop, contacto.valor);
             offsetLoop += 6;
         });

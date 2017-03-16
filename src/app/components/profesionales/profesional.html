@@ -13,7 +13,7 @@
         </div>
         <div class="row">
             <div class="col-md-4">
-                <plex-select label="Sexo" formControlName="sexo" [data]="sexos"></plex-select>
+                <plex-select label="Sexo" formControlName="sexo" (get-data)="loadSexos($event)"></plex-select>
             </div>
             <div class="col-md-4">
                 <plex-select label="Estado Civíl" formControlName="estadoCivil" [data]="estadosCiviles"></plex-select>
@@ -92,7 +92,7 @@
 
 <!--
 -->
-    <plex-box title="Profesión">
+    <plex-box title="Formación Profesional" formGroupName="formacionProfesional">
         <div class="row">
             <div class="col-md-4">
                 <plex-select label="Profesión" formControlName="profesion" (get-data)="loadProfesiones($event)"></plex-select>
@@ -106,7 +106,7 @@
         </div>
         <div class="row">
             <div class="col-md-8">
-                <plex-select label="Entidad Formadora" formControlName="entidadFormadora" (change)="showOtra(formProfesionalComp.controls.entidadFormadora)" (get-data)="loadEntidadesFormadoras($event)"></plex-select>
+                <plex-select label="Entidad Formadora" formControlName="entidadFormadora" (change)="showOtra(formProfesionalComp.controls.formacionProfesional.controls.entidadFormadora)" (get-data)="loadEntidadesFormadoras($event)"></plex-select>
             </div>
             <div class="col-md-4" *ngIf="showOtraEntidadFormadora">
                 <plex-text label="Otra Entidad Formadora" formControlName="otraEntidadFormadora"></plex-text>

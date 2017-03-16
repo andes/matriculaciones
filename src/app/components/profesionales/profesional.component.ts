@@ -18,6 +18,7 @@ import { LocalidadService } from './../../services/localidad.service';
 import { ProfesionService } from './../../services/profesion.service';
 import { ProfesionalService } from './../../services/profesional.service';
 import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
+import { SexoService } from './../../services/sexo.service';
 
 // Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
@@ -40,6 +41,7 @@ export class ProfesionalComponent implements OnInit {
     @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
     constructor(private _formBuilder: FormBuilder,
+        private _sexoService: SexoService,
         private _paisService: PaisService,
         private _provinciaService: ProvinciaService,
         private _localidadService: LocalidadService,
@@ -53,16 +55,17 @@ export class ProfesionalComponent implements OnInit {
     ngOnInit() {
 
         this.estadosCiviles = getEnumAsObjects(EstadoCivil);
-        this.sexos = getEnumAsObjects(Sexo);
+        // this.sexos = getEnumAsObjects(Sexo);
+        /*this._sexoService.getSexos().subscribe(sexos => {
+            this.sexos = sexos;
+            console.log(sexos)*/
 
-        //console.log(TipoContacto.celular.toString())
+            /*this._profesionalService.getProfesional('58ab35ad07a4b51cf0b311b0')
+                .subscribe(profesional => {
+                    this.buildForm(profesional);
+                });*/
+        /*});*/
 
-        this._profesionalService.getProfesional('58ab35ad07a4b51cf0b311b0')
-            .subscribe(profesional => {
-                this.buildForm(profesional);
-                console.log('Profesional DB Model');
-                console.log(profesional);
-            });
     }
 
     private newFormContacto(tipoContacto: String, rankContacto: Number,
@@ -184,17 +187,19 @@ export class ProfesionalComponent implements OnInit {
                 Validators.required],
             contactos: this.formsContactos,
             domicilios: this.formsDomicilios,
-            profesion: [
-                model ? model.profesion : null,
-                Validators.required],
-            entidadFormadora: [model ? model.entidadFormadora : null],
-            otraEntidadFormadora: [model ? model.otraEntidadFormadora : null],
-            titulo: [
-                model ? model.titulo : null,
-                Validators.required],
-            fechaEgreso: [
-                model ? model.fechaEgreso : null,
-                Validators.required]
+            formacionProfesional: this._formBuilder.group({
+                profesion: [
+                    model ? model.profesion : null,
+                    Validators.required],
+                entidadFormadora: [model ? model.entidadFormadora : null],
+                otraEntidadFormadora: [model ? model.otraEntidadFormadora : null],
+                titulo: [
+                    model ? model.titulo : null,
+                    Validators.required],
+                fechaEgreso: [
+                    model ? model.fechaEgreso : null,
+                    Validators.required]
+            })
         });
     }
 
@@ -213,7 +218,7 @@ export class ProfesionalComponent implements OnInit {
         this.onProfesionalCompleto.emit(model);
     }
 
-    /*Código de filtrado de combos*/
+    // Filtrado de combos
     loadPaises(event) {
         this._paisService.getPaises().subscribe(event.callback);
     }
@@ -236,5 +241,9 @@ export class ProfesionalComponent implements OnInit {
 
     loadEntidadesFormadoras(event) {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
+    }
+
+    loadSexos(event) {
+        this._sexoService.getSexos().subscribe(event.callback);
     }
 }

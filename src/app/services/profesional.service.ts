@@ -9,12 +9,13 @@ export class ProfesionalService extends BaseService {
 
     saveProfesional(profesionalModel: any): Observable<any> {
         return this.post(this.profesionalesURL, profesionalModel);
-        /*_http.post(this.profesionalesURL, profesionalModel)
-            .map(this.extractData)
-            .catch(this.handleError);*/
     }
 
     getProfesional(id: string = null): Observable<IProfesional> {
         return this.getById(this.profesionalesURL, id);
+    }
+
+    getCredencial(idProf: string): any {
+        return this.get(this.profesionalesURL + 'matricula/' + idProf);
     }
 }

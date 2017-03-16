@@ -19,7 +19,7 @@ export class AppComponent implements OnInit {
     loadSideBar() {
         const items = [
             new SidebarItem('Inicio', 'creation', '/home'),
-            new SidebarItem('Config. Agenda', 'calendar', '/agenda'),
+            new SidebarItem('Config. Agenda', 'calendar-multiple-check', '/agenda'),
             new SidebarItem('Turnos', 'calendar', '/listadoTurnos'),
         ];
         this._plex.initStaticItems(items);

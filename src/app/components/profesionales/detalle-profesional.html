@@ -146,7 +146,72 @@
                 <plex-box></plex-box>
             </plex-tab>
             <plex-tab label="Sanciones">
-                <plex-box></plex-box>
+                <plex-box >
+                    <form [formGroup]="formSancion">
+
+                    <div class="row">
+                        <div class="col-md-2">
+                            <plex-int label="Número" formControlName="numero"></plex-int>                            
+                        </div>
+                        <div class="col-md-3">
+                            <plex-select label="Sanción" formControlName="sancion" (get-data)="loadSanciones($event)"></plex-select>                            
+                        </div>
+                        <div class="col-md-3">
+                            <plex-text label="Norma Legal" formControlName="normaLegal"></plex-text>                            
+                        </div>
+                        <div class="col-md-2">
+                            <plex-datetime type="date" label="Fecha" formControlName="fecha"></plex-datetime>                            
+                        </div>
+                        <div class="col-md-2">
+                            <plex-datetime type="date" label="Vencimiento" formControlName="vencimiento"></plex-datetime>                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <plex-text label="Motivo" formControlName="motivo"></plex-text>                            
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <plex-button label="Guardar" type="primary" class="pull-right" (click)="guardarSancion(formSancion.value)"></plex-button>
+                        </div>
+                    </div>
+                    </form>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Número</th>
+                                        <th>Sanción</th>
+                                        <th>Motivo</th>
+                                        <th>Norma Legal</th>
+                                        <th>Fecha</th>
+                                        <th>Vencimiento</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let sancion of profesional.sanciones">
+                                        <td>{{sancion.numero}}</td>
+                                        <td>{{sancion.sancion}}</td>
+                                        <td>{{sancion.motivo}}</td>
+                                        <td>{{sancion.normaLegal}}</td>
+                                        <td>{{sancion.fecha | date: 'dd/MM/yyyy'}}</td>
+                                        <td>{{sancion.vencimiento | date: 'dd/MM/yyyy'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!--<div class="col-sm-2"></div>
+                        <div class="col-sm-6"></div>
+                        <div class="col-sm-2"></div>-->
+                    </div>
+
+
+
+
+                </plex-box>
             </plex-tab>
             <plex-tab label="Foto">
                 <plex-box>

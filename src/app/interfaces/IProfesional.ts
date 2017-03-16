@@ -98,4 +98,12 @@ export interface IProfesional {
     }];
     rematriculado: Boolean;
     origen: String;
+    sanciones: [{
+        numero: Number;
+        sancion:  String;
+        motivo: String;
+        normaLegal: String;
+        fecha: Date;
+        vencimiento: Date;
+    }];
 }

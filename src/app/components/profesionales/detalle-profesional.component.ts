@@ -39,10 +39,12 @@ const jsPDF = require('jspdf');
 export class DetalleProfesionalComponent implements OnInit, OnChanges {
     public uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
     public uploaderFirma: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
+    public formSancion: FormGroup;
     @Input() profesional: IProfesional;
     @Output() onShowListado = new EventEmitter();
 
     constructor(private _profesionalService: ProfesionalService,
+        private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
         private _numeracionesService: NumeracionMatriculasService) {}
 
@@ -53,7 +55,19 @@ export class DetalleProfesionalComponent implements OnInit, OnChanges {
         }
     }
 
+    initFormSancion() {
+        this.formSancion = this._formBuilder.group({
+            numero: [null, Validators.required],
+            sancion: [null],
+            motivo: [null, Validators.required],
+            normaLegal: [null],
+            fecha: [null, Validators.required],
+            vencimiento: [null, Validators.required]
+        });
+    }
+
     ngOnInit() {
+        this.initFormSancion();
 
         this.uploader.onAfterAddingFile = (file) => {
             file.withCredentials = false;
@@ -149,5 +163,36 @@ export class DetalleProfesionalComponent implements OnInit, OnChanges {
             });
 
 
+    }
+
+    guardarSancion(sancionModel: any) {
+        sancionModel.sancion = sancionModel.sancion.nombre;
+        this.profesional.sanciones.push(sancionModel);
+
+        this._profesionalService.saveProfesional(this.profesional)
+            .subscribe(resp => {
+            this.initFormSancion();
+        });
+    }
+
+    loadSanciones(event: any) {
+        const sanciones = [{
+            nombre: 'Apercibimiento',
+            id: 1
+        },
+        {
+            nombre: 'Baja de Matrícula',
+            id: 2
+        },
+        {
+            nombre: 'Multa',
+            id: 3
+        },
+        {
+            nombre: 'Suspensión',
+            id: 4
+        }];
+
+        event.callback(sanciones);
     }
 }

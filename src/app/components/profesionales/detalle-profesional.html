@@ -128,13 +128,15 @@
                                 <thead>
                                     <tr>
                                         <th style="text-align: center">Nº</th>
-                                        <th style="text-align: center">Fecha de Inicio - Fecha de Fin</th>
+                                        <th style="text-align: center">Fecha de Inicio</th>
+                                        <th style="text-align: center">Fecha de Fin</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let periodo of profesional.formacionProfesional.periodos">
                                         <td style="text-align: center">{{periodo.numero}}</td>
-                                        <td style="text-align: center">{{periodo.inicio | date: 'dd/MM/yyyy'}} - {{periodo.fin | date: 'dd/MM/yyyy'}}</td>
+                                        <td style="text-align: center">{{periodo.inicio | date: 'dd/MM/yyyy'}}</td>
+                                        <td style="text-align: center">{{periodo.fin | date: 'dd/MM/yyyy'}}</td>
                                     </tr>
                                 </tbody>
                             </table>

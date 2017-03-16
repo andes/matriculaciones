@@ -25,7 +25,7 @@ const moment = window['moment'] = require('moment/moment.js');
 require('./bootstrap-datepicker/bootstrap-datepicker.js');
 require('./bootstrap-datepicker/bootstrap-datepicker.es.min.js');
 
-const diasSemana = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes'];
+const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
 const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
 @Component({
@@ -215,6 +215,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy {
 
     confirmTurno() {
         // this.lblTurno = moment(this.fechaElegida).format('llll');
+        console.log(this.fechaElegida.getDay())
         this.lblTurno = diasSemana[this.fechaElegida.getDay()] + ' '
             + this.fechaElegida.getDate().toString() + ' de '
             + meses[this.fechaElegida.getMonth()] + ' de '

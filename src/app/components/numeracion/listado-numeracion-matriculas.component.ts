@@ -1,9 +1,13 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { Plex } from 'andes-plex/src/lib/core/service';
+import { Plex } from '@andes/plex/src/lib/core/service';
 import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+
+import {
+    InfiniteScroll
+} from 'angular2-infinite-scroll';
 
 // Services
 import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
@@ -26,11 +30,17 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
 
             this.numeraciones = [];
     }
-
+    onScroll(event: any) {
+        console.log('scroll')
+        /*this.currentPage++;
+        this.updateListado();*/
+    }
     ngOnInit() {
         this.formBuscarNumeracion = this._formBuilder.group({
             profesion: new FormControl()
         });
+
+        this.buscar();
     }
 
     showNumeracion(numeracion?: any) {
@@ -67,6 +77,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         this._numeracionesService.getNumeraciones(consulta)
             .subscribe((resp) => {
                 this.numeraciones = resp.data;
+                console.log(this.numeraciones)
                 if (event) {
                     event.callback(resp);
                 }

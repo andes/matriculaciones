@@ -1,62 +1,146 @@
+<section>
 <div class="row">
-    <div class="col-sm-9">
-        <plex-box [formGroup]="formBuscarTurno" *ngIf="showListado">
+    <div class="col-8">
+
+
+<!--<div class="plex-box primary">
+    <div class="plex-box-header">
+        <div [formGroup]="formBuscarTurno">
             <div class="row">
                 <div class="col-md-3">
-                    <plex-text label="Apellido" formControlName="apellido"></plex-text>
+                    <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
                 </div>
                 <div class="col-md-3">
-                    <plex-text label="Nombre" formControlName="nombre"></plex-text>
+                    <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
                 </div>  
                 <div class="col-md-3">
-                    <plex-int label="Documento" formControlName="documentoNumero"></plex-int>
+                    <plex-int label="Documento" formControlName="documentoNumero" (change)="buscar()"></plex-int>
                 </div>
                 <div class="col-md-3">
-                    <plex-datetime type="date" label="Fecha" formControlName="fecha"></plex-datetime>
+                    <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <plex-button class="pull-right" label="Buscar Turno" type="primary" (click)="buscar()"></plex-button>
+        </div>
+    </div>
+    <div class="plex-box-content plex-box-content-notitle" infinite-scroll
+                [infiniteScrollDistance]="2"
+                [infiniteScrollThrottle]="10" 
+                (scrolled)="onScroll()"
+                [scrollWindow]="false">
+        <ul class="list-group">
+            <li class="list-group-item justify-content-between" *ngFor="let turno of turnos" (click)="showTurno(turno)">
+                <h6 class="box-title-elemento">
+                    {{ (turno.profesional ? 'DNI ' + turno.profesional.documentoNumero : '') }} - {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }}
+                <br>
+                <small>{{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }}</small>
+                <br>
+                <span class="mdi mdi-big mdi-danger mdi-alert text-danger">
+                    <span style="margin-left: 5px;">Renovación Vencida</span>
+                </span>
+                </h6>
+                <button type="button" class="btn-contextual" data-widget="" data-toggle="tooltip" title="Eliminar problema" data-original-title="">
+                <i ng-reflect-class-name="mdi mdi-dots-horizontal" class="mdi mdi-dots-horizontal"></i>
+                </button>
+
+            </li>
+        </ul>
+    </div>
+</div>-->
+
+
+        <plex-box type="primary">
+
+        <header>
+            <div [formGroup]="formBuscarTurno"  *ngIf="showListado">
+                <div class="row">
+                    <div class="col-md-3">
+                        <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
+                    </div>
+                    <div class="col-md-3">
+                        <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
+                    </div>  
+                    <div class="col-md-3">
+                        <plex-int label="Documento" formControlName="documentoNumero" (change)="buscar()"></plex-int>
+                    </div>
+                    <div class="col-md-3">
+                        <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
+                    </div>
                 </div>
             </div>
+
+            <app-header-profesional [profesional]="turnoElegido.profesional" *ngIf="!showListado && turnoElegido"></app-header-profesional>
+        </header>
+
+
+
+        <div class="row" *ngIf="showListado">
+            <div class="col-12">
+                <div infinite-scroll
+                [infiniteScrollDistance]="2"
+                [infiniteScrollThrottle]="10" 
+                (scrolled)="onScroll()"
+                [scrollWindow]="false">
+
+                <ul class="list-group">
+                    <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)" [ngClass]="{'active': turnoElegido === turno}">
+                        <div class="row" style="width: 100%">
+                            <div class="col-11">
+                                <h6 class="box-title-elemento">
+                                    {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs <br>                                
+                                    {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }} | <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documentoNumero : '') }}</small>
+                                </h6>
+                            </div>
+                            <div class="col float-right">
+                                <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
+                                </span>
+                            </div>
+                            
+                        </div>
+
+                    </li>
+                </ul>
+                </div>
+                
+            </div>
+        </div>
+
+
+        <app-detalle-profesional *ngIf="turnoElegido && !showListado"
+            [profesional]="turnoElegido.profesional"
+            (onShowListado)="toggleListado(true)"></app-detalle-profesional>
+
+
+        
+
+
+
+
+
 
         </plex-box>
 
-
-        <app-mat-listado *ngIf="showListado" [data]="turnos" (updateData)="buscar($event)">
-            <thead>
-                <tr>
-                    <th>Fecha</th>
-                    <th> Hora</th>
-                    <th>Apellido y Nombre</th>
-                    <th>Documento</th>
-                    <th>Profesión</th>
-                    <th>&nbsp;&nbsp;&nbsp;</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngIf="turnos.length === 0">
-                    <td colspan="6">
-                        No se encontraron resultados.
-                    </td>
-                </tr>
-                <tr *ngFor="let turno of turnos" (click)="showTurno(turno)" class="listado-row" [ngClass]="{'selected-row': turnoElegido && turno._id === turnoElegido._id}">
-                    <td>{{ turno['fecha'] | date:'dd/MM/yyyy' }}</td>
-                    <td>{{ turno.fecha | date:'hh:mm' }}</td>
-                    <td>{{ (turno.profesional ? turno.profesional.nombreCompleto : '' ) }}</td>
-                    <td>{{ (turno.profesional ? 'DNI ' + turno.profesional.documentoNumero : '') }}</td>
-                    <td>{{ (turno.profesional ? turno['profesional']['formacionProfesional']['profesion']['nombre'] : '') }}</td>
-                    <td [ngClass]="{'success' : turno.sePresento, 'danger': !turno.sePresento}"></td>
-                </tr>
-            </tbody>
-        </app-mat-listado>
- 
     </div>
 
+ 
 
-    <div class="col-sm-3" *ngIf="turnoElegido && showListado">
-        <plex-box title="Detalle del Turno">
+
+
+
+
+
+
+
+
+    <!--SIDE LISTADO-->
+    <div class="col-4">       
+        <app-formacion-grado-detalle [formacion]="formacionSelected"></app-formacion-grado-detalle>
+
+        <plex-box type="invert" *ngIf="turnoElegido && showListado">
+            <header>
+                Detalle del Turno
+            </header>
+
+
             <div class="row">
                 <div class="col-sm-12">
                     
@@ -68,35 +152,51 @@
                             <div class="datos-profesional">
                                 {{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}
                             </div>
-                            <plex-button type="success" label="Cambiar Estado" class="pull-right" (click)="cambiarEstado()" *ngIf="!turnoElegido.sePresento"></plex-button>
+                            <plex-button type="success" label="Cambiar Estado" class="float-right" (click)="cambiarEstado()" *ngIf="!turnoElegido.sePresento"></plex-button>
                         </div>
                     </div>
                     <hr>
                     <div class="row">
                         <div class="col-md-12">
                             <div class="nombre-profesional">
-                                <span style="font-weight: bold">{{turnoElegido.profesional.apellidos + ', '}}</span>{{turnoElegido.profesional.nombres}}
+                                <span style="font-weight: bold">{{turnoElegido.profesional.apellido + ', '}}</span>{{turnoElegido.profesional.nombre}}
                             </div>
                             <div class="datos-profesional">
                                 {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documentoNumero }}<br />
-                                {{turnoElegido.profesional.formacionProfesional.profesion.nombre}}
                             </div>
-                            <span class="mdi mdi-big mdi-danger mdi-alert" *ngIf="turnoElegido.profesional.renovacionVencida">
+                            <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.renovacionVencida">
                                 <span style="margin-left: 5px;">Renovación Vencida</span>
                             </span>
-                            <plex-button type="primary" label="Ver Profesional" class="pull-right" [disabled]="!turnoElegido.sePresento" (click)="toggleListado(false)"></plex-button>
+                            <!--<a href="/profesional" class="btn btn-primary">Ver Profesional</a>-->
+                            <plex-button type="primary" label="Ver Profesional" class="float-right" [disabled]="!turnoElegido.sePresento" (click)="toggleListado(false)"></plex-button>
                         </div>
                     </div>
-                    
+                     <hr>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <plex-button type="primary" label="Generar Comprobante de Turrno" class="pull-right" [disabled]="turnoElegido.sePresento" (click)="generarComprobante(turnoElegido)"></plex-button>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
 
         </plex-box>
-    </div>    
+    </div> 
 </div>
 
 
-<app-detalle-profesional 
-    [profesional]="turnoElegido.profesional"
-    (onShowListado)="toggleListado(true)"
-    *ngIf="turnoElegido && !showListado"></app-detalle-profesional>
+
+
+
+
+</section>
+
+
+
+
+<footer *ngIf="turnoElegido && !showListado">
+    <plex-button type="primary" class="pull-left" label="Volver al Listado" (click)="toggleListado(true)"></plex-button>
+</footer>
+

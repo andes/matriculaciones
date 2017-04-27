@@ -1,4 +1,4 @@
 export interface IProfesion {
-    nombre: String,
-    codigoSISA: Number
+    nombre: String;
+    codigoSISA: Number;
 }

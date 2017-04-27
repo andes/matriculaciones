@@ -10,6 +10,10 @@ import { Headers,
     RequestOptionsArgs
 } from '@angular/http';
 
+import {
+    Server
+} from '@andes/shared'
+
 
 // Import RxJs required methods
 import { Observable } from 'rxjs/Rx';

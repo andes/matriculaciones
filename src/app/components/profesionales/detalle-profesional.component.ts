@@ -1,9 +1,8 @@
-import { Component, OnInit, Output, Input, EventEmitter, OnChanges } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Plex } from 'andes-plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
-import { FileUploader } from 'ng2-file-upload';
-
+import { Plex } from '@andes/plex/src/lib/core/service';
+// Settings
 import { AppSettings } from './../../app.settings';
 
 // Utils
@@ -12,7 +11,6 @@ import { PDFUtils } from './../../utils/PDFUtils';
 // Enums
 import {
     getEnumAsObjects,
-    // Sexo,
     EstadoCivil,
     TipoContacto,
     TipoDomicilio } from './../../utils/enumerados';
@@ -26,9 +24,12 @@ import { ProfesionalService } from './../../services/profesional.service';
 import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
 import { SexoService } from './../../services/sexo.service';
 import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
+import { DataService } from './../../services/data.service';
 
 // Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
+import 'rxjs/add/operator/switchMap';
+
 
 const jsPDF = require('jspdf');
 
@@ -36,107 +37,101 @@ const jsPDF = require('jspdf');
     selector: 'app-detalle-profesional',
     templateUrl: 'detalle-profesional.html'
 })
-export class DetalleProfesionalComponent implements OnInit, OnChanges {
-    public uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
-    public uploaderFirma: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
+export class DetalleProfesionalComponent implements OnInit {
     public formSancion: FormGroup;
+    public loading: Boolean = false;
+    public indexFormacionGradoSelected: any;
+    public indexFormacionPosgradoSelected: any;
+
     @Input() profesional: IProfesional;
     @Output() onShowListado = new EventEmitter();
+    @Output() showFormacion = new EventEmitter();
+
 
     constructor(private _profesionalService: ProfesionalService,
         private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
-        private _numeracionesService: NumeracionMatriculasService) {}
+        private _numeracionesService: NumeracionMatriculasService,
+        private route: ActivatedRoute,
+        private router: Router) {}
 
-    ngOnChanges() {
-        if (this.profesional) {
-            this.uploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto/' + this.profesional._id});
-            this.uploaderFirma = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/firma/' + this.profesional._id});
-        }
-    }
-
-    initFormSancion() {
-        this.formSancion = this._formBuilder.group({
-            numero: [null, Validators.required],
-            sancion: [null],
-            motivo: [null, Validators.required],
-            normaLegal: [null],
-            fecha: [null, Validators.required],
-            vencimiento: [null, Validators.required]
-        });
-    }
 
     ngOnInit() {
-        this.initFormSancion();
-
-        this.uploader.onAfterAddingFile = (file) => {
-            file.withCredentials = false;
-        };
-        this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-            if (response) {
-                const oResp = JSON.parse(response);
-                this.profesional.foto = oResp.fileName;
-                this._profesionalService.saveProfesional(this.profesional)
-                    .subscribe(resp => {
-                        //console.log(resp)
-                    })
-
-
-            } else {
-                console.error('Error subiendo foto');
-            }
-        };
-
-        this.uploaderFirma.onAfterAddingFile = (file) => {
-            file.withCredentials = false;
-        };
-
-        this.uploaderFirma.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-            if (response) {
-                const oResp = JSON.parse(response);
-                this.profesional.firmas.push(oResp);
-
-                this._profesionalService.saveProfesional(this.profesional)
-                    .subscribe(resp => {
-                        //console.log(resp)
-                    });
-
-
-            } else {
-                console.error('Error subiendo firma');
-            }
-        };
+        this.route.params
+            .switchMap((params: Params)  =>
+                this._profesionalService.getProfesional(params['id'])
+            ).subscribe(
+                (profesional:  IProfesional) =>
+                this.profesional = profesional
+            );
     }
 
-    enviarFoto() {
-        this.uploader.uploadAll();
+    updateProfesional2(profesional: IProfesional) {
+        this._profesionalService.saveProfesional(profesional)
+            .subscribe(prof => {
+                this.profesional = prof
+            });
+        //this.profesional = profesional;
     }
 
-    enviarFirma() {
-        this.uploaderFirma.uploadAll();
-    }
-
-    guardarNotas(){
-        this._profesionalService.saveProfesional(this.profesional)
+    updateProfesional(callbackData?: any) {
+         this._profesionalService.saveProfesional(this.profesional)
             .subscribe(resp => {
-                //console.log(resp)
+                this.profesional = resp;
+                if (callbackData) {
+                    callbackData.callback(callbackData.param);
+                }
             });
     }
 
-    aprobarProfesional() {
-        this._numeracionesService.getOne(this.profesional.formacionProfesional.profesion.codigo.toString())
-            .subscribe((num) => {
-                this.profesional.formacionProfesional.matriculaNumero = num.proximoNumero++;
-                const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-                const fechaFin = new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio);
 
-                const periodoMat = {
+    guardarFoto(fileName: any) {
+        this.profesional.fotoArchivo = fileName + '?' + new Date().getTime();
+        this.updateProfesional();
+    }
+
+    guardarFirma(oFirma) {
+        this.profesional.firmas.push(oFirma);
+        this.updateProfesional();
+    }
+
+    guardarNotas(textoNotas) {
+        this.profesional.notas = textoNotas;
+        this.updateProfesional();
+    }
+
+    guardarSancion(sancion: any) {
+        this.profesional.sanciones.push(sancion);
+        this.updateProfesional();
+    }
+
+    guardarFormacionPosgrado(posgrado: any) {
+        this.profesional.formacionPosgrado.push(posgrado);
+        this.updateProfesional()
+    }
+
+    matricularProfesional(matriculacion: any) {
+        this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
+        this.updateProfesional();
+    }
+
+    /*aprobarProfesional() {
+        this._numeracionesService.getOne(this.profesional.formacionGrado[0].profesion.codigo.toString())
+            .subscribe((num) => {
+
+                const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
+
+                const oMatriculacion = {
+                    matriculaNumero: num.proximoNumero++,
+                    libro: '',
+                    folio: '',
                     inicio: new Date(),
-                    fin: new Date(fechaFin),
-                    numero: this.profesional.formacionProfesional.periodos.length + 1
+                    fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
+                    revalidacionNumero: this.profesional.formacionGrado[0].matriculacion.length + 1
                 };
 
-                this.profesional.formacionProfesional.periodos.push(periodoMat);
+                this.profesional.formacionGrado[0].matriculacion.push(oMatriculacion);
+
 
                 this._profesionalService.saveProfesional(this.profesional)
                     .subscribe(profesional => {
@@ -148,51 +143,31 @@ export class DetalleProfesionalComponent implements OnInit, OnChanges {
                             });
                     });
             });
+    }*/
+
+    volver() {
+        this.router.navigate(['/turnos', { id: this.profesional._id}]);
     }
 
-    volverAlListado() {
-        this.onShowListado.emit(true);
-    }
-
-    generarCredencial() {
-        console.log('Generando Credencial...');
+   /* generarCredencial() {
+        this.loading = true;
         this._profesionalService.getCredencial(this.profesional._id)
             .subscribe((resp) => {
                 const pdf = this._pdfUtils.generarCredencial(resp, this.profesional);
-                pdf.save('Credencial ' + this.profesional.nombres + ' ' + this.profesional.apellidos + '.pdf');
+                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+                //this.loading = false;
             });
 
 
+    }*/
+
+    formacionGradoSelected(formacion: any) {
+        this.indexFormacionPosgradoSelected = undefined;
+        this.indexFormacionGradoSelected = formacion;
     }
 
-    guardarSancion(sancionModel: any) {
-        sancionModel.sancion = sancionModel.sancion.nombre;
-        this.profesional.sanciones.push(sancionModel);
-
-        this._profesionalService.saveProfesional(this.profesional)
-            .subscribe(resp => {
-            this.initFormSancion();
-        });
-    }
-
-    loadSanciones(event: any) {
-        const sanciones = [{
-            nombre: 'Apercibimiento',
-            id: 1
-        },
-        {
-            nombre: 'Baja de Matrícula',
-            id: 2
-        },
-        {
-            nombre: 'Multa',
-            id: 3
-        },
-        {
-            nombre: 'Suspensión',
-            id: 4
-        }];
-
-        event.callback(sanciones);
+    formacionPosgradoSelected(posgrado: any) {
+        this.indexFormacionGradoSelected = undefined;
+        this.indexFormacionPosgradoSelected = posgrado;
     }
 }

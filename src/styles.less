@@ -1,5 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
-@import '~andes-plex/src/lib/styles.less';
+@import '~@andes/plex/src/lib/styles.less';
 @import './bootstrap-datepicker3.standalone.css';
 
 ul {
@@ -75,17 +75,17 @@ table.ng2-smart-table-custom {
     vertical-align: middle;
 }
 
-.mdi-danger::before {
+/*.mdi-danger::before {
     color: @brand-danger
-}
+}*/
 
 .nombre-profesional {
-    font-size: 18px;
+    font-size: 1.5rem;
 }
 
 .datos-profesional {
     color:#989898;
-    font-size: 14px;
+    font-size: 1rem;
 }
 
 .info-subtitle {
@@ -101,4 +101,29 @@ table.ng2-smart-table-custom {
     border-radius: 50%;
     width: 95px;
     height: 95px;
+}
+
+/* FONTS */
+.text-normal {
+    font-style: normal;
+}
+.text-italic {
+    font-style: italic;
+}
+.text-bold {
+    font-weight: 700;
+}
+
+.text-light {
+    font-weight: 300;
+    .text-normal;
+}
+
+.text-light-italic {
+    .text-italic;
+    .text-light;
+}
+
+label {
+    .text-bold;
 }

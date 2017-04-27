@@ -1,11 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs/Rx';
-
-import {IProfesional} from './../interfaces/IProfesional';
+import { Http } from '@angular/http';
+import { IProfesional } from './../interfaces/IProfesional';
 
 @Injectable()
 export class ProfesionalService extends BaseService {
+
+    constructor(_http: Http) {
+        super(_http);
+    }
 
     saveProfesional(profesionalModel: any): Observable<any> {
         return this.post(this.profesionalesURL, profesionalModel);

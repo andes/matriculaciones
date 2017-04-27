@@ -1,0 +1,61 @@
+<plex-box *ngFor="let domicilio of profesional.domicilios; let i = index;">
+    <header>
+        <legend class="info-subtitle">Domicilio {{domicilio.tipo}}</legend>
+    </header>
+
+    <div class="row">
+        <div class="col-8">
+            <label>Dirección</label>
+            <div>{{ domicilio.valor }}</div>
+        </div>
+        <div class="col-4">
+            <label>C.P.</label>
+            <div>{{ domicilio.codigoPostal }}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <label>Localidad</label>
+            <div>{{ domicilio.ubicacion.localidad.nombre }}</div>
+        </div>
+        <div class="col-4">
+            <label>Provincia</label>
+            <div>{{ domicilio.ubicacion.provincia.nombre }}</div>
+        </div>
+        <div class="col-4">
+            <label>País</label>
+            <div>{{ domicilio.ubicacion.pais.nombre }}</div>
+        </div>
+    </div>
+
+</plex-box>
+
+
+<!--
+
+<plex-box>   
+<fieldset *ngFor="let domicilio of profesional.domicilios; let i = index;">
+    <legend class="info-subtitle">Domicilio {{domicilio.tipo}}</legend>
+    <div class="row">
+        <div class="col-8">
+            <label>Dirección</label> <div>{{ domicilio.valor }}</div>
+        </div>
+        <div class="col-4">
+            <label>C.P.</label> <div>{{ domicilio.codigoPostal }}</div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            <label>Localidad</label> <div>{{ domicilio.ubicacion.localidad.nombre }}</div>
+        </div>
+        <div class="col-4">
+            <label>Provincia</label> <div>{{ domicilio.ubicacion.provincia.nombre }}</div>
+        </div>
+        <div class="col-4">
+            <label>País</label> <div>{{ domicilio.ubicacion.pais.nombre }}</div>
+        </div>
+    </div>
+    <hr *ngIf="i !== profesional.domicilios.length - 1">
+</fieldset>
+</plex-box>
+-->

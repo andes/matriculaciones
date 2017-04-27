@@ -3,17 +3,28 @@ import { URLSearchParams, RequestOptionsArgs , Response, Http } from '@angular/h
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs/Rx';
 
+import {
+    Server
+} from '@andes/shared';
+
+import {
+    ITurno
+} from './../interfaces/ITurno';
+
+
 @Injectable()
 export class TurnoService extends BaseService {
 
     private turnosMatriculacionURL = this.turnosURL + 'matriculacion/';
+    private turnosRenovacionURL = this.turnosURL + 'renovacion/';
     private turnosProximosURL = this.turnosURL + 'proximos/';
 
-    constructor(_http: Http) {
+    constructor(_http: Http, private _server: Server) {
         super(_http);
     }
 
     getTurnosProximos(search: any): Observable<any> {
+        // return this._http.get(this.turnosProximosURL, search);
         return this.getTurnos(this.turnosProximosURL, search);
     }
 
@@ -21,12 +32,15 @@ export class TurnoService extends BaseService {
         return this.getTurnos(this.turnosMatriculacionURL, searchParams);
     }
 
+    getTurnosRenovacion(fecha: Date, searchParams: any): Observable<any[]> {
+        return this.getTurnos(this.turnosRenovacionURL, searchParams);
+    }
+
     saveTurnoMatriculacion(turnoModel: any): Observable<any> {
         return this.post(this.turnosMatriculacionURL + turnoModel.profesional, turnoModel);
     }
 
     saveTurno(turnoModel): Observable<any> {
-        console.log(turnoModel._id)
         return this.post(this.turnosURL + 'save/' + turnoModel._id, turnoModel);
     }
 

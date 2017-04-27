@@ -1,44 +1,121 @@
+<section>
 <div class="row">
-    <div class="col-sm-9">
-        <plex-box [formGroup]="formBuscarNumeracion" *ngIf="showListado">
-            <div class="row">
-                <div class="col-md-6">
-                    <plex-select label="Profesión" formControlName="profesion" (get-data)="loadProfesiones($event)"></plex-select>                   
+    <div class="col-8">
+
+        <plex-box type="primary">
+            <header>
+                <div [formGroup]="formBuscarNumeracion" *ngIf="showListado">
+                    <div class="row">
+                        <div class="col-6">
+                            <plex-select label="Profesión" formControlName="profesion" (getData)="loadProfesiones($event)" (change)="buscar()"></plex-select>                   
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <plex-button class="pull-right" label="Buscar" type="primary" (click)="buscar()"></plex-button>
+            </header>
+        
+
+<!--            <virtual-scroll [items]="numeraciones" (update)="numeraciones = $event">
+                <div *ngFor="let numeracion of numeraciones"> {{numeracion | json}}</div>
+
+            </virtual-scroll>-->
+                <!--<div *ngFor="let numeracion of numeraciones"> {{numeracion | json}}</div>-->
+            <!--<mat-plex-scroll [data]="numeraciones" (updateData)="buscar($event)">-->
+          <!--  <div
+                (scroll)="onScroll($event)">
+
+                <div *ngFor="let numeracion of numeraciones; let idx = index">
+                    {{idx}}
+                </div>-->
+
+
+
+            <div infinite-scroll
+                [infiniteScrollDistance]="1"
+                [infiniteScrollThrottle]="2"
+                (scroll)="onScroll($event)"
+                [scrollWindow]="false">
+            
+
+
+                <div class="row" *ngFor="let numeracion of numeraciones" (click)="showNumeracion(numeracion)">
+                    <div class="col-md-12">
+                            <ul class="list-group">
+                            <li class="list-group-item justify-content-between">
+                                <h4 class="box-title-elemento">{{ numeracion.profesion.nombre }}
+                                <br>
+                                <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
+                                </h4>
+                            
+                                <button type="button" class="btn-contextual" data-widget="" data-toggle="tooltip" title="Eliminar problema" data-original-title="">
+                                <i ng-reflect-class-name="mdi mdi-dots-horizontal" class="mdi mdi-dots-horizontal"></i>
+                                </button>
+
+                            </li>
+                        </ul>
+                        
+                    </div>
                 </div>
-            </div>
+        </div>
+            <!--</div>-->
+           <!-- </mat-plex-scroll>-->
+            
+    
+
+            <!--<mat-plex-scroll *ngIf="showListado" [data]="numeraciones" (updateData)="buscar($event)">-->
+                
+            <!--<plex-scroll>-->
+<!--                <div class="row" *ngFor="let numeracion of numeraciones" (click)="showNumeracion(numeracion)">
+                    <div class="col-md-12">
+                            <ul class="list-group">
+                            <li class="list-group-item justify-content-between">
+                                <h4 class="box-title-elemento">{{ numeracion.profesion.nombre }}
+                                <br>
+                                <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
+                                </h4>
+                            
+                                <button type="button" class="btn-contextual" data-widget="" data-toggle="tooltip" title="Eliminar problema" data-original-title="">
+                                <i ng-reflect-class-name="mdi mdi-dots-horizontal" class="mdi mdi-dots-horizontal"></i>
+                                </button>
+
+                            </li>
+                        </ul>
+                            
+                    </div>
+                </div>-->
+            <!--</plex-scroll>-->
+
+            <!--</mat-plex-scroll>-->
+
+<!--
+
+            <app-mat-listado *ngIf="showListado" [data]="numeraciones" (updateData)="buscar($event)">
+                <thead>
+                    <tr>
+                        <th>Profesión</th>
+                        <th>Próximo Número</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngIf="numeraciones.length === 0">
+                        <td colspan="5">
+                            No se encontraron resultados.
+                        </td>
+                    </tr>
+                    <tr *ngFor="let numeracion of numeraciones" (click)="showNumeracion(numeracion)" class="listado-row" [ngClass]="{'selected-row': numeracionElegida && numeracion._id === numeracionElegida._id}">
+                        <td>{{ numeracion.profesion.nombre }}</td>
+                        <td>{{ numeracion.proximoNumero }}</td>
+                    </tr>
+                </tbody>
+            </app-mat-listado>
+            -->
+            
         </plex-box>
         
-        <app-numeracion-matriculas [numeracion]="numeracionElegida" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
-
-
-        <app-mat-listado *ngIf="showListado" [data]="numeraciones" (updateData)="buscar($event)">
-            <thead>
-                <tr>
-                    <th>Profesión</th>
-                    <th>Próximo Número</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngIf="numeraciones.length === 0">
-                    <td colspan="5">
-                        No se encontraron resultados.
-                    </td>
-                </tr>
-                <tr *ngFor="let numeracion of numeraciones" (click)="showNumeracion(numeracion)" class="listado-row" [ngClass]="{'selected-row': numeracionElegida && numeracion._id === numeracionElegida._id}">
-                    <td>{{ numeracion.profesion.nombre }}</td>
-                    <td>{{ numeracion.proximoNumero }}</td>
-                </tr>
-            </tbody>
-        </app-mat-listado>
 
     </div>
 
-    <div class="col-sm-3" *ngIf="numeracionElegida && showListado">
+
+    <div class="col" *ngIf="numeracionElegida && showListado">
         <plex-box title="Detalle de Numeración" *ngIf="numeracionElegida">
             <div class="row">
                 <div class="col-sm-12">
@@ -52,3 +129,10 @@
         </plex-box>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-8">
+<app-numeracion-matriculas [numeracion]="numeracionElegida" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
+    </div>
+</div>
+</section>

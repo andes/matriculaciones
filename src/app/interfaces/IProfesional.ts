@@ -7,13 +7,14 @@ import {
 
 export interface IProfesional {
     _id: string;
-    cuitCuil: string;
-    apellidos: string;
-    nombres: string;
+    habilitado: Boolean;
+    nombre: string;
+    apellido: string;
     documentoNumero: string;
     documentoVencimiento: Date;
-    lugarNacimiento: string;
+    cuit: string;
     fechaNacimiento: Date;
+    lugarNacimiento: string;
     nacionalidad: {
         nombre: string;
         codigo: number;
@@ -39,12 +40,12 @@ export interface IProfesional {
         ultimaActualizacion: Date;
         activo: boolean;
     }];
-    foto: string;
+    fotoArchivo: string;
     firmas: [{
-        archivo: string;
+        imgArchivo: string;
         fecha: Date;
     }];
-    formacionProfesional: {
+    formacionGrado: [{
         profesion: {
             nombre: string;
             codigo: number;
@@ -55,48 +56,53 @@ export interface IProfesional {
         };
         titulo: string;
         fechaEgreso: Date;
-        matriculaNumero: number;
-        libro: string;
-        folio: string;
-        periodos: [{
+        fechaTitulo: Date;
+        revalida: boolean;
+        matriculacion: [{
+            matriculaNumero: Number;
+            libro: String;
+            folio: String;
             inicio: Date;
             fin: Date;
-            numero: number;
-        }],
-        revalida: boolean;
-        revalidaciones: [{
-            numero: number;
-            fecha: Date;
+            revalidacionNumero: Number;
         }];
-    };
-    matriculasEspecialidades: [{
+    }];
+    formacionPosgrado: [{
+        profesion: {
+            nombre: string;
+            codigo: number;
+        };
+        institucionFormadora: {
+            nombre: string;
+            codigo: number;
+        };
         especialidad: {
             nombre: string;
             codigo: number;
         };
-        entidadRevalidadora: {
-            nombre: string;
-            codigo: number;
-        };
-        numero: Number;
+        fechaIngreso: Date;
+        fechaEgreso: Date;
+        observacion: String;
         certificacion: {
-            nombre: string;
-            codigo: number;
-        };
-        libro: String;
-        folio:  String;
-        periodos: [{
-            incio: Date,
-            fin: Date,
-            numero: number;
-        }],
-        revalida: Boolean;
-        revalidaciones: [{
-            numero: Number;
             fecha: Date;
-        }]
+            modalidad: {
+                nombre: string;
+                codigo: number;
+            };
+            establecimiento: {
+                nombre: string;
+                codigo: number;
+            };
+        };
+        matriculacion: [{
+            matriculaNumero: Number;
+            libro: String;
+            folio: String;
+            inicio: Date;
+            fin: Date;
+            revalidacionNumero: Number;
+        }];
     }];
-    rematriculado: Boolean;
     origen: String;
     sanciones: [{
         numero: Number;
@@ -106,4 +112,5 @@ export interface IProfesional {
         fecha: Date;
         vencimiento: Date;
     }];
+    notas: String;
 }

@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Plex } from 'andes-plex/src/lib/core/service';
-import { SidebarItem } from 'andes-plex/src/lib/app/sidebar-item.class';
+import { Plex } from '@andes/plex';
+import { environment } from './../environments/environment';
+// import { SidebarItem } from '@andes/plex/src/lib/app/sidebar-item.class';
+// import { MenuItem } from '@andes/plex/src/lib/app/menu-item.class';
+import { DropdownItem } from '@andes/plex';
+import { Server } from '@andes/shared';
+
 
 @Component({
   selector: 'app-root',
@@ -9,7 +14,9 @@ import { SidebarItem } from 'andes-plex/src/lib/app/sidebar-item.class';
 })
 export class AppComponent implements OnInit {
 
-    constructor(public _plex: Plex) { }
+    constructor(public _plex: Plex, public _server: Server) {
+        _server.setBaseURL(environment.API);
+    }
 
     ngOnInit() {
         // Cargo el listado de componentes
@@ -17,12 +24,13 @@ export class AppComponent implements OnInit {
     }
 
     loadSideBar() {
-        const items = [
-            new SidebarItem('Inicio', 'creation', '/home'),
-            new SidebarItem('Config. Agenda', 'calendar-multiple-check', '/agenda'),
-            new SidebarItem('Turnos', 'calendar', '/listadoTurnos'),
+        const menu: DropdownItem[] = [
+            { label: 'Inicio', icon: 'home', route: 'home/'},
+            { label: 'Turnos', icon: 'calendar', route: 'listadoTurnos/'},
+            { label: 'Numeraciones', icon: 'book', route: 'listadoNumeraciones/'},
         ];
-        this._plex.initStaticItems(items);
+
+        this._plex.initView('Matriculaciones', menu); // .initStaticItems(menu);//.initView('Matriculaciones', menu);
     }
 
 }

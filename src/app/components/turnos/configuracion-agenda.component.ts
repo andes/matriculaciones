@@ -1,7 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { Plex } from 'andes-plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+import { Plex } from '@andes/plex';
 import { Observable } from 'rxjs/Rx';
 
 // Interfaces
@@ -57,11 +56,11 @@ export class ConfiguracionAgendaComponent implements OnInit {
             diasHabilitados: [ diasActuales ? diasActuales : null, [Validators.required]],
             horarioInicioTurnos: [
                 agenda ? agenda.horarioInicioTurnos : null,
-                [Validators.required, PlexValidator.min(8), PlexValidator.max(16)]],
+                [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
             horarioFinTurnos: [
                 agenda ? agenda.horarioFinTurnos : null,
-                [Validators.required, PlexValidator.min(8), PlexValidator.max(16)]],
-            duracionTurno: [agenda ? agenda.duracionTurno : null, [Validators.required, PlexValidator.min(1), PlexValidator.max(60)]],
+                [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
+            duracionTurno: [agenda ? agenda.duracionTurno : null, [Validators.required, Validators.minLength(1), Validators.maxLength(60)]],
             nuevaFechaEximida: [null]
         });
     }

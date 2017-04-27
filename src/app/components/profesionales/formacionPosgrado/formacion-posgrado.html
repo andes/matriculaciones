@@ -1,0 +1,64 @@
+<app-formacion-posgrado-form [profesional]="profesional" (submitPosgrado)="saveProfesional($event)"></app-formacion-posgrado-form>
+<!--<hr>-->
+<plex-box *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;">
+    <header>
+        <div class="row">
+            <div class="col">
+                <legend class="info-subtitle float-left">
+                    {{formacionPosgrado.especialidad.nombre}}            
+                </legend>
+            </div>
+            <div class="col">
+                <div class="btn-group float-right">           
+                    <plex-button type="danger"                        
+                        icon="delete"></plex-button>
+                    <plex-button *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero"
+                        type="primary"                        
+                        icon="information-outline"            
+                        (click)="showPosgrado(i)"></plex-button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="row">
+        <div class="col-4">
+            <label>Profesión</label> 
+            <div>{{formacionPosgrado.profesion.nombre}}</div>
+        </div>
+        <div class="col">
+            <label>Institución Formadora</label> 
+            <div>{{ formacionPosgrado.institucionFormadora.nombre }}</div>
+        </div>
+        <!--<div class="col-1">
+            <plex-button class="float-right" type="primary" icon="information-outline"  *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" (click)="showPosgrado(i)"></plex-button>            
+        </div>-->
+    </div>
+</plex-box>
+
+<!--<plex-box>
+    <div class="row" style="margin-top:15px">
+        <div class="col-12">
+            <fieldset *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;">
+                <legend class="info-subtitle">
+                    {{formacionPosgrado.especialidad.nombre}}            
+                </legend>
+                <div class="row">
+                    <div class="col-4">
+                        <label>Profesión</label> 
+                        <div>{{formacionPosgrado.profesion.nombre}}</div>
+                    </div>
+                    <div class="col">
+                        <label>Institución Formadora</label> 
+                        <div>{{ formacionPosgrado.institucionFormadora.nombre }}</div>
+                    </div>
+                    <div class="col-1">
+                        <plex-button class="float-right" type="primary" icon="information-outline"  *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" (click)="showPosgrado(i)"></plex-button>            
+                    </div>
+                </div>
+                <hr *ngIf="i !== profesional.formacionPosgrado.length - 1">
+            </fieldset>
+
+        </div>
+    </div>
+</plex-box>-->

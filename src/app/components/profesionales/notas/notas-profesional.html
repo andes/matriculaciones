@@ -1,0 +1,15 @@
+<plex-box>
+    <div class="row">
+        <div class="col-12">
+            <div class="form-group">
+                <label style="font-weight: bold">Notas</label>                                
+                <textarea class="form-control" [(ngModel)]="textoNotas" style="width: 100%; height: 200px"></textarea>                                    
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <plex-button label="Guardar" type="success" (click)="guardarNotas()"></plex-button>
+        </div>
+    </div>
+</plex-box>

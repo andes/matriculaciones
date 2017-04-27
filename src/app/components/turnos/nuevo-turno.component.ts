@@ -7,6 +7,7 @@ import {
     Output,
     EventEmitter,
     OnDestroy,
+    OnChanges,
     OnInit,
     LOCALE_ID
 } from '@angular/core';
@@ -35,7 +36,7 @@ const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', '
          provide: LOCALE_ID, useValue: 'es-AR'
     }]
 })
-export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy {
+export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
     private $input: any;
     private $div: any;
     private format: string;
@@ -60,10 +61,15 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Lifecycle hooks
      */
+    ngOnChanges() {
+        console.log('changes calendar')
+        //this.getConfiguracionAgenda()
+    }
+
     ngOnInit() {
         // Setteo el formato utilizado para las fechas.
         this.format = 'DD/MM/YYYY';
-        //moment.locale('es');
+        // moment.locale('es');
     }
 
     ngAfterViewInit() {
@@ -98,10 +104,19 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy {
 
             // Obtengo la cantidad de turnos por fecha del mes.
             const hoy = new Date();
-            this._turnoService.getTurnosMatriculacion(hoy, {})
-                .subscribe((countTurnosXDia) => {
-                    this.buildCalendar(countTurnosXDia);
-                });
+
+            if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+
+                this._turnoService.getTurnosMatriculacion(hoy, {})
+                    .subscribe((countTurnosXDia) => {
+                        this.buildCalendar(countTurnosXDia);
+                    });
+            } else if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+                this._turnoService.getTurnosRenovacion(hoy, {})
+                    .subscribe((countTurnosXDia) => {
+                        this.buildCalendar(countTurnosXDia);
+                    });
+            }
         });
     }
 
@@ -132,7 +147,52 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy {
     /**
      * Calendar Methods
      */
-     private buildCalendar(countTurnosXDia: any[]) {
+   /* private updateTurnos(fecha: Date, narrow: boolean) {
+        const oDate = new Date(fecha);
+        let search = {};
+        if (narrow) {
+            search = {
+                anio: oDate.getFullYear(),
+                mes: oDate.getMonth() + 1,
+                dia: oDate.getDate()
+            };
+        }
+
+        if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+
+            // Obtengo los horarios ocupados del día.
+            this._turnoService.getTurnosMatriculacion(oDate, search)
+                .subscribe((datos) => {
+                    // Deshabilito los horarios ocupados.
+                    datos.forEach(item => {
+                        const turnoOcupado = item._id;
+                        this.horariosDisponibles.forEach(horario => {
+                            if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
+                                horario.ocupado = true;
+                            }
+                        });
+                    });
+            });
+
+
+        } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
+            // Obtengo los horarios ocupados del día.
+            this._turnoService.getTurnosRenovacion(oDate, search)
+                .subscribe((datos) => {
+                    // Deshabilito los horarios ocupados.
+                    datos.forEach(item => {
+                        const turnoOcupado = item._id;
+                        this.horariosDisponibles.forEach(horario => {
+                            if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
+                                horario.ocupado = true;
+                            }
+                        });
+                    });
+            });
+        }
+    }*/
+
+    private buildCalendar(countTurnosXDia: any[]) {
         // Inicio las opciones del calendario.
         this.buildCalendarOptions(countTurnosXDia);
 
@@ -149,7 +209,41 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy {
             });
 
             // Obtengo los horarios ocupados del día.
-            this._turnoService.getTurnosMatriculacion(fecha, {
+            if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+                this._turnoService.getTurnosMatriculacion(fecha, {
+                        anio: fecha.getFullYear(),
+                        mes: fecha.getMonth() + 1,
+                        dia: fecha.getDate()
+                    }).subscribe((datos) => {
+                            // Deshabilito los horarios ocupados.
+                            datos.forEach(item => {
+                                const turnoOcupado = item._id;
+                                this.horariosDisponibles.forEach(horario => {
+                                    if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
+                                        horario.ocupado = true;
+                                    }
+                                });
+                            });
+                    });
+            } else if (this.tipoTurno === Enums.TipoTurno.renovacion){
+                this._turnoService.getTurnosRenovacion(fecha, {
+                    anio: fecha.getFullYear(),
+                    mes: fecha.getMonth() + 1,
+                    dia: fecha.getDate()
+                }).subscribe((datos) => {
+                        // Deshabilito los horarios ocupados.
+                        datos.forEach(item => {
+                            const turnoOcupado = item._id;
+                            this.horariosDisponibles.forEach(horario => {
+                                if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
+                                    horario.ocupado = true;
+                                }
+                            });
+                        });
+                });
+            }
+
+           /* this._turnoService.getTurnosMatriculacion(fecha, {
                 anio: fecha.getFullYear(),
                 mes: fecha.getMonth() + 1,
                 dia: fecha.getDate()
@@ -163,7 +257,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy {
                             }
                         });
                     });
-            });
+            });*/
 
             this.writeValue(fecha);
         });

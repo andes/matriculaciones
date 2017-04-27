@@ -1,356 +1,126 @@
-<div class="row">
-    <div class="col-sm-9">
-        <plex-box>            
-            <div class="row">
-                <div class="col-sm-6">
-                    <div style="display: inline-block;">
-                        <img *ngIf="profesional.foto" src="http://localhost:3002/{{profesional.foto}}" class="img-circle">
-                        <img *ngIf="!profesional.foto" src="http://localhost:3002/prof.png" class="img-circle">
-                    </div>
-                    <div style="padding-left: 10px; display: inline-block; vertical-align: middle">
-                        <div class="nombre-profesional">                        
-                            <span style="font-weight: bold">{{profesional.apellidos + ', '}}</span>{{profesional.nombres}}
-                        </div>
-                        <span class="datos-profesional">
-                            {{profesional.edad + ' años'}} | {{'DNI ' + profesional.documentoNumero }} ({{profesional.cuitCuil}})<br />
-                            {{profesional.fechaNacimiento | date: 'dd/MM/yyyy'}}
-                        </span>
-                    </div>
+<section  *ngIf="profesional">
+    <div class="row">
+        <div class="col-8">
+            <plex-box (scroll)="alert('scroll')">
+                <header>
+                    <app-header-profesional [profesional]="profesional"></app-header-profesional>
+                </header>
+                <div id="wrapper">
+
+                <plex-tabs>
+                    <!-- Contacto y Domicilios -->
+                    <plex-tab label="Contacto y Domicilios">
+                        <app-contacto-domicilios-profesional [profesional]="profesional"></app-contacto-domicilios-profesional>
+                    </plex-tab>
+                    
+                    <!-- Formación de Grado -->
+                    <plex-tab label="Formación de Grado">
+                        <app-formacion-grado [profesional]="profesional" 
+                            (formacionGradoSelected)="formacionGradoSelected($event)"></app-formacion-grado>
+                    </plex-tab>
+
+                    <!-- Renovaciones -->
+                    <!--<plex-tab label="Renovaciones">
+                        <app-renovaciones-profesional [profesional]="profesional"></app-renovaciones-profesional>
+                    </plex-tab>-->
+
+                    <!-- Formacion Posgrado -->
+                    <plex-tab label="Formación de Posgrado">
+                        <app-formacion-posgrado [profesional]="profesional" 
+                            (formacionPosgradoSelected)="formacionPosgradoSelected($event)" 
+                            (updateProfesional)="updateProfesional2($event)"></app-formacion-posgrado>
+                    </plex-tab>
+
+                    <!-- Sanciones -->
+                    <plex-tab label="Sanciones">
+                        <app-sanciones [profesional]="profesional" 
+                        (updateProfesional)="updateProfesional2($event)"></app-sanciones>
+                    </plex-tab>
+                    
+                    <!-- Foto -->
+                    <plex-tab label="Foto">
+                        <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFoto($event)"></app-foto-profesional>
+                    </plex-tab>
+                    
+                    <!-- Firmas -->
+                    <plex-tab label="Firmas">
+                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirma($event)"></app-firmas-profesional>
+                    </plex-tab>
+
+                    <!-- Notas -->
+                    <plex-tab label="Notas">
+                        <app-notas-profesional [profesional]="profesional" (onSaved)="guardarNotas($event)"></app-notas-profesional>
+                    </plex-tab>
+                </plex-tabs>
                 </div>
-                <div class="col-sm-3 border-left" style="text-align: center">
-                    <span class="mdi mdi-big mdi-danger mdi-alert" *ngIf="profesional.renovacionVencida">
-                        <span style="margin-left: 5px;">Renovación Vencida</span>
-                    </span>
-                </div>
-                <div class="col-sm-3 border-left" style="font-size: 16px">
-                    <div style="padding-top: 25px">
-                    <div class="form-group" *ngIf="profesional.formacionProfesional.matriculaNumero && profesional.formacionProfesional.periodos">
-                        <label>Matrícula Nº</label>
-                        <span>{{ profesional.formacionProfesional.matriculaNumero }}</span>
-                        <div class="datos-profesional">
-                            {{ profesional.formacionProfesional.periodos[profesional.formacionProfesional.periodos.length - 1].inicio | date: 'dd/MM/yyyy'}} - {{profesional.formacionProfesional.periodos[profesional.formacionProfesional.periodos.length - 1].fin | date: 'dd/MM/yyyy'}}
-                        </div>
-                    </div>
-                    </div>
-                </div>
-            </div>
-            <hr style="margin-bottom: 10px; margin-top: 10px">
-            <div class="row">
-                <div class="col-sm-12">
-                    <span class="info-subtitle">Profesión:</span>&nbsp;  {{profesional.formacionProfesional.profesion.nombre}}
-                </div>
-            </div>
-        </plex-box>
 
 
-        <plex-tabs>
-            <plex-tab label="Contacto y Domicilios">
-                <plex-box>
-                    <div class="row">
-                        <div *ngFor="let contacto of profesional.contactos" class="col-sm-4 border-left">
-                            <div class="form-group">
-                                <label>{{contacto.tipo}}</label>
-                                <div>{{ contacto.valor }}</div>
-                            </div>
-                        </div>                        
-                    </div>
-                    <hr>
-                        <div class="row" >
-                            <div class="col-sm-4 border-left" *ngFor="let domicilio of profesional.domicilios; let idx = index">
-                                <h4 class="info-subtitle ">Domicilio {{domicilio.tipo}}</h4>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="form-group">
-                                            <label>Dirección</label>
-                                            <div>{{ domicilio.valor }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>C.P.</label>
-                                            <div>{{ domicilio.codigoPostal }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Localidad</label>
-                                            <div>{{ domicilio.ubicacion.localidad.nombre }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Provincia</label>
-                                            <div>{{ domicilio.ubicacion.provincia.nombre }}</div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>País</label>
-                                            <div>{{ domicilio.ubicacion.pais.nombre }}</div>
-                                        </div>
-                                    </div>
-                                </div>                        
-                            </div>
-                        </div>
-                </plex-box>
-            </plex-tab>
+            </plex-box>
+        </div>
+
+
+        
+        <div class="col">
             
-            <plex-tab label="Formación Profesional">
-                <plex-box>
-                    <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Profesión</label>
-                                <div>{{profesional.formacionProfesional.profesion.nombre}}</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Título</label>
-                                <div>{{profesional.formacionProfesional.titulo}}</div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <label>Fecha de Egreso</label>
-                                <div>{{profesional.formacionProfesional.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Entidad Formadora</label>
-                                <div>{{profesional.formacionProfesional.entidadFormadora.nombre}}</div>
-                            </div>
-                        </div>
-                    </div>
+            <app-formacion-grado-detalle *ngIf="(indexFormacionGradoSelected !== undefined) && (indexFormacionPosgradoSelected === undefined)" 
+                [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" 
+                [profesional]="profesional" 
+                (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
 
-                </plex-box>
-            </plex-tab>
-            <plex-tab label="Renovaciones">
-                <plex-box>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th style="text-align: center">Nº</th>
-                                        <th style="text-align: center">Fecha de Inicio</th>
-                                        <th style="text-align: center">Fecha de Fin</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let periodo of profesional.formacionProfesional.periodos">
-                                        <td style="text-align: center">{{periodo.numero}}</td>
-                                        <td style="text-align: center">{{periodo.inicio | date: 'dd/MM/yyyy'}}</td>
-                                        <td style="text-align: center">{{periodo.fin | date: 'dd/MM/yyyy'}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+            <app-formacion-posgrado-detalle *ngIf="(indexFormacionPosgradoSelected !== undefined) && (indexFormacionGradoSelected === undefined)" 
+                [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
+            
+            <!--<plex-box>
+                <div class="row">
+                    <div class="col-12">
+                        Se requiere la aprobación par que se le asigne un número de matrícula.
                     </div>
-                </plex-box>
-            </plex-tab>
-            <plex-tab label="Especialidades">
-                <plex-box></plex-box>
-            </plex-tab>
-            <plex-tab label="Sanciones">
-                <plex-box >
-                    <form [formGroup]="formSancion">
-
-                    <div class="row">
-                        <div class="col-md-2">
-                            <plex-int label="Número" formControlName="numero"></plex-int>                            
-                        </div>
-                        <div class="col-md-3">
-                            <plex-select label="Sanción" formControlName="sancion" (get-data)="loadSanciones($event)"></plex-select>                            
-                        </div>
-                        <div class="col-md-3">
-                            <plex-text label="Norma Legal" formControlName="normaLegal"></plex-text>                            
-                        </div>
-                        <div class="col-md-2">
-                            <plex-datetime type="date" label="Fecha" formControlName="fecha"></plex-datetime>                            
-                        </div>
-                        <div class="col-md-2">
-                            <plex-datetime type="date" label="Vencimiento" formControlName="vencimiento"></plex-datetime>                            
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Designar" type="danger" (click)="aprobarProfesional()" class="pull-right"></plex-button>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <plex-text label="Motivo" formControlName="motivo"></plex-text>                            
-                        </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        Imprmir un certificado de ética.
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <plex-button label="Guardar" type="primary" class="pull-right" (click)="guardarSancion(formSancion.value)"></plex-button>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Imprimir" type="primary" [disabled]="true" class="pull-right"></plex-button>                    
                     </div>
-                    </form>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Número</th>
-                                        <th>Sanción</th>
-                                        <th>Motivo</th>
-                                        <th>Norma Legal</th>
-                                        <th>Fecha</th>
-                                        <th>Vencimiento</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let sancion of profesional.sanciones">
-                                        <td>{{sancion.numero}}</td>
-                                        <td>{{sancion.sancion}}</td>
-                                        <td>{{sancion.motivo}}</td>
-                                        <td>{{sancion.normaLegal}}</td>
-                                        <td>{{sancion.fecha | date: 'dd/MM/yyyy'}}</td>
-                                        <td>{{sancion.vencimiento | date: 'dd/MM/yyyy'}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <!--<div class="col-sm-2"></div>
-                        <div class="col-sm-6"></div>
-                        <div class="col-sm-2"></div>-->
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        Anular matrícula.
                     </div>
-
-
-
-
-                </plex-box>
-            </plex-tab>
-            <plex-tab label="Foto">
-                <plex-box>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Foto Actual</label>
-                                <div *ngIf="profesional.foto">
-                                    <img src="http://localhost:3002/{{profesional.foto}}" style="width: 85px"/>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                        <div class="row">
-
-                        <div class="col-sm-6">
-                            <div class="form-group">                                
-                                <div>
-                                    <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
-                                </div>
-                            </div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Anular" type="danger" (click)="anularMatricula()" class="pull-right"></plex-button>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            
-                            <plex-button label="Enviar" class="pull-right" (click)="enviarFoto()" [disabled]="!uploader?.queue?.length"></plex-button>
-                        </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        Generar Credencial
                     </div>
-                </plex-box>
-            </plex-tab>
-            <plex-tab label="Firmas">
-                <plex-box>
-                    <div class="row" *ngFor="let firma of profesional.firmas">
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Fecha</label>
-                                <div>
-                                    {{firma.fecha | date: 'dd/MM/yyyy'}}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <div class="form-group">
-                                <label>Firma</label>
-                                <div>
-                                    <img src="http://localhost:3002/{{firma.archivo}}" style="width: 85px">
-                                </div>
-                            </div>
-                        </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Generar" type="primary" (click)="generarCredencial()" class="pull-right" [disabled]="!profesional.foto || !profesional.formacionGrado.matriculaNumero || !(profesional.firmas && profesional.firmas.length > 0)"></plex-button>
                     </div>
-                    <div class="row">
-                        <div class="col-sm-6">
-                            <div class="form-group">                                
-                                <div>
-                                    <input type="file" name="file" ng2FileSelect [uploader]="uploaderFirma" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <plex-button label="Enviar" class="pull-right" (click)="enviarFirma()" [disabled]="!uploaderFirma?.queue?.length"></plex-button>
-                        </div>
-                    </div>
-                </plex-box>
-            </plex-tab>
-            <plex-tab label="Notas">
-                <plex-box>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="form-group">
-                                <label>Notas</label>                                
-                                <textarea class="form-control" [(ngModel)]="profesional.notas" style="width: 100%; height: 200px"></textarea>                                    
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <plex-button label="Guardar" class="pull-right" (click)="guardarNotas()"></plex-button>
-                        </div>
-                    </div>
-                </plex-box>
-            </plex-tab>
-        </plex-tabs>
-    
-        <plex-button type="primary" class="pull-left" label="Volver al Listado" (click)="volverAlListado()"></plex-button>
-
+                </div>
+            </plex-box>-->
+        </div>
     </div>
+</section>
+<footer>
+    <plex-button type="danger" label="Volver" (click)="volver()" icon="arrow-left-bold"></plex-button>
+</footer>
 
-    <div class="col-sm-3">
-        <plex-box>
-            <div class="row">
-                <div class="col-sm-12">
-                    Se requiere la aprobación par que se le asigne un número de matrícula.
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <plex-button label="Designar" type="danger" (click)="aprobarProfesional()" class="pull-right"></plex-button>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-12">
-                    Imprmir un certificado de ética.
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <plex-button label="Imprimir" type="primary" [disabled]="true" class="pull-right"></plex-button>                    
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-12">
-                    Anular matrícula.
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <plex-button label="Anular" type="danger" (click)="anularMatricula()" class="pull-right"></plex-button>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-sm-12">
-                    Generar Credencial
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-sm-12">
-                    <plex-button label="Generar" type="primary" (click)="generarCredencial()" class="pull-right" [disabled]="!profesional.foto || !profesional.formacionProfesional.matriculaNumero || !(profesional.firmas && profesional.firmas.length > 0)"></plex-button>
-                </div>
-            </div>
-        </plex-box>
-       
-    </div>
-</div>
 
+                    

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { Plex } from 'andes-plex/src/lib/core/service';
+import { Plex } from '@andes/plex/src/lib/core/service';
 import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
@@ -28,7 +28,6 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
     public turnoSeleccionado: boolean;
     public turnoGuardado: boolean;
     private _turnoSeleccionado: Date;
-    private _profesionalID: string;
     public _nuevoProfesional: any;
 
     constructor(private _formBuilder: FormBuilder,
@@ -64,8 +63,9 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
 
         this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
             .subscribe(turno => {
+                console.log(turno)
                 const pdf = this._pdfUtils.comprobanteTurno(turno);
-                pdf.save('Turno ' + this._nuevoProfesional.nombres + ' ' + this._nuevoProfesional.apellidos + '.pdf');
+                pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
             });
     }
 

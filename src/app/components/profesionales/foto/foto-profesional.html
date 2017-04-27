@@ -1,0 +1,27 @@
+<plex-box>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label style="font-weight: bold">Foto Actual</label>
+                <div *ngIf="profesional.fotoArchivo">
+                    <img src="http://localhost:3002/{{profesional.fotoArchivo}}" style="width: 85px"/>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div class="row">
+
+        <div class="col-6">
+            <div class="form-group">                                
+                <div>
+                    <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">            
+            <plex-button label="Guardar" type="success" (click)="upload()" [disabled]="!uploader?.queue?.length"></plex-button>
+        </div>
+    </div>
+</plex-box>

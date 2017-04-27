@@ -1,0 +1,34 @@
+<plex-box>
+    <div class="row" *ngFor="let firma of profesional.firmas">
+        <div class="col-6">
+            <div class="form-group">
+                <label style="font-weight: bold">Fecha</label>
+                <div>
+                    {{firma.fecha | date: 'dd/MM/yyyy'}}
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="form-group">
+                <label style="font-weight: bold">Firma</label>
+                <div>
+                    <img src="http://localhost:3002/{{firma.imgArchivo}}" style="width: 85px">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">                                
+                <div>
+                    <input type="file" name="file" ng2FileSelect [uploader]="uploader" />
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <plex-button type="success" label="Guardar" (click)="upload()" [disabled]="!uploader?.queue?.length"></plex-button>
+        </div>
+    </div>
+</plex-box>

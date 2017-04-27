@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="col-md-9">
+        <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9" *ngIf="turnoSeleccionado">
+        <app-profesional  (onProfesionalCompleto)="onProfesionalCompleto($event)"></app-profesional>
+    </div>
+</div>

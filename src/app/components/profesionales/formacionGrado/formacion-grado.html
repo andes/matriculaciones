@@ -1,0 +1,72 @@
+<plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
+    <header>
+        <div class="row">
+            <div class="col">
+                <legend class="info-subtitle float-left">
+                    {{formacionGrado.profesion.nombre}}            
+                </legend>
+            </div>
+            <div class="col">
+                <div class="btn-group float-right">           
+                    <plex-button *ngIf="!formacionGrado.matriculacion?.matriculacionNumero"
+                        type="primary"
+                        class="float-right"
+                        icon="information-outline"            
+                        (click)="showFormacion(i)"></plex-button>            
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="row">
+        <div class="col-3">
+            <label>Título</label> 
+            <div>{{formacionGrado.titulo}}</div>
+        </div>
+        <div class="col-2">
+            <label>Fecha del Título</label> 
+            <div>{{formacionGrado.fechaTitulo | date: 'dd/MM/yyyy'}}</div>
+        </div>
+        <div class="col-7">
+            <label>Entidad Formadora</label> 
+            <div>{{formacionGrado.entidadFormadora.nombre}}</div>
+        </div>
+        <!--<div class="col-1">
+            <plex-button class="float-right" type="primary" icon="information-outline"  *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" (click)="showPosgrado(i)"></plex-button>            
+        </div>-->
+    </div>
+</plex-box>
+
+<!--
+<plex-box>
+<div class="row">
+    <div class="col-12">
+        <fieldset *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
+            <legend class="info-subtitle">
+                {{formacionGrado.profesion.nombre}}            
+            </legend>
+            <div class="row">
+                <div class="col-3 ">
+                    <label>Título</label> 
+                    <div>{{formacionGrado.titulo}}</div>
+                </div>
+                <div class="col-2">
+                    <label>Fecha del Título</label> 
+                    <div>{{formacionGrado.fechaTitulo | date: 'dd/MM/yyyy'}}</div>
+                </div>
+                <div class="col-6">
+                    <label>Entidad Formadora</label> 
+                    <div>{{formacionGrado.entidadFormadora.nombre}}</div>
+                </div>
+                <div class="col-1 align-baseline">
+                    <plex-tooltip text="Ver más información" position="left">
+                        <plex-button class=" align-baseline" type="primary" icon="information-outline"  *ngIf="!formacionGrado.matriculacion?.matriculacionNumero" (click)="showFormacion(i)"></plex-button>
+                    </plex-tooltip>
+                </div>
+            </div>
+            <hr *ngIf="i !== profesional.formacionGrado.length - 1">
+        </fieldset>
+
+    </div>
+</div>
+</plex-box>-->

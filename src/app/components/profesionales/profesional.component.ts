@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Plex } from 'andes-plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+//import { Plex } from '@andes/plex/src/lib/core/service';
+//import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+import { Plex } from '@andes/plex';
 
 // Enums
 import {
@@ -22,7 +23,7 @@ import { SexoService } from './../../services/sexo.service';
 
 // Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
-
+import { ISiisa } from './../../interfaces/ISiisa';
 
 @Component({
     selector: 'app-profesional',
@@ -33,9 +34,11 @@ export class ProfesionalComponent implements OnInit {
     public formsDomicilios: FormArray;
     public formsContactos: FormArray;
     public sexos: any[];
-    public estadosCiviles: any[];
+    public provincias: any[];
+    public localidades: any[];
+    // public estadosCiviles: any[];
     public showOtraEntidadFormadora: Boolean = false;
-    @Input() profesionalID: string;
+    @Input()
     private profesional: IProfesional;
 
     @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
@@ -54,7 +57,7 @@ export class ProfesionalComponent implements OnInit {
 
     ngOnInit() {
 
-        this.estadosCiviles = getEnumAsObjects(EstadoCivil);
+        // this.estadosCiviles = getEnumAsObjects(EstadoCivil);
         // this.sexos = getEnumAsObjects(Sexo);
         /*this._sexoService.getSexos().subscribe(sexos => {
             this.sexos = sexos;
@@ -150,23 +153,23 @@ export class ProfesionalComponent implements OnInit {
             ]);
 
         }
-            console.log(this.formsContactos);
+            //console.log(this.formsContactos);
 
 
 
         this.formProfesionalComp = this._formBuilder.group({
-            cuitCuil: [
+            cuit: [
                 model ? model.cuitCuil : null,
-                [Validators.required, PlexValidator.min(0)]],
-            apellidos: [
+                [Validators.required, Validators.minLength(0)]],
+            apellido: [
                 model ? model.apellidos : null,
                 Validators.required],
-            nombres: [
+            nombre: [
                 model ? model.nombres : null,
                 Validators.required],
             documentoNumero: [
                 model ? model.documentoNumero : null,
-                [Validators.required, PlexValidator.min(0)]],
+                [Validators.required, Validators.minLength(0)]],
             documentoVencimiento: [
                 model ? model.documentoVencimiento : null,
                 Validators.required],
@@ -187,7 +190,7 @@ export class ProfesionalComponent implements OnInit {
                 Validators.required],
             contactos: this.formsContactos,
             domicilios: this.formsDomicilios,
-            formacionProfesional: this._formBuilder.group({
+            formacionGrado: this._formBuilder.group({
                 profesion: [
                     model ? model.profesion : null,
                     Validators.required],
@@ -196,8 +199,8 @@ export class ProfesionalComponent implements OnInit {
                 titulo: [
                     model ? model.titulo : null,
                     Validators.required],
-                fechaEgreso: [
-                    model ? model.fechaEgreso : null,
+                fechaTitulo: [
+                    model ? model.fechaTitulo : null,
                     Validators.required]
             })
         });
@@ -223,15 +226,24 @@ export class ProfesionalComponent implements OnInit {
         this._paisService.getPaises().subscribe(event.callback);
     }
 
-    loadProvincias(event, pais) {
-        if (pais.value) {
+    loadProvincias(pais) {
+        console.log(pais.value)
+        this._provinciaService.get({ 'pais': pais.value.id })
+            .subscribe(resp => {
+                this.provincias = resp;
+            });
+        // console.log(event)
+        /*if (pais.value) {
             this._provinciaService.get({ 'pais': pais.value.id }).subscribe(event.callback);
-        }
+        }*/
     }
 
-    loadLocalidades(event, provincia) {
+    loadLocalidades(provincia) {
         if (provincia.value) {
-            this._localidadService.getXProvincia(provincia.value.id).subscribe(event.callback);
+            this._localidadService.getXProvincia(provincia.value.id)
+                .subscribe(resp => {
+                    this.localidades = resp;
+                });
         }
     }
 

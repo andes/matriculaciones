@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { Plex } from 'andes-plex/src/lib/core/service';
+import { Plex } from '@andes/plex/src/lib/core/service';
 import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
@@ -11,9 +11,9 @@ import { ProfesionService } from './../../services/profesion.service';
 
 @Component({
     selector: 'app-mat-listado',
-    template: `<plex-box>
+    template: `
     <div class="table-responsive">
-    <table class="table table-bordered">
+    <table class="table">
     <ng-content></ng-content>
     </table>
         <div>
@@ -45,8 +45,7 @@ import { ProfesionService } from './../../services/profesion.service';
                 </li>
             </ul>
         </div>
-    </div>
-</plex-box>`
+    </div>`
 })
 export class ListadoComponent implements OnInit {
     currentPage = 1;

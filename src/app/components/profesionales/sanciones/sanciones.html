@@ -1,0 +1,36 @@
+<app-sanciones-form [profesional]="profesional" (submitSancion)="addSancion($event)"></app-sanciones-form>
+
+<plex-box>
+    
+    <!--<hr>-->
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Número</th>
+                        <th>Sanción</th>
+                        <th>Motivo</th>
+                        <th>Norma Legal</th>
+                        <th>Fecha</th>
+                        <th>Vencimiento</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr colspan="6" *ngIf="profesional.sanciones?.length === 0">
+                        No se registraron sanciones.
+                    </tr>
+                    <tr *ngFor="let sancion of profesional.sanciones">
+                        <td>{{sancion.numero}}</td>
+                        <td>{{sancion.sancion}}</td>
+                        <td>{{sancion.motivo}}</td>
+                        <td>{{sancion.normaLegal}}</td>
+                        <td>{{sancion.fecha | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{sancion.vencimiento | date: 'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</plex-box>

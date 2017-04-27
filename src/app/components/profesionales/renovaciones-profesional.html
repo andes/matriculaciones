@@ -1,0 +1,22 @@
+<plex-box  type="primary">
+    <div class="row">
+        <div class="col-6">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th style="text-align: center">Nº</th>
+                        <th style="text-align: center">Fecha de Inicio</th>
+                        <th style="text-align: center">Fecha de Fin</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let periodo of profesional.formacionGrado.periodos">
+                        <td style="text-align: center">{{periodo.numero}}</td>
+                        <td style="text-align: center">{{periodo.inicio | date: 'dd/MM/yyyy'}}</td>
+                        <td style="text-align: center">{{periodo.fin | date: 'dd/MM/yyyy'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</plex-box>

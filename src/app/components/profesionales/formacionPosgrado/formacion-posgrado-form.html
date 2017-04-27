@@ -1,0 +1,51 @@
+<plex-accordion>
+    <plex-panel tituloPrincipal="Nuevo Posgrado" icon="plus-circle-outline" [active]="activeAcc">
+        <div class="row">
+            <div class="col">
+                <form [formGroup]="formPosgrado" (ngSubmit)="onSubmit()">
+                    <div class="row">
+                        <div class="col-6">
+                            <plex-select label="Profesion" formControlName="profesion" [data]="profesiones"></plex-select>
+                        </div>
+                        <div class="col-6">
+                            <plex-select label="Especialidad" formControlName="especialidad" (getData)="loadEspecialidades($event)"></plex-select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <plex-select label="Institucion Formadora" formControlName="institucionFormadora" (getData)="loadInstitucionesFormadoras($event)"></plex-select>
+                        </div>
+                        <div class="col-3">
+                            <plex-datetime type="date" label="Fecha de Ingreso" formControlName="fechaIngreso"></plex-datetime>
+                        </div>
+                        <div class="col-3">
+                            <plex-datetime type="date" label="Fecha de Egreso" formControlName="fechaEgreso"></plex-datetime>
+                        </div>                    
+                    </div>
+                    <hr>
+                    <h4>Certificación</h4>
+                    <div formGroupName="certificacion">
+                        <div class="row">
+                            <div class="col-4">
+                                <plex-select label="Modalidad" formControlName="modalidad" (getData)="loadModalidadesCertificacion($event)"></plex-select>
+                            </div>
+                            <div class="col-4">
+                                <plex-select label="Establecimiento Certificador" formControlName="establecimiento" (getData)="loadEstablecimientosCertificadores($event)"></plex-select>
+                            </div>
+                            <div class="col-4">
+                                <plex-datetime type="date" label="Fecha de Certificación" formControlName="fecha"></plex-datetime>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">                           
+                            <button type="submit" class="btn btn-success float-right">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </plex-panel>
+</plex-accordion>
+

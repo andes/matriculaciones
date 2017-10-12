@@ -11,7 +11,7 @@
     "e2e": "ng e2e"
   },
   "dependencies": {
-    "@andes/auth": "^1.0.0",
+    "@andes/auth": "^0.3.0",
     "@andes/match": "^0.1.9",
     "@andes/plex": "^2.0.13",
     "@andes/shared": "^1.0.1",

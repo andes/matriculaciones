@@ -3,8 +3,8 @@ import { Dia } from './../utils/enumerados';
 export interface IAgendaMatriculaciones {
     _id: String;
     diasHabilitados: Dia[];
-    horarioInicioTurnos: number;
-    horarioFinTurnos: number;
+    horarioInicioTurnos: string;
+    horarioFinTurnos: string;
     fechasExcluidas: Date[];
     duracionTurno: number;
 }

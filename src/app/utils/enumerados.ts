@@ -9,6 +9,12 @@ export enum Sexo {
   'otro'
 }
 
+export enum tipoComunicacion {
+  'Teléfono Fijo',
+  'Teléfono Celular',
+  'Email'
+}
+
 export enum EstadoCivil {
   'casado', 'separado', 'divorciado', 'viudo', 'soltero', 'otro'
 }
@@ -40,6 +46,7 @@ export function getEnumAsObjects(enumerado: any) {
   });
 };
 
+
 function titleCase(str) {
   return str.toLowerCase().split(' ').map(function(word) {
     return (word.charAt(0).toUpperCase() + word.slice(1));
@@ -55,7 +62,7 @@ function titleCase(str) {
 }*/
 
 export function getObjsEstadoCivil() {
-  return getEnumAsObjects(Object.keys(EstadoCivil));
+  return getEnumAsObjects(EstadoCivil);
   /*let arrEstados = Object.keys(EstadoCivil);
   arrEstados = arrEstados.slice(arrEstados.length / 2);
   let salida = arrEstados.map(elem => { return { 'id': elem, 'nombre': titleCase(elem) } });
@@ -63,7 +70,13 @@ export function getObjsEstadoCivil() {
 }
 
 export function getObjDias() {
-  return getEnumAsObjects(Object.keys(Dia));
+  //return getEnumAsObjects(Object.keys(Dia));
+  return getEnumAsObjects(Dia);
+}
+
+export function getObjSexos() {
+  //return getEnumAsObjects(Object.keys(Dia));
+  return getEnumAsObjects(Sexo);
 }
 
 export function getObjeto(elemento) {
@@ -71,4 +84,28 @@ export function getObjeto(elemento) {
     'id': elemento,
     'nombre': titleCase(elemento)
   };
+}
+export function getObjTipoComunicacion() {
+  let arrTC = Object.keys(tipoComunicacion);
+  arrTC = arrTC.slice(arrTC.length / 2);
+  let salida = arrTC.map(elem => {
+      let idEnumerado = elem.split(' ')[1] ? elem.split(' ')[1] : elem.split(' ')[0];
+      return {
+          'id': idEnumerado.toLowerCase(),
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+export function getObjTipoDomicilio() {
+  let arrEstadoC = Object.keys(TipoDomicilio);
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  let salida = arrEstadoC.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
 }

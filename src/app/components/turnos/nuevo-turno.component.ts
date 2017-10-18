@@ -100,7 +100,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             this.agendaConfig = datos[0];
 
             // Calculo los turnos disponibles por día.
-            this.buildHorariosDisponibles();
+            //this.buildHorariosDisponibles();
 
             // Obtengo la cantidad de turnos por fecha del mes.
             const hoy = new Date();
@@ -119,7 +119,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             }
         });
     }
-
+/*
     private buildHorariosDisponibles() {
         if (!this.agendaConfig) {
             return;

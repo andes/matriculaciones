@@ -23,6 +23,7 @@ import { NumeracionMatriculasComponent } from './components/numeracion/numeracio
 import { SolicitarTurnoRenovacionComponent } from './components/turnos/solicitar-turno-renovacion.component';
 import { SolicitarTurnoComponent } from './components/turnos/solicitar-turno.component';
 import { DetalleProfesionalComponent } from './components/profesionales/detalle-profesional.component';
+import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
 
 
 
@@ -40,7 +41,9 @@ const appRoutes: Routes = [
     { path: 'profesional/:id', component: DetalleProfesionalComponent },
     { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },
     { path: 'numeraciones', component: NumeracionMatriculasComponent },
-    { path: 'nuevoTurno', component: SolicitarTurnoComponent }
+    { path: 'nuevoTurno', component: SolicitarTurnoComponent },
+    { path: 'posgrado', component: FormacionPosgradoFormComponent }
+    
 ];
 
 export const appRoutingProviders: any[] = [];

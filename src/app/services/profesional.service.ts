@@ -11,7 +11,7 @@ export class ProfesionalService extends BaseService {
         super(_http);
     }
 
-    saveProfesional(profesionalModel: any): Observable<any> {
+    saveProfesional(profesionalModel: any){
         return this.post(this.profesionalesURL, profesionalModel);
     }
 

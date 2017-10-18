@@ -1,31 +1,41 @@
-<form [formGroup]="configForm">
-    <input type="hidden" formControlName="id" />
-    <plex-box title="Configuración de Turnos" type="{{boxType}}">
-        <div class="row">
-            <div class="col-md-12">                
-                <plex-select label="Días Habilitados" formControlName="diasHabilitados" [data]="dias" [multiple]="true"></plex-select>                
-            </div>
-        </div>
+
+
+<form #formAgenda="ngForm">
+    <plex-box title="Agenda" type="{{boxType}}">
+            <div class="row">
+                    <div class="col-12 text-center">
+                        <header>
+                            <div class="page-title">Agenda</div>
+                        </header>
+                    </div>
+                </div>
+                <br>
+                <br>
+            <div class="row">
+                    <div class="col-md-12">                
+                        <plex-select label="Días Habilitados" [(ngModel)]="currentAgenda.diasHabilitados" name="diasHabilitados" [data]="dias" [multiple]="true" required></plex-select>                
+                    </div>
+                </div>
         <div class="row">
             <div class="col-md-6">                
-                <plex-int label="Horario de Inicio" formControlName="horarioInicioTurnos"></plex-int>                
+                <plex-datetime label="Horario de inicio de los turnos" type="time" [(ngModel)]="currentAgenda.horarioInicioTurnos" name="horarioInicioTurnos"  required></plex-datetime>                
             </div>
             <div class="col-md-6">                
-                <plex-int label="Horario de Fin" formControlName="horarioFinTurnos"></plex-int>                
+                <plex-datetime label="Horario de fin de los  turnos" type="time" [(ngModel)]="currentAgenda.horarioFinTurnos" name="horarioFinTurnos" required ></plex-datetime>                
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <plex-int label="Duración de los Turnos (En minutos)" formControlName="duracionTurno"></plex-int>
+                <plex-int label="Duración de los Turnos (En minutos)" [(ngModel)]="currentAgenda.duracionTurno" name="duracionTurno" required></plex-int>
             </div>
             <div class="col-md-4">                
-                <plex-datetime label="Nueva Fecha" type="date" formControlName="nuevaFechaEximida"></plex-datetime>
+                <plex-datetime label="Agregar Feriados" type="date" [(ngModel)]="currentAgenda.fechasExcluidas" name="duracionTurno" required></plex-datetime>
             </div>
             <div class="col-md-2">
-                <label>&nbsp;</label>
-                <br>
-                <plex-button label="Agregar Fecha" (click)="agregarFeriado()"></plex-button>
-            </div>
+                    <label>&nbsp;</label>
+                    
+                    <plex-button label="Agregar Fecha" (click)="agregarFeriado()"></plex-button>
+                </div>
         </div>
         <div class="row">
             <div class="col-md-12">
@@ -39,7 +49,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <plex-button (click)="guardarConfiguracion(configForm.value, configForm.valid)" label="Guardar" type="primary"></plex-button>
+                <plex-button (click)="guardarConfiguracion()" label="Guardar" type="primary"></plex-button>
             </div>
         </div>
     </plex-box>

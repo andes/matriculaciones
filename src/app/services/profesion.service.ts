@@ -13,13 +13,12 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class ProfesionService extends BaseService {
 
-    private profesionesUrl = this.siisaURL + '/profesion';
 
     constructor(_http: Http) {
         super(_http);
     }
 
     getProfesiones(): Observable<any[]> {
-        return this.get(this.profesionesUrl);
+        return this.get(this.profesionesURL);
     }
 }

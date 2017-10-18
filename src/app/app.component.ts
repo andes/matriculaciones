@@ -50,7 +50,7 @@ export class AppComponent implements OnInit {
             accessList.push({ label: 'RUP: Registro Universal de Prestaciones', icon: 'contacts', route: '/rup' });
         }
 
-        this.menuList.push({ label: 'Página principal', icon: 'home', route: '/inicio' });
+        this.menuList.push({ label: 'Página principal', icon: 'home', route: '/home' });
 
         accessList.forEach((permiso) => {
             this.menuList.push(permiso);
@@ -71,7 +71,8 @@ export class AppComponent implements OnInit {
     loadSideBar() {
         const menu: DropdownItem[] = [
             { label: 'Inicio', icon: 'home', route: 'home/'},
-            { label: 'Turnos', icon: 'calendar', route: 'listadoTurnos/'},
+            { label: 'Nuevo Profesional', icon: 'calendar', route: 'nuevoProfesional/'},
+            { label: 'Agenda', icon: 'calendar', route: 'agenda/'},
             { label: 'Numeraciones', icon: 'book', route: 'listadoNumeraciones/'},
         ];
 

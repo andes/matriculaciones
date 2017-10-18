@@ -18,21 +18,28 @@ import * as enumerados from './../../utils/enumerados';
 })
 
 export class ConfiguracionAgendaComponent implements OnInit {
-    currentAgenda: IAgendaMatriculaciones;
-    configForm: FormGroup;
+    currentAgenda: IAgendaMatriculaciones = {
+        _id: null,
+        diasHabilitados:null,
+        horarioInicioTurnos: null,
+        horarioFinTurnos: null,
+        fechasExcluidas: null,
+        duracionTurno: null,
+    }
     dias: any[];
     boxType: String;
-    feriados: Date[];
+    feriados: Array<any>;
 
-    constructor(private formBuilder: FormBuilder,
-        private agendaService: AgendaService) { }
+    constructor( private agendaService: AgendaService,private plex: Plex) {
+            this.feriados  = [];
+         }
 
     ngOnInit() {
         // Inicio el select de días de la semana.
         this.dias = enumerados.getObjDias();
 
         // Busco la config actual.
-        this.agendaService.get()
+        /*this.agendaService.get()
             .subscribe(datos => {
                 this.currentAgenda = datos[0];
                 this.loadFormulario(this.currentAgenda);
@@ -42,58 +49,32 @@ export class ConfiguracionAgendaComponent implements OnInit {
         this.loadFormulario();
     }
 
-    loadFormulario(agenda: IAgendaMatriculaciones = null) {
-
-        let diasActuales = [];
-        if (agenda) {
-            diasActuales = agenda.diasHabilitados.map(element => { return enumerados.getObjeto(element); });
-        }
-
-        this.feriados = agenda ? agenda.fechasExcluidas : null;
-
-        this.configForm = this.formBuilder.group({
-            id: [agenda ? agenda._id : null],
-            diasHabilitados: [ diasActuales ? diasActuales : null, [Validators.required]],
-            horarioInicioTurnos: [
-                agenda ? agenda.horarioInicioTurnos : null,
-                [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
-            horarioFinTurnos: [
-                agenda ? agenda.horarioFinTurnos : null,
-                [Validators.required, Validators.minLength(8), Validators.maxLength(16)]],
-            duracionTurno: [agenda ? agenda.duracionTurno : null, [Validators.required, Validators.minLength(1), Validators.maxLength(60)]],
-            nuevaFechaEximida: [null]
-        });
+        */
     }
 
     agregarFeriado() {
-        this.feriados.push(this.configForm.controls['nuevaFechaEximida'].value);
-        this.configForm.controls['nuevaFechaEximida'].reset();
+        this.feriados.push(this.currentAgenda.fechasExcluidas);
+  
     }
 
     eliminarFeriado(idx: number) {
         this.feriados.splice(idx, 1);
     }
 
-    guardarConfiguracion(model: any, isValid: boolean) {
-
-        if (isValid) {
-            const diasSeleccionados = model.diasHabilitados;
-
-            model.diasHabilitados = [];
-            model.diasHabilitados = diasSeleccionados.map(element => {
-                return element.id;
-            });
-
-            model.fechasExcluidas = this.feriados;
-
+    guardarConfiguracion() {
+        
+        let fin = false;
+        console.log(this.currentAgenda)
+      
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
-            agendaOperation = this.agendaService.save(model);
+            agendaOperation = this.agendaService.save(this.currentAgenda);
 
-            agendaOperation.subscribe(resultado => {
+              agendaOperation.subscribe(resultado => {
                 console.log('Configuración Actaulizada');
-                this.boxType = 'success';
+                this.plex.toast('info', 'Realizado con exito');
             });
+           
         }
     }
-}
+

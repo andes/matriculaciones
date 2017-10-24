@@ -19,7 +19,7 @@ export class RequisitosMatriculaUniversitariaComponent {
     constructor(private router: Router) {}
 
      onClick(){
-        this.router.navigate(['/home']);
+        this.router.navigate(['/solicitarTurnoMatriculacion']);
     }
 }
 
@@ -34,6 +34,6 @@ export class RequisitosMatriculaTecnicaAuxiliarComponent {
     constructor(private router: Router) {}
 
     onClick(){
-        this.router.navigate(['/home']);
+        this.router.navigate(['/solicitarTurnoMatriculacion']);
     }
 }

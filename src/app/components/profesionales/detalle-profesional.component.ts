@@ -67,6 +67,7 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     updateProfesional2(profesional: IProfesional) {
+        console.log("aca si")
         this._profesionalService.saveProfesional(profesional)
             .subscribe(prof => {
                 this.profesional = prof
@@ -75,8 +76,11 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     updateProfesional(callbackData?: any) {
+        console.log("aca si")
          this._profesionalService.saveProfesional(this.profesional)
             .subscribe(resp => {
+                console.log("aca si 2")
+                console.log(resp)
                 this.profesional = resp;
                 if (callbackData) {
                     callbackData.callback(callbackData.param);
@@ -96,6 +100,7 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     guardarNotas(textoNotas) {
+        console.log("guardar notas")
         this.profesional.notas = textoNotas;
         this.updateProfesional();
     }
@@ -111,6 +116,8 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     matricularProfesional(matriculacion: any) {
+        console.log("matricularProfesional")
+        console.log(matriculacion)
         this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
         this.updateProfesional();
     }

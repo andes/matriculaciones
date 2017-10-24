@@ -106,7 +106,10 @@ export interface IProfesional {
     origen: String;
     sanciones: [{
         numero: Number;
-        sancion:  String;
+        sancion: {
+            id: Number;
+            nombre: String;
+        }; 
         motivo: String;
         normaLegal: String;
         fecha: Date;

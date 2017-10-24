@@ -266,7 +266,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private buildCalendarOptions(countTurnosXDia: any[]) {
         this.options = {
             datesDisabled: this.getDatesDisabled(countTurnosXDia), // Fechas deshabilitados.
-            weekStart: 1, // La semana empieza los lunes.
+            weekStart: 0, // La semana empieza los lunes.
             daysOfWeekDisabled: this.getDaysOfWeekDisabled(), // días de la semana deshabilitados (lunes, martes, etc.).
             startDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // Primera fecha seleccionable
             language: 'es',
@@ -291,9 +291,11 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private getDaysOfWeekDisabled() {
         const dias = [0, 1, 2, 3, 4, 5, 6];
         if (this.agendaConfig) {
-            this.agendaConfig.diasHabilitados.forEach((dia) => {
-                const indexOfDia = diasSemana.indexOf(dia.toString()) + 1;
-                dias.splice(dias.indexOf(indexOfDia), 1);
+
+            this.agendaConfig.diasHabilitados.forEach((dia:any) => {
+                // debugger;
+                const indexOfDia = dias.indexOf((dia.id +1) % 7 );
+                dias.splice(indexOfDia, 1);
             });
         }
         return dias.toString();
@@ -308,7 +310,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     confirmTurno() {
-        // this.lblTurno = moment(this.fechaElegida).format('llll');
+        this.lblTurno = moment(this.fechaElegida).format('llll');
         console.log(this.fechaElegida.getDay())
         this.lblTurno = diasSemana[this.fechaElegida.getDay()] + ' '
             + this.fechaElegida.getDate().toString() + ' de '

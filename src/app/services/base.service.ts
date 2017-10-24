@@ -27,11 +27,12 @@ export class BaseService {
     // URL to web api
     protected turnosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnos/';
     protected paisesURL = AppSettings.API_ENDPOINT + '/core/tm/paises';
-    protected profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales';
+    protected profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
     protected siisaURL = AppSettings.API_ENDPOINT + '/core/tm/siisa';
     protected numeracionesURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/numeraciones';
     protected profesionesURL = AppSettings.API_ENDPOINT + '/core/tm/profesiones';
-
+    protected entidadFormadoraURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/entidadesFormadoras/';
+    
     constructor(protected _http: Http) { }
 
     protected get(url: string, searchQuery?: URLSearchParams): Observable<any[]> {

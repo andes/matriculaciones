@@ -69,7 +69,7 @@ export class TurnosComponent implements OnInit {
             .subscribe((resp) => {
 
                 this.turnos = resp.data;
-
+                console.log(this.turnos)
                 if (event) {
                     event.callback(resp);
                 }

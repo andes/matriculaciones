@@ -116,7 +116,9 @@ export class ProfesionalComponent implements OnInit {
             titulo: null,
             fechaEgreso: '',
             fechaTitulo: '',
-        }]
+        }],
+
+        
         
     };
 
@@ -129,7 +131,8 @@ export class ProfesionalComponent implements OnInit {
         private _localidadService: LocalidadService,
         private _profesionService: ProfesionService,
         private _profesionalService: ProfesionalService,
-        private _entidadFormadoraService: EntidadFormadoraService) {
+        private _entidadFormadoraService: EntidadFormadoraService,
+        private plex: Plex) {
 
           
          }
@@ -153,8 +156,8 @@ export class ProfesionalComponent implements OnInit {
         }
     }
 
-    confirmarDatos() {
-
+    confirmarDatos($event) {
+        if ($event.formValid){
         console.log(this.profesional)
       
             let profesionalOperation: any;
@@ -163,8 +166,12 @@ export class ProfesionalComponent implements OnInit {
             console.log('ok1');
             profesionalOperation.subscribe(resultado => {
                 console.log('ok2');
+                this.plex.toast('success', 'Su turno se registro con exito!','informacion', 1000);
             });
-           
+
+            this.onProfesionalCompleto.emit(this.profesional);
+        }  
+       
         
 
         // model.contactos.forEach(contacto => {
@@ -222,5 +229,19 @@ export class ProfesionalComponent implements OnInit {
         if (i >= 0) {
             this.profesional.contactos.splice(i, 1);
         }
+    }
+
+    completar(){
+        this.profesional.domicilios[1].direccion = this.profesional.domicilios[0].direccion;
+        this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;        
+        this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
+        this.profesional.domicilios[1].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
+        this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad
+
+        this.profesional.domicilios[2].direccion = this.profesional.domicilios[0].direccion;
+        this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;        
+        this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
+        this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
+        this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad
     }
 }

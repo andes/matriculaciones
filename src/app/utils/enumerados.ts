@@ -70,8 +70,17 @@ export function getObjsEstadoCivil() {
 }
 
 export function getObjDias() {
-  //return getEnumAsObjects(Object.keys(Dia));
-  return getEnumAsObjects(Dia);
+  
+  let arrEstadoC = Object.keys(Dia);
+
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  let salida = arrEstadoC.map((elem,index) => {
+      return {
+          'id': index,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
 }
 
 export function getObjSexos() {

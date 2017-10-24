@@ -26,40 +26,36 @@ import {
     templateUrl: 'sanciones-form.html'
 })
 export class SancionesFormComponent implements OnInit {
-    formSancion: FormGroup;
     activeAcc: Boolean = false;
     @Input() profesional: IProfesional;
     @Output() submitSancion = new EventEmitter();
+        sanciones: any ={
+            numero: null,
+            sancion: {
+                id: Number,
+                nombre: String,
+            },
+            motivo: null,
+            normaLegal: null,
+            fecha: null,
+            vencimiento: null,
+        }
+    
 
-    constructor(private _formBuilder: FormBuilder) {}
+    constructor() {}
 
     ngOnInit() {
-        this.initForm();
+      
     }
 
-    initForm() {
-        this.formSancion = this._formBuilder.group({
-            numero: [null, Validators.required],
-            sancion: [null],
-            motivo: [null, Validators.required],
-            normaLegal: [null],
-            fecha: [null, Validators.required],
-            vencimiento: [null, Validators.required]
-        });
-    }
 
     onSave() {
-        if (this.formSancion.valid) {
-            this.formSancion.value.sancion = this.formSancion.value.nombre;
+        console.log("hola")
+       
 
-            //this.profesional.sanciones.push(this.formSancion.value);
-            this.submitSancion.emit(this.formSancion.value);
-            this.activeAcc = false;
-            this.initForm();
-        }
-
-        // sancionModel.sancion = sancionModel.sancion.nombre;
-        // validaciones
+        this.profesional.sanciones.push(this.sanciones);
+        console.log(this.profesional)
+        this.submitSancion.emit(this.sanciones);
     }
 
     loadTipoSanciones(event: any) {

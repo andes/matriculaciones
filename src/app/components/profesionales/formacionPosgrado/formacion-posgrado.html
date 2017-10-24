@@ -11,7 +11,7 @@
             <div class="col">
                 <div class="btn-group float-right">           
                     <plex-button type="danger"                        
-                        icon="delete"></plex-button>
+                        icon="delete" (click)="borrarPosgrado(i)" ></plex-button>
                     <plex-button *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero"
                         type="primary"                        
                         icon="information-outline"            
@@ -20,12 +20,15 @@
             </div>
         </div>
     </header>
-
+    <legend class="info-subtitle">
+        {{formacionPosgrado.especialidad.nombre}}            
+    </legend>
     <div class="row">
-        <div class="col-4">
+         <div class="col-4">
             <label>Profesión</label> 
             <div>{{formacionPosgrado.profesion.nombre}}</div>
         </div>
+        
         <div class="col">
             <label>Institución Formadora</label> 
             <div>{{ formacionPosgrado.institucionFormadora.nombre }}</div>

@@ -52,7 +52,7 @@ export class PDFUtils {
         doc.setLineWidth(1);
         doc.line(20, 40, 190, 40);
         doc.setFontSize(12);
-        doc.text(20, 45, 'Planilla de Turno Otrogado');
+        doc.text(20, 45, 'Planilla de Turno Otorgado');
         doc.text(155, 45, 'MATRICULACIÓN');
         doc.line(20, 47, 190, 47);
         doc.setFontSize(10);
@@ -94,20 +94,20 @@ export class PDFUtils {
 
         // Domicilios
         let offsetLoop = 0;
-        turno.profesional.domicilios.forEach(domicilio => {
+         turno.profesional.domicilios.forEach(domicilio => {
             doc.setFontSize(14);
-            doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
+             doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
             doc.line(20, 143 + offsetLoop , 190, 143 + offsetLoop);
-            doc.setFontSize(12);
-            doc.text(20, 148 + offsetLoop, 'Calle:');
-            doc.text(20, 154 + offsetLoop, 'C.P.:');
-            doc.text(20, 160 + offsetLoop, 'País:');
-            doc.text(70, 160 + offsetLoop, 'Provincia:');
-            doc.text(130, 160 + offsetLoop, 'Localidad:');
+             doc.setFontSize(12);
+             doc.text(20, 148 + offsetLoop, 'Calle:');
+             doc.text(20, 154 + offsetLoop, 'C.P.:');
+             doc.text(20, 160 + offsetLoop, 'País:');
+             doc.text(70, 160 + offsetLoop, 'Provincia:');
+             doc.text(130, 160 + offsetLoop, 'Localidad:');
             doc.setLineWidth(0.5);
-            doc.line(20, 162 + offsetLoop, 190, 162 +  offsetLoop);
-            offsetLoop += 26;
-        });
+             doc.line(20, 162 + offsetLoop, 190, 162 +  offsetLoop);
+             offsetLoop += 26;
+         });
 
         // Contacto
         doc.setFontSize(14);
@@ -147,7 +147,7 @@ export class PDFUtils {
         offsetLoop = 0;
         turno.profesional.domicilios.forEach(domicilio => {
             doc.setFontSize(12);
-            doc.text(35, 148 + offsetLoop, domicilio.valor);
+            doc.text(35, 148 + offsetLoop, domicilio.direccion);
             doc.text(35, 154 + offsetLoop, domicilio.codigoPostal);
             doc.text(35, 160 + offsetLoop, domicilio.ubicacion.pais.nombre);
             doc.text(90, 160 + offsetLoop, domicilio.ubicacion.provincia.nombre);

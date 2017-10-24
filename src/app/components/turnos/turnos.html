@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </header>
-
+                    
                     <!-- LIST -->
                     <div class="row">
                         <div class="col-12">
@@ -37,8 +37,8 @@
                                             </h6>
                                         </div>
                                         <div class="col float-right">
-                                            <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
-                                            </span>
+                                            <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
+                                            </span> -->
                                         </div>
                                         
                                     </div>
@@ -63,7 +63,9 @@
                             
                             <div class="row">
                                 <div class="col-md-12">
+                                    <label>Fecha y hora</label>
                                     <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
+                                    <label>Tipo de turno</label>
                                     <h6 class="text-light">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</h6>
                                     <plex-button type="success" label="Cambiar Estado" class="float-right" (click)="cambiarEstado()" *ngIf="!turnoElegido.sePresento"></plex-button>
                                 </div>
@@ -71,6 +73,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
+                                        <label>Apellido y nombre</label>
                                     <h5><strong>{{turnoElegido.profesional.apellido + ', '}} </strong>{{turnoElegido.profesional.nombre}}</h5>
                                     <h6 class="text-light">{{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documentoNumero }}</h6>
                                     <!--<div class="nombre-profesional">
@@ -93,7 +96,7 @@
                             <hr>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <plex-button type="primary" label="Generar Comprobante de Turrno" class="pull-right" [disabled]="turnoElegido.sePresento" (click)="generarComprobante(turnoElegido)"></plex-button>
+                                    <plex-button type="primary" label="Generar Comprobante de Turno" class="pull-right" [disabled]="turnoElegido.sePresento" (click)="generarComprobante(turnoElegido)"></plex-button>
                                 </div>
                             </div>
 

@@ -20,7 +20,7 @@ import { ISiisa } from './../../../interfaces/ISiisa';
 
 // Services
 import { SIISAService } from './../../../services/siisa.service';
-
+import { ProfesionalService } from './../../../services/profesional.service';
 
 @Component({
     selector: 'app-formacion-posgrado',
@@ -36,23 +36,28 @@ export class FormacionPosgradoComponent implements OnInit {
     @Output() updateProfesional = new EventEmitter();
 
     constructor(private _fb: FormBuilder,
-        private _siisaSrv: SIISAService) {}
+        private _siisaSrv: SIISAService,
+        private _profesionalService: ProfesionalService,) {}
 
-    saveProfesional(formacionPosgrado: any) {
-        debugger
-        console.log(formacionPosgrado)
-        this.profesional.formacionPosgrado.push(formacionPosgrado);
+    saveProfesional(formacionPosgradoEntrante: any) {
+
+        console.log(formacionPosgradoEntrante)
+        console.log(this.profesional.formacionPosgrado)
+        console.log(this.profesional)
+        //this.profesional.formacionPosgrado.push
+        this.profesional.formacionPosgrado.push(formacionPosgradoEntrante);
         this.updateProfesional.emit(this.profesional);
+        // let profesionalOperation: any;
+        
+                    // profesionalOperation = this._profesionalService.saveProfesional(this.profesional);
+                    // console.log('ok1');
+                    // profesionalOperation.subscribe(resultado => {
+                    //     console.log('ok2');
+                    // });
     }
 
     ngOnInit() {
 
-        /*if (this.profesional) {
-            this.profesiones = this.profesional.formacionGrado.map((value) => {
-                return value.profesion;
-            });
-        }*/
-        // this.cleanForm();
     }
 
     /*cleanForm() {
@@ -74,23 +79,18 @@ export class FormacionPosgradoComponent implements OnInit {
         });
     }*/
 
-    /*guardarEspecialidad(especialidad: any) {
-        const dIng = new Date(especialidad.fechaIngreso);
-        const dEgr = new Date(especialidad.fechaEgreso);
-        const dCert = new Date(especialidad.certificacion.fecha);
 
-        if (dIng > dEgr) {
-            // Error.
-        }
-
-
-
-        this.accordionActive = false;
-        this.save.emit(especialidad);
-    }*/
 
     showPosgrado(posgrado: any) {
         this.formacionPosgradoSelected.emit(posgrado);
+    }
+
+
+    borrarPosgrado(i){
+        this.profesional.formacionPosgrado.splice(i,1);
+        this.updateProfesional.emit(this.profesional);
+        
+        
     }
     /*getProfesionesProfesional(event: any) {
         return this.profesional.formacionGrado.filter((value) => {

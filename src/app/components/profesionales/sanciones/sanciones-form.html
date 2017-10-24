@@ -1,6 +1,36 @@
 <plex-accordion>
     <plex-panel tituloPrincipal="Nueva Sanción" icon="plus-circle-outline" [active]="activeAcc">
-        <form [formGroup]="formSancion" (ngSubmit)="onSave()">
+        <form >
+            <div class="row">
+                <div class="col-md-2">
+                    <plex-int label="Número" [(ngModel)]="sanciones.numero" name='numero'></plex-int>                            
+                </div>
+                <div class="col-md-3">
+                    <plex-select label="Sanción" [(ngModel)]="sanciones.sancion" name='sancion' (getData)="loadTipoSanciones($event)"></plex-select>                            
+                </div>
+                <div class="col-md-3">
+                    <plex-text label="Norma Legal" [(ngModel)]="sanciones.normaLegal" name='normaLegal'></plex-text>                            
+                </div>
+                <div class="col-md-2">
+                    <plex-datetime type="date" label="Fecha" [(ngModel)]="sanciones.fecha" name='fecha'></plex-datetime>                            
+                </div>
+                <div class="col-md-2">
+                    <plex-datetime type="date" label="Vencimiento" [(ngModel)]="sanciones.vencimiento" name='vencimiento'></plex-datetime>                            
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <plex-text label="Motivo" [(ngModel)]="sanciones.motivo" name='motivo'></plex-text>                            
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <!--<button type="submit" class="btn btn-success float-right">Guardar</button>-->
+                    <plex-button label="Guardar" type="success" class="float-right" (click)="onSave()"></plex-button>
+                </div>
+            </div>
+        </form>            
+        <!-- <form [formGroup]="formSancion" (ngSubmit)="onSave()">
             <div class="row">
                 <div class="col-md-2">
                     <plex-int label="Número" formControlName="numero"></plex-int>                            
@@ -25,10 +55,10 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <!--<button type="submit" class="btn btn-success float-right">Guardar</button>-->
+                    <!--<button type="submit" class="btn btn-success float-right">Guardar</button>
                     <plex-button label="Guardar" type="success" class="float-right" (click)="onSave()"></plex-button>
                 </div>
             </div>
-        </form>            
+        </form>    -->
     </plex-panel>
 </plex-accordion>

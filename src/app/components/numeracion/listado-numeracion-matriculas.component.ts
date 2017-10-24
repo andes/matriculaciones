@@ -19,9 +19,10 @@ import { ProfesionService } from './../../services/profesion.service';
 })
 export class ListadoNumeracionMatriculasComponent implements OnInit {
     private formBuscarNumeracion: FormGroup;
-    private numeraciones: any[];
+    private numeraciones: any[] ;
     private numeracionElegida: any;
     private showListado: Boolean = true;
+    public var : Number;
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
@@ -39,7 +40,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         this.formBuscarNumeracion = this._formBuilder.group({
             profesion: new FormControl()
         });
-
+        console.log(this.numeraciones)
         this.buscar();
     }
 
@@ -63,13 +64,14 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
 
         const consulta = this.formBuscarNumeracion.value;
 
-        if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
-            consulta.profesion = null;
-        }
+        // if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
+        //     consulta.profesion = null;
+        // }
 
         consulta.offset = event ? event.query.offset : 0;
         consulta.size = event ? event.query.size : 10;
-
+        consulta.profesion = event ? event.query.codigo : consulta.profesion.id;
+        console.log(consulta.profesion)
         if (!event) {
             this.numeracionElegida = null;
         }
@@ -81,11 +83,18 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
                 if (event) {
                     event.callback(resp);
                 }
+                console.log(resp)
             });
     }
 
     toggleListado(show) {
         this.showListado = show;
+    }
+
+    cambio(ingreso){
+        this.numeracionElegida = ingreso;
+        console.log(this.numeraciones);
+        
     }
 
 

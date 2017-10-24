@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col-12">
             <div class="row" *ngIf="formacion.matriculacion.length > 0">
-                <div class="col-12">
+                <div class="col-12" >
                     <div class="form-group">
                         <label><strong>Matícula Nº</strong></label> 
                         <div>{{ formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero }}</div>
@@ -54,7 +54,7 @@
     <div class="row">
         <div class="col-12">
             
-            <plex-accordion>
+            <plex-accordion style="color:black !important">
                 <plex-panel tituloPrincipal="Renovaciones" [active]="false">
                     <div class="row">
                         <div class="col-12">

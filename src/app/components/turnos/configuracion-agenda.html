@@ -13,28 +13,28 @@
                 <br>
             <div class="row">
                     <div class="col-md-12">                
-                        <plex-select label="Días Habilitados" [(ngModel)]="currentAgenda.diasHabilitados" name="diasHabilitados" [data]="dias" [multiple]="true" required></plex-select>                
+                        <plex-select label="Días Habilitados" [(ngModel)]="currentAgenda.diasHabilitados" name="diasHabilitados" [data]="dias" [multiple]="true" [required]="true"></plex-select>                
                     </div>
                 </div>
         <div class="row">
             <div class="col-md-6">                
-                <plex-datetime label="Horario de inicio de los turnos" type="time" [(ngModel)]="currentAgenda.horarioInicioTurnos" name="horarioInicioTurnos"  required></plex-datetime>                
+                <plex-datetime label="Horario de inicio de los turnos" type="time" [(ngModel)]="currentAgenda.horarioInicioTurnos" name="horarioInicioTurnos"  [required]="true"></plex-datetime>                
             </div>
             <div class="col-md-6">                
-                <plex-datetime label="Horario de fin de los  turnos" type="time" [(ngModel)]="currentAgenda.horarioFinTurnos" name="horarioFinTurnos" required ></plex-datetime>                
+                <plex-datetime label="Horario de fin de los  turnos" type="time" [(ngModel)]="currentAgenda.horarioFinTurnos" name="horarioFinTurnos" [required]="true"></plex-datetime>                
             </div>
         </div>
         <div class="row">
             <div class="col-md-6">
-                <plex-int label="Duración de los Turnos (En minutos)" [(ngModel)]="currentAgenda.duracionTurno" name="duracionTurno" required></plex-int>
+                <plex-int label="Duración de los Turnos (En minutos)" [(ngModel)]="currentAgenda.duracionTurno" name="duracionTurno" [required]="true"></plex-int>
             </div>
             <div class="col-md-4">                
-                <plex-datetime label="Agregar Feriados" type="date" [(ngModel)]="currentAgenda.fechasExcluidas" name="duracionTurno" required></plex-datetime>
+                <plex-datetime label="Agregar Feriados" type="date" [(ngModel)]="currentAgenda.fechasExcluidas" name="fechasExcluidas" [required]="false"></plex-datetime>
             </div>
             <div class="col-md-2">
                     <label>&nbsp;</label>
                     
-                    <plex-button label="Agregar Fecha" (click)="agregarFeriado()"></plex-button>
+                    <plex-button label="Agregar Fecha" [disabled]="currentAgenda.fechasExcluidas == null" (click)="agregarFeriado()"></plex-button>
                 </div>
         </div>
         <div class="row">
@@ -49,7 +49,7 @@
         </div>
         <div class="row">
             <div class="col-md-12">
-                <plex-button (click)="guardarConfiguracion()" label="Guardar" type="primary"></plex-button>
+                <plex-button (click)="guardarConfiguracion($event)" label="Guardar" type="primary" validateForm="true"></plex-button>
             </div>
         </div>
     </plex-box>

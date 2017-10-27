@@ -12,7 +12,7 @@
         <legend class="info-subtitle">Domicilio {{domicilio.tipo}}</legend>
     </header>
     <div class="row">
-        <div class="col-8">
+        <div class="col-4">
             <label>Dirección</label>
             <div>{{ domicilio.direccion }}</div>
         </div>
@@ -20,12 +20,13 @@
             <label>C.P.</label>
             <div>{{ domicilio.codigoPostal }}</div>
         </div>
+        <div class="col-4">
+                <label>Localidad</label>
+                <div>{{ domicilio.ubicacion.localidad.nombre }}</div>
+            </div>
     </div>
     <div class="row">
-        <div class="col-4">
-            <label>Localidad</label>
-            <div>{{ domicilio.ubicacion.localidad.nombre }}</div>
-        </div>
+        
         <div class="col-4">
             <label>Provincia</label>
             <div>{{ domicilio.ubicacion.provincia.nombre }}</div>
@@ -46,8 +47,7 @@
 <div >
 <div class="row">
         <div class="col-md-4" *ngFor="let contacto of profesional.contactos; let i = index">
-            <label>contacto</label>
-            <div>{{ contacto.tipo }}</div> 
+
             <div>{{ contacto.valor }}</div>
            
         </div>

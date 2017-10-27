@@ -71,9 +71,9 @@ export class AppComponent implements OnInit {
     loadSideBar() {
         const menu: DropdownItem[] = [
             { label: 'Inicio', icon: 'home', route: 'home/'},
-            { label: 'Nuevo Profesional', icon: 'calendar', route: 'nuevoProfesional/'},
             { label: 'Agenda', icon: 'calendar', route: 'agenda/'},
-            { label: 'Numeraciones', icon: 'book', route: 'listadoNumeraciones/'},
+            { label: 'Requisitos generales', icon: 'calendar', route: 'requisitosGenerales/'},
+            { label: 'Turnos', icon: 'book', route: 'turnos/'},
         ];
 
         this.plex.initView('Matriculaciones', menu); // .initStaticItems(menu);//.initView('Matriculaciones', menu);

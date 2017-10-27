@@ -13,7 +13,7 @@
                                 </div>
                                 <div class="col-md-3">
                                     <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
-                                </div>  
+                                </div>
                                 <div class="col-md-3">
                                     <plex-int label="Documento" formControlName="documentoNumero" (change)="buscar()"></plex-int>
                                 </div>
@@ -23,7 +23,7 @@
                             </div>
                         </div>
                     </header>
-                    
+
                     <!-- LIST -->
                     <div class="row">
                         <div class="col-12">
@@ -32,7 +32,7 @@
                                     <div class="row" style="width: 100%">
                                         <div class="col-11">
                                             <h6 class="box-title-elemento">
-                                                {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs <br>                                
+                                                {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs <br>
                                                 {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }} | <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documentoNumero : '') }}</small>
                                             </h6>
                                         </div>
@@ -40,7 +40,7 @@
                                             <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
                                             </span> -->
                                         </div>
-                                        
+
                                     </div>
 
                                 </li>
@@ -60,7 +60,7 @@
 
                     <div class="row">
                         <div class="col-sm-12">
-                            
+
                             <div class="row">
                                 <div class="col-md-12">
                                     <label>Fecha y hora</label>
@@ -82,9 +82,9 @@
                                     <div class="datos-profesional">
                                         {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documentoNumero }}<br />
                                     </div>-->
-                                    <span class="mdi mdi-big mdi-danger mdi-alert text-danger">
+                                    <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.formacionGrado.matriculacion.matriculaNumero">
                                         <span style="margin-left: 5px;">Renovación Vencida</span>
-                                    </span>
+                                    </span> -->
                                     <!--<a href="/profesional" class="btn btn-primary">Ver Profesional</a>-->
                                 </div>
                             </div>

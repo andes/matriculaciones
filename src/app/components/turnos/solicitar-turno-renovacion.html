@@ -1,4 +1,4 @@
-<div class="row">
+<!-- <div class="row">
     <div class="col-md-9">
         <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
     </div>
@@ -7,4 +7,18 @@
     <div class="col-md-9" *ngIf="turnoSeleccionado">
         <app-profesional  (onProfesionalCompleto)="onProfesionalCompleto($event)"></app-profesional>
     </div>
-</div>
+</div> -->
+
+<section>
+    <div class="row">
+        <div class="col-12">
+            <plex-box type="primary">
+                <header>
+                    <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
+                </header>
+
+                <app-profesional (onProfesionalCompleto)="onProfesionalCompleto($event)" *ngIf="turnoSeleccionado"></app-profesional>
+            </plex-box>
+        </div>
+    </div>
+</section>

@@ -42,20 +42,21 @@ export class SancionesFormComponent implements OnInit {
         }
     
 
-    constructor() {}
+    constructor(private plex: Plex) {}
 
     ngOnInit() {
       
     }
 
 
-    onSave() {
-        console.log("hola")
-       
-
-        this.profesional.sanciones.push(this.sanciones);
-        console.log(this.profesional)
+    onSave($event,form) {
+        if ($event.formValid){
         this.submitSancion.emit(this.sanciones);
+        this.plex.toast('success', 'Realizado con exito','informacion', 1000);
+        form.reset();
+    }
+    
+     
     }
 
     loadTipoSanciones(event: any) {

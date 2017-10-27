@@ -75,7 +75,9 @@ export class FormacionPosgradoFormComponent implements OnInit {
 
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
-        private _profSrv: ProfesionalService,private _entidadFormadoraService: EntidadFormadoraService) {}
+        private _profSrv: ProfesionalService,
+        private _entidadFormadoraService: EntidadFormadoraService,
+        private plex: Plex) {}
 
     ngOnInit() {
         console.log(this.profesionalP.formacionPosgrado)
@@ -87,9 +89,15 @@ export class FormacionPosgradoFormComponent implements OnInit {
         this.buildForm();
     }
 
-    onSubmit() {
+    onSubmit($event,form) {
+        if($event.formValid){
         console.log(this.profesionalP.formacionPosgrado)
         this.submitPosgrado.emit(this.profesionalP);
+        this.plex.toast('success', 'Se registro con exito!','informacion', 1000);
+
+
+        form.resetForm();
+        }
         // debugger
         // // Validaciones
         // if (this.formPosgrado.valid) {

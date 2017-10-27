@@ -40,7 +40,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         this.formBuscarNumeracion = this._formBuilder.group({
             profesion: new FormControl()
         });
-        console.log(this.numeraciones)
+ 
         this.buscar();
     }
 
@@ -66,11 +66,12 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
 
         // if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
         //     consulta.profesion = null;
-        // }
+        // }    
+        console.log(consulta)
 
         consulta.offset = event ? event.query.offset : 0;
         consulta.size = event ? event.query.size : 10;
-        consulta.profesion = event ? event.query.codigo : consulta.profesion.id;
+        consulta.profesion = event ? event.query.codigo : consulta.profesion;
         console.log(consulta.profesion)
         if (!event) {
             this.numeracionElegida = null;
@@ -83,7 +84,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
                 if (event) {
                     event.callback(resp);
                 }
-                console.log(resp)
+                console.log(resp.data)
             });
     }
 

@@ -61,10 +61,9 @@ export class ConfiguracionAgendaComponent implements OnInit {
         this.feriados.splice(idx, 1);
     }
 
-    guardarConfiguracion($event) {
+    guardarConfiguracion($event,form) {
         
         if ($event.formValid){
-        console.log(this.currentAgenda)
       
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
@@ -74,8 +73,9 @@ export class ConfiguracionAgendaComponent implements OnInit {
                 console.log('Configuración Actualizada');
                 this.plex.toast('success', 'Realizado con exito','informacion', 1000);
             });
-           
+            form.resetForm();
         }
+        
        
     }
     }

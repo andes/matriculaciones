@@ -48,6 +48,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private lblTurno: string;
     private options: any = {};
     public boxType: string;
+    public horarioSi: boolean = false;
 
     @Output() onTurnoSeleccionado = new EventEmitter<Date>();
     @Input() private tipoTurno: Enums.TipoTurno;
@@ -67,9 +68,12 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     ngOnInit() {
+      
         // Setteo el formato utilizado para las fechas.
         this.format = 'DD/MM/YYYY';
         // moment.locale('es');
+        
+         //this.horarioSi = this.fechaElegida.getHours();
     }
 
     ngAfterViewInit() {
@@ -100,8 +104,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             this.agendaConfig = datos[0];
 
             // Calculo los turnos disponibles por día.
-            //this.buildHorariosDisponibles();
-
+            this.buildHorariosDisponibles();
+            console.log(this.horariosDisponibles);
             // Obtengo la cantidad de turnos por fecha del mes.
             const hoy = new Date();
 
@@ -111,7 +115,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
                     .subscribe((countTurnosXDia) => {
                         this.buildCalendar(countTurnosXDia);
                     });
-            } else if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+            } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
                 this._turnoService.getTurnosRenovacion(hoy, {})
                     .subscribe((countTurnosXDia) => {
                         this.buildCalendar(countTurnosXDia);
@@ -119,29 +123,52 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             }
         });
     }
-/*
-    private buildHorariosDisponibles() {
-        if (!this.agendaConfig) {
-            return;
-        }
 
-        for (let n = this.agendaConfig.horarioInicioTurnos; n <= this.agendaConfig.horarioFinTurnos; n++) {
-            if (n !== this.agendaConfig.horarioFinTurnos) {
-                for (let nx = 0; nx < (60 / this.agendaConfig.duracionTurno); nx++) {
-                    this.horariosDisponibles.push({
-                        hora: n,
-                        minutos: nx * this.agendaConfig.duracionTurno,
-                        ocupado: false
-                    });
+    private buildHorariosDisponibles() {
+        var res = null;
+        var entradaU = false;
+         var minutos = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('mm'));
+         var horaInicio = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('HH'));
+         var horaFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('HH'));
+        var n = horaInicio;
+        var i = horaInicio;
+        var tiempo = 55;
+        var flag = true;
+        var nx = 0
+
+        while ( n < horaFin && flag == true) {
+          while ( nx < (60 / this.agendaConfig.duracionTurno) && flag == true) {
+            if(entradaU == false ){                             
+             entradaU = true;
+            }else{
+                  if((i) == horaFin){
+                    flag = false;
+                    }else{
+                          if((this.agendaConfig.duracionTurno + minutos) >= 60){
+                            minutos =  (minutos + this.agendaConfig.duracionTurno) - 60;
+                            i++;                                               
+                            }else{                                                   
+                                  if((this.agendaConfig.duracionTurno + minutos) < 60){
+                                    res = minutos + this.agendaConfig.duracionTurno;
+                                    }
+                                    minutos = res; 
+                                }
+                        }                                    
                 }
-            } else {
-                this.horariosDisponibles.push({
-                    hora: n,
-                    minutos: 0,
-                    ocupado: false
-                });
+                if(flag == true){
+                    this.horariosDisponibles.push({
+                        hora: i,
+                        minutos: minutos,
+                        ocupado: false       
+                        });
+                        }
+                nx++
             }
+            nx = 0;
+            n++;
+
         }
+        
     }
 
     /**
@@ -207,7 +234,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             this.horariosDisponibles.forEach(horario => {
                 horario.ocupado = false;
             });
-
+          
             // Obtengo los horarios ocupados del día.
             if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
                 this._turnoService.getTurnosMatriculacion(fecha, {
@@ -307,6 +334,10 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     buildFechaTurno(turno: any) {
         this.fechaElegida.setHours(turno.hora);
         this.fechaElegida.setMinutes(turno.minutos);
+        if(this.fechaElegida.getHours() != 0 ){
+            this.horarioSi = true;
+        }
+        
     }
 
     confirmTurno() {

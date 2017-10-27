@@ -42,6 +42,9 @@ export class DetalleProfesionalComponent implements OnInit {
     public loading: Boolean = false;
     public indexFormacionGradoSelected: any;
     public indexFormacionPosgradoSelected: any;
+    public mostrar = true;
+    public mostrarGrado = true;
+
 
     @Input() profesional: IProfesional;
     @Output() onShowListado = new EventEmitter();
@@ -169,12 +172,28 @@ export class DetalleProfesionalComponent implements OnInit {
     }*/
 
     formacionGradoSelected(formacion: any) {
+        if(this.mostrarGrado == true){
         this.indexFormacionPosgradoSelected = undefined;
         this.indexFormacionGradoSelected = formacion;
+        this.mostrarGrado = false
+        }
+        else{          
+         this.indexFormacionGradoSelected = undefined;
+         this.mostrarGrado = true;
+     }
     }
 
     formacionPosgradoSelected(posgrado: any) {
-        this.indexFormacionGradoSelected = undefined;
+
+        if(this.mostrar == true){
+       
+         this.indexFormacionGradoSelected = undefined;
         this.indexFormacionPosgradoSelected = posgrado;
+        this.mostrar = false;
+        }else{
+
+            this.indexFormacionPosgradoSelected = undefined;
+            this.mostrar = true;
+        }
     }
 }

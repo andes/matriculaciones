@@ -32,6 +32,7 @@ export class BaseService {
     protected numeracionesURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/numeraciones';
     protected profesionesURL = AppSettings.API_ENDPOINT + '/core/tm/profesiones';
     protected entidadFormadoraURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/entidadesFormadoras/';
+    protected especialidadURL = AppSettings.API_ENDPOINT + '/core/tm/especialidades/';
     
     constructor(protected _http: Http) { }
 

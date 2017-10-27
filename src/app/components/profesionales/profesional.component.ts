@@ -106,7 +106,7 @@ export class ProfesionalComponent implements OnInit {
         }],
         formacionGrado: [{
             profesion: {
-                nombre: '',
+                nombre: null,
                 codigo: null,
             },
             entidadFormadora: {
@@ -163,10 +163,10 @@ export class ProfesionalComponent implements OnInit {
             let profesionalOperation: any;
 
             profesionalOperation = this._profesionalService.saveProfesional(this.profesional);
-            console.log('ok1');
+            
             profesionalOperation.subscribe(resultado => {
-                console.log('ok2');
-                this.plex.toast('success', 'Su turno se registro con exito!','informacion', 1000);
+                
+                this.plex.toast('success', 'Se registro con exito!','informacion', 1000);
             });
 
             this.onProfesionalCompleto.emit(this.profesional);

@@ -30,6 +30,7 @@ export class FormacionPosgradoComponent implements OnInit {
     // formPosgrado: FormGroup;
     profesiones: any[];
     // accordionActive = false;
+    public resultado: boolean;
 
     @Input() profesional: IProfesional;
     @Output() formacionPosgradoSelected = new EventEmitter();
@@ -37,47 +38,20 @@ export class FormacionPosgradoComponent implements OnInit {
 
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
-        private _profesionalService: ProfesionalService,) {}
+        private _profesionalService: ProfesionalService,
+        private plex: Plex) {}
 
     saveProfesional(formacionPosgradoEntrante: any) {
 
-        console.log(formacionPosgradoEntrante)
-        console.log(this.profesional.formacionPosgrado)
-        console.log(this.profesional)
-        //this.profesional.formacionPosgrado.push
         this.profesional.formacionPosgrado.push(formacionPosgradoEntrante);
         this.updateProfesional.emit(this.profesional);
-        // let profesionalOperation: any;
-        
-                    // profesionalOperation = this._profesionalService.saveProfesional(this.profesional);
-                    // console.log('ok1');
-                    // profesionalOperation.subscribe(resultado => {
-                    //     console.log('ok2');
-                    // });
+ 
     }
 
     ngOnInit() {
 
     }
 
-    /*cleanForm() {
-        this.formPosgrado = this._fb.group({
-            profesion: [null, Validators.required],
-            especialidad: [null, Validators.required],
-            institucionFormadora: [null, Validators.required],
-            fechaIngreso: [null, Validators.required],
-            fechaEgreso: [null, Validators.required],
-            certificacion: this._fb.group({
-                fecha: null,
-                modalidad: null,
-                establecimiento: null
-            }),
-            numero: null,
-            libro: null,
-            folio: null,
-            revalida: null,
-        });
-    }*/
 
 
 
@@ -87,14 +61,18 @@ export class FormacionPosgradoComponent implements OnInit {
 
 
     borrarPosgrado(i){
-        this.profesional.formacionPosgrado.splice(i,1);
-        this.updateProfesional.emit(this.profesional);
+         this.profesional.formacionPosgrado.splice(i,1);
+         this.updateProfesional.emit(this.profesional);
         
         
     }
-    /*getProfesionesProfesional(event: any) {
-        return this.profesional.formacionGrado.filter((value) => {
-            return value.profesion;
+
+
+    confirm(i) {
+        this.plex.confirm("¿Desea eliminar?'").then((resultado) => {
+            if(resultado){
+            this.borrarPosgrado(i);
+            }
         });
-    }*/
+    }
 }

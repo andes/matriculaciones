@@ -19,8 +19,8 @@ import * as Enums from './../../utils/enumerados';
 const jsPDF = require('jspdf');
 
 @Component({
-    selector: 'app-solicitar-turno-matriculacion',
-    templateUrl: 'solicitar-turno-matriculacion.html'
+    selector: 'app-solicitar-turno-renovacion',
+    templateUrl: 'solicitar-turno-renovacion.html'
 })
 export class SolicitarTurnoRenovacionComponent implements OnInit {
     public tipoTurno: Enums.TipoTurno;

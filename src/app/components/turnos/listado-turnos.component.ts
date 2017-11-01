@@ -26,7 +26,6 @@ export class ListadoTurnosComponent implements OnInit {
         private _pdfUtils: PDFUtils) { }
 
     onScroll() {
-        console.log('scroll');
     }
 
     ngOnInit() {
@@ -42,7 +41,6 @@ export class ListadoTurnosComponent implements OnInit {
     }
 
     showTurno(turno: any) {
-        console.log(turno)
         this.turnoElegido = turno;
     }
 
@@ -75,7 +73,7 @@ export class ListadoTurnosComponent implements OnInit {
         this.turnoElegido.sePresento = true;
         this._turnoService.saveTurno(this.turnoElegido)
             .subscribe(resp => {
-                //console.log(resp)
+                // console.log(resp)
             });
     }
 

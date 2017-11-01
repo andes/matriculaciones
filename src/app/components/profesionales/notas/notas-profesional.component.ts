@@ -25,7 +25,6 @@ export class NotasProfesionalComponent implements OnChanges {
     @Output() onSaved =  new EventEmitter();
 
     guardarNotas() {
-        console.log(this.textoNotas)
          this.onSaved.emit(this.textoNotas);
     }
 

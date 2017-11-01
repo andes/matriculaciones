@@ -62,6 +62,8 @@ import { SancionesFormComponent } from './components/profesionales/sanciones/san
 import { HeaderProfesionalComponent } from './components/profesionales/header-profesional.component';
 import { FormacionPosgradoComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado.component';
 import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
+import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
+
 
 
 import { TurnosComponent } from './components/turnos/turnos.component';
@@ -85,7 +87,8 @@ const COMPS_PROFESIONAL = [
   FormacionGradoDetalleComponent,
   FormacionPosgradoComponent,
   FormacionPosgradoDetalleComponent,
-  FormacionPosgradoFormComponent
+  FormacionPosgradoFormComponent,
+  ListarProfesionalesComponent
 ];
 
 

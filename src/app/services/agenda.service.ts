@@ -1,6 +1,7 @@
 import { AppSettings } from './../app.settings';
 import { IAgendaMatriculaciones } from './../interfaces/IAgendaMatriculaciones';
 import { Injectable } from '@angular/core';
+import { Server } from '@andes/shared';
 import { Headers, Http, RequestOptions, RequestMethod, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
 
@@ -14,29 +15,25 @@ export class AgendaService {
 
    private agendaUrl = AppSettings.API_ENDPOINT + '/modules/matriculaciones/agendaMatriculaciones';  // URL to web api
 
-   constructor(private http: Http) {}
+   constructor(private server: Server) {}
 
    get(): Observable<IAgendaMatriculaciones[]> {
-       return this.http.get(this.agendaUrl)
-           .map((res: Response) => res.json())
-           .catch(this.handleError); // ...errors if any*/
+       return this.server.get(this.agendaUrl);
    }
 
    save(agenda: any): Observable<IAgendaMatriculaciones> {
 
         if (agenda.id) {
-            return this.http.put(this.agendaUrl + '/' + agenda.id, agenda)
-                    .map((res: Response) => res.json())
-                    .catch(this.handleError);
+            return this.server.put(this.agendaUrl + '/' + agenda.id, agenda);
         } else {
-            return this.http.post(this.agendaUrl, agenda)
-                    .map((res: Response) => res.json())
-                    .catch(this.handleError);
+            return this.server.post(this.agendaUrl, agenda);
+
+                    // .map((res: Response) => res.json())
+                    // .catch(this.handleError);
         }
    }
 
-  handleError(error: any){
-        console.log(error.json());
+  handleError(error: any) {
         return Observable.throw(error.json().error || 'Server error');
-    }   
+    }
 }

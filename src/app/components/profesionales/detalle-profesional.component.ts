@@ -60,30 +60,28 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     ngOnInit() {
+        console.log(this.profesional);
         this.route.params
             .switchMap((params: Params)  =>
-                this._profesionalService.getProfesional(params['id'])
+                this._profesionalService.getUnProfesional(params['id'])
             ).subscribe(
                 (profesional:  IProfesional) =>
                 this.profesional = profesional
             );
+        console.log(this.profesional);
     }
 
     updateProfesional2(profesional: IProfesional) {
-        console.log("aca si")
         this._profesionalService.saveProfesional(profesional)
             .subscribe(prof => {
-                this.profesional = prof
+                this.profesional = prof;
             });
-        //this.profesional = profesional;
+        // this.profesional = profesional;
     }
 
     updateProfesional(callbackData?: any) {
-        console.log("aca si")
          this._profesionalService.saveProfesional(this.profesional)
             .subscribe(resp => {
-                console.log("aca si 2")
-                console.log(resp)
                 this.profesional = resp;
                 if (callbackData) {
                     callbackData.callback(callbackData.param);
@@ -103,7 +101,6 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     guardarNotas(textoNotas) {
-        console.log("guardar notas")
         this.profesional.notas = textoNotas;
         this.updateProfesional();
     }
@@ -115,12 +112,10 @@ export class DetalleProfesionalComponent implements OnInit {
 
     guardarFormacionPosgrado(posgrado: any) {
         this.profesional.formacionPosgrado.push(posgrado);
-        this.updateProfesional()
+        this.updateProfesional();
     }
 
     matricularProfesional(matriculacion: any) {
-        console.log("matricularProfesional")
-        console.log(matriculacion)
         this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
         this.updateProfesional();
     }
@@ -172,12 +167,11 @@ export class DetalleProfesionalComponent implements OnInit {
     }*/
 
     formacionGradoSelected(formacion: any) {
-        if(this.mostrarGrado == true){
+        if (this.mostrarGrado === true) {
         this.indexFormacionPosgradoSelected = undefined;
         this.indexFormacionGradoSelected = formacion;
-        this.mostrarGrado = false
-        }
-        else{          
+        this.mostrarGrado = false;
+        } else {
          this.indexFormacionGradoSelected = undefined;
          this.mostrarGrado = true;
      }
@@ -185,13 +179,11 @@ export class DetalleProfesionalComponent implements OnInit {
 
     formacionPosgradoSelected(posgrado: any) {
 
-        if(this.mostrar == true){
-       
+        if (this.mostrar === true) {
          this.indexFormacionGradoSelected = undefined;
         this.indexFormacionPosgradoSelected = posgrado;
         this.mostrar = false;
-        }else{
-
+        }else {
             this.indexFormacionPosgradoSelected = undefined;
             this.mostrar = true;
         }

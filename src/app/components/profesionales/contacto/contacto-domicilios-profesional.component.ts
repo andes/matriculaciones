@@ -22,6 +22,6 @@ export class ContactoDomiciliosProfesionalComponent implements OnInit {
     @Input() profesional: IProfesional;
 
     ngOnInit() {
-        console.log('init Contactos')
+
     }
 }

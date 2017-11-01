@@ -1,7 +1,7 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-//import { Plex } from '@andes/plex/src/lib/core/service';
-//import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+// import { Plex } from '@andes/plex/src/lib/core/service';
+// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { Plex } from '@andes/plex';
 
 // Enums
@@ -10,9 +10,7 @@ import {
     getEnumAsObjects,
     Sexo,
     EstadoCivil,
-    TipoContacto }  from './../../utils/enumerados';
-   
-    
+    TipoContacto } from './../../utils/enumerados';
 
 // Services
 import { PaisService } from './../../services/pais.service';
@@ -36,13 +34,13 @@ export class ProfesionalComponent implements OnInit {
     public sexos: any;
     public provincias: any[];
     public localidades: any[];
-    public estadoCivil : any;
+    public estadoCivil: any;
     public tipoComunicacion: any[];
 
     // public estadosCiviles: any[];
     public showOtraEntidadFormadora: Boolean = false;
     @Input()
-    //private profesional: IProfesional
+    // private profesional: IProfesional
     private profesional: any = {
         habilitado: Boolean,
         nombre: null,
@@ -71,7 +69,7 @@ export class ProfesionalComponent implements OnInit {
             direccion: null,
             codigoPostal: null,
             ubicacion: {
-                localidad:null,
+                localidad: null,
                 provincia: null,
                 pais: null,
             },
@@ -84,7 +82,7 @@ export class ProfesionalComponent implements OnInit {
             direccion: null,
             codigoPostal: null,
             ubicacion: {
-                localidad:null,
+                localidad: null,
                 provincia: null,
                 pais: null,
             },
@@ -97,7 +95,7 @@ export class ProfesionalComponent implements OnInit {
             direccion: null,
             codigoPostal: null,
             ubicacion: {
-                localidad:null,
+                localidad: null,
                 provincia: null,
                 pais: null,
             },
@@ -110,16 +108,13 @@ export class ProfesionalComponent implements OnInit {
                 codigo: null,
             },
             entidadFormadora: {
-                nombre:null,
+                nombre: null,
                 codigo: null,
             },
             titulo: null,
             fechaEgreso: '',
             fechaTitulo: '',
         }],
-
-        
-        
     };
 
     @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
@@ -133,22 +128,14 @@ export class ProfesionalComponent implements OnInit {
         private _profesionalService: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
         private plex: Plex) {
-
-          
          }
 
     ngOnInit() {
-        this.estadoCivil = enumerados.getObjsEstadoCivil()
+        this.estadoCivil = enumerados.getObjsEstadoCivil();
         this.sexos = enumerados.getObjSexos();
         this.tipoComunicacion = enumerados.getObjTipoComunicacion();
     }
 
-
-
-    prueba(){
-        console.log(this.profesional)
-        
-    }
 
     showOtra(entidadFormadora) {
         if (entidadFormadora.value) {
@@ -157,22 +144,14 @@ export class ProfesionalComponent implements OnInit {
     }
 
     confirmarDatos($event) {
-        if ($event.formValid){
-        console.log(this.profesional)
-      
+        if ($event.formValid) {
             let profesionalOperation: any;
-
             profesionalOperation = this._profesionalService.saveProfesional(this.profesional);
-            
             profesionalOperation.subscribe(resultado => {
-                
-                this.plex.toast('success', 'Se registro con exito!','informacion', 1000);
+                this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
             });
-
             this.onProfesionalCompleto.emit(this.profesional);
-        }  
-       
-        
+        }
 
         // model.contactos.forEach(contacto => {
         //     contacto.tipo = contacto.tipo.toLowerCase();
@@ -187,7 +166,6 @@ export class ProfesionalComponent implements OnInit {
     }
 
     loadProvincias(pais) {
-        console.log(pais.value)
         this._provinciaService.get({ 'pais': pais.value.id })
             .subscribe(resp => {
                 this.provincias = resp;
@@ -215,7 +193,7 @@ export class ProfesionalComponent implements OnInit {
         this._sexoService.getSexos().subscribe(event.callback);
     }
     addContacto() {
-        let nuevoContacto = Object.assign({}, {
+        const nuevoContacto = Object.assign({}, {
             tipo: 'celular',
             valor: '',
             ranking: 0,
@@ -231,17 +209,17 @@ export class ProfesionalComponent implements OnInit {
         }
     }
 
-    completar(){
+    completar() {
         this.profesional.domicilios[1].direccion = this.profesional.domicilios[0].direccion;
-        this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;        
+        this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;
         this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
         this.profesional.domicilios[1].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
-        this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad
+        this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
 
         this.profesional.domicilios[2].direccion = this.profesional.domicilios[0].direccion;
-        this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;        
+        this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;
         this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
         this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
-        this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad
+        this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
     }
 }

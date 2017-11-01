@@ -4,7 +4,6 @@ const jsPDF = require('jspdf');
 export class PDFUtils {
 
     public generarCredencial(imgsData: any, profesional: any, formacionGrado: any): any {
-        debugger
         const ultimaRenovacion = formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1];
 
         const doc = new jsPDF('p', 'mm', [217.5, 304.3]);

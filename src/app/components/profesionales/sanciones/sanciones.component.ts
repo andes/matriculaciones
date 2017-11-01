@@ -26,7 +26,7 @@ import {
     templateUrl: 'sanciones.html'
 })
 export class SancionesComponent implements OnInit {
-    //formSancion: FormGroup;
+    // formSancion: FormGroup;
     @Input() profesional: IProfesional;
     @Output() updateProfesional = new EventEmitter();
 

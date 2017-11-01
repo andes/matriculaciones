@@ -64,7 +64,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
         this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
             .subscribe(turno => {
-                console.log(turno)
                 const pdf = this._pdfUtils.comprobanteTurno(turno);
                 pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
             });

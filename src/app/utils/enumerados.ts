@@ -70,11 +70,10 @@ export function getObjsEstadoCivil() {
 }
 
 export function getObjDias() {
-  
   let arrEstadoC = Object.keys(Dia);
 
   arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
-  let salida = arrEstadoC.map((elem,index) => {
+  const salida = arrEstadoC.map((elem, index) => {
       return {
           'id': index,
           'nombre': titleCase(elem)
@@ -84,7 +83,7 @@ export function getObjDias() {
 }
 
 export function getObjSexos() {
-  //return getEnumAsObjects(Object.keys(Dia));
+  // return getEnumAsObjects(Object.keys(Dia));
   return getEnumAsObjects(Sexo);
 }
 
@@ -97,8 +96,8 @@ export function getObjeto(elemento) {
 export function getObjTipoComunicacion() {
   let arrTC = Object.keys(tipoComunicacion);
   arrTC = arrTC.slice(arrTC.length / 2);
-  let salida = arrTC.map(elem => {
-      let idEnumerado = elem.split(' ')[1] ? elem.split(' ')[1] : elem.split(' ')[0];
+  const salida = arrTC.map(elem => {
+      const idEnumerado = elem.split(' ')[1] ? elem.split(' ')[1] : elem.split(' ')[0];
       return {
           'id': idEnumerado.toLowerCase(),
           'nombre': titleCase(elem)
@@ -110,7 +109,7 @@ export function getObjTipoComunicacion() {
 export function getObjTipoDomicilio() {
   let arrEstadoC = Object.keys(TipoDomicilio);
   arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
-  let salida = arrEstadoC.map(elem => {
+  const salida = arrEstadoC.map(elem => {
       return {
           'id': elem,
           'nombre': titleCase(elem)

@@ -29,7 +29,7 @@ export class SancionesFormComponent implements OnInit {
     activeAcc: Boolean = false;
     @Input() profesional: IProfesional;
     @Output() submitSancion = new EventEmitter();
-        sanciones: any ={
+        sanciones: any = {
             numero: null,
             sancion: {
                 id: Number,
@@ -39,24 +39,19 @@ export class SancionesFormComponent implements OnInit {
             normaLegal: null,
             fecha: null,
             vencimiento: null,
-        }
-    
-
+            };
     constructor(private plex: Plex) {}
 
     ngOnInit() {
-      
     }
 
 
-    onSave($event,form) {
-        if ($event.formValid){
+    onSave($event, form) {
+        if ($event.formValid) {
         this.submitSancion.emit(this.sanciones);
-        this.plex.toast('success', 'Realizado con exito','informacion', 1000);
+        this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
         form.reset();
     }
-    
-     
     }
 
     loadTipoSanciones(event: any) {

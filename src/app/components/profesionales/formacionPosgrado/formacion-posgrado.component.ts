@@ -45,7 +45,7 @@ export class FormacionPosgradoComponent implements OnInit {
 
         this.profesional.formacionPosgrado.push(formacionPosgradoEntrante);
         this.updateProfesional.emit(this.profesional);
- 
+
     }
 
     ngOnInit() {
@@ -60,17 +60,15 @@ export class FormacionPosgradoComponent implements OnInit {
     }
 
 
-    borrarPosgrado(i){
-         this.profesional.formacionPosgrado.splice(i,1);
+    borrarPosgrado(i) {
+         this.profesional.formacionPosgrado.splice(i, 1);
          this.updateProfesional.emit(this.profesional);
-        
-        
     }
 
 
     confirm(i) {
-        this.plex.confirm("¿Desea eliminar?'").then((resultado) => {
-            if(resultado){
+        this.plex.confirm('¿Desea eliminar?').then((resultado) => {
+            if (resultado) {
             this.borrarPosgrado(i);
             }
         });

@@ -20,17 +20,17 @@ import * as enumerados from './../../utils/enumerados';
 export class ConfiguracionAgendaComponent implements OnInit {
     currentAgenda: IAgendaMatriculaciones = {
         _id: null,
-        diasHabilitados:null,
+        diasHabilitados: null,
         horarioInicioTurnos: null,
         horarioFinTurnos: null,
         fechasExcluidas: null,
         duracionTurno: null,
-    }
+    };
     dias: any[];
     boxType: String;
     feriados: Array<any>;
 
-    constructor( private agendaService: AgendaService,private plex: Plex) {
+    constructor( private agendaService: AgendaService, private plex: Plex) {
             this.feriados  = [];
          }
 
@@ -54,29 +54,23 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
     agregarFeriado() {
         this.feriados.push(this.currentAgenda.fechasExcluidas);
-  
     }
 
     eliminarFeriado(idx: number) {
         this.feriados.splice(idx, 1);
     }
 
-    guardarConfiguracion($event,form) {
-        
-        if ($event.formValid){
-      
+    guardarConfiguracion($event, form) {
+        if ($event.formValid) {
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
             agendaOperation = this.agendaService.save(this.currentAgenda);
 
               agendaOperation.subscribe(resultado => {
-                console.log('Configuración Actualizada');
-                this.plex.toast('success', 'Realizado con exito','informacion', 1000);
+                this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
             });
             form.resetForm();
         }
-        
-       
     }
     }
 

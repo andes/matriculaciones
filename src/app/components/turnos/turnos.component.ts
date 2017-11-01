@@ -32,11 +32,9 @@ export class TurnosComponent implements OnInit {
         private router: Router) { }
 
     onScroll() {
-        console.log('scroll');
     }
 
     ngOnInit() {
-        
         this.formBuscarTurno = this._formBuilder.group({
             nombre: '',
             apellido: '',
@@ -69,7 +67,6 @@ export class TurnosComponent implements OnInit {
             .subscribe((resp) => {
 
                 this.turnos = resp.data;
-                console.log(this.turnos)
                 if (event) {
                     event.callback(resp);
                 }
@@ -84,7 +81,7 @@ export class TurnosComponent implements OnInit {
         this.turnoElegido.sePresento = true;
         this._turnoService.saveTurno(this.turnoElegido)
             .subscribe(resp => {
-                //console.log(resp)
+                // console.log(resp)
             });
     }
 

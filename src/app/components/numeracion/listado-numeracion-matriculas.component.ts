@@ -22,7 +22,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     private numeraciones: any[] ;
     private numeracionElegida: any;
     private showListado: Boolean = true;
-    public var : Number;
+    public var: Number;
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
@@ -32,7 +32,6 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
             this.numeraciones = [];
     }
     onScroll(event: any) {
-        console.log('scroll')
         /*this.currentPage++;
         this.updateListado();*/
     }
@@ -40,7 +39,6 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         this.formBuscarNumeracion = this._formBuilder.group({
             profesion: new FormControl()
         });
- 
         this.buscar();
     }
 
@@ -66,13 +64,11 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
 
         // if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
         //     consulta.profesion = null;
-        // }    
-        console.log(consulta)
+        // }
 
         consulta.offset = event ? event.query.offset : 0;
         consulta.size = event ? event.query.size : 10;
         consulta.profesion = event ? event.query.codigo : consulta.profesion;
-        console.log(consulta.profesion)
         if (!event) {
             this.numeracionElegida = null;
         }
@@ -80,11 +76,9 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         this._numeracionesService.getNumeraciones(consulta)
             .subscribe((resp) => {
                 this.numeraciones = resp.data;
-                console.log(this.numeraciones)
                 if (event) {
                     event.callback(resp);
                 }
-                console.log(resp.data)
             });
     }
 
@@ -92,10 +86,8 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         this.showListado = show;
     }
 
-    cambio(ingreso){
+    cambio(ingreso) {
         this.numeracionElegida = ingreso;
-        console.log(this.numeraciones);
-        
     }
 
 
@@ -103,7 +95,6 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         const numero = this.numeracionElegida.proximoNumero++;
         this._numeracionesService.saveNumeracion(this.numeracionElegida)
             .subscribe(resp => {
-                // console.log('Matrícula Generada');
             });
     }
 }

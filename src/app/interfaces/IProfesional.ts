@@ -109,7 +109,7 @@ export interface IProfesional {
         sancion: {
             id: Number;
             nombre: String;
-        }; 
+        },
         motivo: String;
         normaLegal: String;
         fecha: Date;

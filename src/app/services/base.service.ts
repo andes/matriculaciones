@@ -12,7 +12,7 @@ import { Headers,
 
 import {
     Server
-} from '@andes/shared'
+} from '@andes/shared';
 
 
 // Import RxJs required methods
@@ -33,7 +33,6 @@ export class BaseService {
     protected profesionesURL = AppSettings.API_ENDPOINT + '/core/tm/profesiones';
     protected entidadFormadoraURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/entidadesFormadoras/';
     protected especialidadURL = AppSettings.API_ENDPOINT + '/core/tm/especialidades/';
-    
     constructor(protected _http: Http) { }
 
     protected get(url: string, searchQuery?: URLSearchParams): Observable<any[]> {
@@ -58,8 +57,6 @@ export class BaseService {
     }
 
     protected handleError(error: any) {
-        console.log('handleError');
-        console.log(error.json());
         return Observable.throw(error.json().error || 'Server error');
     }
 }

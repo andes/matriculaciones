@@ -42,7 +42,7 @@ export class FormacionGradoDetalleComponent {
             .subscribe((resp) => {
                 const pdf = this._pdfUtils.generarCredencial(resp, this.profesional, this.formacion);
                 pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                //this.loading = false;
+                // this.loading = false;
             });
 
 
@@ -51,9 +51,7 @@ export class FormacionGradoDetalleComponent {
     matricularProfesional(formacion: any) {
         this._numeracionesService.getOne(formacion.profesion._id)
             .subscribe((num) => {
-                console.log(num)
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-                console.log(num.proximoNumero);
                 const oMatriculacion = {
                     matriculaNumero: num[0].proximoNumero + 1,
                     libro: '',
@@ -62,8 +60,7 @@ export class FormacionGradoDetalleComponent {
                     fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
                     revalidacionNumero: formacion.matriculacion.length + 1
                 };
-                console.log(oMatriculacion)
-                num[0].proximoNumero = num[0].proximoNumero + 1
+                num[0].proximoNumero = num[0].proximoNumero + 1;
                 this._numeracionesService.saveNumeracion(num[0])
                 .subscribe(newNum => {
                         // console.log('Numeracion Actualizada');

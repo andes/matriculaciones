@@ -37,7 +37,6 @@ export class SolicitarTurnoComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges() {
-        console.log(this.tipoTurno)
     }
 
     nuevaMatriculacion() {

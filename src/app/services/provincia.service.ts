@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, RequestMethod, Response } from '@angular/http';
 // import { Server } from './../../../node_modules/andes-shared/src/lib/server/server.service';
 import 'rxjs/add/operator/toPromise';
-
+import { Server } from '@andes/shared';
 import {Observable} from 'rxjs/Rx';
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
@@ -15,7 +15,7 @@ export class ProvinciaService {
 
    private provinciaUrl = AppSettings.API_ENDPOINT + '/core/tm/provincias';  // URL to web api
 
-   constructor(/*private server: Server,*/ private http: Http) {}
+   constructor(private server: Server) {}
 
 //    get(): Observable<IProvincia[]> {
 //        return this.http.get(this.provinciaUrl)
@@ -24,9 +24,7 @@ export class ProvinciaService {
 //    }
 
    get(params: any): Observable<IProvincia[]> {
-       return this.http.get(this.provinciaUrl)
-            .map((res:Response) => res.json())
-            .catch(this.handleError);
+       return this.server.get(this.provinciaUrl);
    }
 
 //    getXPais(pais: String): Observable<IProvincia[]> {
@@ -42,10 +40,8 @@ export class ProvinciaService {
 //            .catch(this.handleError); //...errors if any*/
 //    }
 
-    handleError(error: any){
-         console.log(error.json());
+    handleError(error: any) {
          return Observable.throw(error.json().error || 'Server error');
      }
 
-   
 }

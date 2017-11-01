@@ -1,0 +1,73 @@
+
+    <section>
+            <plex-box >
+        <div class="row">
+            <div class="col-12">
+                    <div class="col-md-12 text-center">
+                            <h2>Buscar profesional</h2>
+                    </div>
+                
+                    <header>
+                        <!-- SEARCH -->
+                        <div [formGroup]="formBuscarProfesionales">
+                            <div class="row">
+                                <!-- <div class="col-md-3">
+                                    <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
+                                </div>
+                                <div class="col-md-3">
+                                    <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
+                                </div> -->
+                                <div class="col-md-6">
+                                    <plex-int label="Documento" formControlName="busquedaDoc" (change)="buscar()"></plex-int>
+                                </div>
+                                <div class="col-md-6">
+                                    <plex-text label="Apellido" formControlName="busquedaApellido" (change)="buscar()"></plex-text>
+                                </div>
+                                <!-- <div class="col-md-3">
+                                    <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
+                                </div> -->
+                            </div>
+                        </div>
+                    </header>
+                    
+                    <!-- LIST -->
+                    <div class="row">
+                        <div class="col-12">
+                                <br>
+                                <br>
+                            <ul class="list-group">
+                                <li class="list-group-item" *ngFor="let profesional of profesionales; let i = index;" (click)="showTurno(profesional)" >
+                                    <div class="row" style="width: 100%">
+                                        <div class="col-10">
+                                            <h6 class="box-title-elemento">
+                                                <strong> {{profesional.apellido | uppercase}},{{profesional.nombre | uppercase}}</strong> <br>
+                                                 <strong>DNI</strong> {{profesional.documentoNumero}} | {{profesional.edad + ' años'}}
+                                            </h6>
+                                           
+                                                
+                                            
+                                        </div>
+                                        <div class="col-md-2">
+                                            <plex-button type="primary" label="Ver Profesional" class="float-right" (click)="showProfesional(profesional)"></plex-button>
+                                        </div>
+                                        <div class="col float-right">
+                                            <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
+                                            </span> -->
+                                        </div>
+
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+            </div>
+
+            
+        </div>
+
+    </plex-box>
+    </section>
+<!--</div>-->

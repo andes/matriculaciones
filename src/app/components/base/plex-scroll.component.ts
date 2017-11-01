@@ -9,7 +9,7 @@ import { NumeracionMatriculasService } from './../../services/numeracionMatricul
 import { ProfesionService } from './../../services/profesion.service';
 
 @Component({
-    selector: 'mat-plex-scroll',
+    selector: 'app-mat-plex-scroll',
     template: `
         <div class="search-results"
             infinite-scroll
@@ -46,8 +46,8 @@ export class ScrollComponent implements OnInit {
         this.updateListado();
     }
 
-    onScroll(event:any) {
-        console.log('scroll')
+    onScroll(event: any) {
+
         /*this.currentPage++;
         this.updateListado();*/
     }

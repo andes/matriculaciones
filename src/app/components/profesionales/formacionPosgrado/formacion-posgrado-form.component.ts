@@ -47,7 +47,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
             },
             fechaIngreso: null,
             fechaEgreso: null,
-            observacion:null,
+            observacion: null,
             certificacion: {
                 fecha: null,
                 modalidad: {
@@ -67,7 +67,6 @@ export class FormacionPosgradoFormComponent implements OnInit {
             //     fin: null,
             //     revalidacionNumero: null,
             // }],
-      
     };
 
     @Input() profesional: IProfesional;
@@ -80,58 +79,24 @@ export class FormacionPosgradoFormComponent implements OnInit {
         private plex: Plex) {}
 
     ngOnInit() {
-        console.log(this.profesionalP.formacionPosgrado)
         if (this.profesional) {
             this.profesiones = this.profesional.formacionGrado.map((value) => {
                 return value.profesion;
             });
         }
-        this.buildForm();
     }
 
-    onSubmit($event,form) {
-        if($event.formValid){
-        console.log(this.profesionalP.formacionPosgrado)
+    onSubmit($event, form) {
+        if ($event.formValid) {
         this.submitPosgrado.emit(this.profesionalP);
-        this.plex.toast('success', 'Se registro con exito!','informacion', 1000);
+        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
 
 
         form.resetForm();
         }
-        // debugger
-        // // Validaciones
-        // if (this.formPosgrado.valid) {
-           
-        //     this.activeAcc = false;
-        //     this.submitPosgrado.emit(this.formPosgrado.value);
-        //     this.buildForm();
-        // } else {
-        //     // Show errors
-        // }
-    }
-
-    buildForm() {
-        this.formPosgrado = this._fb.group({
-            profesion: [null, Validators.required],
-            especialidad: [null, Validators.required],
-            institucionFormadora: [null, Validators.required],
-            fechaIngreso: [null, Validators.required],
-            fechaEgreso: [null, Validators.required],
-            certificacion: this._fb.group({
-                fecha: null,
-                modalidad: null,
-                establecimiento: null
-            }),
-            numero: null,
-            libro: null,
-            folio: null,
-            revalida: null,
-        });
     }
 
     guardarEspecialidad(especialidad: any, valid: boolean) {
-        console.log(valid)
-        console.log(especialidad)
         // this.save.emit(especialidad);
     }
 

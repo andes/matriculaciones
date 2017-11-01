@@ -26,11 +26,9 @@ export class HomeComponent {
             this.loading = true;
             this.auth.login(this.usuario.toString(), this.password)
                 .subscribe((data) => {
-                    debugger;
                     this.plex.updateUserInfo({usuario: this.auth.usuario});
                     this.router.navigate(['selectOrganizacion']);
                 }, (err) => {
-                    debugger;
                     this.plex.alert('Usuario o contraseña incorrectos');
                     this.loading = false;
                     this.deshabilitar = false;
@@ -38,5 +36,4 @@ export class HomeComponent {
         }
     }
 
- 
 }

@@ -62,7 +62,6 @@ export class ListarProfesionalesComponent implements OnInit {
             .subscribe((resp) => {
 
                  this.profesionales = resp;
-                console.log(this.profesionales);
                 //   if (event) {
                 //       event.callback(resp);
                 //   }

@@ -26,39 +26,50 @@ import {
 import {
     AppSettings
 } from './../../../app.settings';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-firmas-profesional',
     templateUrl: 'firmas-profesional.html'
 })
-export class FirmasProfesionalComponent implements OnInit, OnChanges {
+export class FirmasProfesionalComponent implements OnInit {
     uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/firma'});
     @Input() profesional: IProfesional;
     @Output() onFileUploaded = new EventEmitter();
+    public binaryString = null;
+    public firmas = null;
+    private base64textString: String= '';
+    public firmaP = {
+        imgArchivo: null,
+        fecha: new Date()
+    };
 
+    constructor(public sanitizer: DomSanitizer){
+    }
+
+
+    handleFileSelect(evt){
+        const files = evt.target.files;
+        const file = files[0];
+      if (files && file) {
+          const reader = new FileReader();
+          reader.onload =this._handleReaderLoaded.bind(this);
+          reader.readAsBinaryString(file);
+      }
+    }
+    _handleReaderLoaded(readerEvt) {
+       this.binaryString = readerEvt.target.result;
+              this.firmaP.imgArchivo = "data:image/jpeg;base64," + btoa(this.binaryString);
+             
+      }
     ngOnInit() {
-        this.uploader.onAfterAddingFile = (file) => {
-            file.withCredentials = false;
-        };
 
-        this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-            if (response) {
-                const oResp = JSON.parse(response);
-                this.onFileUploaded.emit(oResp);
-            } else {
-                console.error('Error subiendo foto');
-            }
-        };
+        //this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
     }
 
-    ngOnChanges() {
-         if (this.profesional) {
-            this.uploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/firma/' + this.profesional._id});
-        }
-    }
 
     upload() {
-        this.uploader.uploadAll();
+        this.onFileUploaded.emit(this.firmaP);
     }
 
 }

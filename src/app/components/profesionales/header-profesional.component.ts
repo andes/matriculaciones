@@ -11,12 +11,21 @@ import {
 import {
     IProfesional
 } from './../../interfaces/IProfesional';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-header-profesional',
     templateUrl: 'header-profesional.html'
 })
 export class HeaderProfesionalComponent {
+   public foto = null;
 
     @Input() profesional: IProfesional;
+
+    constructor(public sanitizer: DomSanitizer){
+        console.log(this.sanitizer);
+    }
+    ngOnInit() {
+        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.fotoArchivo);
+    }
 }

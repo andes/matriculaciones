@@ -60,7 +60,6 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     ngOnInit() {
-        console.log(this.profesional);
         this.route.params
             .switchMap((params: Params)  =>
                 this._profesionalService.getUnProfesional(params['id'])
@@ -68,7 +67,6 @@ export class DetalleProfesionalComponent implements OnInit {
                 (profesional:  IProfesional) =>
                 this.profesional = profesional
             );
-        console.log(this.profesional);
     }
 
     updateProfesional2(profesional: IProfesional) {
@@ -91,7 +89,7 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     guardarFoto(fileName: any) {
-        this.profesional.fotoArchivo = fileName + '?' + new Date().getTime();
+        this.profesional.fotoArchivo = fileName;
         this.updateProfesional();
     }
 
@@ -152,6 +150,9 @@ export class DetalleProfesionalComponent implements OnInit {
 
     volver() {
         this.router.navigate(['/turnos', { id: this.profesional._id}]);
+    }
+    volverP() {
+        this.router.navigate(['/listarProfesionales']);
     }
 
    /* generarCredencial() {

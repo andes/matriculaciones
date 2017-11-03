@@ -6,7 +6,7 @@ import {
     Output,
     OnChanges,
     OnInit } from '@angular/core';
-
+    import { DomSanitizer } from '@angular/platform-browser';
 // Plex
 import {
     Plex
@@ -31,34 +31,41 @@ import {
     selector: 'app-foto-profesional',
     templateUrl: 'foto-profesional.html'
 })
-export class FotoProfesionalComponent implements OnInit, OnChanges {
+export class FotoProfesionalComponent implements OnInit{
     uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
     @Input() profesional: IProfesional;
     @Output() onFileUploaded = new EventEmitter();
+    public binaryString = null;
+    public foto = null;
+    private base64textString: String= '';
 
+    constructor(public sanitizer: DomSanitizer){
+    }
+
+
+    handleFileSelect(evt){
+        const files = evt.target.files;
+        const file = files[0];
+      if (files && file) {
+          const reader = new FileReader();
+          reader.onload =this._handleReaderLoaded.bind(this);
+          reader.readAsBinaryString(file);
+      }
+    }
+    _handleReaderLoaded(readerEvt) {
+       this.binaryString = readerEvt.target.result;
+              this.base64textString= btoa(this.binaryString);
+      }
     ngOnInit() {
-        this.uploader.onAfterAddingFile = (file) => {
-            file.withCredentials = false;
-        };
-
-        this.uploader.onCompleteItem = (item: any, response: any, status: any, headers: any) => {
-            if (response) {
-                const oResp = JSON.parse(response);
-                this.onFileUploaded.emit(oResp.fileName);
-            } else {
-                console.error('Error subiendo foto');
-            }
-        };
+        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.fotoArchivo);
     }
 
-    ngOnChanges() {
-         if (this.profesional) {
-            this.uploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto/' + this.profesional._id});
-        }
-    }
+
 
     upload() {
         this.uploader.uploadAll();
+        this.onFileUploaded.emit(this.base64textString);
     }
+
 
 }

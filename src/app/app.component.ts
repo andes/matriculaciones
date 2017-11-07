@@ -74,6 +74,7 @@ export class AppComponent implements OnInit {
             { label: 'Agenda', icon: 'calendar', route: 'agenda/'},
             { label: 'Requisitos generales', icon: 'calendar', route: 'requisitosGenerales/'},
             { label: 'Turnos', icon: 'book', route: 'turnos/'},
+            { label: 'Listado profesionales', icon: 'book', route: 'listarProfesionales/'}
         ];
 
         this.plex.initView('Matriculaciones', menu); // .initStaticItems(menu);//.initView('Matriculaciones', menu);

@@ -22,8 +22,8 @@ export class HeaderProfesionalComponent {
 
     @Input() profesional: IProfesional;
 
-    constructor(public sanitizer: DomSanitizer){
-        console.log(this.sanitizer);
+    constructor(public sanitizer: DomSanitizer) {
+
     }
     ngOnInit() {
         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.fotoArchivo);

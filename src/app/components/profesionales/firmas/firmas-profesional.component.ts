@@ -44,31 +44,30 @@ export class FirmasProfesionalComponent implements OnInit {
         fecha: new Date()
     };
 
-    constructor(public sanitizer: DomSanitizer){
+    constructor(public sanitizer: DomSanitizer, private plex: Plex) {
     }
 
 
-    handleFileSelect(evt){
+    handleFileSelect(evt) {
         const files = evt.target.files;
         const file = files[0];
       if (files && file) {
           const reader = new FileReader();
-          reader.onload =this._handleReaderLoaded.bind(this);
+          reader.onload = this._handleReaderLoaded.bind(this);
           reader.readAsBinaryString(file);
       }
     }
     _handleReaderLoaded(readerEvt) {
        this.binaryString = readerEvt.target.result;
-              this.firmaP.imgArchivo = "data:image/jpeg;base64," + btoa(this.binaryString);
-             
+              this.firmaP.imgArchivo = 'data:image/jpeg;base64,' + btoa(this.binaryString);
       }
     ngOnInit() {
-
-        //this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
+        // this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
     }
 
 
     upload() {
+        this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
         this.onFileUploaded.emit(this.firmaP);
     }
 

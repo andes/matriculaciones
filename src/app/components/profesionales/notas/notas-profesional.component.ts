@@ -24,8 +24,13 @@ export class NotasProfesionalComponent implements OnChanges {
     @Input() profesional: IProfesional;
     @Output() onSaved =  new EventEmitter();
 
+
+    constructor(private plex: Plex) {
+    }
+
     guardarNotas() {
          this.onSaved.emit(this.textoNotas);
+         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
     }
 
     ngOnChanges() {

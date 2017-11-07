@@ -145,19 +145,8 @@ export class ProfesionalComponent implements OnInit {
 
     confirmarDatos($event) {
         if ($event.formValid) {
-            let profesionalOperation: any;
-            profesionalOperation = this._profesionalService.saveProfesional(this.profesional);
-            profesionalOperation.subscribe(resultado => {
-                this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-            });
             this.onProfesionalCompleto.emit(this.profesional);
         }
-
-        // model.contactos.forEach(contacto => {
-        //     contacto.tipo = contacto.tipo.toLowerCase();
-        // });
-
-        // this.onProfesionalCompleto.emit(model);
     }
 
     // Filtrado de combos

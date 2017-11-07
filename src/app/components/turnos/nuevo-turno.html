@@ -1,10 +1,5 @@
 <!-- temporal -->
-<style>
-    .btn-primary:focus, .btn-primary.focus {
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5) !important;
-    background-color: #115065;
-}
-</style>
+
 <!--<plex-box title="Fecha y Hora del Turno"  type="{{boxType}}" >-->
     <div class="row">
         <div class="col-lg-12" *ngIf="turnoElegido">
@@ -27,7 +22,7 @@
             <div class="row"  >
                 <div *ngFor="let turno of horariosDisponibles; let idx = index">
                    <div class="col-md-6" style=" margin-bottom: 6px;" >
-                        <button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado"   class="btn btn-primary" (click)="buildFechaTurno(horariosDisponibles[idx])" >
+                        <button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado"   class="btn btn-primary" (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'active':isActive(horariosDisponibles[idx]) == true}" >
                                 {{ horariosDisponibles[idx].hora  }}:{{ (horariosDisponibles[idx].minutos == 0) ? '00' : horariosDisponibles[idx].minutos }} hs
                         </button>
                     </div>

@@ -38,7 +38,8 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
         private _profesionService: ProfesionService,
         private _profesionalService: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
-        private _pdfUtils: PDFUtils) {
+        private _pdfUtils: PDFUtils,
+        private plex: Plex) {
 
             this.tipoTurno = Enums.TipoTurno.matriculacion;
 
@@ -71,11 +72,15 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
     onProfesionalCompleto(profesional: any) {
         this._profesionalService.saveProfesional(profesional)
             .subscribe((nuevoProfesional) => {
-                this._nuevoProfesional = nuevoProfesional;
-                this.turnoGuardado = true;
-
-                if (this._turnoSeleccionado && this._nuevoProfesional) {
-                    this.saveTurno();
+                if (nuevoProfesional == null) {
+                    this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
+                }else{
+                    this._nuevoProfesional = nuevoProfesional;
+                    this.turnoGuardado = true;
+                    if (this._turnoSeleccionado && this._nuevoProfesional) {
+                        this.saveTurno();
+                    }
+                    this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
                 }
         });
     }

@@ -1,12 +1,11 @@
 <section  *ngIf="profesional">
     <div class="row">
         <div class="col-8">
-            <plex-box (scroll)="alert('scroll')">
+            <plex-box >
                 <header>
                     <app-header-profesional [profesional]="profesional"></app-header-profesional>
                 </header>
                 <div id="wrapper">
-
                 <plex-tabs>
                     <!-- Contacto y Domicilios -->
                     <plex-tab label="Contacto y Domicilios">
@@ -57,9 +56,6 @@
 
             </plex-box>
         </div>
-
-
-        
         <div class="col">
             
             <app-formacion-grado-detalle *ngIf="(indexFormacionGradoSelected !== undefined) && (indexFormacionPosgradoSelected === undefined)" 

@@ -10,7 +10,7 @@
             </div>
             <span class="datos-profesional">
                 {{profesional.edad + ' años'}} | {{'DNI ' + profesional.documentoNumero }} ({{profesional.cuit}})<br />
-                {{profesional.fechaNacimiento | date: 'dd/MM/yyyy'}}
+                {{profesional.fechaNacimiento | date: 'dd/MM/yyyy'}} | Estado civil: {{profesional.estadoCivil[0].nombre}}
             </span>
         </div>
     </div>

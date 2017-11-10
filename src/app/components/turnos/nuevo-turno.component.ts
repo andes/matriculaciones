@@ -103,9 +103,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private getConfiguracionAgenda() {
         this._agendaService.get().subscribe((datos) => {
             this.agendaConfig = datos[0];
-
+            console.log(this.agendaConfig)
             // Calculo los turnos disponibles por día.
-            
             // Obtengo la cantidad de turnos por fecha del mes.
             const hoy = new Date();
 
@@ -113,8 +112,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
 
                 this._turnoService.getTurnosMatriculacion(hoy, {})
                     .subscribe((countTurnosXDia) => {
+                        console.log("entro");
                         this.buildCalendar(countTurnosXDia);
-                       
                     });
             } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
                 this._turnoService.getTurnosRenovacion(hoy, {})
@@ -122,7 +121,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
                         this.buildCalendar(countTurnosXDia);
                     });
             }
-            
         });
     }
 
@@ -135,12 +133,11 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
         const horaFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('HH'));
         const horaActual = parseInt(new moment().format('HH'));
         const minutosActual = parseInt(new moment().format('mm'));
-        const fechaActual = new Date()
+        const fechaActual = new Date();
         let n = horaInicio;
         let i = horaInicio;
         let flag = true;
         let nx = 0;
-        console.log(this.fechaElegida)
         while ( n < horaFin && flag === true) {
           while ( nx < (60 / this.agendaConfig.duracionTurno) && flag === true) {
             if (entradaU === false ) {
@@ -271,7 +268,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             datesDisabled: this.getDatesDisabled(countTurnosXDia), // Fechas deshabilitados.
             weekStart: 0, // La semana empieza los lunes.
             daysOfWeekDisabled: this.getDaysOfWeekDisabled(), // días de la semana deshabilitados (lunes, martes, etc.).
-            startDate: new Date(new Date().getTime()), // Primera fecha seleccionable startDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // Primera fecha seleccionable
+            startDate: new Date(new Date().getTime()), // Primera fecha seleccionable
             language: 'es',
             todayHighlight: true // Resaltar la fecha de hoy.
         };

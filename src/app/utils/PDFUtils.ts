@@ -115,7 +115,7 @@ export class PDFUtils {
         doc.setFontSize(12);
         offsetLoop = 0;
         turno.profesional.contactos.forEach(contacto => {
-            doc.text(20, 225 + offsetLoop, contacto.tipo + ':');
+            doc.text(20, 225 + offsetLoop, contacto.tipo[0].nombre + ':');
             offsetLoop += 6;
         });
 
@@ -157,7 +157,7 @@ export class PDFUtils {
         // Completado contactos
         offsetLoop = 0;
         turno.profesional.contactos.forEach(contacto => {
-            doc.text(35, 225 + offsetLoop, contacto.valor);
+            doc.text(50, 225 + offsetLoop, contacto.valor);
             offsetLoop += 6;
         });
 

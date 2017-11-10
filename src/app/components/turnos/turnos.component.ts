@@ -17,7 +17,8 @@ const jsPDF = require('jspdf');
 
 @Component({
     selector: 'app-turnos',
-    templateUrl: 'turnos.html'
+    templateUrl: 'turnos.html',
+    styles: ['.list-group-item{cursor:pointer}'],
 })
 export class TurnosComponent implements OnInit {
     private formBuscarTurno: FormGroup;

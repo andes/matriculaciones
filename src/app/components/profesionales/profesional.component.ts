@@ -54,10 +54,10 @@ export class ProfesionalComponent implements OnInit {
             nombre: null,
             codigo: null,
         },
-        sexo: null,
-        estadoCivil: null,
+        sexo: undefined,
+        estadoCivil: undefined,
         contactos: [{
-            tipo: 'celular',
+            tipo: [{nombre: 'celular', id: 'celular'}],
             valor: '',
             ranking: 0,
             activo: true,
@@ -144,9 +144,15 @@ export class ProfesionalComponent implements OnInit {
     }
 
     confirmarDatos($event) {
-        if ($event.formValid) {
+        // if ($event.formValid) {
+        //     this.onProfesionalCompleto.emit(this.profesional);
+        // // }
+        // this.profesional.estadoCivil =  this.profesional.estadoCivil ? ((typeof  this.profesional.estadoCivil === 'string')) ?  this.profesional.estadoCivil : (Object( this.profesional.estadoCivil).id) : null;
+        // this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id);
+        // console.log(this.profesional);
+
             this.onProfesionalCompleto.emit(this.profesional);
-        }
+        
     }
 
     // Filtrado de combos
@@ -183,7 +189,7 @@ export class ProfesionalComponent implements OnInit {
     }
     addContacto() {
         const nuevoContacto = Object.assign({}, {
-            tipo: 'celular',
+            tipo: [{nombre: 'celular', id: 'celular'}],
             valor: '',
             ranking: 0,
             activo: true,

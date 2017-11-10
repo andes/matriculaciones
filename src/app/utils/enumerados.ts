@@ -60,13 +60,22 @@ function titleCase(str) {
   arrSexos = arrSexos.slice(arrSexos.length / 2);
   return arrSexos.map(getObject);
 }*/
+export function getEstadoCivil() {
+  let arrEstadoC = Object.keys(EstadoCivil);
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  return arrEstadoC;
+}
 
 export function getObjsEstadoCivil() {
-  return getEnumAsObjects(EstadoCivil);
-  /*let arrEstados = Object.keys(EstadoCivil);
-  arrEstados = arrEstados.slice(arrEstados.length / 2);
-  let salida = arrEstados.map(elem => { return { 'id': elem, 'nombre': titleCase(elem) } });
-  return salida;*/
+  let arrEstadoC = Object.keys(EstadoCivil);
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  let salida = arrEstadoC.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
 }
 
 export function getObjDias() {
@@ -83,8 +92,15 @@ export function getObjDias() {
 }
 
 export function getObjSexos() {
-  // return getEnumAsObjects(Object.keys(Dia));
-  return getEnumAsObjects(Sexo);
+  let arrSexo = Object.keys(Sexo);
+  arrSexo = arrSexo.slice(arrSexo.length / 2);
+  let salida = arrSexo.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
 }
 
 export function getObjeto(elemento) {

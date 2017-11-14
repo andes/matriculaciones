@@ -6,7 +6,7 @@ import {
 } from './../utils/enumerados';
 
 export interface IProfesional {
-    _id: string;
+    id: string;
     habilitado: Boolean;
     nombre: string;
     apellido: string;
@@ -21,15 +21,15 @@ export interface IProfesional {
     };
     sexo: Sexo;
     estadoCivil: EstadoCivil;
-    contacto: [{
-        tipo: TipoContacto;
+    contactos: [{
+        tipo: string;
         valor: string;
         rank: number;
         ultimaActualizacion: Date;
         activo: boolean;
     }];
     domicilios: [{
-        tipo: TipoDomicilio;
+        tipo: string;
         valor: string;
         codigoPostal: string;
         ubicacion: {
@@ -104,7 +104,7 @@ export interface IProfesional {
         }];
     }];
     origen: String;
-    sanciones: [{
+    sanciones:  [{
         numero: Number;
         sancion: {
             id: Number;

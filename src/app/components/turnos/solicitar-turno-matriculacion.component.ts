@@ -72,6 +72,7 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
 
     onProfesionalCompleto(profesional: any) {
         console.log("hola2");
+        console.log(profesional);
         this._profesionalService.saveProfesional(profesional)
             .subscribe((nuevoProfesional) => {
                 if (nuevoProfesional == null) {

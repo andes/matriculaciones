@@ -42,8 +42,12 @@ export class FormacionPosgradoComponent implements OnInit {
         private plex: Plex) {}
 
     saveProfesional(formacionPosgradoEntrante: any) {
+        if (this.profesional.formacionPosgrado) {
+            this.profesional.formacionPosgrado.push(formacionPosgradoEntrante);
+        } else {
+            this.profesional.formacionPosgrado = [formacionPosgradoEntrante];
+        }
 
-        this.profesional.formacionPosgrado.push(formacionPosgradoEntrante);
         this.updateProfesional.emit(this.profesional);
 
     }

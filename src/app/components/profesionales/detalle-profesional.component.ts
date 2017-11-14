@@ -94,7 +94,12 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     guardarFirma(oFirma) {
-        this.profesional.firmas.push(oFirma);
+        if (this.profesional.firmas) {
+            this.profesional.firmas.push(oFirma);
+        } else {
+            this.profesional.firmas = [oFirma];
+        }
+      
         this.updateProfesional();
     }
 
@@ -149,7 +154,7 @@ export class DetalleProfesionalComponent implements OnInit {
     }*/
 
     volver() {
-        this.router.navigate(['/turnos', { id: this.profesional._id}]);
+        this.router.navigate(['/turnos', { id: this.profesional.id}]);
     }
     volverP() {
         this.router.navigate(['/listarProfesionales']);

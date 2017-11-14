@@ -37,7 +37,12 @@ export class SancionesComponent implements OnInit {
     }
 
     addSancion(sancion: any) {
-        this.profesional.sanciones.push(sancion);
+        if (this.profesional.sanciones) {
+            this.profesional.sanciones.push(sancion);
+        } else {
+            this.profesional.sanciones = [sancion];
+        }
+        
         this.updateProfesional.emit(this.profesional);
     }
 

@@ -23,7 +23,7 @@ export class PDFUtils {
         doc.text(/*'BO TEC. EN LABORATORIO'*/formacionGrado.profesion.nombre.toUpperCase(), 43, 13);
         doc.text(/*'PINO'*/profesional.apellido.toUpperCase(), 43, 18);
         doc.text(/*'JORGE PABLO'*/profesional.nombre.toUpperCase(), 43, 23);
-        doc.text(/*'Masculino'*/ profesional.sexo.nombre, 74, 23);
+        doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
         doc.text('DNI ' + profesional.documentoNumero, 43, 28);
         doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
         doc.text(/*'15/07/2010'*/ this.getDateStr(ultimaRenovacion.inicio), 43, 40);
@@ -115,7 +115,7 @@ export class PDFUtils {
         doc.setFontSize(12);
         offsetLoop = 0;
         turno.profesional.contactos.forEach(contacto => {
-            doc.text(20, 225 + offsetLoop, contacto.tipo[0].nombre + ':');
+            doc.text(20, 225 + offsetLoop, contacto.tipo + ':');
             offsetLoop += 6;
         });
 
@@ -134,7 +134,7 @@ export class PDFUtils {
         doc.text(65, 77, 'DNI ' + turno.profesional.documentoNumero);
         doc.text(65, 83, this.getSimpleFormatedDate(turno.profesional.fechaNacimiento));
         doc.text(65, 89, turno.profesional.lugarNacimiento);
-        doc.text(65, 95, turno.profesional.sexo.nombre);
+         doc.text(65, 95, turno.profesional.sexo);
         doc.text(65, 101, turno.profesional.nacionalidad.nombre);
 
         doc.text(65, 111, turno.profesional.formacionGrado[0].profesion.nombre);
@@ -146,7 +146,7 @@ export class PDFUtils {
         offsetLoop = 0;
         turno.profesional.domicilios.forEach(domicilio => {
             doc.setFontSize(12);
-            doc.text(35, 148 + offsetLoop, domicilio.direccion);
+            doc.text(35, 148 + offsetLoop, domicilio.valor);
             doc.text(35, 154 + offsetLoop, domicilio.codigoPostal);
             doc.text(35, 160 + offsetLoop, domicilio.ubicacion.pais.nombre);
             doc.text(90, 160 + offsetLoop, domicilio.ubicacion.provincia.nombre);

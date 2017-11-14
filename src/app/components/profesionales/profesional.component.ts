@@ -36,19 +36,21 @@ export class ProfesionalComponent implements OnInit {
     public localidades: any[];
     public estadoCivil: any;
     public tipoComunicacion: any[];
+    public vacio = [];
 
     // public estadosCiviles: any[];
     public showOtraEntidadFormadora: Boolean = false;
     @Input()
-    // private profesional: IProfesional
-    private profesional: any = {
-        habilitado: Boolean,
+     // private profesional: IProfesional
+     private profesional: IProfesional = {
+        id:null,
+        habilitado: true,
         nombre: null,
         apellido: null,
         documentoNumero: null,
         documentoVencimiento: null,
         cuit: null,
-        fechaNacimiento: '',
+        fechaNacimiento: null,
         lugarNacimiento: '',
         nacionalidad: {
             nombre: null,
@@ -57,29 +59,27 @@ export class ProfesionalComponent implements OnInit {
         sexo: undefined,
         estadoCivil: undefined,
         contactos: [{
-            tipo: [{nombre: 'celular', id: 'celular'}],
+            tipo: 'celular',
             valor: '',
-            ranking: 0,
+            rank: 0,
             activo: true,
             ultimaActualizacion: new Date()
         }],
         domicilios: [{
             tipo: 'real',
             valor: '',
-            direccion: null,
-            codigoPostal: null,
+            codigoPostal: '',
             ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
+                localidad: '',
+                provincia: '',
+                pais: '',
             },
             ultimaActualizacion: new Date(),
             activo: true
         },
         {
             tipo: 'legal',
-            valor: '',
-            direccion: null,
+            valor: null,
             codigoPostal: null,
             ubicacion: {
                 localidad: null,
@@ -91,8 +91,7 @@ export class ProfesionalComponent implements OnInit {
         },
         {
             tipo: 'profesional',
-            valor: '',
-            direccion: null,
+            valor: null,
             codigoPostal: null,
             ubicacion: {
                 localidad: null,
@@ -102,6 +101,8 @@ export class ProfesionalComponent implements OnInit {
             ultimaActualizacion: new Date(),
             activo: true
         }],
+        fotoArchivo: null,
+        firmas: null,
         formacionGrado: [{
             profesion: {
                 nombre: null,
@@ -112,10 +113,100 @@ export class ProfesionalComponent implements OnInit {
                 codigo: null,
             },
             titulo: null,
-            fechaEgreso: '',
-            fechaTitulo: '',
+            fechaEgreso: null,
+            fechaTitulo: null,
+            revalida: true,
+            matriculacion: [{
+                matriculaNumero: null,
+                libro: null,
+                folio: null,
+                inicio: null,
+                fin: null,
+                revalidacionNumero: null,
+            }],
         }],
+        formacionPosgrado: null,
+        origen:null,
+        sanciones: null,
+        notas:null
     };
+
+    // // private profesional: IProfesional
+    // private profesional: any = {
+    //     habilitado: Boolean,
+    //     nombre: null,
+    //     apellido: null,
+    //     documentoNumero: null,
+    //     documentoVencimiento: null,
+    //     cuit: null,
+    //     fechaNacimiento: '',
+    //     lugarNacimiento: '',
+    //     nacionalidad: {
+    //         nombre: null,
+    //         codigo: null,
+    //     },
+    //     sexo: undefined,
+    //     estadoCivil: undefined,
+    //     contactos: [{
+    //         tipo: 'celular',
+    //         valor: '',
+    //         rank: 0,
+    //         activo: true,
+    //         ultimaActualizacion: new Date()
+    //     }],
+    //     domicilios: [{
+    //         tipo: 'real',
+    //         valor: null,
+    //         direccion: null,
+    //         codigoPostal: null,
+    //         ubicacion: {
+    //             localidad: null,
+    //             provincia: null,
+    //             pais: null,
+    //         },
+    //         ultimaActualizacion: new Date(),
+    //         activo: true
+    //     },
+    //     {
+    //         tipo: 'legal',
+    //         valor: null,
+    //         direccion: null,
+    //         codigoPostal: null,
+    //         ubicacion: {
+    //             localidad: null,
+    //             provincia: null,
+    //             pais: null,
+    //         },
+    //         ultimaActualizacion: new Date(),
+    //         activo: true
+    //     },
+    //     {
+    //         tipo: 'profesional',
+    //         valor: null,
+    //         direccion: null,
+    //         codigoPostal: null,
+    //         ubicacion: {
+    //             localidad: null,
+    //             provincia: null,
+    //             pais: null,
+    //         },
+    //         ultimaActualizacion: new Date(),
+    //         activo: true
+    //     }],
+    //     formacionGrado: [{
+    //         profesion: {
+    //             nombre: null,
+    //             codigo: null,
+    //         },
+    //         entidadFormadora: {
+    //             nombre: null,
+    //             codigo: null,
+    //         },
+    //         titulo: null,
+    //         fechaEgreso: '',
+    //         fechaTitulo: '',
+    //     }],
+    // };
 
     @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
@@ -144,15 +235,19 @@ export class ProfesionalComponent implements OnInit {
     }
 
     confirmarDatos($event) {
-        // if ($event.formValid) {
-        //     this.onProfesionalCompleto.emit(this.profesional);
-        // // }
-        // this.profesional.estadoCivil =  this.profesional.estadoCivil ? ((typeof  this.profesional.estadoCivil === 'string')) ?  this.profesional.estadoCivil : (Object( this.profesional.estadoCivil).id) : null;
-        // this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id);
-        // console.log(this.profesional);
+         if ($event.formValid) {
+          this.onProfesionalCompleto.emit(this.profesional);
+        this.profesional.estadoCivil =  this.profesional.estadoCivil ? ((typeof  this.profesional.estadoCivil === 'string')) ?  this.profesional.estadoCivil : (Object( this.profesional.estadoCivil).id) : null;
+        this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).nombre);
+        this.profesional.contactos.map(elem => {
+            elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
+            return elem;
+        });
+        console.log(this.profesional);
 
-            this.onProfesionalCompleto.emit(this.profesional);
-        
+           this.onProfesionalCompleto.emit(this.profesional);
+    }
+
     }
 
     // Filtrado de combos
@@ -189,9 +284,9 @@ export class ProfesionalComponent implements OnInit {
     }
     addContacto() {
         const nuevoContacto = Object.assign({}, {
-            tipo: [{nombre: 'celular', id: 'celular'}],
+            tipo: 'celular',
             valor: '',
-            ranking: 0,
+            rank: 0,
             activo: true,
             ultimaActualizacion: new Date()
         });
@@ -205,13 +300,14 @@ export class ProfesionalComponent implements OnInit {
     }
 
     completar() {
-        this.profesional.domicilios[1].direccion = this.profesional.domicilios[0].direccion;
+        console.log(this.profesional.domicilios[0].valor)
+        this.profesional.domicilios[1].valor = this.profesional.domicilios[0].valor;
         this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;
         this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
         this.profesional.domicilios[1].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
         this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
 
-        this.profesional.domicilios[2].direccion = this.profesional.domicilios[0].direccion;
+        this.profesional.domicilios[2].valor = this.profesional.domicilios[0].valor;
         this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;
         this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
         this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;

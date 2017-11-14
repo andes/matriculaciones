@@ -38,7 +38,7 @@ export class FormacionGradoDetalleComponent {
 
     generarCredencial() {
 
-        this._profesionalService.getCredencial(this.profesional._id)
+        this._profesionalService.getCredencial(this.profesional.id)
             .subscribe((resp) => {
                 const pdf = this._pdfUtils.generarCredencial(resp, this.profesional, this.formacion);
                 pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
@@ -49,7 +49,7 @@ export class FormacionGradoDetalleComponent {
     }
 
     matricularProfesional(formacion: any) {
-        this._numeracionesService.getOne(formacion.profesion._id)
+        this._numeracionesService.getOne(formacion.profesion.id)
             .subscribe((num) => {
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {

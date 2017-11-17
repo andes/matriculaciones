@@ -15,6 +15,7 @@ import { Server } from '@andes/shared';
 import { RoutingGuard } from './app.routings-guard.class';
 import { PDFUtils } from './utils/PDFUtils';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
+import { ImageUploadModule } from 'angular2-image-upload';
 // import { Plex } from '@andes/plex';
 // import { ScrollComponent } from './components/base/plex-scroll.component';
 
@@ -37,6 +38,7 @@ import { RequisitosGeneralesComponent,
   RequisitosMatriculaUniversitariaComponent,
   RequisitosMatriculaTecnicaAuxiliarComponent } from './components/requisitos/requisitos.component';
 import { HomeComponent } from './components/home/home.component';
+import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
 import { AgendaComponent } from './components/turnos/agenda.component';
 import { NuevoTurnoComponent } from './components/turnos/nuevo-turno.component';
 import { SolicitarTurnoMatriculacionComponent } from './components/turnos/solicitar-turno-matriculacion.component';
@@ -96,6 +98,7 @@ const COMPS_PROFESIONAL = [
   declarations: [
     AppComponent,
     HomeComponent,
+    HomeProfesionalesComponent,
     ListadoComponent,
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
@@ -115,7 +118,8 @@ const COMPS_PROFESIONAL = [
     routing,
     FileUploadModule,
     InfiniteScrollModule,
-    Daterangepicker
+    Daterangepicker,
+    ImageUploadModule.forRoot(),
   ],
   providers: [
     Plex,

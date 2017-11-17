@@ -27,7 +27,7 @@ import {
     AppSettings
 } from './../../../app.settings';
 import { DomSanitizer } from '@angular/platform-browser';
-
+import { environment } from '../../../../environments/environment';
 @Component({
     selector: 'app-firmas-profesional',
     templateUrl: 'firmas-profesional.html'
@@ -38,11 +38,8 @@ export class FirmasProfesionalComponent implements OnInit {
     @Output() onFileUploaded = new EventEmitter();
     public binaryString = null;
     public firmas = null;
+    public urlFirma = null;
     private base64textString: String= '';
-    public firmaP = {
-        imgArchivo: null,
-        fecha: new Date()
-    };
 
     constructor(public sanitizer: DomSanitizer, private plex: Plex) {
     }
@@ -58,17 +55,19 @@ export class FirmasProfesionalComponent implements OnInit {
       }
     }
     _handleReaderLoaded(readerEvt) {
-       this.binaryString = readerEvt.target.result;
-              this.firmaP.imgArchivo = 'data:image/jpeg;base64,' + btoa(this.binaryString);
+        this.binaryString = readerEvt.target.result;
+        this.base64textString = btoa(this.binaryString);
       }
     ngOnInit() {
+        this.urlFirma = environment.API + '/core/tm/profesionales/firma/' + this.profesional.id;
         // this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
     }
 
 
     upload() {
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
-        this.onFileUploaded.emit(this.firmaP);
+        this.onFileUploaded.emit(this.base64textString);
+        this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
     }
 
 }

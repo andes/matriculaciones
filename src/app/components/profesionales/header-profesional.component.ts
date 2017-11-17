@@ -1,7 +1,9 @@
 // Angular
 import {
     Component,
-    Input } from '@angular/core';
+    Input,
+    OnInit,
+    OnChanges } from '@angular/core';
 // Plex
 import {
     Plex
@@ -13,19 +15,30 @@ import {
 } from './../../interfaces/IProfesional';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { ProfesionalService } from './../../services/profesional.service';
+import { environment } from '../../../environments/environment';
 @Component({
     selector: 'app-header-profesional',
     templateUrl: 'header-profesional.html'
 })
-export class HeaderProfesionalComponent {
+export class HeaderProfesionalComponent implements OnInit, OnChanges {
    public foto = null;
-
+    public urlFoto = null;
+    @Input() img64 = null;
     @Input() profesional: IProfesional;
-
-    constructor(public sanitizer: DomSanitizer) {
+    constructor(private _profesionalService: ProfesionalService, public sanitizer: DomSanitizer) {
 
     }
     ngOnInit() {
-        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.fotoArchivo);
+
+         this.urlFoto = environment.API + '/core/tm/profesionales/foto/' + this.profesional.id;
+
+        }
+
+     ngOnChanges () {
+         if (this.img64 !== null) {
+         this.urlFoto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.img64);
+         }
     }
+
 }

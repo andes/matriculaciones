@@ -18,6 +18,22 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL, profesionalModel);
     }
 
+    saveProfesionalFoto(foto: any) {
+        return this.server.post(this.profesionalesURL + 'foto' , {foto});
+    }
+
+    getProfesionalFirma(id: string = null): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'firma/' , { params: id, showError: true });
+    }
+
+    saveProfesionalFirma(firma: any) {
+        return this.server.post(this.profesionalesURL + 'firma' , {firma});
+    }
+
+    getProfesionalFoto(id: string = null): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'foto/' , { params: id, showError: true });
+    }
+
     getProfesional(params: any): Observable<any> {
         return this.server.get(this.profesionalesURL, { params: params, showError: true });
     }

@@ -42,7 +42,7 @@ export class SancionesComponent implements OnInit {
         } else {
             this.profesional.sanciones = [sancion];
         }
-        
+
         this.updateProfesional.emit(this.profesional);
     }
 

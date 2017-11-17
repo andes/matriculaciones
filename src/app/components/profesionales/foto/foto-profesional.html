@@ -3,9 +3,9 @@
         <div class="col-6">
             <div class="form-group">
                 <label style="font-weight: bold">Foto Actual</label>
-                <div *ngIf="profesional.fotoArchivo">
+           
                     <img [src]="foto" style="width: 85px"/>
-                </div>
+                
             </div>
         </div>
         </div>
@@ -15,6 +15,7 @@
             <div class="form-group">                                
                 <div>
                     <div>
+                        <!-- <image-upload url="https://httpbin.org/status/200"></image-upload> -->
                         <label for="filePicker">Seleccione una foto:</label><br>
                         <input type="file" id="filePicker" (change)="handleFileSelect($event)">
                     </div>

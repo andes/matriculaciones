@@ -3,7 +3,7 @@
         <div class="col-8">
             <plex-box >
                 <header>
-                    <app-header-profesional [profesional]="profesional"></app-header-profesional>
+                    <app-header-profesional [profesional]="profesional" [img64]="img64"></app-header-profesional>
                 </header>
                 <div id="wrapper">
                 <plex-tabs>
@@ -38,12 +38,12 @@
                     
                     <!-- Foto -->
                     <plex-tab label="Foto">
-                        <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFoto($event)"></app-foto-profesional>
+                        <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)"></app-foto-profesional>
                     </plex-tab>
                     
                     <!-- Firmas -->
                     <plex-tab label="Firmas">
-                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirma($event)"></app-firmas-profesional>
+                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)"></app-firmas-profesional>
                     </plex-tab>
 
                     <!-- Notas -->

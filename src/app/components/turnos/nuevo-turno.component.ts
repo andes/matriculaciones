@@ -103,7 +103,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private getConfiguracionAgenda() {
         this._agendaService.get().subscribe((datos) => {
             this.agendaConfig = datos[0];
-            console.log(this.agendaConfig)
             // Calculo los turnos disponibles por día.
             // Obtengo la cantidad de turnos por fecha del mes.
             const hoy = new Date();
@@ -112,7 +111,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
 
                 this._turnoService.getTurnosMatriculacion(hoy, {})
                     .subscribe((countTurnosXDia) => {
-                        console.log("entro");
                         this.buildCalendar(countTurnosXDia);
                     });
             } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
@@ -293,7 +291,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
         if (this.agendaConfig) {
 
             this.agendaConfig.diasHabilitados.forEach((dia: any) => {
-                // debugger;
+
                 const indexOfDia = dias.indexOf((dia.id + 1) % 7 );
                 dias.splice(indexOfDia, 1);
             });

@@ -10,6 +10,7 @@ import { RoutingGuard } from './app.routings-guard.class';
 // Components
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
+import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
 import { RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent } from './components/requisitos/requisitos.component';
@@ -30,6 +31,7 @@ import { ListarProfesionalesComponent } from './components/profesionales/listar-
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
+    { path: 'homeProfesionales', component: HomeProfesionalesComponent },
     { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'requisitosGenerales', component: RequisitosGeneralesComponent },
     { path: 'requisitosMatriculaUniversitaria', component: RequisitosMatriculaUniversitariaComponent },

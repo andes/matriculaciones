@@ -82,7 +82,6 @@ export class TurnosComponent implements OnInit {
         this.turnoElegido.sePresento = true;
         this._turnoService.saveTurno(this.turnoElegido)
             .subscribe(resp => {
-                // console.log(resp)
             });
     }
 

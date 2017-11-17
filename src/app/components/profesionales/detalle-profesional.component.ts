@@ -44,6 +44,7 @@ export class DetalleProfesionalComponent implements OnInit {
     public indexFormacionPosgradoSelected: any;
     public mostrar = true;
     public mostrarGrado = true;
+    public img64 = null;
 
 
     @Input() profesional: IProfesional;
@@ -87,20 +88,48 @@ export class DetalleProfesionalComponent implements OnInit {
             });
     }
 
+    updateFoto(img: any) {
+        this.img64 = img;
+        const imagenPro = {
+            'img': img,
+            'idProfesional': this.profesional.id
+        };
+        this._profesionalService.saveProfesionalFoto(imagenPro).subscribe(resp => {
 
-    guardarFoto(fileName: any) {
-        this.profesional.fotoArchivo = fileName;
-        this.updateProfesional();
+        });
+   }
+
+   updateFirma(firma: any) {
+    const firmaPro = {
+        'firmaP': firma,
+        'idProfesional': this.profesional.id
+    };
+    this._profesionalService.saveProfesionalFirma(firmaPro).subscribe(resp => {
+
+    });
+   }
+
+
+    // guardarFoto(fileName: any) {
+    //     this.profesional.fotoArchivo = fileName;
+    //     this.updateProfesional();
+    // }
+
+    guardarFotoGrid(foto: any) {
+        this.updateFoto(foto);
     }
 
-    guardarFirma(oFirma) {
-        if (this.profesional.firmas) {
-            this.profesional.firmas.push(oFirma);
-        } else {
-            this.profesional.firmas = [oFirma];
-        }
-      
-        this.updateProfesional();
+    // guardarFirma(oFirma) {
+    //     if (this.profesional.firmas) {
+    //         this.profesional.firmas.push(oFirma);
+    //     } else {
+    //         this.profesional.firmas = [oFirma];
+    //     }
+    //     this.updateProfesional();
+    // }
+
+    guardarFirmaGrid(oFirma) {
+        this.updateFirma(oFirma);
     }
 
     guardarNotas(textoNotas) {
@@ -195,3 +224,4 @@ export class DetalleProfesionalComponent implements OnInit {
         }
     }
 }
+

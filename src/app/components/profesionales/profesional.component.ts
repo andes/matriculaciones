@@ -43,7 +43,7 @@ export class ProfesionalComponent implements OnInit {
     @Input()
      // private profesional: IProfesional
      private profesional: IProfesional = {
-        id:null,
+        id: null,
         habilitado: true,
         nombre: null,
         apellido: null,
@@ -126,9 +126,9 @@ export class ProfesionalComponent implements OnInit {
             }],
         }],
         formacionPosgrado: null,
-        origen:null,
+        origen: null,
         sanciones: null,
-        notas:null
+        notas: null
     };
 
     // // private profesional: IProfesional
@@ -235,17 +235,17 @@ export class ProfesionalComponent implements OnInit {
     }
 
     confirmarDatos($event) {
-         if ($event.formValid) {
-          this.onProfesionalCompleto.emit(this.profesional);
+        if ($event.formValid) {
+        // tslint:disable-next-line:max-line-length
         this.profesional.estadoCivil =  this.profesional.estadoCivil ? ((typeof  this.profesional.estadoCivil === 'string')) ?  this.profesional.estadoCivil : (Object( this.profesional.estadoCivil).id) : null;
         this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).nombre);
         this.profesional.contactos.map(elem => {
             elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
             return elem;
         });
-        console.log(this.profesional);
+        this.onProfesionalCompleto.emit(this.profesional);
 
-           this.onProfesionalCompleto.emit(this.profesional);
+          // this.onProfesionalCompleto.emit(this.profesional);
     }
 
     }
@@ -300,7 +300,6 @@ export class ProfesionalComponent implements OnInit {
     }
 
     completar() {
-        console.log(this.profesional.domicilios[0].valor)
         this.profesional.domicilios[1].valor = this.profesional.domicilios[0].valor;
         this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;
         this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;

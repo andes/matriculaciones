@@ -64,20 +64,18 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
 
         this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
             .subscribe(turno => {
-                console.log(turno)
                 const pdf = this._pdfUtils.comprobanteTurno(turno);
                 pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
             });
     }
 
     onProfesionalCompleto(profesional: any) {
-        console.log("hola2");
-        console.log(profesional);
         this._profesionalService.saveProfesional(profesional)
             .subscribe((nuevoProfesional) => {
                 if (nuevoProfesional == null) {
                     this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
                 }else {
+
                     this._nuevoProfesional = nuevoProfesional;
                     this.turnoGuardado = true;
                     if (this._turnoSeleccionado && this._nuevoProfesional) {

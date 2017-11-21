@@ -30,15 +30,13 @@ import {
 
 @Component({
     selector: 'app-foto-profesional',
-    templateUrl: 'foto-profesional.html'
+    templateUrl: 'subir-foto-profesional.html'
 })
-export class FotoProfesionalComponent implements OnInit {
+export class SubirFotoProfesionalComponent implements OnInit {
     uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
     @Input() profesional: IProfesional;
     @Output() onFileUploaded = new EventEmitter();
-    @Output() onFileUploaded2 = new EventEmitter();
     public binaryString = null;
-    public foto = null;
     private base64textString: String= '';
 
     constructor(public sanitizer: DomSanitizer, private plex: Plex) {
@@ -60,7 +58,6 @@ export class FotoProfesionalComponent implements OnInit {
       }
 
     ngOnInit() {
-        this.foto = environment.API + '/core/tm/profesionales/foto/' + this.profesional.id;
     }
 
 
@@ -68,8 +65,6 @@ export class FotoProfesionalComponent implements OnInit {
         this.uploader.uploadAll();
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
         this.onFileUploaded.emit(this.base64textString);
-        this.onFileUploaded2.emit(this.base64textString);
-        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
     }
 
 

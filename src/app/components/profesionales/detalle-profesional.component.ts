@@ -35,7 +35,8 @@ const jsPDF = require('jspdf');
 
 @Component({
     selector: 'app-detalle-profesional',
-    templateUrl: 'detalle-profesional.html'
+    templateUrl: 'detalle-profesional.html',
+    styles: ['.margenFoto { padding-left: 3%; padding-bottom: 1%; }']
 })
 export class DetalleProfesionalComponent implements OnInit {
     public formSancion: FormGroup;

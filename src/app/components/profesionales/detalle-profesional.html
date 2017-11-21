@@ -3,7 +3,14 @@
         <div class="col-8">
             <plex-box >
                 <header>
-                    <app-header-profesional [profesional]="profesional" [img64]="img64"></app-header-profesional>
+                        <div class="row">
+                                <div class="col-1">       
+                     <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+                    </div>
+                     <div class="col-11 margenFoto">
+                     <app-header-profesional [profesional]="profesional" ></app-header-profesional>
+                                </div>
+                     </div>       
                 </header>
                 <div id="wrapper">
                 <plex-tabs>
@@ -38,6 +45,17 @@
                     
                     <!-- Foto -->
                     <plex-tab label="Foto">
+                            <div class="row">
+                                    <div class="col-12 text-center">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Foto Actual</label>
+                                       
+                                            <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+                                            
+                                        </div>
+                                    </div>
+                            </div>
+                           
                         <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)"></app-foto-profesional>
                     </plex-tab>
                     
@@ -114,9 +132,17 @@
         </div>
     </div>
 </section>
+
 <footer>
-    <plex-button type="danger" label="Ir a agenda" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
+    <div class="row">
+        <div class="col-8">
+            <plex-box >
+                <plex-button type="danger" label="Ir a agenda" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
+            </plex-box>
+        </div>
+    </div>
 </footer>
+       
 
 
                     

@@ -21,24 +21,18 @@ import { environment } from '../../../environments/environment';
     selector: 'app-header-profesional',
     templateUrl: 'header-profesional.html'
 })
-export class HeaderProfesionalComponent implements OnInit, OnChanges {
+export class HeaderProfesionalComponent implements OnInit {
    public foto = null;
     public urlFoto = null;
-    @Input() img64 = null;
+
     @Input() profesional: IProfesional;
     constructor(private _profesionalService: ProfesionalService, public sanitizer: DomSanitizer) {
 
     }
     ngOnInit() {
 
-         this.urlFoto = environment.API + '/core/tm/profesionales/foto/' + this.profesional.id;
 
         }
 
-     ngOnChanges () {
-         if (this.img64 !== null) {
-         this.urlFoto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.img64);
-         }
-    }
 
 }

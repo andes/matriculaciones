@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
@@ -15,7 +15,9 @@ import { ProfesionService } from './../../services/profesion.service';
 export class NumeracionMatriculasComponent implements OnInit {
     private formNumeracion: FormGroup;
     @Input() numeracion: any;
+    @Input() numeracion2: any;
     @Output() onShowListado = new EventEmitter();
+    @Output() cambio = new EventEmitter();
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
@@ -38,8 +40,8 @@ export class NumeracionMatriculasComponent implements OnInit {
     guardarNumeracion(model: any) {
         this._numeracionesService.saveNumeracion(model)
             .subscribe((resp) => {
-                // console.log(resp);
             });
+        this.cambio.emit(model);
     }
 
     loadProfesiones(event) {

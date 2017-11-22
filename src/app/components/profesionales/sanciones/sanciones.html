@@ -20,13 +20,13 @@
                     <tr colspan="6" *ngIf="profesional.sanciones?.length === 0">
                         No se registraron sanciones.
                     </tr>
-                    <tr *ngFor="let sancion of profesional.sanciones">
-                        <td>{{sancion.numero}}</td>
-                        <td>{{sancion.sancion}}</td>
-                        <td>{{sancion.motivo}}</td>
-                        <td>{{sancion.normaLegal}}</td>
-                        <td>{{sancion.fecha | date: 'dd/MM/yyyy'}}</td>
-                        <td>{{sancion.vencimiento | date: 'dd/MM/yyyy'}}</td>
+                    <tr *ngFor="let san of profesional.sanciones;">
+                        <td>{{san.numero}}</td>
+                        <td>{{san.sancion.nombre}}</td>
+                        <td>{{san.motivo}}</td>
+                        <td>{{san.normaLegal}}</td>
+                        <td>{{san.fecha | date: 'dd/MM/yyyy'}}</td>
+                        <td>{{san.vencimiento | date: 'dd/MM/yyyy'}}</td>
                     </tr>
                 </tbody>
             </table>

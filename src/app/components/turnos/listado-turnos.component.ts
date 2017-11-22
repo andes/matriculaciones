@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
@@ -26,7 +26,6 @@ export class ListadoTurnosComponent implements OnInit {
         private _pdfUtils: PDFUtils) { }
 
     onScroll() {
-        console.log('scroll');
     }
 
     ngOnInit() {
@@ -42,7 +41,6 @@ export class ListadoTurnosComponent implements OnInit {
     }
 
     showTurno(turno: any) {
-        console.log(turno)
         this.turnoElegido = turno;
     }
 
@@ -75,7 +73,6 @@ export class ListadoTurnosComponent implements OnInit {
         this.turnoElegido.sePresento = true;
         this._turnoService.saveTurno(this.turnoElegido)
             .subscribe(resp => {
-                //console.log(resp)
             });
     }
 

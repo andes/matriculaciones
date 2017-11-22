@@ -13,11 +13,11 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class EntidadFormadoraService extends BaseService {
 
-    private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
+    // private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
     constructor(_http: Http) {
         super(_http);
     }
     getEntidadesFormadoras(): Observable<IEntidadFormadora[]> {
-        return this.get(this.entidadesFormadorasUrl);
+        return this.get(this.entidadFormadoraURL);
     }
 }

@@ -9,6 +9,12 @@ export enum Sexo {
   'otro'
 }
 
+export enum tipoComunicacion {
+  'Teléfono Fijo',
+  'Teléfono Celular',
+  'Email'
+}
+
 export enum EstadoCivil {
   'casado', 'separado', 'divorciado', 'viudo', 'soltero', 'otro'
 }
@@ -40,6 +46,7 @@ export function getEnumAsObjects(enumerado: any) {
   });
 };
 
+
 function titleCase(str) {
   return str.toLowerCase().split(' ').map(function(word) {
     return (word.charAt(0).toUpperCase() + word.slice(1));
@@ -53,17 +60,47 @@ function titleCase(str) {
   arrSexos = arrSexos.slice(arrSexos.length / 2);
   return arrSexos.map(getObject);
 }*/
+export function getEstadoCivil() {
+  let arrEstadoC = Object.keys(EstadoCivil);
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  return arrEstadoC;
+}
 
 export function getObjsEstadoCivil() {
-  return getEnumAsObjects(Object.keys(EstadoCivil));
-  /*let arrEstados = Object.keys(EstadoCivil);
-  arrEstados = arrEstados.slice(arrEstados.length / 2);
-  let salida = arrEstados.map(elem => { return { 'id': elem, 'nombre': titleCase(elem) } });
-  return salida;*/
+  let arrEstadoC = Object.keys(EstadoCivil);
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  let salida = arrEstadoC.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
 }
 
 export function getObjDias() {
-  return getEnumAsObjects(Object.keys(Dia));
+  let arrEstadoC = Object.keys(Dia);
+
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  const salida = arrEstadoC.map((elem, index) => {
+      return {
+          'id': index,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+export function getObjSexos() {
+  let arrSexo = Object.keys(Sexo);
+  arrSexo = arrSexo.slice(arrSexo.length / 2);
+  let salida = arrSexo.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
 }
 
 export function getObjeto(elemento) {
@@ -71,4 +108,28 @@ export function getObjeto(elemento) {
     'id': elemento,
     'nombre': titleCase(elemento)
   };
+}
+export function getObjTipoComunicacion() {
+  let arrTC = Object.keys(tipoComunicacion);
+  arrTC = arrTC.slice(arrTC.length / 2);
+  const salida = arrTC.map(elem => {
+      const idEnumerado = elem.split(' ')[1] ? elem.split(' ')[1] : elem.split(' ')[0];
+      return {
+          'id': idEnumerado.toLowerCase(),
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+export function getObjTipoDomicilio() {
+  let arrEstadoC = Object.keys(TipoDomicilio);
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  const salida = arrEstadoC.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
 }

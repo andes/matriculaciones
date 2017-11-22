@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 // Services
@@ -38,7 +38,8 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
         private _profesionService: ProfesionService,
         private _profesionalService: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
-        private _pdfUtils: PDFUtils) {
+        private _pdfUtils: PDFUtils,
+        private plex: Plex) {
 
             this.tipoTurno = Enums.TipoTurno.matriculacion;
 
@@ -63,7 +64,6 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
 
         this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
             .subscribe(turno => {
-                console.log(turno)
                 const pdf = this._pdfUtils.comprobanteTurno(turno);
                 pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
             });
@@ -72,11 +72,16 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
     onProfesionalCompleto(profesional: any) {
         this._profesionalService.saveProfesional(profesional)
             .subscribe((nuevoProfesional) => {
-                this._nuevoProfesional = nuevoProfesional;
-                this.turnoGuardado = true;
+                if (nuevoProfesional == null) {
+                    this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
+                }else {
 
-                if (this._turnoSeleccionado && this._nuevoProfesional) {
-                    this.saveTurno();
+                    this._nuevoProfesional = nuevoProfesional;
+                    this.turnoGuardado = true;
+                    if (this._turnoSeleccionado && this._nuevoProfesional) {
+                        this.saveTurno();
+                    }
+                    this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
                 }
         });
     }

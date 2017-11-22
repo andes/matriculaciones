@@ -164,9 +164,9 @@
                             <div class="datos-profesional">
                                 {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documentoNumero }}<br />
                             </div>
-                            <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.renovacionVencida">
+                            <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.renovacionVencida">
                                 <span style="margin-left: 5px;">Renovación Vencida</span>
-                            </span>
+                            </span> -->
                             <!--<a href="/profesional" class="btn btn-primary">Ver Profesional</a>-->
                             <plex-button type="primary" label="Ver Profesional" class="float-right" [disabled]="!turnoElegido.sePresento" (click)="toggleListado(false)"></plex-button>
                         </div>

@@ -2,38 +2,37 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-    selector: 'requisitosGenerales',
+    selector: 'app-requisitos-generales',
     templateUrl: 'requisitosGenerales.html'
 })
 
 export class RequisitosGeneralesComponent {}
 
 @Component({
-    selector: 'requisitosMatriculaUniversitaria',
+    selector: 'app-requisitos-matricula-universitaria',
     templateUrl: 'requisitosMatUniv.html'
 })
 
 export class RequisitosMatriculaUniversitariaComponent {
-    public terminosLeidos: boolean = false;
+    public terminosLeidos = false;
 
     constructor(private router: Router) {}
 
-     onClick(){
-        this.router.navigate(['/home']);
+     onClick() {
+        this.router.navigate(['/solicitarTurnoMatriculacion']);
     }
 }
 
 @Component({
-    selector: 'requisitosMatriculaTecnicaAuxiliar',
+    selector: 'app-requisitos-matricula-tecnica-auxiliar',
     templateUrl: 'requisitosMatTecAux.html'
 })
 
 export class RequisitosMatriculaTecnicaAuxiliarComponent {
-    public terminosLeidos: boolean = false;
-     
+    public terminosLeidos = false;
     constructor(private router: Router) {}
 
-    onClick(){
-        this.router.navigate(['/home']);
+    onClick() {
+        this.router.navigate(['/solicitarTurnoMatriculacion']);
     }
 }

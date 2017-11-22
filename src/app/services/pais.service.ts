@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BaseService } from './base.service';
 import {Observable} from 'rxjs/Rx';
-import { Http } from '@angular/http';
+import { Server } from '@andes/shared';
 
 @Injectable()
-export class PaisService extends BaseService {
+export class PaisService  {
+    private paisesURL = '/core/tm/paises';  // URL to web api
 
-    constructor(_http: Http) {
-        super(_http);
-    }
+    constructor(private server: Server) { }
+
     getPaises(): Observable<any[]> {
-        return this.get(this.paisesURL);
+        return this.server.get(this.paisesURL);
     }
 }

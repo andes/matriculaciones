@@ -35,13 +35,18 @@ const jsPDF = require('jspdf');
 
 @Component({
     selector: 'app-detalle-profesional',
-    templateUrl: 'detalle-profesional.html'
+    templateUrl: 'detalle-profesional.html',
+    styles: ['.margenFoto { padding-left: 3%; padding-bottom: 1%; }']
 })
 export class DetalleProfesionalComponent implements OnInit {
     public formSancion: FormGroup;
     public loading: Boolean = false;
     public indexFormacionGradoSelected: any;
     public indexFormacionPosgradoSelected: any;
+    public mostrar = true;
+    public mostrarGrado = true;
+    public img64 = null;
+
 
     @Input() profesional: IProfesional;
     @Output() onShowListado = new EventEmitter();
@@ -59,7 +64,7 @@ export class DetalleProfesionalComponent implements OnInit {
     ngOnInit() {
         this.route.params
             .switchMap((params: Params)  =>
-                this._profesionalService.getProfesional(params['id'])
+                this._profesionalService.getUnProfesional(params['id'])
             ).subscribe(
                 (profesional:  IProfesional) =>
                 this.profesional = profesional
@@ -69,9 +74,9 @@ export class DetalleProfesionalComponent implements OnInit {
     updateProfesional2(profesional: IProfesional) {
         this._profesionalService.saveProfesional(profesional)
             .subscribe(prof => {
-                this.profesional = prof
+                this.profesional = prof;
             });
-        //this.profesional = profesional;
+        // this.profesional = profesional;
     }
 
     updateProfesional(callbackData?: any) {
@@ -84,15 +89,48 @@ export class DetalleProfesionalComponent implements OnInit {
             });
     }
 
+    updateFoto(img: any) {
+        this.img64 = img;
+        const imagenPro = {
+            'img': img,
+            'idProfesional': this.profesional.id
+        };
+        this._profesionalService.saveProfesionalFoto(imagenPro).subscribe(resp => {
 
-    guardarFoto(fileName: any) {
-        this.profesional.fotoArchivo = fileName + '?' + new Date().getTime();
-        this.updateProfesional();
+        });
+   }
+
+   updateFirma(firma: any) {
+    const firmaPro = {
+        'firmaP': firma,
+        'idProfesional': this.profesional.id
+    };
+    this._profesionalService.saveProfesionalFirma(firmaPro).subscribe(resp => {
+
+    });
+   }
+
+
+    // guardarFoto(fileName: any) {
+    //     this.profesional.fotoArchivo = fileName;
+    //     this.updateProfesional();
+    // }
+
+    guardarFotoGrid(foto: any) {
+        this.updateFoto(foto);
     }
 
-    guardarFirma(oFirma) {
-        this.profesional.firmas.push(oFirma);
-        this.updateProfesional();
+    // guardarFirma(oFirma) {
+    //     if (this.profesional.firmas) {
+    //         this.profesional.firmas.push(oFirma);
+    //     } else {
+    //         this.profesional.firmas = [oFirma];
+    //     }
+    //     this.updateProfesional();
+    // }
+
+    guardarFirmaGrid(oFirma) {
+        this.updateFirma(oFirma);
     }
 
     guardarNotas(textoNotas) {
@@ -107,7 +145,7 @@ export class DetalleProfesionalComponent implements OnInit {
 
     guardarFormacionPosgrado(posgrado: any) {
         this.profesional.formacionPosgrado.push(posgrado);
-        this.updateProfesional()
+        this.updateProfesional();
     }
 
     matricularProfesional(matriculacion: any) {
@@ -146,7 +184,10 @@ export class DetalleProfesionalComponent implements OnInit {
     }*/
 
     volver() {
-        this.router.navigate(['/turnos', { id: this.profesional._id}]);
+        this.router.navigate(['/turnos', { id: this.profesional.id}]);
+    }
+    volverP() {
+        this.router.navigate(['/listarProfesionales']);
     }
 
    /* generarCredencial() {
@@ -162,12 +203,26 @@ export class DetalleProfesionalComponent implements OnInit {
     }*/
 
     formacionGradoSelected(formacion: any) {
+        if (this.mostrarGrado === true) {
         this.indexFormacionPosgradoSelected = undefined;
         this.indexFormacionGradoSelected = formacion;
+        this.mostrarGrado = false;
+        } else {
+         this.indexFormacionGradoSelected = undefined;
+         this.mostrarGrado = true;
+     }
     }
 
     formacionPosgradoSelected(posgrado: any) {
-        this.indexFormacionGradoSelected = undefined;
+
+        if (this.mostrar === true) {
+         this.indexFormacionGradoSelected = undefined;
         this.indexFormacionPosgradoSelected = posgrado;
+        this.mostrar = false;
+        }else {
+            this.indexFormacionPosgradoSelected = undefined;
+            this.mostrar = true;
+        }
     }
 }
+

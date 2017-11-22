@@ -15,6 +15,7 @@ import { Server } from '@andes/shared';
 import { RoutingGuard } from './app.routings-guard.class';
 import { PDFUtils } from './utils/PDFUtils';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
+import { ImageUploadModule } from 'angular2-image-upload';
 // import { Plex } from '@andes/plex';
 // import { ScrollComponent } from './components/base/plex-scroll.component';
 
@@ -37,6 +38,7 @@ import { RequisitosGeneralesComponent,
   RequisitosMatriculaUniversitariaComponent,
   RequisitosMatriculaTecnicaAuxiliarComponent } from './components/requisitos/requisitos.component';
 import { HomeComponent } from './components/home/home.component';
+import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
 import { AgendaComponent } from './components/turnos/agenda.component';
 import { NuevoTurnoComponent } from './components/turnos/nuevo-turno.component';
 import { SolicitarTurnoMatriculacionComponent } from './components/turnos/solicitar-turno-matriculacion.component';
@@ -54,7 +56,8 @@ import { FormacionGradoComponent } from './components/profesionales/formacionGra
 import { FormacionGradoDetalleComponent } from './components/profesionales/formacionGrado/formacion-grado-detalle.component';
 import { FormacionPosgradoDetalleComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-detalle.component';
 import { RenovacionesProfesionalComponent } from './components/profesionales/renovaciones-profesional.component';
-import { FotoProfesionalComponent } from './components/profesionales/foto/foto-profesional.component';
+import { SubirFotoProfesionalComponent } from './components/profesionales/foto/subir-foto-profesional.component';
+import { FotoGeneralComponent } from './components/profesionales/foto-general.component';
 import { FirmasProfesionalComponent } from './components/profesionales/firmas/firmas-profesional.component';
 import { NotasProfesionalComponent } from './components/profesionales/notas/notas-profesional.component';
 import { SancionesComponent } from './components/profesionales/sanciones/sanciones.component';
@@ -62,6 +65,8 @@ import { SancionesFormComponent } from './components/profesionales/sanciones/san
 import { HeaderProfesionalComponent } from './components/profesionales/header-profesional.component';
 import { FormacionPosgradoComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado.component';
 import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
+import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
+
 
 
 import { TurnosComponent } from './components/turnos/turnos.component';
@@ -76,7 +81,7 @@ const COMPS_PROFESIONAL = [
   DetalleProfesionalComponent,
   HeaderProfesionalComponent,
   ContactoDomiciliosProfesionalComponent,
-  FotoProfesionalComponent,
+  SubirFotoProfesionalComponent,
   FirmasProfesionalComponent,
   NotasProfesionalComponent,
   SancionesComponent,
@@ -85,7 +90,8 @@ const COMPS_PROFESIONAL = [
   FormacionGradoDetalleComponent,
   FormacionPosgradoComponent,
   FormacionPosgradoDetalleComponent,
-  FormacionPosgradoFormComponent
+  FormacionPosgradoFormComponent,
+  ListarProfesionalesComponent
 ];
 
 
@@ -93,6 +99,7 @@ const COMPS_PROFESIONAL = [
   declarations: [
     AppComponent,
     HomeComponent,
+    HomeProfesionalesComponent,
     ListadoComponent,
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
@@ -101,6 +108,7 @@ const COMPS_PROFESIONAL = [
     NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
     ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,
     TurnosComponent,
+    FotoGeneralComponent,
     COMPS_PROFESIONAL
   ],
   imports: [
@@ -112,7 +120,8 @@ const COMPS_PROFESIONAL = [
     routing,
     FileUploadModule,
     InfiniteScrollModule,
-    Daterangepicker
+    Daterangepicker,
+    ImageUploadModule.forRoot(),
   ],
   providers: [
     Plex,

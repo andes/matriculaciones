@@ -21,6 +21,7 @@ import { ISiisa } from './../../../interfaces/ISiisa';
 // Services
 import { SIISAService } from './../../../services/siisa.service';
 import { ProfesionalService } from './../../../services/profesional.service';
+import { EntidadFormadoraService } from './../../../services/entidadFormadora.service';
 
 @Component({
     selector: 'app-formacion-posgrado-form',
@@ -30,13 +31,52 @@ export class FormacionPosgradoFormComponent implements OnInit {
     formPosgrado: FormGroup;
     activeAcc = false;
     profesiones: any[];
+    profesionalP: any = {
+
+            profesion: {
+                nombre: null,
+                codigo: null,
+            },
+            institucionFormadora: {
+                nombre: null,
+                codigo: null,
+            },
+            especialidad: {
+                nombre: null,
+                codigo: null,
+            },
+            fechaIngreso: null,
+            fechaEgreso: null,
+            observacion: null,
+            certificacion: {
+                fecha: null,
+                modalidad: {
+                    nombre: null,
+                    codigo: null,
+                },
+                establecimiento: {
+                    nombre: null,
+                    codigo: null,
+                },
+            },
+            // matriculacion: [{
+            //     matriculaNumero: null,
+            //     libro: null,
+            //     folio: null,
+            //     inicio: null,
+            //     fin: null,
+            //     revalidacionNumero: null,
+            // }],
+    };
 
     @Input() profesional: IProfesional;
     @Output() submitPosgrado = new EventEmitter();
 
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
-        private _profSrv: ProfesionalService) {}
+        private _profSrv: ProfesionalService,
+        private _entidadFormadoraService: EntidadFormadoraService,
+        private plex: Plex) {}
 
     ngOnInit() {
         if (this.profesional) {
@@ -44,44 +84,19 @@ export class FormacionPosgradoFormComponent implements OnInit {
                 return value.profesion;
             });
         }
-        this.buildForm();
     }
 
-    onSubmit() {
-        debugger
-        // Validaciones
-        if (this.formPosgrado.valid) {
+    onSubmit($event, form) {
+        if ($event.formValid) {
+        this.submitPosgrado.emit(this.profesionalP);
+        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
 
-            this.activeAcc = false;
-            this.submitPosgrado.emit(this.formPosgrado.value);
-            this.buildForm();
-        } else {
-            // Show errors
+
+        form.resetForm();
         }
     }
 
-    buildForm() {
-        this.formPosgrado = this._fb.group({
-            profesion: [null, Validators.required],
-            especialidad: [null, Validators.required],
-            institucionFormadora: [null, Validators.required],
-            fechaIngreso: [null, Validators.required],
-            fechaEgreso: [null, Validators.required],
-            certificacion: this._fb.group({
-                fecha: null,
-                modalidad: null,
-                establecimiento: null
-            }),
-            numero: null,
-            libro: null,
-            folio: null,
-            revalida: null,
-        });
-    }
-
     guardarEspecialidad(especialidad: any, valid: boolean) {
-        console.log(valid)
-        console.log(especialidad)
         // this.save.emit(especialidad);
     }
 
@@ -94,8 +109,8 @@ export class FormacionPosgradoFormComponent implements OnInit {
         this._siisaSrv.getModalidadesCertificacionEspecialidades(null).subscribe(event.callback);
     }
 
-    loadInstitucionesFormadoras(event: any) {
-        this._siisaSrv.getEntidadesFormadoras(null).subscribe(event.callback);
+    loadEntidadesFormadoras(event) {
+        this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
     }
 
     loadEstablecimientosCertificadores(event: any) {

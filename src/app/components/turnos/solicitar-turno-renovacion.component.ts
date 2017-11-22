@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 // Services
@@ -19,8 +19,8 @@ import * as Enums from './../../utils/enumerados';
 const jsPDF = require('jspdf');
 
 @Component({
-    selector: 'app-solicitar-turno-matriculacion',
-    templateUrl: 'solicitar-turno-matriculacion.html'
+    selector: 'app-solicitar-turno-renovacion',
+    templateUrl: 'solicitar-turno-renovacion.html'
 })
 export class SolicitarTurnoRenovacionComponent implements OnInit {
     public tipoTurno: Enums.TipoTurno;
@@ -64,7 +64,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
         this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
             .subscribe(turno => {
-                console.log(turno)
                 const pdf = this._pdfUtils.comprobanteTurno(turno);
                 pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
             });

@@ -10,7 +10,7 @@ export class NumeracionMatriculasService extends BaseService {
         super(_http);
     }
 
-    getOne(codigo: string): Observable<any> {
+    getOne(codigo: number): Observable<any> {
         return this.get(this.numeracionesURL + '/' + codigo);
     }
 

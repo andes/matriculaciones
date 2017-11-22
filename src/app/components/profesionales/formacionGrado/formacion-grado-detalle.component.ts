@@ -38,36 +38,34 @@ export class FormacionGradoDetalleComponent {
 
     generarCredencial() {
 
-        this._profesionalService.getCredencial(this.profesional._id)
+        this._profesionalService.getCredencial(this.profesional.id)
             .subscribe((resp) => {
                 const pdf = this._pdfUtils.generarCredencial(resp, this.profesional, this.formacion);
                 pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                //this.loading = false;
+                // this.loading = false;
             });
 
 
     }
 
     matricularProfesional(formacion: any) {
-        this._numeracionesService.getOne(formacion.profesion.codigo.toString())
+        this._numeracionesService.getOne(formacion.profesion.id)
             .subscribe((num) => {
-
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-
                 const oMatriculacion = {
-                    matriculaNumero: num.proximoNumero++,
+                    matriculaNumero: num[0].proximoNumero + 1,
                     libro: '',
                     folio: '',
                     inicio: new Date(),
                     fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
                     revalidacionNumero: formacion.matriculacion.length + 1
                 };
-
-                this._numeracionesService.saveNumeracion(num)
-                    .subscribe(newNum => {
+                num[0].proximoNumero = num[0].proximoNumero + 1;
+                this._numeracionesService.saveNumeracion(num[0])
+                .subscribe(newNum => {
                         // console.log('Numeracion Actualizada');
-                        this.matriculacion.emit(oMatriculacion);
-                    });
+                         this.matriculacion.emit(oMatriculacion);
+                     });
             });
     }
 }

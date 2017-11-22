@@ -32,6 +32,7 @@ const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', '
 @Component({
     selector: 'app-nuevo-turno',
     templateUrl: 'nuevo-turno.html',
+    styleUrls: ['nuevo-turno.scss'],
     providers: [{
          provide: LOCALE_ID, useValue: 'es-AR'
     }]
@@ -48,6 +49,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private lblTurno: string;
     private options: any = {};
     public boxType: string;
+    public horarioSi = false;
+    public fechaComparacion: Date;
 
     @Output() onTurnoSeleccionado = new EventEmitter<Date>();
     @Input() private tipoTurno: Enums.TipoTurno;
@@ -61,15 +64,17 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     /**
      * Lifecycle hooks
      */
+
+
     ngOnChanges() {
-        console.log('changes calendar')
-        //this.getConfiguracionAgenda()
+        // this.getConfiguracionAgenda()
     }
 
     ngOnInit() {
         // Setteo el formato utilizado para las fechas.
         this.format = 'DD/MM/YYYY';
         // moment.locale('es');
+         // this.horarioSi = this.fechaElegida.getHours();
     }
 
     ngAfterViewInit() {
@@ -98,10 +103,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private getConfiguracionAgenda() {
         this._agendaService.get().subscribe((datos) => {
             this.agendaConfig = datos[0];
-
             // Calculo los turnos disponibles por día.
-            this.buildHorariosDisponibles();
-
             // Obtengo la cantidad de turnos por fecha del mes.
             const hoy = new Date();
 
@@ -111,7 +113,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
                     .subscribe((countTurnosXDia) => {
                         this.buildCalendar(countTurnosXDia);
                     });
-            } else if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+            } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
                 this._turnoService.getTurnosRenovacion(hoy, {})
                     .subscribe((countTurnosXDia) => {
                         this.buildCalendar(countTurnosXDia);
@@ -121,93 +123,89 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     private buildHorariosDisponibles() {
-        if (!this.agendaConfig) {
-            return;
-        }
-
-        for (let n = this.agendaConfig.horarioInicioTurnos; n <= this.agendaConfig.horarioFinTurnos; n++) {
-            if (n !== this.agendaConfig.horarioFinTurnos) {
-                for (let nx = 0; nx < (60 / this.agendaConfig.duracionTurno); nx++) {
-                    this.horariosDisponibles.push({
-                        hora: n,
-                        minutos: nx * this.agendaConfig.duracionTurno,
-                        ocupado: false
-                    });
+        this.horariosDisponibles = [];
+        let res = null;
+        let entradaU = false;
+        let minutos = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('mm'));
+        const horaInicio = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('HH'));
+        const horaFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('HH'));
+        const horaActual = parseInt(new moment().format('HH'));
+        const minutosActual = parseInt(new moment().format('mm'));
+        const fechaActual = new Date();
+        let n = horaInicio;
+        let i = horaInicio;
+        let flag = true;
+        let nx = 0;
+        while ( n < horaFin && flag === true) {
+          while ( nx < (60 / this.agendaConfig.duracionTurno) && flag === true) {
+            if (entradaU === false ) {
+             entradaU = true;
+            }else {
+                  if ((i) === horaFin) {
+                    flag = false;
+                    }else {
+                          if ((this.agendaConfig.duracionTurno + minutos) >= 60) {
+                            minutos =  (minutos + this.agendaConfig.duracionTurno) - 60;
+                            i++;
+                            }else {
+                                  if ((this.agendaConfig.duracionTurno + minutos) < 60) {
+                                    res = minutos + this.agendaConfig.duracionTurno;
+                                    }
+                                    minutos = res;
+                                }
+                        }
                 }
-            } else {
-                this.horariosDisponibles.push({
-                    hora: n,
-                    minutos: 0,
-                    ocupado: false
-                });
+                if (flag === true) {
+
+                    if (this.fechaComparacion === moment(fechaActual).format('L')) {
+                        if (i > horaActual) {
+                        this.horariosDisponibles.push({
+                            hora: i,
+                            minutos: minutos,
+                            ocupado: false
+                            });
+                        }
+                        if (i === horaActual) {
+                            if (minutos > minutosActual) {
+                        this.horariosDisponibles.push({
+                            hora: i,
+                            minutos: minutos,
+                            ocupado: false
+                            });
+                            }
+                        }
+                    }else {
+                        this.horariosDisponibles.push({
+                            hora: i,
+                            minutos: minutos,
+                            ocupado: false
+                            });
+                    }
+                }
+                nx++;
             }
+            nx = 0;
+            n++;
+
         }
     }
-
-    /**
-     * Calendar Methods
-     */
-   /* private updateTurnos(fecha: Date, narrow: boolean) {
-        const oDate = new Date(fecha);
-        let search = {};
-        if (narrow) {
-            search = {
-                anio: oDate.getFullYear(),
-                mes: oDate.getMonth() + 1,
-                dia: oDate.getDate()
-            };
-        }
-
-        if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
-
-            // Obtengo los horarios ocupados del día.
-            this._turnoService.getTurnosMatriculacion(oDate, search)
-                .subscribe((datos) => {
-                    // Deshabilito los horarios ocupados.
-                    datos.forEach(item => {
-                        const turnoOcupado = item._id;
-                        this.horariosDisponibles.forEach(horario => {
-                            if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
-                                horario.ocupado = true;
-                            }
-                        });
-                    });
-            });
-
-
-        } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
-            // Obtengo los horarios ocupados del día.
-            this._turnoService.getTurnosRenovacion(oDate, search)
-                .subscribe((datos) => {
-                    // Deshabilito los horarios ocupados.
-                    datos.forEach(item => {
-                        const turnoOcupado = item._id;
-                        this.horariosDisponibles.forEach(horario => {
-                            if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
-                                horario.ocupado = true;
-                            }
-                        });
-                    });
-            });
-        }
-    }*/
 
     private buildCalendar(countTurnosXDia: any[]) {
         // Inicio las opciones del calendario.
         this.buildCalendarOptions(countTurnosXDia);
-
         // Inicio el calendario.
         this.$div.datepicker(this.options);
 
         // Setteo el evento changeDate del calendario.
         this.$div.on('changeDate', (event) => {
             const fecha = new Date(event.date);
+            this.fechaComparacion = moment(fecha).format('L');
+            this.buildHorariosDisponibles();
 
             // Limpio el estado de los horarios.
             this.horariosDisponibles.forEach(horario => {
                 horario.ocupado = false;
             });
-
             // Obtengo los horarios ocupados del día.
             if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
                 this._turnoService.getTurnosMatriculacion(fecha, {
@@ -225,7 +223,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
                                 });
                             });
                     });
-            } else if (this.tipoTurno === Enums.TipoTurno.renovacion){
+            } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
                 this._turnoService.getTurnosRenovacion(fecha, {
                     anio: fecha.getFullYear(),
                     mes: fecha.getMonth() + 1,
@@ -266,9 +264,9 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private buildCalendarOptions(countTurnosXDia: any[]) {
         this.options = {
             datesDisabled: this.getDatesDisabled(countTurnosXDia), // Fechas deshabilitados.
-            weekStart: 1, // La semana empieza los lunes.
+            weekStart: 0, // La semana empieza los lunes.
             daysOfWeekDisabled: this.getDaysOfWeekDisabled(), // días de la semana deshabilitados (lunes, martes, etc.).
-            startDate: new Date(new Date().getTime() + 24 * 60 * 60 * 1000), // Primera fecha seleccionable
+            startDate: new Date(new Date().getTime()), // Primera fecha seleccionable
             language: 'es',
             todayHighlight: true // Resaltar la fecha de hoy.
         };
@@ -291,9 +289,11 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private getDaysOfWeekDisabled() {
         const dias = [0, 1, 2, 3, 4, 5, 6];
         if (this.agendaConfig) {
-            this.agendaConfig.diasHabilitados.forEach((dia) => {
-                const indexOfDia = diasSemana.indexOf(dia.toString()) + 1;
-                dias.splice(dias.indexOf(indexOfDia), 1);
+
+            this.agendaConfig.diasHabilitados.forEach((dia: any) => {
+
+                const indexOfDia = dias.indexOf((dia.id + 1) % 7 );
+                dias.splice(indexOfDia, 1);
             });
         }
         return dias.toString();
@@ -303,13 +303,21 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
      * Actions
      */
     buildFechaTurno(turno: any) {
+
         this.fechaElegida.setHours(turno.hora);
         this.fechaElegida.setMinutes(turno.minutos);
+        if (this.fechaElegida.getHours() !== 0 ) {
+            this.horarioSi = true;
+        }
     }
 
+    isActive(turno: any) {
+        if ( (this.fechaElegida.getHours() === turno.hora) && (this.fechaElegida.getMinutes() === turno.minutos)) {
+            return true;
+        }
+    }
     confirmTurno() {
-        // this.lblTurno = moment(this.fechaElegida).format('llll');
-        console.log(this.fechaElegida.getDay())
+        this.lblTurno = moment(this.fechaElegida).format('llll');
         this.lblTurno = diasSemana[this.fechaElegida.getDay()] + ' '
             + this.fechaElegida.getDate().toString() + ' de '
             + meses[this.fechaElegida.getMonth()] + ' de '
@@ -317,7 +325,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             + this.fechaElegida.getHours();
 
         if (this.fechaElegida.getMinutes() > 0) {
-            this.lblTurno += ':' + this.fechaElegida.getMinutes()
+            this.lblTurno += ':' + this.fechaElegida.getMinutes();
         }
 
         this.lblTurno += ' hs';

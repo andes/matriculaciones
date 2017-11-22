@@ -4,7 +4,6 @@ const jsPDF = require('jspdf');
 export class PDFUtils {
 
     public generarCredencial(imgsData: any, profesional: any, formacionGrado: any): any {
-        debugger
         const ultimaRenovacion = formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1];
 
         const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
@@ -24,7 +23,7 @@ export class PDFUtils {
         doc.text(/*'BO TEC. EN LABORATORIO'*/formacionGrado.profesion.nombre.toUpperCase(), 43, 13);
         doc.text(/*'PINO'*/profesional.apellido.toUpperCase(), 43, 18);
         doc.text(/*'JORGE PABLO'*/profesional.nombre.toUpperCase(), 43, 23);
-        doc.text(/*'Masculino'*/ profesional.sexo.nombre, 74, 23);
+        doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
         doc.text('DNI ' + profesional.documentoNumero, 43, 28);
         doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
         doc.text(/*'15/07/2010'*/ this.getDateStr(ultimaRenovacion.inicio), 43, 40);
@@ -52,7 +51,7 @@ export class PDFUtils {
         doc.setLineWidth(1);
         doc.line(20, 40, 190, 40);
         doc.setFontSize(12);
-        doc.text(20, 45, 'Planilla de Turno Otrogado');
+        doc.text(20, 45, 'Planilla de Turno Otorgado');
         doc.text(155, 45, 'MATRICULACIÓN');
         doc.line(20, 47, 190, 47);
         doc.setFontSize(10);
@@ -94,20 +93,20 @@ export class PDFUtils {
 
         // Domicilios
         let offsetLoop = 0;
-        turno.profesional.domicilios.forEach(domicilio => {
+         turno.profesional.domicilios.forEach(domicilio => {
             doc.setFontSize(14);
-            doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
+             doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
             doc.line(20, 143 + offsetLoop , 190, 143 + offsetLoop);
-            doc.setFontSize(12);
-            doc.text(20, 148 + offsetLoop, 'Calle:');
-            doc.text(20, 154 + offsetLoop, 'C.P.:');
-            doc.text(20, 160 + offsetLoop, 'País:');
-            doc.text(70, 160 + offsetLoop, 'Provincia:');
-            doc.text(130, 160 + offsetLoop, 'Localidad:');
+             doc.setFontSize(12);
+             doc.text(20, 148 + offsetLoop, 'Calle:');
+             doc.text(20, 154 + offsetLoop, 'C.P.:');
+             doc.text(20, 160 + offsetLoop, 'País:');
+             doc.text(70, 160 + offsetLoop, 'Provincia:');
+             doc.text(130, 160 + offsetLoop, 'Localidad:');
             doc.setLineWidth(0.5);
-            doc.line(20, 162 + offsetLoop, 190, 162 +  offsetLoop);
-            offsetLoop += 26;
-        });
+             doc.line(20, 162 + offsetLoop, 190, 162 +  offsetLoop);
+             offsetLoop += 26;
+         });
 
         // Contacto
         doc.setFontSize(14);
@@ -135,7 +134,7 @@ export class PDFUtils {
         doc.text(65, 77, 'DNI ' + turno.profesional.documentoNumero);
         doc.text(65, 83, this.getSimpleFormatedDate(turno.profesional.fechaNacimiento));
         doc.text(65, 89, turno.profesional.lugarNacimiento);
-        doc.text(65, 95, turno.profesional.sexo.nombre);
+         doc.text(65, 95, turno.profesional.sexo);
         doc.text(65, 101, turno.profesional.nacionalidad.nombre);
 
         doc.text(65, 111, turno.profesional.formacionGrado[0].profesion.nombre);
@@ -158,7 +157,7 @@ export class PDFUtils {
         // Completado contactos
         offsetLoop = 0;
         turno.profesional.contactos.forEach(contacto => {
-            doc.text(35, 225 + offsetLoop, contacto.valor);
+            doc.text(50, 225 + offsetLoop, contacto.valor);
             offsetLoop += 6;
         });
 

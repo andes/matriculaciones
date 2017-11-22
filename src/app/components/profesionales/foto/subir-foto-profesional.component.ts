@@ -6,7 +6,8 @@ import {
     Output,
     OnChanges,
     OnInit } from '@angular/core';
-
+    import { DomSanitizer } from '@angular/platform-browser';
+    import { environment } from '../../../../environments/environment';
 // Plex
 import {
     Plex
@@ -26,19 +27,16 @@ import {
 import {
     AppSettings
 } from './../../../app.settings';
-import { DomSanitizer } from '@angular/platform-browser';
-import { environment } from '../../../../environments/environment';
+
 @Component({
-    selector: 'app-firmas-profesional',
-    templateUrl: 'firmas-profesional.html'
+    selector: 'app-foto-profesional',
+    templateUrl: 'subir-foto-profesional.html'
 })
-export class FirmasProfesionalComponent implements OnInit {
-    uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/firma'});
+export class SubirFotoProfesionalComponent implements OnInit {
+    uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
     @Input() profesional: IProfesional;
     @Output() onFileUploaded = new EventEmitter();
     public binaryString = null;
-    public firmas = null;
-    public urlFirma = null;
     private base64textString: String= '';
 
     constructor(public sanitizer: DomSanitizer, private plex: Plex) {
@@ -55,19 +53,19 @@ export class FirmasProfesionalComponent implements OnInit {
       }
     }
     _handleReaderLoaded(readerEvt) {
-        this.binaryString = readerEvt.target.result;
-        this.base64textString = btoa(this.binaryString);
+       this.binaryString = readerEvt.target.result;
+              this.base64textString = btoa(this.binaryString);
       }
+
     ngOnInit() {
-        this.urlFirma = environment.API + '/core/tm/profesionales/firma/' + this.profesional.id;
-        // this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
     }
 
 
     upload() {
+        this.uploader.uploadAll();
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
         this.onFileUploaded.emit(this.base64textString);
-        this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
     }
+
 
 }

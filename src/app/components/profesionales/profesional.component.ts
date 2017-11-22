@@ -1,16 +1,16 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-//import { Plex } from '@andes/plex/src/lib/core/service';
-//import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+// import { Plex } from '@andes/plex/src/lib/core/service';
+// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { Plex } from '@andes/plex';
 
 // Enums
+import * as enumerados from './../../utils/enumerados';
 import {
     getEnumAsObjects,
     Sexo,
     EstadoCivil,
-    TipoContacto,
-    TipoDomicilio } from './../../utils/enumerados';
+    TipoContacto } from './../../utils/enumerados';
 
 // Services
 import { PaisService } from './../../services/pais.service';
@@ -31,15 +31,182 @@ import { ISiisa } from './../../interfaces/ISiisa';
 })
 export class ProfesionalComponent implements OnInit {
     public formProfesionalComp: FormGroup;
-    public formsDomicilios: FormArray;
-    public formsContactos: FormArray;
-    public sexos: any[];
+    public sexos: any;
     public provincias: any[];
     public localidades: any[];
+    public estadoCivil: any;
+    public tipoComunicacion: any[];
+    public vacio = [];
+
     // public estadosCiviles: any[];
     public showOtraEntidadFormadora: Boolean = false;
     @Input()
-    private profesional: IProfesional;
+     // private profesional: IProfesional
+     private profesional: IProfesional = {
+        id: null,
+        habilitado: true,
+        nombre: null,
+        apellido: null,
+        documentoNumero: null,
+        documentoVencimiento: null,
+        cuit: null,
+        fechaNacimiento: null,
+        lugarNacimiento: '',
+        nacionalidad: {
+            nombre: null,
+            codigo: null,
+        },
+        sexo: undefined,
+        estadoCivil: undefined,
+        contactos: [{
+            tipo: 'celular',
+            valor: '',
+            rank: 0,
+            activo: true,
+            ultimaActualizacion: new Date()
+        }],
+        domicilios: [{
+            tipo: 'real',
+            valor: '',
+            codigoPostal: '',
+            ubicacion: {
+                localidad: '',
+                provincia: '',
+                pais: '',
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },
+        {
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },
+        {
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }],
+        fotoArchivo: null,
+        firmas: null,
+        formacionGrado: [{
+            profesion: {
+                nombre: null,
+                codigo: null,
+            },
+            entidadFormadora: {
+                nombre: null,
+                codigo: null,
+            },
+            titulo: null,
+            fechaEgreso: null,
+            fechaTitulo: null,
+            revalida: true,
+            matriculacion: [{
+                matriculaNumero: null,
+                libro: null,
+                folio: null,
+                inicio: null,
+                fin: null,
+                revalidacionNumero: null,
+            }],
+        }],
+        formacionPosgrado: null,
+        origen: null,
+        sanciones: null,
+        notas: null
+    };
+
+    // // private profesional: IProfesional
+    // private profesional: any = {
+    //     habilitado: Boolean,
+    //     nombre: null,
+    //     apellido: null,
+    //     documentoNumero: null,
+    //     documentoVencimiento: null,
+    //     cuit: null,
+    //     fechaNacimiento: '',
+    //     lugarNacimiento: '',
+    //     nacionalidad: {
+    //         nombre: null,
+    //         codigo: null,
+    //     },
+    //     sexo: undefined,
+    //     estadoCivil: undefined,
+    //     contactos: [{
+    //         tipo: 'celular',
+    //         valor: '',
+    //         rank: 0,
+    //         activo: true,
+    //         ultimaActualizacion: new Date()
+    //     }],
+    //     domicilios: [{
+    //         tipo: 'real',
+    //         valor: null,
+    //         direccion: null,
+    //         codigoPostal: null,
+    //         ubicacion: {
+    //             localidad: null,
+    //             provincia: null,
+    //             pais: null,
+    //         },
+    //         ultimaActualizacion: new Date(),
+    //         activo: true
+    //     },
+    //     {
+    //         tipo: 'legal',
+    //         valor: null,
+    //         direccion: null,
+    //         codigoPostal: null,
+    //         ubicacion: {
+    //             localidad: null,
+    //             provincia: null,
+    //             pais: null,
+    //         },
+    //         ultimaActualizacion: new Date(),
+    //         activo: true
+    //     },
+    //     {
+    //         tipo: 'profesional',
+    //         valor: null,
+    //         direccion: null,
+    //         codigoPostal: null,
+    //         ubicacion: {
+    //             localidad: null,
+    //             provincia: null,
+    //             pais: null,
+    //         },
+    //         ultimaActualizacion: new Date(),
+    //         activo: true
+    //     }],
+    //     formacionGrado: [{
+    //         profesion: {
+    //             nombre: null,
+    //             codigo: null,
+    //         },
+    //         entidadFormadora: {
+    //             nombre: null,
+    //             codigo: null,
+    //         },
+    //         titulo: null,
+    //         fechaEgreso: '',
+    //         fechaTitulo: '',
+    //     }],
+    // };
 
     @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
@@ -50,161 +217,16 @@ export class ProfesionalComponent implements OnInit {
         private _localidadService: LocalidadService,
         private _profesionService: ProfesionService,
         private _profesionalService: ProfesionalService,
-        private _entidadFormadoraService: EntidadFormadoraService) {
-
-            this.buildForm();
+        private _entidadFormadoraService: EntidadFormadoraService,
+        private plex: Plex) {
          }
 
     ngOnInit() {
-
-        // this.estadosCiviles = getEnumAsObjects(EstadoCivil);
-        // this.sexos = getEnumAsObjects(Sexo);
-        /*this._sexoService.getSexos().subscribe(sexos => {
-            this.sexos = sexos;
-            console.log(sexos)*/
-
-            /*this._profesionalService.getProfesional('58ab35ad07a4b51cf0b311b0')
-                .subscribe(profesional => {
-                    this.buildForm(profesional);
-                });*/
-        /*});*/
-
+        this.estadoCivil = enumerados.getObjsEstadoCivil();
+        this.sexos = enumerados.getObjSexos();
+        this.tipoComunicacion = enumerados.getObjTipoComunicacion();
     }
 
-    private newFormContacto(tipoContacto: String, rankContacto: Number,
-        valorContacto: String = null,
-        ultimaActualizacionContacto: Date = new Date(),
-        isActivo: Boolean = true) {
-
-        return this._formBuilder.group({
-            tipo: [tipoContacto, Validators.required],
-            valor: [valorContacto, Validators.required],
-            rank: [rankContacto, Validators.required],
-            ultimaActualizacion: [ultimaActualizacionContacto, Validators.required],
-            activo: [isActivo, Validators.required]
-        });
-    }
-
-    private newFormDomicilio(tipoDom: String,
-        valorDom: String = null,
-        codigoPostalDom: String = null,
-        localidadUbicacionDom: String = null,
-        provinciaUbicacionDom: String = null,
-        paisUbicacionDom: String = null,
-        ultimaActualizacionContacto: Date = new Date(),
-        isActivo: Boolean = true) {
-
-        return this._formBuilder.group({
-            tipo: [tipoDom, Validators.required],
-            valor: [valorDom, Validators.required],
-            codigoPostal: [codigoPostalDom, Validators.required],
-            ubicacion: this._formBuilder.group({
-                localidad: [localidadUbicacionDom, Validators.required],
-                provincia: [provinciaUbicacionDom, Validators.required],
-                pais: [paisUbicacionDom, Validators.required]
-            }),
-            activo: [isActivo, Validators.required]
-        });
-    }
-
-    buildForm(model?: any) {
-
-        if (model) {
-
-            // Domicilios.
-            const doms = [];
-            model.domicilios.forEach(domicilio => {
-                doms.push(this.newFormDomicilio(domicilio.tipo,
-                    domicilio.valor,
-                    domicilio.codigoPostal,
-                    domicilio.ubicacion.pais,
-                    domicilio.ubicacion.provincia,
-                    domicilio.ubicacion.localidad));
-
-            });
-
-            this.formsDomicilios = this._formBuilder.array(doms);
-
-            // Contatos
-            const ctcs = [];
-            model.contactos.forEach((contacto, i) => {
-                ctcs.push(this.newFormContacto(contacto.tipo,
-                    (contacto.rank ? contacto.rank : i + 1 ),
-                    contacto.valor,
-                    contacto.ultimaActualizacion,
-                    contacto.activo));
-            });
-
-            this.formsContactos = this._formBuilder.array(ctcs);
-
-
-
-        } else {
-            this.formsDomicilios = this._formBuilder.array([
-                this.newFormDomicilio(TipoDomicilio.legal.toString()),
-                this.newFormDomicilio(TipoDomicilio.real.toString()),
-                this.newFormDomicilio(TipoDomicilio.profesional.toString())
-            ]);
-
-            this.formsContactos = this._formBuilder.array([
-                this.newFormContacto(TipoContacto.celular.toString(), 1),
-                this.newFormContacto(TipoContacto.email.toString(), 2),
-                this.newFormContacto(TipoContacto.fijo.toString(), 3)
-            ]);
-
-        }
-            //console.log(this.formsContactos);
-
-
-
-        this.formProfesionalComp = this._formBuilder.group({
-            cuit: [
-                model ? model.cuitCuil : null,
-                [Validators.required, Validators.minLength(0)]],
-            apellido: [
-                model ? model.apellidos : null,
-                Validators.required],
-            nombre: [
-                model ? model.nombres : null,
-                Validators.required],
-            documentoNumero: [
-                model ? model.documentoNumero : null,
-                [Validators.required, Validators.minLength(0)]],
-            documentoVencimiento: [
-                model ? model.documentoVencimiento : null,
-                Validators.required],
-            lugarNacimiento: [
-                model ? model.lugarNacimiento : null,
-                Validators.required],
-            fechaNacimiento: [
-                model ? model.fechaNacimiento : null,
-                Validators.required],
-            nacionalidad: [
-                model ? model.nacionalidad : null,
-                Validators.required],
-            sexo: [
-                model ? model.sexo : null,
-                Validators.required],
-            estadoCivil: [
-                model ? model.estadoCivil : null,
-                Validators.required],
-            contactos: this.formsContactos,
-            domicilios: this.formsDomicilios,
-            formacionGrado: this._formBuilder.group({
-                profesion: [
-                    model ? model.profesion : null,
-                    Validators.required],
-                entidadFormadora: [model ? model.entidadFormadora : null],
-                otraEntidadFormadora: [model ? model.otraEntidadFormadora : null],
-                titulo: [
-                    model ? model.titulo : null,
-                    Validators.required],
-                fechaTitulo: [
-                    model ? model.fechaTitulo : null,
-                    Validators.required]
-            })
-        });
-    }
 
     showOtra(entidadFormadora) {
         if (entidadFormadora.value) {
@@ -212,13 +234,20 @@ export class ProfesionalComponent implements OnInit {
         }
     }
 
-    confirmarDatos(model: any, isValid: Boolean) {
-
-        model.contactos.forEach(contacto => {
-            contacto.tipo = contacto.tipo.toLowerCase();
+    confirmarDatos($event) {
+        if ($event.formValid) {
+        // tslint:disable-next-line:max-line-length
+        this.profesional.estadoCivil =  this.profesional.estadoCivil ? ((typeof  this.profesional.estadoCivil === 'string')) ?  this.profesional.estadoCivil : (Object( this.profesional.estadoCivil).id) : null;
+        this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).nombre);
+        this.profesional.contactos.map(elem => {
+            elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
+            return elem;
         });
+        this.onProfesionalCompleto.emit(this.profesional);
 
-        this.onProfesionalCompleto.emit(model);
+          // this.onProfesionalCompleto.emit(this.profesional);
+    }
+
     }
 
     // Filtrado de combos
@@ -227,15 +256,10 @@ export class ProfesionalComponent implements OnInit {
     }
 
     loadProvincias(pais) {
-        console.log(pais.value)
         this._provinciaService.get({ 'pais': pais.value.id })
             .subscribe(resp => {
                 this.provincias = resp;
             });
-        // console.log(event)
-        /*if (pais.value) {
-            this._provinciaService.get({ 'pais': pais.value.id }).subscribe(event.callback);
-        }*/
     }
 
     loadLocalidades(provincia) {
@@ -257,5 +281,35 @@ export class ProfesionalComponent implements OnInit {
 
     loadSexos(event) {
         this._sexoService.getSexos().subscribe(event.callback);
+    }
+    addContacto() {
+        const nuevoContacto = Object.assign({}, {
+            tipo: 'celular',
+            valor: '',
+            rank: 0,
+            activo: true,
+            ultimaActualizacion: new Date()
+        });
+        this.profesional.contactos.push(nuevoContacto);
+    }
+
+    removeContacto(i) {
+        if (i >= 0) {
+            this.profesional.contactos.splice(i, 1);
+        }
+    }
+
+    completar() {
+        this.profesional.domicilios[1].valor = this.profesional.domicilios[0].valor;
+        this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;
+        this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
+        this.profesional.domicilios[1].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
+        this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
+
+        this.profesional.domicilios[2].valor = this.profesional.domicilios[0].valor;
+        this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;
+        this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
+        this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
+        this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
     }
 }

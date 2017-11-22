@@ -23,7 +23,7 @@ export class SIISAService {
   getEntidadesFormadoras(id: String): Observable<ISiisa> {
       return this.server.get(this.siisaUrl + '/entidadesFormadoras', null);
   }
-  
+
   getEstablecimientosCertificadores(id: String): Observable<ISiisa> {
       return this.server.get(this.siisaUrl + '/establecimientosCertificadores', null);
   }

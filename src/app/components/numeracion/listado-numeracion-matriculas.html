@@ -4,7 +4,7 @@
 
         <plex-box type="primary">
             <header>
-                <div [formGroup]="formBuscarNumeracion" *ngIf="showListado">
+                <div [formGroup]="formBuscarNumeracion">
                     <div class="row">
                         <div class="col-6">
                             <plex-select label="Profesión" formControlName="profesion" (getData)="loadProfesiones($event)" (change)="buscar()"></plex-select>                   
@@ -37,7 +37,7 @@
             
 
 
-                <div class="row" *ngFor="let numeracion of numeraciones" (click)="showNumeracion(numeracion)">
+                <div class="row" *ngFor="let numeracion of numeraciones" >
                     <div class="col-md-12">
                             <ul class="list-group">
                             <li class="list-group-item justify-content-between">
@@ -46,8 +46,8 @@
                                 <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
                                 </h4>
                             
-                                <button type="button" class="btn-contextual" data-widget="" data-toggle="tooltip" title="Eliminar problema" data-original-title="">
-                                <i ng-reflect-class-name="mdi mdi-dots-horizontal" class="mdi mdi-dots-horizontal"></i>
+                                <button class="btn btn-primary" (click)="showNumeracion(numeracion)" >
+                                    <span class="mdi mdi-chevron-right"></span>
                                 </button>
 
                             </li>
@@ -125,14 +125,20 @@
                     <plex-button label="Editar" type="primary" class="pull-right" (click)="toggleListado(false)"></plex-button>
                     <plex-button label="Generar Matricula" type="danger" class="pull-left" (click)="generarMatricula()"></plex-button>
                 </div>
+               
             </div>
         </plex-box>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <app-numeracion-matriculas [numeracion]="numeracionElegida" [numeracion2]="numeracion" (cambio)="cambio($event)" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
+
+        </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col-8">
-<app-numeracion-matriculas [numeracion]="numeracionElegida" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
     </div>
 </div>
 </section>

@@ -36,8 +36,6 @@ export class FormacionGradoComponent {
 
 
     /*aprobarProfesional(formacion: any, i: number) {
-
-        
         this._numeracionesService.getOne(formacion.profesion.codigo.toString())
             .subscribe((num) => {
 

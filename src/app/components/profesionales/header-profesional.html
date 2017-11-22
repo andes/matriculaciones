@@ -1,8 +1,8 @@
 <div class="row">
     <div class="col-12" style="padding-bottom: 10px;">
         <div style="display: inline-block;">
-            <img *ngIf="profesional.fotoArchivo" src="http://localhost:3002/{{profesional.fotoArchivo}}" class="img-circle">
-            <img *ngIf="!profesional.fotoArchivo" src="http://localhost:3002/prof.png" class="img-circle">
+            <!-- <img   [src]="urlFoto" class="img-circle"> -->
+            
         </div>
         <div style="padding-left: 10px; display: inline-block; vertical-align: middle">
             <div class="nombre-profesional">                        
@@ -10,7 +10,7 @@
             </div>
             <span class="datos-profesional">
                 {{profesional.edad + ' años'}} | {{'DNI ' + profesional.documentoNumero }} ({{profesional.cuit}})<br />
-                {{profesional.fechaNacimiento | date: 'dd/MM/yyyy'}}
+                {{profesional.fechaNacimiento | date: 'dd/MM/yyyy'}} | {{profesional.estadoCivil }} 
             </span>
         </div>
     </div>

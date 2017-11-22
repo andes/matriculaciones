@@ -1,6 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostListener } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
-import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -10,7 +9,7 @@ import { NumeracionMatriculasService } from './../../services/numeracionMatricul
 import { ProfesionService } from './../../services/profesion.service';
 
 @Component({
-    selector: 'mat-plex-scroll',
+    selector: 'app-mat-plex-scroll',
     template: `
         <div class="search-results"
             infinite-scroll
@@ -47,8 +46,8 @@ export class ScrollComponent implements OnInit {
         this.updateListado();
     }
 
-    onScroll(event:any) {
-        console.log('scroll')
+    onScroll(event: any) {
+
         /*this.currentPage++;
         this.updateListado();*/
     }

@@ -189,7 +189,7 @@
                             <plex-text label="Título" [(ngModel)]="profesional.formacionGrado[0].titulo" name='titulo' [required]="true"></plex-text>
                         </div>
                          <div class="col-md-4">
-                            <plex-datetime label="Fecha de egreso" type="date"  [(ngModel)]="profesional.formacionGrado[0].fechaEgreso" name='fechaEgreso'[required]="true" ></plex-datetime>
+                            <plex-datetime label="Fecha de egreso" type="date"  [(ngModel)]="profesional.formacionGrado[0].fechaEgreso" name='fechaEgreso' [required]="true" ></plex-datetime>
                          </div>
                         <div class="col-md-4">
                                 <plex-datetime label="Fecha del Título" type="date"  [(ngModel)]="profesional.formacionGrado[0].fechaTitulo" name='fechaTitulo' [required]="true"></plex-datetime>
@@ -209,7 +209,9 @@
             <br>
             <div class="row">
                 <div class="col-md-12 text-right">
-                    <plex-button type="success" label="Confirmar Datos"  (click)="confirmarDatos($event)"
+                        <plex-button *ngIf="confirmar == true" type="success" label="Confirmar Datos"  (click)="confirmarDatosAdmin($event)"
+                        class="pull-right" validateForm="true"></plex-button>
+                    <plex-button *ngIf="confirmar == false" type="success" label="Confirmar Turno"  (click)="confirmarDatos($event)"
                         class="pull-right" validateForm="true"></plex-button>
                 </div>
             </div>

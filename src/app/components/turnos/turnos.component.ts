@@ -75,7 +75,7 @@ export class TurnosComponent implements OnInit {
     }
 
     showProfesional(turno: any) {
-        this.router.navigate(['/profesional', turno.profesional.id]);
+        this.router.navigate(['/profesional', turno.profesional.documentoNumero]);
     }
 
     cambiarEstado() {

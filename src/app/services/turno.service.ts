@@ -18,6 +18,7 @@ export class TurnoService extends BaseService {
     private turnosMatriculacionURL = this.turnosURL + 'matriculacion/';
     private turnosRenovacionURL = this.turnosURL + 'renovacion/';
     private turnosProximosURL = this.turnosURL + 'proximos/';
+    private turnosSolicitados = this.turnosSolicidatosURL;
 
     constructor(_http: Http, private _server: Server) {
         super(_http);
@@ -44,6 +45,12 @@ export class TurnoService extends BaseService {
         return this.post(this.turnosURL + 'save/' + turnoModel._id, turnoModel);
     }
 
+    saveTurnoSolicitados(turnoSolicitado: any) {
+        return this._server.post(this.turnosSolicitados, turnoSolicitado);
+    }
+    getTurnoSolicitados(dni: any): Observable<any> {
+        return this._server.get(this.turnosSolicitados + 'traePDni/' + dni);
+    }
     getTurnos(url: string, searchParams: any): Observable<any> {
         const query = new URLSearchParams();
 

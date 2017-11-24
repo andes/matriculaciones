@@ -49,7 +49,7 @@ export class ListarProfesionalesComponent implements OnInit {
 
     showProfesional(profesional: any) {
         this.profesionalElegido = profesional;
-        this.router.navigate(['/profesional', profesional.documentoNumero]);
+        this.router.navigate(['/profesional', profesional.documento]);
     }
 
     buscar(event?: any) {

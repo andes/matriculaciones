@@ -55,7 +55,7 @@ export class DetalleProfesionalComponent implements OnInit {
         habilitado: true,
         nombre: null,
         apellido: null,
-        documentoNumero: null,
+        documento: null,
         documentoVencimiento: null,
         cuit: null,
         fechaNacimiento: null,

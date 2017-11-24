@@ -273,6 +273,9 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     private getDatesDisabled(countTurnosXDia: any[]) {
+
+        let res = null;
+        if(this.agendaConfig.fechasExcluidas !== null){
         // Fechas excluidas en la configuración de la agenda.
         const fechasExcluidas = this.agendaConfig.fechasExcluidas.map((item) => {
             return moment(item).format(this.format);
@@ -283,7 +286,11 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             return dia.count === this.horariosDisponibles.length;
         }).map((dia) => { return dia._id.fechaStr; });
 
-        return fechasExcluidas.concat(diasCompletos);
+        res =  fechasExcluidas.concat(diasCompletos);
+    }
+
+    return res;
+
     }
 
     private getDaysOfWeekDisabled() {

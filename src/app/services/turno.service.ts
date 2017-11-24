@@ -86,8 +86,8 @@ export class TurnoService extends BaseService {
             query.set('fecha', searchParams.fecha);
         }
 
-        if (searchParams.documentoNumero) {
-            query.set('documentoNumero', searchParams.documentoNumero);
+        if (searchParams.documento) {
+            query.set('documento', searchParams.documento);
         }
 
         return this.get(url, query);

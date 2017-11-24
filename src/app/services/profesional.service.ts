@@ -58,8 +58,8 @@ export class ProfesionalService extends BaseService {
     // getProfesionales(url: string, searchParams: any): Observable<any> {
     //     const query = new URLSearchParams();
 
-    //     if (searchParams.documentoNumero) {
-    //         query.set('documentoNumero', searchParams.documentoNumero);
+    //     if (searchParams.documento) {
+    //         query.set('documento', searchParams.documento);
     //     }
     //     return this.get(url, query);
     // }

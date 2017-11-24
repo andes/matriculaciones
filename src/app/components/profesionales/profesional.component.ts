@@ -46,7 +46,7 @@ export class ProfesionalComponent implements OnInit {
         habilitado: true,
         nombre: null,
         apellido: null,
-        documentoNumero: null,
+        documento: null,
         documentoVencimiento: null,
         cuit: null,
         fechaNacimiento: null,
@@ -187,10 +187,9 @@ console.log(this.profesional)
         });
         // this.onProfesionalCompleto.emit(this.profesional);
 
-        console.log(this.profesional)
         this._profesionalService.saveProfesional(this.profesional)
         .subscribe(nuevoProfesional => {
-            if (nuevoProfesional == null) {
+            if (nuevoProfesional === null) {
                 this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
             }else {
                 this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);

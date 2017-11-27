@@ -54,7 +54,7 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   showProfesional(profesional: any) {
-    this.router.navigate(['/profesional', profesional.id]);
+    this.router.navigate(['/profesional', profesional.documento]);
   }
 
   seleccionar(profesional: any) {

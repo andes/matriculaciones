@@ -49,7 +49,7 @@ export class DetalleProfesionalComponent implements OnInit {
     public img64 = null;
     public flag = null;
     public confirmar = true;
-    
+
     @Input()  public profesional: IProfesional = {
         id: null,
         habilitado: true,
@@ -161,20 +161,19 @@ export class DetalleProfesionalComponent implements OnInit {
                 this._profesionalService.getProfesional(params['documento'])
             ).subscribe(
                 (profesional:  any) =>{
-                    console.log(profesional);
                     // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
                     if (!profesional) {
                         this.flag = false;
                     }else{
                         console.log('tiene')
-                        this.profesional = profesional;
+                        this.profesional = profesional[0];
                         this.flag = true;
                     }
                     // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
                     if (this.flag === false) {
                     this.route.params
                         .switchMap((paramsTemporal: Params)  =>
-                            this._turnoService.getTurnoSolicitados(paramsTemporal['dni'])
+                            this._turnoService.getTurnoSolicitados(paramsTemporal['documento'])
                         ).subscribe(
                             (profesionalTemporal: any) => {
                                 this.profesional = profesionalTemporal;

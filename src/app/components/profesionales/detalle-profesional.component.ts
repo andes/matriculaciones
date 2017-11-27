@@ -64,7 +64,7 @@ export class DetalleProfesionalComponent implements OnInit {
     ngOnInit() {
         this.route.params
             .switchMap((params: Params)  =>
-                this._profesionalService.getUnProfesional(params['id'])
+                this._profesionalService.getProfesional(params['id'])
             ).subscribe(
                 (profesional:  IProfesional) =>
                 this.profesional = profesional

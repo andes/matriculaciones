@@ -94,6 +94,10 @@ const COMPS_PROFESIONAL = [
   ListarProfesionalesComponent
 ];
 
+// Pipes
+import { EdadPipe } from './pipes/edad.pipe';
+import {ProfesionalPipe} from './pipes/profesional.pipe';
+import {FechaPipe} from './pipes/fecha.pipe';
 
 @NgModule({
   declarations: [
@@ -109,6 +113,9 @@ const COMPS_PROFESIONAL = [
     ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,
     TurnosComponent,
     FotoGeneralComponent,
+    EdadPipe,
+    ProfesionalPipe,
+    FechaPipe,
     COMPS_PROFESIONAL
   ],
   imports: [

@@ -1,4 +1,4 @@
-<section  *ngIf="profesional">
+<section  *ngIf="flag == true">
     <div class="row">
         <div class="col-8">
             <plex-box >
@@ -34,13 +34,13 @@
                     <plex-tab label="Formación de Posgrado">
                         <app-formacion-posgrado [profesional]="profesional" 
                             (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)" 
-                            (updateProfesional)="updateProfesional2($event)" ></app-formacion-posgrado>
+                            (updateProfesional)="updateProfesional($event)" ></app-formacion-posgrado>
                     </plex-tab>
 
                     <!-- Sanciones -->
                     <plex-tab label="Sanciones">
                         <app-sanciones [profesional]="profesional" 
-                        (updateProfesional)="updateProfesional2($event)"></app-sanciones>
+                        (updateProfesional)="updateProfesional($event)"></app-sanciones>
                     </plex-tab>
                     
                     <!-- Foto -->
@@ -131,6 +131,9 @@
             </plex-box>-->
         </div>
     </div>
+</section>
+<section  *ngIf="flag == false">
+<app-profesional [profesional]='profesional' [confirmar]='confirmar' ></app-profesional>
 </section>
 
 <footer>

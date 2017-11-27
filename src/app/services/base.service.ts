@@ -26,6 +26,7 @@ export class BaseService {
 
     // URL to web api
     protected turnosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnos/';
+    protected turnosSolicidatosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnoSolicitados/';
     protected paisesURL = AppSettings.API_ENDPOINT + '/core/tm/paises';
     protected profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
     protected siisaURL = AppSettings.API_ENDPOINT + '/core/tm/siisa';

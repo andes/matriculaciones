@@ -70,7 +70,7 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
     }
 
     onProfesionalCompleto(profesional: any) {
-        this._profesionalService.saveProfesional(profesional)
+        this._turnosService.saveTurnoSolicitados(profesional)
             .subscribe((nuevoProfesional) => {
                 if (nuevoProfesional == null) {
                     this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');

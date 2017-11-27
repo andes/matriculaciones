@@ -41,6 +41,14 @@ export class ProfesionalService extends BaseService {
     getUnProfesional(id: string = null): Observable<any> {
         return this.getById(this.profesionalesURL, id);
     }
+    getUnProfesionalDni(dni: any): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'traePDni/' + dni);
+    }
+
+    putProfesional(profesionalModel): Observable<any> {
+
+        return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+    }
 
 
     getCredencial(idProf: string): any {
@@ -50,8 +58,8 @@ export class ProfesionalService extends BaseService {
     // getProfesionales(url: string, searchParams: any): Observable<any> {
     //     const query = new URLSearchParams();
 
-    //     if (searchParams.documentoNumero) {
-    //         query.set('documentoNumero', searchParams.documentoNumero);
+    //     if (searchParams.documento) {
+    //         query.set('documento', searchParams.documento);
     //     }
     //     return this.get(url, query);
     // }

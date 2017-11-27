@@ -29,6 +29,7 @@ import { DataService } from './../../services/data.service';
 // Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
+import { TurnoService } from '../../services/turno.service';
 
 
 const jsPDF = require('jspdf');
@@ -46,14 +47,106 @@ export class DetalleProfesionalComponent implements OnInit {
     public mostrar = true;
     public mostrarGrado = true;
     public img64 = null;
+    public flag = null;
+    public confirmar = true;
+    
+    @Input()  public profesional: IProfesional = {
+        id: null,
+        habilitado: true,
+        nombre: null,
+        apellido: null,
+        documento: null,
+        documentoVencimiento: null,
+        cuit: null,
+        fechaNacimiento: null,
+        lugarNacimiento: '',
+        nacionalidad: {
+            nombre: null,
+            codigo: null,
+        },
+        sexo: undefined,
+        estadoCivil: undefined,
+        contactos: [{
+            tipo: 'celular',
+            valor: '',
+            rank: 0,
+            activo: true,
+            ultimaActualizacion: new Date()
+        }],
+        domicilios: [{
+            tipo: 'real',
+            valor: '',
+            codigoPostal: '',
+            ubicacion: {
+                localidad: '',
+                provincia: '',
+                pais: '',
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },
+        {
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },
+        {
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }],
+        fotoArchivo: null,
+        firmas: null,
+        formacionGrado: [{
+            profesion: {
+                nombre: null,
+                codigo: null,
+            },
+            entidadFormadora: {
+                nombre: null,
+                codigo: null,
+            },
+            titulo: null,
+            fechaEgreso: null,
+            fechaTitulo: null,
+            revalida: true,
+            matriculacion: [{
+                matriculaNumero: null,
+                libro: null,
+                folio: null,
+                inicio: null,
+                fin: null,
+                revalidacionNumero: null,
+            }],
+        }],
+        formacionPosgrado: null,
+        origen: null,
+        sanciones: null,
+        notas: null
+    };
 
 
-    @Input() profesional: IProfesional;
+
     @Output() onShowListado = new EventEmitter();
     @Output() showFormacion = new EventEmitter();
 
 
     constructor(private _profesionalService: ProfesionalService,
+        private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
         private _numeracionesService: NumeracionMatriculasService,
@@ -62,12 +155,37 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     ngOnInit() {
+
         this.route.params
             .switchMap((params: Params)  =>
-                this._profesionalService.getProfesional(params['id'])
+                this._profesionalService.getProfesional(params['documento'])
             ).subscribe(
-                (profesional:  IProfesional) =>
-                this.profesional = profesional
+                (profesional:  any) =>{
+                    console.log(profesional);
+                    // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
+                    if (!profesional) {
+                        this.flag = false;
+                    }else{
+                        console.log('tiene')
+                        this.profesional = profesional;
+                        this.flag = true;
+                    }
+                    // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
+                    if (this.flag === false) {
+                    this.route.params
+                        .switchMap((paramsTemporal: Params)  =>
+                            this._turnoService.getTurnoSolicitados(paramsTemporal['dni'])
+                        ).subscribe(
+                            (profesionalTemporal: any) => {
+                                this.profesional = profesionalTemporal;
+                                console.log(this.profesional)}
+                        );
+                    }
+
+
+
+                }
+
             );
     }
 
@@ -80,7 +198,7 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     updateProfesional(callbackData?: any) {
-         this._profesionalService.saveProfesional(this.profesional)
+         this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;
                 if (callbackData) {
@@ -153,36 +271,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateProfesional();
     }
 
-    /*aprobarProfesional() {
-        this._numeracionesService.getOne(this.profesional.formacionGrado[0].profesion.codigo.toString())
-            .subscribe((num) => {
-
-                const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-
-                const oMatriculacion = {
-                    matriculaNumero: num.proximoNumero++,
-                    libro: '',
-                    folio: '',
-                    inicio: new Date(),
-                    fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
-                    revalidacionNumero: this.profesional.formacionGrado[0].matriculacion.length + 1
-                };
-
-                this.profesional.formacionGrado[0].matriculacion.push(oMatriculacion);
-
-
-                this._profesionalService.saveProfesional(this.profesional)
-                    .subscribe(profesional => {
-
-                        this.profesional = profesional;
-                        this._numeracionesService.saveNumeracion(num)
-                            .subscribe(newNum => {
-                                // console.log('Numeracion Actualizada');
-                            });
-                    });
-            });
-    }*/
-
     volver() {
         this.router.navigate(['/turnos', { id: this.profesional.id}]);
     }
@@ -190,17 +278,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this.router.navigate(['/listarProfesionales']);
     }
 
-   /* generarCredencial() {
-        this.loading = true;
-        this._profesionalService.getCredencial(this.profesional._id)
-            .subscribe((resp) => {
-                const pdf = this._pdfUtils.generarCredencial(resp, this.profesional);
-                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                //this.loading = false;
-            });
-
-
-    }*/
 
     formacionGradoSelected(formacion: any) {
         if (this.mostrarGrado === true) {

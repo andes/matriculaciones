@@ -40,7 +40,7 @@ export class TurnosComponent implements OnInit {
             nombre: '',
             apellido: '',
             fecha: null,
-            documentoNumero: ''
+            documento: ''
         });
 
         this.buscar();
@@ -75,7 +75,7 @@ export class TurnosComponent implements OnInit {
     }
 
     showProfesional(turno: any) {
-        this.router.navigate(['/profesional', turno.profesional.id]);
+        this.router.navigate(['/profesional', turno.profesional.documento]);
     }
 
     cambiarEstado() {

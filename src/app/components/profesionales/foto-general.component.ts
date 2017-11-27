@@ -43,17 +43,14 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
+        // Ojo aca hay que usar el servicio
         this.foto = environment.API + this.url + this.profesional.id;
     }
-
 
     ngOnChanges () {
         if (this.img64 !== null) {
         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.img64);
         }
    }
-
-
-
 
 }

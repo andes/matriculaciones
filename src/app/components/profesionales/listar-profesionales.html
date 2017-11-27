@@ -1,73 +1,126 @@
-
-    <section>
-            <plex-box >
+<section>
+  <div class="row">
+    <!--Panel central-->
+    <div class="col">
+      <plex-box>
+        <header>
+          <div class="page-title">Buscar un profesional</div>
+        </header>
         <div class="row">
-            <div class="col-12">
-                    <div class="col-md-12 text-center">
-                            <h2>Buscar profesional</h2>
-                    </div>
-                
-                    <header>
-                        <!-- SEARCH -->
-                        <div [formGroup]="formBuscarProfesionales">
-                            <div class="row">
-                                <!-- <div class="col-md-3">
-                                    <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
-                                </div>
-                                <div class="col-md-3">
-                                    <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
-                                </div> -->
-                                <div class="col-md-6">
-                                    <plex-int label="Documento" formControlName="busquedaDoc" (change)="buscar()"></plex-int>
-                                </div>
-                                <div class="col-md-6">
-                                    <plex-text label="Apellido" formControlName="busquedaApellido" (change)="buscar()"></plex-text>
-                                </div>
-                                <!-- <div class="col-md-3">
-                                    <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
-                                </div> -->
-                            </div>
-                        </div>
-                    </header>
-                    
-                    <!-- LIST -->
-                    <div class="row">
-                        <div class="col-12">
-                                <br>
-                                <br>
-                            <ul class="list-group">
-                                <li class="list-group-item" *ngFor="let profesional of profesionales; let i = index;" (click)="showTurno(profesional)" >
-                                    <div class="row" style="width: 100%">
-                                        <div class="col-10">
-                                            <h6 class="box-title-elemento">
-                                                <strong> {{profesional.apellido | uppercase}},{{profesional.nombre | uppercase}}</strong> <br>
-                                                 <strong>DNI</strong> {{profesional.documento}} | {{profesional.edad + ' años'}}
-                                            </h6>
-                                           
-                                                
-                                            
-                                        </div>
-                                        <div class="col-md-2">
-                                            <plex-button type="primary" label="Ver Profesional" class="float-right" (click)="showProfesional(profesional)"></plex-button>
-                                        </div>
-                                        <div class="col float-right">
-                                            <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
-                                            </span> -->
-                                        </div>
-
-                                    </div>
-
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-
-            </div>
-
-            
+          <div class="col-6">
+            <plex-text label="Documento" [(ngModel)]="dni" [autoFocus]="autoFocus" placeholder="escriba un documento">
+            </plex-text>
+          </div>
+          <div class="col-6">
+            <plex-text label="apellido" [(ngModel)]="apellido" placeholder="escriba apellido">
+            </plex-text>
+          </div>
         </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col">
+            <plex-button label="Buscar" type="info" (click)="buscar()"></plex-button>
+          </div>
+        </div>
+        <div class="row">&nbsp;</div>
+        <div class="row">
+          <div class="col">
+            <!--Loader-->
+            <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
+            <!--Alerta si no se encontró ningun profesional-->
+            <div *ngIf="profesionales && !profesionales.length" class="alert alert-danger">
+              <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
+            </div>
+            <!--Tabla de resultados por SimpleQuery -->
+            <table *ngIf="profesionales && profesionales.length" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Documento</th>
+                  <th>Apellido y Nombre</th>
+                  <th>Fecha de Nacimiento</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="hover" *ngFor="let profesional of profesionales" (click)="seleccionar(profesional)">
+                  <td>
+                    <span *ngIf="profesional?.documento !== ''">{{profesional.documento}}</span>
+                    <span *ngIf="profesional?.documento === ''" class="text-danger">Sin documento</span>
+                  </td>
+                  <td>{{profesional | profesional}}</td>
+                  <td>
+                    <span *ngIf="profesional.fechaNacimiento !== null">
+                      {{profesional.fechaNacimiento | fecha}}
+                      <br> {{profesional | edad}}
+                    </span>
+                    <span *ngIf="profesional.fechaNacimiento === null" class="text-danger">
+                      Sin fecha de nacimiento
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </plex-box>
+    </div>
+    <!--Panel lateral-->
+    <div class="col-4" *ngIf='profesionalElegido'>
+      <plex-box>
+        <header>
+          <div class="page-title">Vista resumen profesional</div>
+        </header>
+        <div>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="row mb-1">
+                <div class="col">
+                  <app-foto-general [profesional]="profesionalElegido" [img64]="img64"></app-foto-general>
+                </div>
+              </div>
+              <div class="row mb-1" *ngIf="profesionalElegido.apellido">
+                <div class="col">
+                  <label class="block">Apellido y nombre</label>
+                  <span>{{profesionalElegido | profesional}}</span>
+                </div>
+              </div>
+              <div class="row mb-1">
+                <div class="col-6" *ngIf="profesionalElegido.documento !== ''">
+                  <label class="block">Documento</label>
+                  <span>{{ profesionalElegido.documento }}</span>
+                </div>
+                <div class="col-6" *ngIf="profesionalElegido.documento === ''">
+                  <label class="block">Documento</label>
+                  <span class="text-danger">Sin documento</span>
+                </div>
+              </div>
+              <div class="row mb-1" *ngIf="profesionalElegido.fechaNacimiento !== null">
+                <div class="col-6">
+                  <label>Fecha de Nacimiento</label>
+                  <span>{{ profesionalElegido.fechaNacimiento | fecha }}</span>
+                </div>
+                <div class="col">
+                  <label>Edad</label>
+                  <span>{{ profesionalElegido | edad }}</span>
+                </div>
+              </div>
+              <div class="row mb-1" *ngIf="profesionalElegido.fechaNacimiento === null">
+                <div class="col">
+                  <label>Fecha de Nacimiento</label>
+                  <span class="text-danger">Sin fecha de nacimiento</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4>
+            <span>
+              <plex-button label="Editar profesional" icon="pencil" type="primary" (click)="showProfesional(profesionalElegido)"></plex-button>
+            </span>
 
-    </plex-box>
-    </section>
-<!--</div>-->
+          </h4>
+        </div>
+      </plex-box>
+    </div>
+  </div>
+</section>

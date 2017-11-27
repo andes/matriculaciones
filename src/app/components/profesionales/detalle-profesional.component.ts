@@ -158,70 +158,35 @@ export class DetalleProfesionalComponent implements OnInit {
 
         this.route.params
             .switchMap((params: Params)  =>
-                this._profesionalService.getUnProfesionalDni(params['dni'])
+                this._profesionalService.getProfesional(params['documento'])
             ).subscribe(
                 (profesional:  any) =>{
                     console.log(profesional);
-                    //me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
-                    if(!profesional){
-                        console.log('no')
+                    // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
+                    if (!profesional) {
                         this.flag = false;
                     }else{
                         console.log('tiene')
-                        this.profesional = profesional
+                        this.profesional = profesional;
                         this.flag = true;
                     }
-
-
-
-                    //si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
-                    if(this.flag == false){
-                        console.log("aca va lo proximo");
-
+                    // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
+                    if (this.flag === false) {
                     this.route.params
                         .switchMap((paramsTemporal: Params)  =>
                             this._turnoService.getTurnoSolicitados(paramsTemporal['dni'])
                         ).subscribe(
-                            (profesionalTemporal:  any) =>{
+                            (profesionalTemporal: any) => {
                                 this.profesional = profesionalTemporal;
-                                console.log(this.profesional)
-                                        }
+                                console.log(this.profesional)}
                         );
                     }
 
 
 
                 }
-             
+
             );
-
-        //          this.route.params
-        // .switchMap((params: Params)  =>
-        //     this._turnoService.getTurnoSolicitados(params['dni'])
-        // ).subscribe(
-        //     (profesional:  any) =>{
-        //                     console.log(profesional);
-        //                     this.profesional = profesional
-        //                     if(!this.profesional){
-        //                         console.log('no')
-        //                         this.flag = false;
-        //                     }else{
-        //                         console.log('tiene')
-        //                         this.flag = true;
-        //                     }
-        //                 }
-        // );
-
-        //     console.log("primer"+ this.profesional)
-        // this.route.params
-        // .switchMap((params: Params)  =>
-        //     this._turnoService.getTurnoSolicitados(params['dni'])
-        // ).subscribe(
-        //     (profesional:  IProfesional) =>
-
-        //     this.profesional = profesional
-        // );
-        // console.log("segundo"+ this.profesional)
     }
 
     updateProfesional2(profesional: IProfesional) {
@@ -306,36 +271,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateProfesional();
     }
 
-    /*aprobarProfesional() {
-        this._numeracionesService.getOne(this.profesional.formacionGrado[0].profesion.codigo.toString())
-            .subscribe((num) => {
-
-                const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-
-                const oMatriculacion = {
-                    matriculaNumero: num.proximoNumero++,
-                    libro: '',
-                    folio: '',
-                    inicio: new Date(),
-                    fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
-                    revalidacionNumero: this.profesional.formacionGrado[0].matriculacion.length + 1
-                };
-
-                this.profesional.formacionGrado[0].matriculacion.push(oMatriculacion);
-
-
-                this._profesionalService.saveProfesional(this.profesional)
-                    .subscribe(profesional => {
-
-                        this.profesional = profesional;
-                        this._numeracionesService.saveNumeracion(num)
-                            .subscribe(newNum => {
-                                // console.log('Numeracion Actualizada');
-                            });
-                    });
-            });
-    }*/
-
     volver() {
         this.router.navigate(['/turnos', { id: this.profesional.id}]);
     }
@@ -343,17 +278,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this.router.navigate(['/listarProfesionales']);
     }
 
-   /* generarCredencial() {
-        this.loading = true;
-        this._profesionalService.getCredencial(this.profesional._id)
-            .subscribe((resp) => {
-                const pdf = this._pdfUtils.generarCredencial(resp, this.profesional);
-                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                //this.loading = false;
-            });
-
-
-    }*/
 
     formacionGradoSelected(formacion: any) {
         if (this.mostrarGrado === true) {

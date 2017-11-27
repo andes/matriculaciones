@@ -1,0 +1,25 @@
+<div class="row" [formGroup]="formNumeracion">
+    <div class="col-12">
+        <plex-box type="primary">
+            <div class="row">
+                <input type="hidden" formControlName="id"/>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label>Profesión</label>
+                        <div>{{ numeracion.profesion.nombre }}</div>
+                    </div>                    
+                    <!--<plex-select label="Profesión" formControlName="profesion" (getData)="loadProfesiones($event)" [disabled]="true"></plex-select>                   -->
+                </div>
+                <div class="col-6">
+                    <plex-int label="Próximo Número" formControlName="proximoNumero" min="1"></plex-int>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <plex-button label="Guardar" type="success" (click)="guardarNumeracion(formNumeracion.value)" class="pull-right"></plex-button>
+                    <plex-button label="Volver" type="danger"  class="pull-left" (click)="volverAlListado()" ></plex-button>
+                </div>
+            </div>
+        </plex-box>
+    </div>
+</div>

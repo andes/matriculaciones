@@ -1,0 +1,39 @@
+<div class="row">
+    <div class="col-sm-9">
+        <plex-box>
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Primera Vez</label>
+                </div>
+                <div class="col-sm-10">
+                    <label>Profesional Ya Registrado</label>
+                </div>
+            </div>
+            <div class="row" [formGroup]="formRematriculacion">
+                <div class="col-sm-2">
+                    <plex-button type="primary" label="Nueva Matriculación" (click)="nuevaMatriculacion()"></plex-button>
+                </div>
+                <div class="col-sm-4 border-left">
+                    <input type="number" formControlName="documentoNumero" placeholder="Nº de Documento" class="form-control" />
+                </div>
+                <div class="col-sm-4">
+                    <input type="number" formControlName="matriculaNumero" placeholder="Nº de Matrícula" class="form-control" />
+                </div>
+                <div class="col-sm-2">
+                    <plex-button type="primary" class="pull-right" label="Rematriculación" (click)="buscarProfesional(formRematriculacion.value)"></plex-button>
+                </div>
+            </div>
+        </plex-box>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-9">
+        <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-9" *ngIf="turnoSeleccionado">
+        <app-profesional [profesional]="profesional"  (onProfesionalCompleto)="onProfesionalCompleto($event)"></app-profesional>
+    </div>
+</div>

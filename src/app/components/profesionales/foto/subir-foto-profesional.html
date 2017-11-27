@@ -1,0 +1,23 @@
+<plex-box>
+
+        <div class="row">
+
+        <div class="col-6">
+            <div class="form-group">                                
+                <div>
+                    <div>
+                        <!-- <image-upload url="https://httpbin.org/status/200"></image-upload> -->
+                        <label for="filePicker">Seleccione una foto:</label><br>
+                        <input type="file" id="filePicker" (change)="handleFileSelect($event)">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">      
+            <br>      
+            <plex-button label="Guardar" type="success" (click)="upload()"  ></plex-button>
+        </div>
+    </div>
+</plex-box>

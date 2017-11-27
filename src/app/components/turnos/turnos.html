@@ -1,0 +1,111 @@
+<!--<div class="plex-layout">
+    <header>Header</header>-->
+    <section>
+        <div class="row">
+            <div class="col-8">
+                <plex-box>
+                    <header>
+                        <!-- SEARCH -->
+                        <div [formGroup]="formBuscarTurno">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
+                                </div>
+                                <div class="col-md-3">
+                                    <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
+                                </div>
+                                <div class="col-md-3">
+                                    <plex-int label="Documento" formControlName="documentoNumero" (change)="buscar()"></plex-int>
+                                </div>
+                                <div class="col-md-3">
+                                    <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
+                                </div>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- LIST -->
+                    <div class="row">
+                        <div class="col-12">
+                            <ul class="list-group">
+                                <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)" [ngClass]="{'active': isSelected(turno)}">
+                                    <div class="row" style="width: 100%">
+                                        <div class="col-11">
+                                            <h6 class="box-title-elemento">
+                                                {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs <br>
+                                                {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }} | <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documentoNumero : '') }}</small>
+                                            </h6>
+                                        </div>
+                                        <div class="col float-right">
+                                            <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
+                                            </span> -->
+                                        </div>
+
+                                    </div>
+
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
+        </plex-box>
+            </div>
+
+            <div class="col" >
+                <plex-box type="invert" *ngIf="turnoElegido">
+                    <header>
+                        <legend>Detalle del Turno</legend>
+                    </header>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label>Fecha y hora</label>
+                                    <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
+                                    <label>Tipo de turno</label>
+                                    <h6 class="text-light">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</h6>
+                                    <plex-button type="success" label="Cambiar Estado" class="float-right" (click)="cambiarEstado()" *ngIf="!turnoElegido.sePresento"></plex-button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12 ">
+                                        <label>Apellido y nombre</label>
+                                    <h5><strong>{{turnoElegido.profesional.apellido + ', '}} </strong>{{turnoElegido.profesional.nombre}}</h5>
+                                    <h6 class="text-light">{{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documentoNumero }}</h6>
+                                    <!--<div class="nombre-profesional">
+                                        <span style="font-weight: bold">{{turnoElegido.profesional.apellido + ', '}}</span>{{turnoElegido.profesional.nombre}}
+                                    </div>
+                                    <div class="datos-profesional">
+                                        {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documentoNumero }}<br />
+                                    </div>-->
+                                    <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.formacionGrado.matriculacion.matriculaNumero">
+                                        <span style="margin-left: 5px;">Renovación Vencida</span>
+                                    </span> -->
+                                    <!--<a href="/profesional" class="btn btn-primary">Ver Profesional</a>-->
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <plex-button type="primary" label="Ver Profesional" class="float-right" [disabled]="!turnoElegido.sePresento" (click)="showProfesional(turnoElegido)"></plex-button>
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <plex-button type="primary" label="Generar Comprobante de Turno" class="pull-right" [disabled]="turnoElegido.sePresento" (click)="generarComprobante(turnoElegido)"></plex-button>
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+
+                </plex-box>
+            </div>
+        </div>
+    </section>
+<!--</div>-->

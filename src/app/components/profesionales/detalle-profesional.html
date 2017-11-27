@@ -1,0 +1,148 @@
+<section  *ngIf="profesional">
+    <div class="row">
+        <div class="col-8">
+            <plex-box >
+                <header>
+                        <div class="row">
+                                <div class="col-1">       
+                     <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+                    </div>
+                     <div class="col-11 margenFoto">
+                     <app-header-profesional [profesional]="profesional" ></app-header-profesional>
+                                </div>
+                     </div>       
+                </header>
+                <div id="wrapper">
+                <plex-tabs>
+                    <!-- Contacto y Domicilios -->
+                    <plex-tab label="Contacto y Domicilios">
+                        <app-contacto-domicilios-profesional [profesional]="profesional"></app-contacto-domicilios-profesional>
+                    </plex-tab>
+                    
+                    <!-- Formación de Grado -->
+                    <plex-tab label="Formación de Grado">
+                        <app-formacion-grado [profesional]="profesional" 
+                            (formacionGradoSelected)="formacionGradoSelected($event)"></app-formacion-grado>
+                    </plex-tab>
+
+                    <!-- Renovaciones -->
+                    <!--<plex-tab label="Renovaciones">
+                        <app-renovaciones-profesional [profesional]="profesional"></app-renovaciones-profesional>
+                    </plex-tab>-->
+
+                    <!-- Formacion Posgrado -->
+                    <plex-tab label="Formación de Posgrado">
+                        <app-formacion-posgrado [profesional]="profesional" 
+                            (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)" 
+                            (updateProfesional)="updateProfesional2($event)" ></app-formacion-posgrado>
+                    </plex-tab>
+
+                    <!-- Sanciones -->
+                    <plex-tab label="Sanciones">
+                        <app-sanciones [profesional]="profesional" 
+                        (updateProfesional)="updateProfesional2($event)"></app-sanciones>
+                    </plex-tab>
+                    
+                    <!-- Foto -->
+                    <plex-tab label="Foto">
+                            <div class="row">
+                                    <div class="col-12 text-center">
+                                        <div class="form-group">
+                                            <label style="font-weight: bold">Foto Actual</label>
+                                       
+                                            <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+                                            
+                                        </div>
+                                    </div>
+                            </div>
+                           
+                        <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)"></app-foto-profesional>
+                    </plex-tab>
+                    
+                    <!-- Firmas -->
+                    <plex-tab label="Firmas">
+                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)"></app-firmas-profesional>
+                    </plex-tab>
+
+                    <!-- Notas -->
+                    <plex-tab label="Notas">
+                        <app-notas-profesional [profesional]="profesional" (onSaved)="guardarNotas($event)"></app-notas-profesional>
+                    </plex-tab>
+                </plex-tabs>
+                </div>
+
+
+            </plex-box>
+        </div>
+        <div class="col">
+            
+            <app-formacion-grado-detalle *ngIf="(indexFormacionGradoSelected !== undefined) && (indexFormacionPosgradoSelected === undefined)" 
+                [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" 
+                [profesional]="profesional" 
+                (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
+
+            <app-formacion-posgrado-detalle *ngIf="(indexFormacionPosgradoSelected !== undefined) && (indexFormacionGradoSelected === undefined)" 
+                [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
+            
+            <!--<plex-box>
+                <div class="row">
+                    <div class="col-12">
+                        Se requiere la aprobación par que se le asigne un número de matrícula.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Designar" type="danger" (click)="aprobarProfesional()" class="pull-right"></plex-button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        Imprmir un certificado de ética.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Imprimir" type="primary" [disabled]="true" class="pull-right"></plex-button>                    
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        Anular matrícula.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Anular" type="danger" (click)="anularMatricula()" class="pull-right"></plex-button>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        Generar Credencial
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <plex-button label="Generar" type="primary" (click)="generarCredencial()" class="pull-right" [disabled]="!profesional.foto || !profesional.formacionGrado.matriculaNumero || !(profesional.firmas && profesional.firmas.length > 0)"></plex-button>
+                    </div>
+                </div>
+            </plex-box>-->
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="row">
+        <div class="col-8">
+            <plex-box >
+                <plex-button type="danger" label="Ir a agenda" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
+            </plex-box>
+        </div>
+    </div>
+</footer>
+       
+
+
+                    

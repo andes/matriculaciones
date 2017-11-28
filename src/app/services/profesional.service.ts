@@ -15,7 +15,6 @@ export class ProfesionalService extends BaseService {
     }
 
     getProfesional(params: any): Observable<any> {
-        debugger;
         return this.server.get(this.profesionalesURL, { params: params, showError: true });
     }
     getProfesionalFoto(id: string = null): Observable<any> {

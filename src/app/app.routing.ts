@@ -33,7 +33,6 @@ import { FotoGeneralComponent } from './components/profesionales/foto-general.co
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'homeProfesionales', component: HomeProfesionalesComponent },
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'requisitosGenerales', component: RequisitosGeneralesComponent },
     { path: 'requisitosMatriculaUniversitaria', component: RequisitosMatriculaUniversitariaComponent },
     { path: 'requisitosMatriculaTecnicaAuxiliar', component: RequisitosMatriculaTecnicaAuxiliarComponent },
@@ -46,7 +45,8 @@ const appRoutes: Routes = [
     { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },
     { path: 'numeraciones', component: NumeracionMatriculasComponent },
     { path: 'nuevoTurno', component: SolicitarTurnoComponent },
-    { path: 'listarProfesionales', component: ListarProfesionalesComponent }
+    { path: 'listarProfesionales', component: ListarProfesionalesComponent },
+    { path: '**', redirectTo: 'homeProfesionales' }
 ];
 
 export const appRoutingProviders: any[] = [];

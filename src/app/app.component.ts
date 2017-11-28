@@ -1,11 +1,20 @@
-import { Component, OnInit } from '@angular/core';
-import { Plex } from '@andes/plex';
-import { environment } from './../environments/environment';
-// import { SidebarItem } from '@andes/plex/src/lib/app/sidebar-item.class';
-// import { MenuItem } from '@andes/plex/src/lib/app/menu-item.class';
-import { DropdownItem } from '@andes/plex';
-import { Server } from '@andes/shared';
-import { Auth } from '@andes/auth';
+import {
+  environment
+} from './../environments/environment';
+import {
+  Component,
+  OnInit,
+  ModuleWithProviders
+} from '@angular/core';
+import {
+  Plex
+} from '@andes/plex';
+import {
+  Server
+} from '@andes/shared';
+import {
+  Auth
+} from '@andes/auth';
 
 
 @Component({
@@ -13,71 +22,84 @@ import { Auth } from '@andes/auth';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
 
-    constructor(public plex: Plex, public _server: Server, public auth: Auth) {
-        _server.setBaseURL(environment.API);
-         // Inicializa el menu
-         this.checkPermissions();
+  private initStatusCheck() {
+    if (environment.APIStatusCheck) {
+      setTimeout(() => {
+        this.server.get('/core/status', {
+            params: null,
+            showError: false,
+            showLoader: false
+          })
+          .finally(() => this.initStatusCheck())
+          .subscribe(
+            (data) => this.plex.updateAppStatus(data),
+            (err) => this.plex.updateAppStatus({
+              API: 'Error'
+            })
+          );
+      }, 2000);
+    } else {
+      this.plex.updateAppStatus({
+        API: 'OK'
+      });
     }
+  }
 
-    private menuList = [];
+  private menuList = [];
 
-    public checkPermissions(): any {
-        const accessList = [];
-        this.menuList = [];
-
-        if (this.auth.loggedIn()) {
-            this.auth.organizaciones().subscribe(data => {
-                if (data.length > 1) {
-                    this.menuList = [{ label: 'Seleccionar organización', icon: 'home', route: '/selectOrganizacion' }, ...this.menuList];
-                    this.plex.updateMenu(this.menuList);
-                }
-            });
-        }
-        // Cargo el array de permisos
-        if (this.auth.getPermissions('turnos:planificarAgenda:?').length > 0) {
-            accessList.push({ label: 'CITAS: Gestor de Agendas y Turnos', icon: 'calendar', route: '/citas/gestor_agendas' });
-        }
-        if (this.auth.getPermissions('turnos:darTurnos:?').length > 0) {
-            accessList.push({ label: 'CITAS: Punto de Inicio', icon: 'calendar', route: '/puntoInicioTurnos' });
-        }
-        if (this.auth.getPermissions('mpi:?').length > 0) {
-            accessList.push({ label: 'MPI: Indice Maestro de Pacientes', icon: 'account-multiple-outline', route: '/mpi' });
-        }
-
-        if (this.auth.getPermissions('rup:?').length > 0) {
-            accessList.push({ label: 'RUP: Registro Universal de Prestaciones', icon: 'contacts', route: '/rup' });
-        }
-
-        this.menuList.push({ label: 'Página principal', icon: 'home', route: '/home' });
-
-        accessList.forEach((permiso) => {
+  public checkPermissions(): any {
+    let accessList = [];
+    this.menuList = [];
+    if (this.auth.loggedIn()) {
+          accessList.push({
+            label: 'Configuración de agendas',
+            icon: 'calendar',
+            route: '/turnos'
+          });
+          accessList.push({
+            label: 'Gestión de profesionales',
+            icon: 'account-multiple-outline',
+            route: '/listarProfesionales'
+          });
+          accessList.push({
+            divider: true
+          });
+          accessList.push({
+            label: 'Cerrar Sesión',
+            icon: 'logout',
+            route: '/home'
+          });
+          accessList.forEach((permiso) => {
             this.menuList.push(permiso);
-        });
-        this.menuList.push({ divider: true });
-        this.menuList.push({ label: 'Cerrar Sesión', icon: 'logout', route: '/login' });
-
-        // Actualizamos la lista de menú
-        this.plex.updateMenu(this.menuList);
-        return accessList;
+          });
+    } else {
+      // Página pública
+      this.menuList.push({
+        label: 'Acceso fiscalización',
+        icon: 'lock',
+        route: '/home'
+      });
     }
 
-    ngOnInit() {
-        // Cargo el listado de componentes
-        this.loadSideBar();
-    }
+    // Actualizamos la lista de menú
+    this.plex.updateMenu(this.menuList);
+  }
 
-    loadSideBar() {
-        const menu: DropdownItem[] = [
-            { label: 'Inicio', icon: 'home', route: 'home/'},
-            { label: 'Agenda', icon: 'calendar', route: 'agenda/'},
-            { label: 'Requisitos generales', icon: 'calendar', route: 'requisitosGenerales/'},
-            { label: 'Turnos', icon: 'book', route: 'turnos/'},
-            { label: 'Listado profesionales', icon: 'book', route: 'listarProfesionales/'}
-        ];
+  constructor(public plex: Plex, public server: Server, public auth: Auth) {
 
-        this.plex.initView('Matriculaciones', menu); // .initStaticItems(menu);//.initView('Matriculaciones', menu);
-    }
+    server.setBaseURL(environment.API);
+
+    // Inicializa el menu
+    this.checkPermissions();
+
+    // Inicializa la vista
+    this.plex.updateTitle('ANDES | Matriculaciones');
+
+    // Inicializa el chequeo de conectividad
+    this.initStatusCheck();
+  }
+
 
 }

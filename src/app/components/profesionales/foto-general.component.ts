@@ -51,8 +51,8 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
 
         this.foto = environment.API + this.url + this.profesional.id;
 
-    
-    if(this.img64 !== undefined &&  this.img64 !== null){
+
+    if (this.img64 !== undefined &&  this.img64 !== null) {
         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.img64);
         }
    }

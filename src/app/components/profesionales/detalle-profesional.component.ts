@@ -161,14 +161,11 @@ export class DetalleProfesionalComponent implements OnInit {
             .switchMap((params: Params)  =>
                 this._profesionalService.getProfesional({documento: params['documento']})
             ).subscribe(
-                (profesional:  any) =>{
-                    console.log(profesional.length)
+                (profesional:  any) => {
                     // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
                     if (profesional.length === 0) {
-                        console.log("no tiene")
                         this.flag = false;
-                    }else{
-                        console.log('tiene')
+                    }else {
                         this.profesional = profesional[0];
                         this.flag = true;
                     }
@@ -180,7 +177,7 @@ export class DetalleProfesionalComponent implements OnInit {
                         ).subscribe(
                             (profesionalTemporal: any) => {
                                 this.profesional = profesionalTemporal;
-                                console.log(this.profesional)}
+                            }
                         );
                     }
 
@@ -191,13 +188,6 @@ export class DetalleProfesionalComponent implements OnInit {
             );
     }
 
-    updateProfesional2(profesional: IProfesional) {
-        this._profesionalService.saveProfesional(profesional)
-            .subscribe(prof => {
-                this.profesional = prof;
-            });
-        // this.profesional = profesional;
-    }
 
     updateProfesional(callbackData?: any) {
          this._profesionalService.putProfesional(this.profesional)
@@ -216,7 +206,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'img': img,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesionalFoto(imagenPro).subscribe(resp => {
+        this._profesionalService.saveProfesional({imagen: imagenPro}).subscribe(resp => {
 
         });
    }
@@ -226,7 +216,7 @@ export class DetalleProfesionalComponent implements OnInit {
         'firmaP': firma,
         'idProfesional': this.profesional.id
     };
-    this._profesionalService.saveProfesionalFirma(firmaPro).subscribe(resp => {
+    this._profesionalService.saveProfesional({firma: firmaPro}).subscribe(resp => {
 
     });
    }

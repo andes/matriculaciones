@@ -69,7 +69,7 @@ export function getEstadoCivil() {
 export function getObjsEstadoCivil() {
   let arrEstadoC = Object.keys(EstadoCivil);
   arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
-  let salida = arrEstadoC.map(elem => {
+  const salida = arrEstadoC.map(elem => {
       return {
           'id': elem,
           'nombre': titleCase(elem)
@@ -94,7 +94,7 @@ export function getObjDias() {
 export function getObjSexos() {
   let arrSexo = Object.keys(Sexo);
   arrSexo = arrSexo.slice(arrSexo.length / 2);
-  let salida = arrSexo.map(elem => {
+  const salida = arrSexo.map(elem => {
       return {
           'id': elem,
           'nombre': titleCase(elem)

@@ -28,6 +28,10 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL, profesionalModel);
     }
 
+    // saveProfesional(profesionalModel: any) {
+    //     return this.server.post(this.profesionalesURL, profesionalModel);
+    // }
+
     saveProfesionalFoto(foto: any) {
         return this.server.post(this.profesionalesURL + 'foto' , {foto});
     }
@@ -52,8 +56,8 @@ export class ProfesionalService extends BaseService {
     }
 
     putProfesional(profesionalModel): Observable<any> {
-
-        return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+        return this.server.put(this.profesionalesURL + 'actualizar', profesionalModel);
+        // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
     }
 
 

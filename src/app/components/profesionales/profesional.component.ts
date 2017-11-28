@@ -216,7 +216,7 @@ export class ProfesionalComponent implements OnInit {
       });
       // this.onProfesionalCompleto.emit(this.profesional);
 
-      this._profesionalService.saveProfesional(this.profesional)
+      this._profesionalService.saveProfesional({profesional : this.profesional})
         .subscribe(nuevoProfesional => {
           if (nuevoProfesional === null) {
             this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');

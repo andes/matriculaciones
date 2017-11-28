@@ -275,7 +275,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     private getDatesDisabled(countTurnosXDia: any[]) {
 
         let res = null;
-        if(this.agendaConfig.fechasExcluidas !== null){
+        if (this.agendaConfig.fechasExcluidas !== null) {
         // Fechas excluidas en la configuración de la agenda.
         const fechasExcluidas = this.agendaConfig.fechasExcluidas.map((item) => {
             return moment(item).format(this.format);

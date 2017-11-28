@@ -47,6 +47,7 @@ export class DetalleProfesionalComponent implements OnInit {
     public mostrar = true;
     public mostrarGrado = true;
     public img64 = null;
+    public vieneDeDetalle = null;
     public flag = null;
     public confirmar = true;
 
@@ -155,14 +156,16 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     ngOnInit() {
-
+        this.vieneDeDetalle = true;
         this.route.params
             .switchMap((params: Params)  =>
-                this._profesionalService.getProfesional(params['documento'])
+                this._profesionalService.getProfesional({documento: params['documento']})
             ).subscribe(
                 (profesional:  any) =>{
+                    console.log(profesional.length)
                     // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
-                    if (!profesional) {
+                    if (profesional.length === 0) {
+                        console.log("no tiene")
                         this.flag = false;
                     }else{
                         console.log('tiene')
@@ -204,6 +207,7 @@ export class DetalleProfesionalComponent implements OnInit {
                     callbackData.callback(callbackData.param);
                 }
             });
+
     }
 
     updateFoto(img: any) {

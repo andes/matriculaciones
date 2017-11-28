@@ -53,6 +53,11 @@ export class AppComponent {
     let accessList = [];
     this.menuList = [];
     if (this.auth.loggedIn()) {
+        this.auth.organizaciones().subscribe(data => {
+            if (data.length > 1) {
+                this.menuList = [{ label: 'Seleccionar organización', icon: 'home', route: '/selectOrganizacion' }, ...this.menuList];
+                this.plex.updateMenu(this.menuList);
+            }
           accessList.push({
             label: 'Configuración de agendas',
             icon: 'calendar',
@@ -74,6 +79,7 @@ export class AppComponent {
           accessList.forEach((permiso) => {
             this.menuList.push(permiso);
           });
+        });
     } else {
       // Página pública
       this.menuList.push({

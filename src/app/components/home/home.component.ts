@@ -55,11 +55,10 @@ export class HomeComponent implements OnInit {
       this.loading = true;
       this.auth.login(this.usuario.toString(), this.password)
         .subscribe((data) => {
-          this.plex.updateUserInfo({
-            usuario: this.auth.usuario
-          });
-          this.resync();
-          this.router.navigate(['turnos']);
+          this.plex.updateUserInfo({usuario: this.auth.usuario});
+          this.router.navigate(['selectOrganizacion']);
+          // this.resync();
+          // this.router.navigate(['turnos']);
 
         }, (err) => {
           this.plex.alert('Usuario o contraseña incorrectos');
@@ -68,6 +67,7 @@ export class HomeComponent implements OnInit {
         });
     }
   }
+
 
   resync() {
     this.appComponent.checkPermissions();

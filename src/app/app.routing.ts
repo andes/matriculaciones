@@ -27,6 +27,7 @@ import { DetalleProfesionalComponent } from './components/profesionales/detalle-
 import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { FotoGeneralComponent } from './components/profesionales/foto-general.component';
+import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 
 
 
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
     { path: 'numeraciones', component: NumeracionMatriculasComponent },
     { path: 'nuevoTurno', component: SolicitarTurnoComponent },
     { path: 'listarProfesionales', component: ListarProfesionalesComponent },
+    { path: 'selectOrganizacion', component: SelectOrganizacionComponent },
     { path: '**', redirectTo: 'homeProfesionales' }
 ];
 

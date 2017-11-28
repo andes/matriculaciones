@@ -57,12 +57,12 @@ export class FirmasProfesionalComponent implements OnInit {
     _handleReaderLoaded(readerEvt) {
         this.binaryString = readerEvt.target.result;
         this.base64textString = btoa(this.binaryString);
+        this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
       }
     ngOnInit() {
         this.urlFirma = environment.API + '/core/tm/profesionales/firma/' + this.profesional.id;
         // this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
     }
-
 
     upload() {
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);

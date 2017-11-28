@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostBinding } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
@@ -14,6 +14,7 @@ export class RequisitosGeneralesComponent {}
 })
 
 export class RequisitosMatriculaUniversitariaComponent {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public terminosLeidos = false;
 
     constructor(private router: Router) {}

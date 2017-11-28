@@ -27,13 +27,13 @@ import { DetalleProfesionalComponent } from './components/profesionales/detalle-
 import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { FotoGeneralComponent } from './components/profesionales/foto-general.component';
+import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 
 
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'homeProfesionales', component: HomeProfesionalesComponent },
-    { path: '', redirectTo: 'home', pathMatch: 'full' },
     { path: 'requisitosGenerales', component: RequisitosGeneralesComponent },
     { path: 'requisitosMatriculaUniversitaria', component: RequisitosMatriculaUniversitariaComponent },
     { path: 'requisitosMatriculaTecnicaAuxiliar', component: RequisitosMatriculaTecnicaAuxiliarComponent },
@@ -42,11 +42,13 @@ const appRoutes: Routes = [
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
     { path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent },
     { path: 'turnos', component: TurnosComponent },
-    { path: 'profesional/:id', component: DetalleProfesionalComponent },
+    { path: 'profesional/:documento', component: DetalleProfesionalComponent },
     { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },
     { path: 'numeraciones', component: NumeracionMatriculasComponent },
     { path: 'nuevoTurno', component: SolicitarTurnoComponent },
-    { path: 'listarProfesionales', component: ListarProfesionalesComponent }
+    { path: 'listarProfesionales', component: ListarProfesionalesComponent },
+    { path: 'selectOrganizacion', component: SelectOrganizacionComponent },
+    { path: '**', redirectTo: 'homeProfesionales' }
 ];
 
 export const appRoutingProviders: any[] = [];

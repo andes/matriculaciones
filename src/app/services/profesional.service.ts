@@ -15,7 +15,6 @@ export class ProfesionalService extends BaseService {
     }
 
     getProfesional(params: any): Observable<any> {
-        debugger;
         return this.server.get(this.profesionalesURL, { params: params, showError: true });
     }
     getProfesionalFoto(id: string = null): Observable<any> {
@@ -29,6 +28,10 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL, profesionalModel);
     }
 
+    // saveProfesional(profesionalModel: any) {
+    //     return this.server.post(this.profesionalesURL, profesionalModel);
+    // }
+
     saveProfesionalFoto(foto: any) {
         return this.server.post(this.profesionalesURL + 'foto' , {foto});
     }
@@ -37,9 +40,31 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL + 'firma' , {firma});
     }
 
+    // getProfesionalFoto(id: string = null): Observable<any> {
+    //     return this.server.get(this.profesionalesURL + 'foto/' , { params: id, showError: true });
+    // }
+
+    // getProfesional(params: any): Observable<any> {
+    //     return this.server.get(this.profesionalesURL, { params: params, showError: true });
+    // }
+
+    getUnProfesional(id: string = null): Observable<any> {
+        return this.getById(this.profesionalesURL, id);
+    }
+    getUnProfesionalDni(dni: any): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'traePDni/' + dni);
+    }
+
+    putProfesional(profesionalModel): Observable<any> {
+        return this.server.put(this.profesionalesURL + 'actualizar', profesionalModel);
+        // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+    }
+
+
     getCredencial(idProf: string): any {
         return this.server.get(this.profesionalesURL + 'matricula/' + idProf);
     }
+
 }
 
 

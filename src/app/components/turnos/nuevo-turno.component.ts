@@ -126,11 +126,11 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
         this.horariosDisponibles = [];
         let res = null;
         let entradaU = false;
-        let minutos = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('mm'));
-        const horaInicio = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('HH'));
-        const horaFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('HH'));
-        const horaActual = parseInt(new moment().format('HH'));
-        const minutosActual = parseInt(new moment().format('mm'));
+        let minutos = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('mm'), 10);
+        const horaInicio = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('HH'), 10);
+        const horaFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('HH'), 10);
+        const horaActual = parseInt(new moment().format('HH'), 10);
+        const minutosActual = parseInt(new moment().format('mm'), 10);
         const fechaActual = new Date();
         let n = horaInicio;
         let i = horaInicio;
@@ -273,6 +273,9 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
     }
 
     private getDatesDisabled(countTurnosXDia: any[]) {
+
+        let res = null;
+        if (this.agendaConfig.fechasExcluidas !== null) {
         // Fechas excluidas en la configuración de la agenda.
         const fechasExcluidas = this.agendaConfig.fechasExcluidas.map((item) => {
             return moment(item).format(this.format);
@@ -283,7 +286,11 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
             return dia.count === this.horariosDisponibles.length;
         }).map((dia) => { return dia._id.fechaStr; });
 
-        return fechasExcluidas.concat(diasCompletos);
+        res =  fechasExcluidas.concat(diasCompletos);
+    }
+
+    return res;
+
     }
 
     private getDaysOfWeekDisabled() {

@@ -24,7 +24,7 @@ export class PDFUtils {
         doc.text(/*'PINO'*/profesional.apellido.toUpperCase(), 43, 18);
         doc.text(/*'JORGE PABLO'*/profesional.nombre.toUpperCase(), 43, 23);
         doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
-        doc.text('DNI ' + profesional.documentoNumero, 43, 28);
+        doc.text('DNI ' + profesional.documento, 43, 28);
         doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
         doc.text(/*'15/07/2010'*/ this.getDateStr(ultimaRenovacion.inicio), 43, 40);
         doc.text(/*'29/01/2015'*/ this.getDateStr(ultimaRenovacion.fin), 66, 40);
@@ -131,7 +131,7 @@ export class PDFUtils {
         doc.setFont('courier');
         doc.text(65, 65, turno.profesional.apellido);
         doc.text(65, 71, turno.profesional.nombre);
-        doc.text(65, 77, 'DNI ' + turno.profesional.documentoNumero);
+        doc.text(65, 77, 'DNI ' + turno.profesional.documento);
         doc.text(65, 83, this.getSimpleFormatedDate(turno.profesional.fechaNacimiento));
         doc.text(65, 89, turno.profesional.lugarNacimiento);
          doc.text(65, 95, turno.profesional.sexo);

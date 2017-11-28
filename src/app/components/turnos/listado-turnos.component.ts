@@ -34,7 +34,7 @@ export class ListadoTurnosComponent implements OnInit {
             nombre: '',
             apellido: '',
             fecha: null,
-            documentoNumero: ''
+            documento: ''
         });
 
         this.buscar();

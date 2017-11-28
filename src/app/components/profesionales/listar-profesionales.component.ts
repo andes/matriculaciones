@@ -44,6 +44,7 @@ export class ListarProfesionalesComponent implements OnInit {
   private showListado: Boolean = true;
   public dni: string = null;
   public apellido: string = null;
+  public vieneDeListado = null;
   constructor(
     private _profesionalService: ProfesionalService,
     private route: ActivatedRoute,
@@ -51,10 +52,11 @@ export class ListarProfesionalesComponent implements OnInit {
 
   ngOnInit() {
     this.buscar();
+    this.vieneDeListado = true;
   }
 
   showProfesional(profesional: any) {
-    this.router.navigate(['/profesional', profesional.id]);
+    this.router.navigate(['/profesional', profesional.documento]);
   }
 
   seleccionar(profesional: any) {

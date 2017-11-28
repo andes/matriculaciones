@@ -32,7 +32,7 @@ export class SelectOrganizacionComponent implements OnInit {
         this.auth.setOrganizacion(unaOrg).subscribe((data) => {
             this.plex.updateUserInfo({ usuario: this.auth.usuario });
             this.appComponent.checkPermissions();
-            this.router.navigate(['inicio']);
+            this.router.navigate(['turnos']);
         }, (err) => {
             this.plex.info('danger', 'Error al seleccionar organización');
         });

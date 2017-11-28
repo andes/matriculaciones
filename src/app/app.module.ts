@@ -66,6 +66,7 @@ import { HeaderProfesionalComponent } from './components/profesionales/header-pr
 import { FormacionPosgradoComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado.component';
 import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
+import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 
 
 
@@ -116,6 +117,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     EdadPipe,
     ProfesionalPipe,
     FechaPipe,
+    SelectOrganizacionComponent,
     COMPS_PROFESIONAL
   ],
   imports: [

@@ -33,6 +33,7 @@ import {
 import {
   ProfesionalService
 } from './../../services/profesional.service';
+import { Auth } from '@andes/auth';
 
 @Component({
   selector: 'app-listar-profesionales',
@@ -48,9 +49,11 @@ export class ListarProfesionalesComponent implements OnInit {
   constructor(
     private _profesionalService: ProfesionalService,
     private route: ActivatedRoute,
-    private router: Router) {}
+    private router: Router,
+    public auth: Auth) {}
 
   ngOnInit() {
+    console.log(this.auth)
     this.buscar();
     this.vieneDeListado = true;
   }

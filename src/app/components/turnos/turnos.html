@@ -22,6 +22,7 @@
                                 </div>
                             </div>
                         </div>
+                        <br>
                     </header>
 
                     <!-- LIST -->
@@ -67,7 +68,7 @@
                                     <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
                                     <label>Tipo de turno</label>
                                     <h6 class="text-light">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</h6>
-                                    <plex-button type="success" label="Cambiar Estado" class="float-right" (click)="cambiarEstado()" *ngIf="!turnoElegido.sePresento"></plex-button>
+                                    <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado()" *ngIf="!turnoElegido.sePresento"></plex-button>
                                 </div>
                             </div>
                             <hr>

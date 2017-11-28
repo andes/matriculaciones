@@ -200,6 +200,10 @@ export class DetalleProfesionalComponent implements OnInit {
 
     }
 
+    previewImg(img: any){
+        this.img64 = img;
+    }
+
     updateFoto(img: any) {
         this.img64 = img;
         const imagenPro = {

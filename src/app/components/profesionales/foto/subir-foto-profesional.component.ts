@@ -63,7 +63,7 @@ export class SubirFotoProfesionalComponent implements OnInit {
     ngOnInit() {
     }
 
-    
+
     upload() {
         this.uploader.uploadAll();
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);

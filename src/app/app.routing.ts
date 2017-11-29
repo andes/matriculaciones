@@ -11,6 +11,7 @@ import { RoutingGuard } from './app.routings-guard.class';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
+import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
 import { RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent } from './components/requisitos/requisitos.component';
@@ -34,6 +35,7 @@ import { SelectOrganizacionComponent } from './components/home/selectOrganizacio
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
     { path: 'homeProfesionales', component: HomeProfesionalesComponent },
+    { path: 'homeAdministracion', component: HomeAdministracionComponent },
     { path: 'requisitosGenerales', component: RequisitosGeneralesComponent },
     { path: 'requisitosMatriculaUniversitaria', component: RequisitosMatriculaUniversitariaComponent },
     { path: 'requisitosMatriculaTecnicaAuxiliar', component: RequisitosMatriculaTecnicaAuxiliarComponent },

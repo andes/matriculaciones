@@ -15,6 +15,7 @@ import {
 import {
   Auth
 } from '@andes/auth';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -58,14 +59,24 @@ export class AppComponent {
                 this.menuList = [{ label: 'Seleccionar organización', icon: 'home', route: '/selectOrganizacion' }, ...this.menuList];
                 this.plex.updateMenu(this.menuList);
             }
+            accessList.push({
+              label: 'Home',
+              icon: 'mdi mdi-home',
+              route: '/homeAdministracion'
+            });
           accessList.push({
-            label: 'Configuración de agendas',
-            icon: 'calendar',
+            label: 'Agenda',
+            icon: 'mdi mdi-pencil-box-outline',
             route: '/turnos'
           });
           accessList.push({
-            label: 'Gestión de profesionales',
-            icon: 'account-multiple-outline',
+            label: 'Turnos',
+            icon: 'mdi mdi-calendar',
+            route: '/turnos'
+          });
+          accessList.push({
+            label: 'Profesionales',
+            icon: 'mdi mdi-account-multiple',
             route: '/listarProfesionales'
           });
           accessList.push({
@@ -87,13 +98,18 @@ export class AppComponent {
         icon: 'lock',
         route: '/home'
       });
+
+      // if (this.router.url !== '/home' ) {
+      //   this.redirect('/homeProfesionales');
+      // }
+      // this.redirect('/homeProfesionales');
     }
 
     // Actualizamos la lista de menú
     this.plex.updateMenu(this.menuList);
   }
 
-  constructor(public plex: Plex, public server: Server, public auth: Auth) {
+  constructor(public plex: Plex, public server: Server, public auth: Auth, private router: Router) {
 
     server.setBaseURL(environment.API);
 
@@ -107,5 +123,8 @@ export class AppComponent {
     this.initStatusCheck();
   }
 
-
+  redirect(pagina: string) {
+    this.router.navigate(['./' + pagina]);
+    return false;
+  }
 }

@@ -74,13 +74,13 @@
 
             </plex-box>
         </div>
-        <div class="col">
+        <div class="col-4" *ngIf="(indexFormacionGradoSelected !== undefined) && (indexFormacionPosgradoSelected === undefined)">
             
-            <app-formacion-grado-detalle *ngIf="(indexFormacionGradoSelected !== undefined) && (indexFormacionPosgradoSelected === undefined)" 
+            <app-formacion-grado-detalle  
                 [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" 
                 [profesional]="profesional" 
                 (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
-
+         </div>   
             <app-formacion-posgrado-detalle *ngIf="(indexFormacionPosgradoSelected !== undefined) && (indexFormacionGradoSelected === undefined)" 
                 [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
             
@@ -129,7 +129,7 @@
                     </div>
                 </div>
             </plex-box>-->
-        </div>
+        
     </div>
 </section>
 <section  *ngIf="flag == false">
@@ -137,13 +137,8 @@
 </section>
 
 <footer>
-    <div class="row">
-        <div class="col-8">
-            <plex-box >
-                <plex-button type="danger" label="Ir a agenda" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
-            </plex-box>
-        </div>
-    </div>
+
+<plex-button type="danger" label="Ir a agenda" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
 </footer>
        
 

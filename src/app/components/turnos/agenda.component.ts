@@ -8,4 +8,7 @@ import { ConfiguracionAgendaComponent } from './configuracion-agenda.component';
     selector: 'app-agenda',
     templateUrl: 'agenda.html'
 })
-export class AgendaComponent { }
+export class AgendaComponent {
+
+
+ }

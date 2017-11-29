@@ -4,7 +4,8 @@ import {
   OnInit,
   Output,
   Input,
-  EventEmitter
+  EventEmitter,
+  HostBinding
 } from '@angular/core';
 import {
   Plex
@@ -40,6 +41,7 @@ import { Auth } from '@andes/auth';
   templateUrl: 'listar-profesionales.html'
 })
 export class ListarProfesionalesComponent implements OnInit {
+  @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
   private profesionales: IProfesional[] = [];
   private profesionalElegido: IProfesional;
   private showListado: Boolean = true;
@@ -53,7 +55,6 @@ export class ListarProfesionalesComponent implements OnInit {
     public auth: Auth) {}
 
   ngOnInit() {
-    console.log(this.auth)
     this.buscar();
     this.vieneDeListado = true;
   }
@@ -74,5 +75,8 @@ export class ListarProfesionalesComponent implements OnInit {
       .subscribe((data) => {
         this.profesionales = data;
       });
+  }
+  cerrarResumenProfesional() {
+    this.profesionalElegido = null;
   }
 }

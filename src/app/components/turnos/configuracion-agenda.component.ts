@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Plex } from '@andes/plex';
 import { Observable } from 'rxjs/Rx';
@@ -18,6 +18,7 @@ import * as enumerados from './../../utils/enumerados';
 })
 
 export class ConfiguracionAgendaComponent implements OnInit {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
         _id: null,
         diasHabilitados: null,

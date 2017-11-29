@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Plex } from '@andes/plex/src/lib/core/service';
@@ -40,6 +40,7 @@ const jsPDF = require('jspdf');
     styles: ['.margenFoto { padding-left: 3%; padding-bottom: 1%; }']
 })
 export class DetalleProfesionalComponent implements OnInit {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public formSancion: FormGroup;
     public loading: Boolean = false;
     public indexFormacionGradoSelected: any;
@@ -200,7 +201,7 @@ export class DetalleProfesionalComponent implements OnInit {
 
     }
 
-    previewImg(img: any){
+    previewImg(img: any) {
         this.img64 = img;
     }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
 // import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
@@ -18,9 +18,10 @@ const jsPDF = require('jspdf');
 @Component({
     selector: 'app-turnos',
     templateUrl: 'turnos.html',
-    styles: ['.list-group-item{cursor:pointer}'],
+    styleUrls: ['turnos.scss']
 })
 export class TurnosComponent implements OnInit {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     private formBuscarTurno: FormGroup;
     private turnos: any[] = [];
     private turnoElegido: any;
@@ -88,5 +89,9 @@ export class TurnosComponent implements OnInit {
     generarComprobante(turno: any) {
         const pdf = this._pdfUtils.comprobanteTurno(turno);
         pdf.save('Turno ' + turno.profesional.nombre + ' ' + turno.profesional.apellido + '.pdf');
+    }
+
+    cerrarDetalleTurno() {
+        this.turnoElegido = null;
     }
 }

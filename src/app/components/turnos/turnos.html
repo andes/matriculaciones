@@ -2,9 +2,10 @@
     <header>Header</header>-->
     <section>
         <div class="row">
-            <div class="col-8">
+            <div class="col">
                 <plex-box>
                     <header>
+                    
                         <!-- SEARCH -->
                         <div [formGroup]="formBuscarTurno">
                             <div class="row">
@@ -18,7 +19,7 @@
                                     <plex-int label="Documento" formControlName="documento" (change)="buscar()"></plex-int>
                                 </div>
                                 <div class="col-md-3">
-                                    <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
+                                    <plex-datetime type="date" label="Fecha desde" formControlName="fecha" (change)="buscar()"></plex-datetime>
                                 </div>
                             </div>
                         </div>
@@ -28,8 +29,12 @@
                     <!-- LIST -->
                     <div class="row">
                         <div class="col-12">
+                                <div *ngIf="turnos.length === 0" class="alert alert-danger">
+                                        <i class="mdi mdi-account-alert"></i> No se encontró ningún turno
+                                      </div>
                             <ul class="list-group">
                                 <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)" [ngClass]="{'active': isSelected(turno)}">
+ 
                                     <div class="row" style="width: 100%">
                                         <div class="col-11">
                                             <h6 class="box-title-elemento">
@@ -50,19 +55,21 @@
                     </div>
 
 
-        </plex-box>
+                </plex-box>
             </div>
 
-            <div class="col" >
-                <plex-box type="invert" *ngIf="turnoElegido">
+            <div class="col-4" *ngIf="turnoElegido" >
+                <plex-box>
                     <header>
+                            <button  class="float-right btn btn-danger" (click)="cerrarDetalleTurno()"><i class="mdi mdi-window-close"></i></button>
                         <legend>Detalle del Turno</legend>
+                        
                     </header>
 
                     <div class="row">
                         <div class="col-sm-12">
 
-                            <div class="row">
+                            <div class="row" >
                                 <div class="col-md-12">
                                     <label>Fecha y hora</label>
                                     <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
@@ -76,7 +83,7 @@
                                 <div class="col-md-12 ">
                                         <label>Apellido y nombre</label>
                                     <h5><strong>{{turnoElegido.profesional.apellido + ', '}} </strong>{{turnoElegido.profesional.nombre}}</h5>
-                                    <h6 class="text-light">{{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documento }}</h6>
+                                    <h6 class="text-light">{{turnoElegido.profesional | edad}} | {{'DNI ' + turnoElegido.profesional.documento }}</h6>
                                     <!--<div class="nombre-profesional">
                                         <span style="font-weight: bold">{{turnoElegido.profesional.apellido + ', '}}</span>{{turnoElegido.profesional.nombre}}
                                     </div>
@@ -91,7 +98,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-md-12">
-                                    <plex-button type="primary" label="Ver Profesional" class="float-right" [disabled]="!turnoElegido.sePresento" (click)="showProfesional(turnoElegido)"></plex-button>
+                                    <plex-button type="primary" label="Ver Profesional" class="float-right" [disabled]="turnoElegido.sePresento === false" (click)="showProfesional(turnoElegido)"></plex-button>
                                 </div>
                             </div>
                             <hr>
@@ -109,4 +116,7 @@
             </div>
         </div>
     </section>
+    <footer>
+            <plex-button label="Volver"  type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
+    </footer>
 <!--</div>-->

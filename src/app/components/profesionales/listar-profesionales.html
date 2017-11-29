@@ -67,13 +67,14 @@
     <div class="col-4" *ngIf='profesionalElegido'>
       <plex-box>
         <header>
-          <div class="page-title">Vista resumen profesional</div>
+            <button  class="float-right btn btn-danger" (click)="cerrarResumenProfesional()"><i class="mdi mdi-window-close"></i></button>
+          <div class="page-title">Resumen profesional</div>
         </header>
         <div>
           <div class="row">
             <div class="col-md-12">
               <div class="row mb-1">
-                <div class="col">
+                <div class="col text-center">
                   <app-foto-general [profesional]="profesionalElegido" [img64]="img64" ></app-foto-general>
                 </div>
               </div>
@@ -114,6 +115,7 @@
         </div>
         <div>
           <h4>
+            <br>
             <span>
               <plex-button label="Editar profesional" icon="pencil" type="primary" (click)="showProfesional(profesionalElegido)"></plex-button>
             </span>
@@ -124,3 +126,6 @@
     </div>
   </div>
 </section>
+<footer>
+    <plex-button label="Volver"  type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
+</footer>

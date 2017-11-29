@@ -67,6 +67,7 @@ import { FormacionPosgradoComponent } from './components/profesionales/formacion
 import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
+import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
 
 
 
@@ -105,6 +106,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     AppComponent,
     HomeComponent,
     HomeProfesionalesComponent,
+    HomeAdministracionComponent,
     ListadoComponent,
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,

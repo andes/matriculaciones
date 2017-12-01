@@ -27,6 +27,7 @@ import {
 import {
     AppSettings
 } from './../../app.settings';
+import { ProfesionalService } from '../../services/profesional.service';
 
 @Component({
     selector: 'app-foto-general',
@@ -39,22 +40,33 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
     public foto = null;
     public url = '/core/tm/profesionales/foto/';
 
-    constructor(public sanitizer: DomSanitizer, private plex: Plex) {
+    constructor(public sanitizer: DomSanitizer, private plex: Plex,
+        private _profesionalService: ProfesionalService) {
     }
 
     ngOnInit() {
         // Ojo aca hay que usar el servicio
-        this.foto = environment.API + this.url + this.profesional.id;
+       this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
+        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
+                });
+       // this.foto = this._profesionalService.getProfesionalFoto( this.profesional.id);
+        // this.foto = environment.API + this.url + this.profesional.id;
     }
 
     ngOnChanges () {
-
-        this.foto = environment.API + this.url + this.profesional.id;
-
-
-    if (this.img64 !== undefined &&  this.img64 !== null) {
-        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.img64);
+        if (this.profesional.id) {
+        this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
+         console.log(resp);
+         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
+         if (this.img64 !== undefined &&  this.img64 !== null) {
+            this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
+            }
+                 });
         }
+
+
+
+
    }
 
 }

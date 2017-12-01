@@ -28,6 +28,7 @@ import {
 } from './../../../app.settings';
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
+import { ProfesionalService } from '../../../services/profesional.service';
 @Component({
     selector: 'app-firmas-profesional',
     templateUrl: 'firmas-profesional.html'
@@ -41,7 +42,7 @@ export class FirmasProfesionalComponent implements OnInit {
     public urlFirma = null;
     private base64textString: String= '';
 
-    constructor(public sanitizer: DomSanitizer, private plex: Plex) {
+    constructor(public sanitizer: DomSanitizer, private plex: Plex, private _profesionalService: ProfesionalService) {
     }
 
 
@@ -60,7 +61,10 @@ export class FirmasProfesionalComponent implements OnInit {
         this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
       }
     ngOnInit() {
-        this.urlFirma = environment.API + '/core/tm/profesionales/firma/' + this.profesional.id;
+        this._profesionalService.getProfesionalFirma({id: this.profesional.id}).subscribe(resp => {
+            this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
+                    });
+        // this.urlFirma = environment.API + '/core/tm/profesionales/firma/' + this.profesional.id;
         // this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
     }
 

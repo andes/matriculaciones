@@ -17,12 +17,12 @@ export class ProfesionalService extends BaseService {
     getProfesional(params: any): Observable<any> {
         return this.server.get(this.profesionalesURL, { params: params, showError: true });
     }
-    getProfesionalFoto(id: string = null): Observable<any> {
-        return this.server.get(this.profesionalesURL + 'foto/' , { params: id, showError: true });
+    getProfesionalFoto(params: any): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'foto/' , {params: params});
     }
-    // getProfesionalFirma(id: string = null): Observable<any> {
-    //     return this.server.get(this.profesionalesURL + 'firma/' , { params: id, showError: true });
-    // }
+    getProfesionalFirma(params: any): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'firma/' , { params: params, showError: true });
+    }
 
     saveProfesional(profesionalModel: any) {
         return this.server.post(this.profesionalesURL, profesionalModel);

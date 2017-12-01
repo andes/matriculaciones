@@ -38,11 +38,11 @@ export class TurnoService extends BaseService {
     }
 
     saveTurnoMatriculacion(turnoModel: any): Observable<any> {
-        return this.post(this.turnosMatriculacionURL + turnoModel.profesional, turnoModel);
+        return this._server.post(this.turnosMatriculacionURL + turnoModel.profesional, turnoModel);
     }
 
     saveTurno(turnoModel): Observable<any> {
-        return this.post(this.turnosURL + 'save/' + turnoModel._id, turnoModel);
+        return this._server.post(this.turnosURL + 'save/' + turnoModel._id, turnoModel);
     }
 
     saveTurnoSolicitados(turnoSolicitado: any) {
@@ -52,44 +52,54 @@ export class TurnoService extends BaseService {
         return this._server.get(this.turnosSolicitados + 'traePDni/' + dni);
     }
     getTurnos(url: string, searchParams: any): Observable<any> {
-        const query = new URLSearchParams();
+        const parametros: any = {
+            anio: null,
+            mes: null,
+            dia: null,
+            offset: null,
+            size: null,
+            nombre: null,
+            apellido: null,
+            fecha: null,
+            documento: null
+        };
 
         if (searchParams.anio) {
-            query.set('anio', searchParams.anio);
+            parametros.anio = searchParams.anio;
         }
 
         if (searchParams.mes) {
-            query.set('mes', searchParams.mes);
+            parametros.mes =  searchParams.mes;
         }
 
         if (searchParams.dia) {
-            query.set('dia', searchParams.dia);
+            parametros.dia = searchParams.dia;
         }
 
         if (searchParams.offset) {
-            query.set('offset', searchParams.offset);
+            parametros.offset = searchParams.offset;
         }
 
         if (searchParams.size) {
-            query.set('size', searchParams.size);
+            parametros.size = searchParams.size ;
         }
 
         if (searchParams.nombre) {
-            query.set('nombre', searchParams.nombre);
+            parametros.nombre = searchParams.nombre;
         }
 
         if (searchParams.apellido) {
-            query.set('apellido', searchParams.apellido);
+            parametros.apellido = searchParams.apellido;
         }
 
         if (searchParams.fecha) {
-            query.set('fecha', searchParams.fecha);
+            parametros.fecha = searchParams.fecha;
         }
 
         if (searchParams.documento) {
-            query.set('documento', searchParams.documento);
+            parametros.documento = searchParams.documento;
         }
 
-        return this.get(url, query);
+        return this._server.get(url, {params : parametros});
     }
 }

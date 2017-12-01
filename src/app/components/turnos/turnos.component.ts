@@ -12,6 +12,7 @@ import { Observable } from 'rxjs/Observable';
 import { TurnoService } from './../../services/turno.service';
 
 import { PDFUtils } from './../../utils/PDFUtils';
+import { Auth } from '@andes/auth';
 
 const jsPDF = require('jspdf');
 
@@ -31,7 +32,8 @@ export class TurnosComponent implements OnInit {
         private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
         private route: ActivatedRoute,
-        private router: Router) { }
+        private router: Router,
+        public auth: Auth) { }
 
     onScroll() {
     }

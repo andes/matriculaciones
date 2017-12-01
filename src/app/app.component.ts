@@ -55,6 +55,7 @@ export class AppComponent {
     this.menuList = [];
     if (this.auth.loggedIn()) {
         this.auth.organizaciones().subscribe(data => {
+
             if (data.length > 1) {
                 this.menuList = [{ label: 'Seleccionar organización', icon: 'home', route: '/selectOrganizacion' }, ...this.menuList];
                 this.plex.updateMenu(this.menuList);
@@ -99,9 +100,9 @@ export class AppComponent {
         route: '/home'
       });
 
-      // if (this.router.url !== '/home' ) {
-      //   this.redirect('/homeProfesionales');
-      // }
+       if (this.router.url !== '/home' ) {
+         this.redirect('/homeProfesionales');
+       }
       // this.redirect('/homeProfesionales');
     }
 

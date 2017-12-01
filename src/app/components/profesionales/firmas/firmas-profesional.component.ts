@@ -64,8 +64,6 @@ export class FirmasProfesionalComponent implements OnInit {
         this._profesionalService.getProfesionalFirma({id: this.profesional.id}).subscribe(resp => {
             this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
                     });
-        // this.urlFirma = environment.API + '/core/tm/profesionales/firma/' + this.profesional.id;
-        // this.firmas = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.profesional.firmas[4].imgArchivo);
     }
 
     upload() {

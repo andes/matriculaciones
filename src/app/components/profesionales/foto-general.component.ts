@@ -45,12 +45,10 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
     }
 
     ngOnInit() {
-        // Ojo aca hay que usar el servicio
        this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
                 });
-       // this.foto = this._profesionalService.getProfesionalFoto( this.profesional.id);
-        // this.foto = environment.API + this.url + this.profesional.id;
+
     }
 
     ngOnChanges () {

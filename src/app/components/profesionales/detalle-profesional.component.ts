@@ -226,24 +226,9 @@ export class DetalleProfesionalComponent implements OnInit {
     });
    }
 
-
-    // guardarFoto(fileName: any) {
-    //     this.profesional.fotoArchivo = fileName;
-    //     this.updateProfesional();
-    // }
-
     guardarFotoGrid(foto: any) {
         this.updateFoto(foto);
     }
-
-    // guardarFirma(oFirma) {
-    //     if (this.profesional.firmas) {
-    //         this.profesional.firmas.push(oFirma);
-    //     } else {
-    //         this.profesional.firmas = [oFirma];
-    //     }
-    //     this.updateProfesional();
-    // }
 
     guardarFirmaGrid(oFirma) {
         this.updateFirma(oFirma);
@@ -279,24 +264,27 @@ export class DetalleProfesionalComponent implements OnInit {
 
     formacionGradoSelected(formacion: any) {
         if (this.mostrarGrado === true) {
-        this.indexFormacionPosgradoSelected = undefined;
         this.indexFormacionGradoSelected = formacion;
         this.mostrarGrado = false;
+        this.mostrar = true;
         } else {
-         this.indexFormacionGradoSelected = undefined;
+         this.indexFormacionGradoSelected = null;
          this.mostrarGrado = true;
+         this.mostrar = true;
      }
     }
 
     formacionPosgradoSelected(posgrado: any) {
 
         if (this.mostrar === true) {
-         this.indexFormacionGradoSelected = undefined;
+
         this.indexFormacionPosgradoSelected = posgrado;
         this.mostrar = false;
+        this.mostrarGrado = true;
         }else {
-            this.indexFormacionPosgradoSelected = undefined;
+            this.indexFormacionPosgradoSelected = null;
             this.mostrar = true;
+            this.mostrarGrado = true;
         }
     }
 }

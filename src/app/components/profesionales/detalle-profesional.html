@@ -74,16 +74,17 @@
 
             </plex-box>
         </div>
-        <div class="col-4" *ngIf="(indexFormacionGradoSelected !== undefined) && (indexFormacionPosgradoSelected === undefined)">
+        <div class="col-4" *ngIf="(!indexFormacionGradoSelected) && !mostrarGrado">
             
             <app-formacion-grado-detalle  
                 [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" 
                 [profesional]="profesional" 
                 (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
          </div>   
-            <app-formacion-posgrado-detalle *ngIf="(indexFormacionPosgradoSelected !== undefined) && (indexFormacionGradoSelected === undefined)" 
+         <div class="col-4" *ngIf="!indexFormacionPosgradoSelected && !mostrar" >
+            <app-formacion-posgrado-detalle  
                 [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
-            
+            </div>
             <!--<plex-box>
                 <div class="row">
                     <div class="col-12">

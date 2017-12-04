@@ -180,6 +180,8 @@ export class ProfesionalComponent implements OnInit {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
+  
+
   }
 
 

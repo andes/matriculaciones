@@ -263,29 +263,36 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     formacionGradoSelected(formacion: any) {
-        if (this.mostrarGrado === true) {
-        this.indexFormacionGradoSelected = formacion;
-        this.mostrarGrado = false;
         this.mostrar = true;
+        this.indexFormacionGradoSelected = formacion;
+        if (this.mostrarGrado === true) {
+        this.mostrarGrado = false;
+
         } else {
-         this.indexFormacionGradoSelected = null;
          this.mostrarGrado = true;
-         this.mostrar = true;
      }
     }
 
     formacionPosgradoSelected(posgrado: any) {
-
-        if (this.mostrar === true) {
-
-        this.indexFormacionPosgradoSelected = posgrado;
-        this.mostrar = false;
         this.mostrarGrado = true;
-        }else {
-            this.indexFormacionPosgradoSelected = null;
+        this.indexFormacionPosgradoSelected = posgrado;
+        if(this.mostrar === true){
+            this.mostrar = false;
+        }else{
             this.mostrar = true;
-            this.mostrarGrado = true;
         }
+
+        // console.log(posgrado)
+        // if (this.mostrar === true) {
+        //     console.log("mostrar")
+        // this.indexFormacionPosgradoSelected = posgrado;
+        // this.mostrar = false;
+        // this.mostrarGrado = true;
+        // }else {
+        //     this.indexFormacionPosgradoSelected = null;
+        //     this.mostrar = true;
+        //     this.mostrarGrado = true;
+        // }
     }
 }
 

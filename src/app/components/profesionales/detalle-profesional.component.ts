@@ -126,6 +126,7 @@ export class DetalleProfesionalComponent implements OnInit {
             fechaEgreso: null,
             fechaTitulo: null,
             revalida: true,
+            papelesVerificados: false,
             matriculacion: [{
                 matriculaNumero: null,
                 libro: null,
@@ -250,7 +251,11 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     matricularProfesional(matriculacion: any) {
+        if (this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion === null) {
+            this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion = [matriculacion];
+        }else {
         this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
+    }
         this.updateProfesional();
     }
 
@@ -276,9 +281,9 @@ export class DetalleProfesionalComponent implements OnInit {
     formacionPosgradoSelected(posgrado: any) {
         this.mostrarGrado = true;
         this.indexFormacionPosgradoSelected = posgrado;
-        if(this.mostrar === true){
+        if (this.mostrar === true) {
             this.mostrar = false;
-        }else{
+        }else {
             this.mostrar = true;
         }
 
@@ -294,5 +299,16 @@ export class DetalleProfesionalComponent implements OnInit {
         //     this.mostrarGrado = true;
         // }
     }
+
+
+    generarCredencial() {
+
+                // this._profesionalService.getCredencial(this.profesional.id)
+                //     .subscribe((resp) => {
+                        const pdf = this._pdfUtils.generarCredencial(this.profesional);
+                        pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+                        // this.loading = false;
+                 //   });
+            }
 }
 

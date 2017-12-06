@@ -68,7 +68,7 @@ export class AppComponent {
           accessList.push({
             label: 'Agenda',
             icon: 'mdi mdi-pencil-box-outline',
-            route: '/turnos'
+            route: '/agenda'
           });
           accessList.push({
             label: 'Turnos',

@@ -3,37 +3,72 @@ const jsPDF = require('jspdf');
 
 export class PDFUtils {
 
-    public generarCredencial(imgsData: any, profesional: any, formacionGrado: any): any {
-        const ultimaRenovacion = formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1];
+    public generarCredencial( profesional: any): any {
+        console.log(profesional)
+        console.log(profesional.formacionGrado[0].matriculacion)
+        const ultimaRenovacion = profesional.formacionGrado[0].matriculacion[profesional.formacionGrado[0].matriculacion.length - 1];
 
         const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
         doc.setFontSize(6);
         doc.setFontStyle('bold');
-        doc.text(/*'Argentina'*/ profesional.nacionalidad.nombre.toUpperCase(), 14, 14);
-        doc.text(/*'TEC. EN LABORATORIO CLINICO E HISTOPATOLOGIA'*/formacionGrado.titulo.toUpperCase(), 20, 17);
-        doc.text(/*'UNIV. NAC. DE CORDOBA'*/formacionGrado.entidadFormadora.nombre, 20, 20);
-        doc.text(/*'01/12/1999'*/ this.getDateStr(formacionGrado.fechaEgreso), 28, 24);
-        doc.addImage(imgsData.firmaSupervisor, 'jpg', 38, 25, 30, 14);
+        doc.text(/*'Argentina'*/ profesional.nacionalidad.nombre, 14, 14);
+        doc.text(/*'TEC. EN LABORATORIO CLINICO E HISTOPATOLOGIA'*/profesional.formacionGrado[0].titulo, 20, 17);
+        doc.text(/*'UNIV. NAC. DE CORDOBA'*/profesional.formacionGrado[0].entidadFormadora.nombre, 20, 20);
+        doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionGrado[0].fechaEgreso), 28, 24);
+       // doc.addImage(imgsData.firmaSupervisor, 'jpg', 38, 25, 30, 14);
         doc.text('Dr. Ruben Monsalvo', 42, 41);
-        doc.text(/*'15/07/2010'*/ this.getDateStr(formacionGrado.fechaTitulo), 50, 48);
+        doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionGrado[0].fechaTitulo), 50, 48);
         doc.addPage();
         doc.setFillColor(0, 153, 0);
         doc.rect(9, 9, 30, 30, 'F');
-        doc.addImage(imgsData.foto, 'jpg', 10, 10, 28, 28);
-        doc.text(/*'BO TEC. EN LABORATORIO'*/formacionGrado.profesion.nombre.toUpperCase(), 43, 13);
-        doc.text(/*'PINO'*/profesional.apellido.toUpperCase(), 43, 18);
-        doc.text(/*'JORGE PABLO'*/profesional.nombre.toUpperCase(), 43, 23);
+        //doc.addImage(imgsData.foto, 'jpg', 10, 10, 28, 28);
+        doc.text(/*'BO TEC. EN LABORATORIO'*/profesional.formacionGrado[0].profesion.nombre, 43, 13);
+        doc.text(/*'PINO'*/profesional.apellido, 43, 18);
+        doc.text(/*'JORGE PABLO'*/profesional.nombre, 43, 23);
         doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
         doc.text('DNI ' + profesional.documento, 43, 28);
         doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
         doc.text(/*'15/07/2010'*/ this.getDateStr(ultimaRenovacion.inicio), 43, 40);
         doc.text(/*'29/01/2015'*/ this.getDateStr(ultimaRenovacion.fin), 66, 40);
-        doc.addImage(imgsData.firmaProfesional, 'jpg', 54, 41, 31, 10);
+       // doc.addImage(imgsData.firmaProfesional, 'jpg', 54, 41, 31, 10);
         doc.setFontSize(8);
         doc.text(/*'82'*/ultimaRenovacion.matriculaNumero.toString(), 74, 13);
 
         return doc;
     }
+
+    // public generarCredencial(imgsData: any, profesional: any, formacionGrado: any): any {
+    //     const ultimaRenovacion = formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1];
+
+    //     const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
+    //     doc.setFontSize(6);
+    //     doc.setFontStyle('bold');
+    //     doc.text(/*'Argentina'*/ profesional.nacionalidad.nombre.toUpperCase(), 14, 14);
+    //     doc.text(/*'TEC. EN LABORATORIO CLINICO E HISTOPATOLOGIA'*/formacionGrado.titulo.toUpperCase(), 20, 17);
+    //     doc.text(/*'UNIV. NAC. DE CORDOBA'*/formacionGrado.entidadFormadora.nombre, 20, 20);
+    //     doc.text(/*'01/12/1999'*/ this.getDateStr(formacionGrado.fechaEgreso), 28, 24);
+    //     doc.addImage(imgsData.firmaSupervisor, 'jpg', 38, 25, 30, 14);
+    //     doc.text('Dr. Ruben Monsalvo', 42, 41);
+    //     doc.text(/*'15/07/2010'*/ this.getDateStr(formacionGrado.fechaTitulo), 50, 48);
+    //     doc.addPage();
+    //     doc.setFillColor(0, 153, 0);
+    //     doc.rect(9, 9, 30, 30, 'F');
+    //     doc.addImage(imgsData.foto, 'jpg', 10, 10, 28, 28);
+    //     doc.text(/*'BO TEC. EN LABORATORIO'*/formacionGrado.profesion.nombre.toUpperCase(), 43, 13);
+    //     doc.text(/*'PINO'*/profesional.apellido.toUpperCase(), 43, 18);
+    //     doc.text(/*'JORGE PABLO'*/profesional.nombre.toUpperCase(), 43, 23);
+    //     doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
+    //     doc.text('DNI ' + profesional.documento, 43, 28);
+    //     doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
+    //     doc.text(/*'15/07/2010'*/ this.getDateStr(ultimaRenovacion.inicio), 43, 40);
+    //     doc.text(/*'29/01/2015'*/ this.getDateStr(ultimaRenovacion.fin), 66, 40);
+    //     doc.addImage(imgsData.firmaProfesional, 'jpg', 54, 41, 31, 10);
+    //     doc.setFontSize(8);
+    //     doc.text(/*'82'*/ultimaRenovacion.matriculaNumero.toString(), 74, 13);
+
+    //     return doc;
+    // }
+
 
     private getDateStr(date: Date): String {
         const dt = new Date(date);

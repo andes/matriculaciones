@@ -1,0 +1,37 @@
+<plex-accordion>
+    <plex-panel tituloPrincipal="Nuevo Grado" icon="plus-circle-outline" [active]="activeAcc">
+        <div class="row">
+            <div class="col">
+                <form #posgrado='ngForm' >
+                    <div class="row">
+                        <div class="col-4">
+                            <plex-select label="Profesion" [(ngModel)]="profesionalGrado.profesion" name="profesion" (getData)="loadProfesiones($event)" [required]="true"></plex-select>
+                        </div>
+                        <div class="col-md-4">
+                                <plex-text label="Título" [(ngModel)]="profesionalGrado.titulo" name='titulo' [required]="true"></plex-text>
+                            </div>
+                             <div class="col-md-4">
+                                <plex-datetime label="Fecha de egreso" type="date"  [(ngModel)]="profesionalGrado.fechaEgreso" name='fechaEgreso' [required]="true" ></plex-datetime>
+                             </div>
+                            <div class="col-md-4">
+                                    <plex-datetime label="Fecha del Título" type="date"  [(ngModel)]="profesionalGrado.fechaTitulo" name='fechaTitulo' [required]="true"></plex-datetime>
+                             </div>
+                             <div class="col-6">
+                                    <plex-select label="Institucion Formadora" [(ngModel)]="profesionalGrado.entidadFormadora" name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
+                                </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col">
+                                <plex-button label="Guardar" type="success" class="float-right" (click)="onSubmit($event,posgrado)" validateForm="true"></plex-button>                       
+                            
+                        </div>
+                    </div> 
+                </form>
+            </div>
+        </div>
+
+    </plex-panel>
+</plex-accordion>

@@ -3,7 +3,7 @@ import {
     Component,
     Input,
     Output,
-    EventEmitter } from '@angular/core';
+    EventEmitter, OnInit } from '@angular/core';
 // Plex
 import {
     Plex
@@ -22,7 +22,7 @@ import { NumeracionMatriculasService } from './../../../services/numeracionMatri
     selector: 'app-formacion-grado',
     templateUrl: 'formacion-grado.html'
 })
-export class FormacionGradoComponent {
+export class FormacionGradoComponent implements OnInit{
 
     @Input() profesional: IProfesional;
     @Output() formacionGradoSelected = new EventEmitter();
@@ -30,9 +30,17 @@ export class FormacionGradoComponent {
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService) { }
 
+    ngOnInit() {
+        
+
+    }
+
     showFormacion(formacion: any) {
         this.formacionGradoSelected.emit(formacion);
     }
+
+
+
 
 
     /*aprobarProfesional(formacion: any, i: number) {

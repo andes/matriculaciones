@@ -36,19 +36,25 @@ export class FormacionGradoDetalleComponent {
         private _pdfUtils: PDFUtils) { }
 
 
-    generarCredencial() {
+    // generarCredencial() {
 
-        this._profesionalService.getCredencial(this.profesional.id)
-            .subscribe((resp) => {
-                const pdf = this._pdfUtils.generarCredencial(resp, this.profesional, this.formacion);
-                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                // this.loading = false;
-            });
+    //     this._profesionalService.getCredencial(this.profesional.id)
+    //         .subscribe((resp) => {
+    //             const pdf = this._pdfUtils.generarCredencial(resp, this.profesional, this.formacion);
+    //             pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+    //             // this.loading = false;
+    //         });
 
 
-    }
+    // }
 
     matricularProfesional(formacion: any) {
+        let revNumero = null;
+        if (formacion.matriculacion === null) {
+            revNumero = 0;
+        }else {
+            revNumero = formacion.matriculacion.length;
+        }
         this._numeracionesService.getOne(formacion.profesion.id)
             .subscribe((num) => {
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
@@ -58,7 +64,7 @@ export class FormacionGradoDetalleComponent {
                     folio: '',
                     inicio: new Date(),
                     fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
-                    revalidacionNumero: formacion.matriculacion.length + 1
+                    revalidacionNumero: revNumero + 1
                 };
                 num[0].proximoNumero = num[0].proximoNumero + 1;
                 this._numeracionesService.saveNumeracion(num[0])
@@ -68,4 +74,22 @@ export class FormacionGradoDetalleComponent {
                      });
             });
     }
+
+    papelesVerificados() {
+        this.formacion.papelesVerificados = true;
+
+        this._profesionalService.putProfesional(this.profesional)
+        .subscribe(resp => {
+            this.profesional = resp;
+        });
+    }
+
+    volverAVerificar() {
+        this.formacion.papelesVerificados = false;
+        // this._profesionalService.putProfesional(this.profesional)
+        // .subscribe(resp => {
+        //     this.profesional = resp;
+        // });
+    }
+
 }

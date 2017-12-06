@@ -40,6 +40,7 @@ import { RequisitosGeneralesComponent,
 import { HomeComponent } from './components/home/home.component';
 import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
 import { AgendaComponent } from './components/turnos/agenda.component';
+import { agendaFormComponent } from './components/turnos/agenda.form.component';
 import { NuevoTurnoComponent } from './components/turnos/nuevo-turno.component';
 import { SolicitarTurnoMatriculacionComponent } from './components/turnos/solicitar-turno-matriculacion.component';
 import { SolicitarTurnoRenovacionComponent } from './components/turnos/solicitar-turno-renovacion.component';
@@ -65,6 +66,7 @@ import { SancionesFormComponent } from './components/profesionales/sanciones/san
 import { HeaderProfesionalComponent } from './components/profesionales/header-profesional.component';
 import { FormacionPosgradoComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado.component';
 import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
+import { FormacionGradoFormComponent } from './components/profesionales/formacionGrado/formacion-grado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
@@ -89,6 +91,7 @@ const COMPS_PROFESIONAL = [
   SancionesComponent,
   SancionesFormComponent,
   FormacionGradoComponent,
+  FormacionGradoFormComponent,
   FormacionGradoDetalleComponent,
   FormacionPosgradoComponent,
   FormacionPosgradoDetalleComponent,
@@ -111,7 +114,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent,
-    AgendaComponent, ConfiguracionAgendaComponent,
+    AgendaComponent, ConfiguracionAgendaComponent, agendaFormComponent,
     NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
     ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,
     TurnosComponent,

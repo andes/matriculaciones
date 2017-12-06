@@ -58,7 +58,8 @@ export interface IProfesional {
         fechaEgreso: Date;
         fechaTitulo: Date;
         revalida: boolean;
-        matriculacion: [{
+        papelesVerificados: boolean;
+        matriculacion?: [{
             matriculaNumero: Number;
             libro: String;
             folio: String;
@@ -94,14 +95,16 @@ export interface IProfesional {
                 codigo: number;
             };
         };
-        matriculacion: [{
+        matriculacion?: [
+            {
             matriculaNumero: Number;
             libro: String;
             folio: String;
             inicio: Date;
             fin: Date;
             revalidacionNumero: Number;
-        }];
+        } | null
+    ];
     }];
     origen: String;
     sanciones:  [{

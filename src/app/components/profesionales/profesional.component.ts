@@ -148,14 +148,8 @@ export class ProfesionalComponent implements OnInit {
       fechaEgreso: null,
       fechaTitulo: null,
       revalida: true,
-      matriculacion: [{
-        matriculaNumero: null,
-        libro: null,
-        folio: null,
-        inicio: null,
-        fin: null,
-        revalidacionNumero: null,
-      }],
+      papelesVerificados: false,
+      matriculacion: null,
     }],
     formacionPosgrado: null,
     origen: null,
@@ -180,7 +174,7 @@ export class ProfesionalComponent implements OnInit {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
-  
+
 
   }
 

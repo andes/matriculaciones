@@ -3,12 +3,15 @@
         <div class="row">
             <div class="col">
                 <h3 class="float-left">{{formacion.profesion.nombre}} </h3>
-                <div class="btn-group float-right">
+                <div class="btn-group float-right" *ngIf='formacion.papelesVerificados'>
                     <plex-button type="success" icon="credit-card" (click)="generarCredencial()"></plex-button>
                    <!-- <plex-tooltip text="Asignar número de matrícula" position="right">-->
                         <plex-button type="primary" icon="account-plus" (click)="matricularProfesional(formacion)"></plex-button>
                     <!--</plex-tooltip>-->
                     <plex-button type="danger" icon="account-minus" (click)="generarCredencial()"></plex-button>
+                </div>
+                <div class="btn-group float-right" *ngIf='!formacion.papelesVerificados'>
+                    <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
                 </div>
             </div>
         </div>
@@ -65,7 +68,7 @@
                                     <th>Inicio</th>
                                     <th>Fin</th>
                                 </thead>
-                                <tbody>
+                                <tbody *ngIf='formacion.matriculacion'>
                                     <tr *ngFor="let matriculacion of formacion.matriculacion">
                                         <td>{{ matriculacion.revalidacionNumero }}</td>
                                         <td>{{ matriculacion.matriculaNumero }}</td>

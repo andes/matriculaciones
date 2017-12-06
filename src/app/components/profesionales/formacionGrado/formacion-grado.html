@@ -1,3 +1,4 @@
+<app-formacion-grado-form [profesional]="profesional" ></app-formacion-grado-form>
 <plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
     <header>
         <div class="row">
@@ -27,9 +28,18 @@
             <label>Fecha del Título</label> 
             <div>{{formacionGrado.fechaTitulo | date: 'dd/MM/yyyy'}}</div>
         </div>
-        <div class="col-7">
+        <div class="col-5">
             <label>Entidad Formadora</label> 
             <div>{{formacionGrado.entidadFormadora.nombre}}</div>
+        </div>
+        <div class="col-2" *ngIf='!formacionGrado.matriculacion' >
+            <label>Estado Papeles</label> 
+            <div *ngIf='!formacionGrado.papelesVerificados' style='color:red'>Sin verificar</div>
+            <div *ngIf='formacionGrado.papelesVerificados' style='color:green'>Verificados</div>
+        </div>
+        <div class="col-2"  >
+           
+            <div *ngIf='formacionGrado.matriculacion'  style='color:green'><label>Matriculado</label> </div>
         </div>
         <!--<div class="col-1">
             <plex-button class="float-right" type="primary" icon="information-outline"  *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" (click)="showPosgrado(i)"></plex-button>            

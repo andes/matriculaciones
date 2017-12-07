@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
 // import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -23,6 +23,7 @@ const jsPDF = require('jspdf');
     templateUrl: 'solicitar-turno-matriculacion.html'
 })
 export class SolicitarTurnoMatriculacionComponent implements OnInit {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente    
     public tipoTurno: Enums.TipoTurno;
     private formTurno: FormGroup;
     public turnoSeleccionado: boolean;

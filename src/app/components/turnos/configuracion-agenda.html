@@ -1,13 +1,16 @@
 
 <section>
-<form #formAgenda="ngForm">
-    <plex-box title="Agenda" type="{{boxType}}">
+<plex-box title="Agenda" type="{{boxType}}">
+    <div  *ngIf='!mostrar'>
+            <div class="col-12 text-center">
+                    <header>
+                           <div class="page-title">Agenda</div>
+                   </header>
+               </div>
+    <app-agenda-form></app-agenda-form>
+<!-- <form #formAgenda="ngForm">
+
             <div class="row">
-                    <div class="col-12 text-center">
-                        <header>
-                            <div class="page-title">Agenda</div>
-                        </header>
-                    </div>
                 </div>
                 <br>
                 <br>
@@ -52,9 +55,49 @@
                 <plex-button (click)="guardarConfiguracion($event,formAgenda)" label="Guardar" type="primary" validateForm="true"></plex-button>
             </div>
         </div>
+
+</form> -->
+<br>
+<div class="page-title">Agenda actual</div>
+    <table  class="table table-striped">
+        <thead>
+          <tr>
+            <th>Dias</th>
+            <th>hora inicio</th>
+            <th>hora fin</th>
+            <th>duracion turno</th>
+            <th>fechas excluidas</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="hover" *ngFor="let agenda of agendas,let i = index" (click)="showEditar(agenda)" >
+               
+            <td>
+                <div *ngFor="let dias of agenda.diasHabilitados,let n = index">  {{dias.nombre}}</div>
+            </td>
+            <td>{{agenda.horarioInicioTurnos | date: 'HH:mm'}}</td>
+            <td>{{agenda.horarioFinTurnos | date: 'HH:mm'}}</td>
+            <td>{{agenda.duracionTurno }}</td>
+            <td>
+                <span *ngIf='agendasFeriados === null'>No hay fechas excluidas</span>
+     <div  *ngFor="let feriados of agenda.fechasExcluidas,let m = index">  {{feriados | date: 'dd/MM/yyyy'}}</div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+  
+    </div>
+    <div *ngIf='mostrar'>
+            <div class="col-12 text-center">
+                    <header>
+                           <div class="page-title">Modificar agenda</div>
+                   </header>
+               </div>
+            <app-agenda-form [agendaAmodificar]='agendaSelect'></app-agenda-form>
+    </div>
     </plex-box>
-</form>
 </section>
 <footer>
-    <plex-button label="Volver"  type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
+    <plex-button *ngIf='mostrar' label="Volver"  type="danger" (click)="showListar()" icon="arrow-left-bold"></plex-button>        
+    <plex-button *ngIf='!mostrar' label="Volver"  type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
 </footer>

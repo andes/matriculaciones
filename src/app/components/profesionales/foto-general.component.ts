@@ -54,7 +54,6 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
     ngOnChanges () {
         if (this.profesional.id) {
         this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
-         console.log(resp);
          this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
          if (this.img64 !== undefined &&  this.img64 !== null) {
             this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);

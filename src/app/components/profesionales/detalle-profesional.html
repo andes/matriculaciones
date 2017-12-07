@@ -74,63 +74,65 @@
 
             </plex-box>
         </div>
-        <div class="col-4" *ngIf="(!indexFormacionGradoSelected) && !mostrarGrado">
+        <!-- <div class="col" *ngIf='mostrarGrado'>
+        <plex-box>
+            <div class="row">
+                <div class="col-12">
+                    Se requiere la aprobación par que se le asigne un número de matrícula.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <plex-button label="Designar" type="danger" (click)="aprobarProfesional()" class="pull-right"></plex-button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    Imprmir un certificado de ética.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <plex-button label="Imprimir" type="primary" [disabled]="true" class="pull-right"></plex-button>                    
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    Anular matrícula.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <plex-button label="Anular" type="danger" (click)="anularMatricula()" class="pull-right"></plex-button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col-12">
+                    Generar Credencial
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <plex-button label="Generar" type="primary" (click)="generarCredencial()" class="pull-right" [disabled]="!profesional.foto || !profesional.formacionGrado.matriculaNumero || !(profesional.firmas && profesional.firmas.length > 0)"></plex-button>
+                </div>
+            </div>
+        </plex-box>
+        </div> -->
+        <div class="col-4" *ngIf="!mostrarGrado">
             
             <app-formacion-grado-detalle  
                 [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" 
                 [profesional]="profesional" 
                 (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
          </div>   
-         <div class="col-4" *ngIf="!indexFormacionPosgradoSelected && !mostrar" >
+         <div class="col-4" *ngIf="!mostrar" >
             <app-formacion-posgrado-detalle  
                 [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
             </div>
-            <!--<plex-box>
-                <div class="row">
-                    <div class="col-12">
-                        Se requiere la aprobación par que se le asigne un número de matrícula.
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <plex-button label="Designar" type="danger" (click)="aprobarProfesional()" class="pull-right"></plex-button>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-12">
-                        Imprmir un certificado de ética.
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <plex-button label="Imprimir" type="primary" [disabled]="true" class="pull-right"></plex-button>                    
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-12">
-                        Anular matrícula.
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <plex-button label="Anular" type="danger" (click)="anularMatricula()" class="pull-right"></plex-button>
-                    </div>
-                </div>
-                <hr>
-                <div class="row">
-                    <div class="col-12">
-                        Generar Credencial
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <plex-button label="Generar" type="primary" (click)="generarCredencial()" class="pull-right" [disabled]="!profesional.foto || !profesional.formacionGrado.matriculaNumero || !(profesional.firmas && profesional.firmas.length > 0)"></plex-button>
-                    </div>
-                </div>
-            </plex-box>-->
-        
+
     </div>
 </section>
 <section  *ngIf="flag == false">
@@ -139,7 +141,7 @@
 
 <footer>
 
-<plex-button type="danger" label="Ir a agenda" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
+<plex-button type="danger" label="Ir a turnos" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
 </footer>
        
 

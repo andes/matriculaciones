@@ -37,7 +37,7 @@ const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', '
          provide: LOCALE_ID, useValue: 'es-AR'
     }]
 })
-export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
+export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     private $input: any;
     private $div: any;
     private format: string;
@@ -85,9 +85,9 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnDestroy, On
         this.getConfiguracionAgenda();
     }
 
-    ngOnDestroy() {
-         jQuery(this.div.nativeElement).datepicker('destroy');
-    }
+    // ngOnDestroy() {
+    //      jQuery(this.div.nativeElement).datepicker('destroy');
+    // }
 
     /**
      * Setup Methods

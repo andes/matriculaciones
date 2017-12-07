@@ -6,7 +6,9 @@ import { Router } from '@angular/router';
     templateUrl: 'requisitosGenerales.html'
 })
 
-export class RequisitosGeneralesComponent {}
+export class RequisitosGeneralesComponent {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+}
 
 @Component({
     selector: 'app-requisitos-matricula-universitaria',
@@ -30,6 +32,7 @@ export class RequisitosMatriculaUniversitariaComponent {
 })
 
 export class RequisitosMatriculaTecnicaAuxiliarComponent {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public terminosLeidos = false;
     constructor(private router: Router) {}
 

@@ -31,7 +31,7 @@ export class NumeracionMatriculasService extends BaseService {
         }
 
         if (searchParams.profesion) {
-            query.set('codigo', searchParams.profesion.codigo);
+            query.set('codigo', searchParams.profesion._id);
         }
 
         return this.get(this.numeracionesURL, query);

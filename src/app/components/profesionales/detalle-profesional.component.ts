@@ -126,6 +126,7 @@ export class DetalleProfesionalComponent implements OnInit {
             fechaEgreso: null,
             fechaTitulo: null,
             revalida: true,
+            papelesVerificados: false,
             matriculacion: [{
                 matriculaNumero: null,
                 libro: null,
@@ -250,7 +251,11 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     matricularProfesional(matriculacion: any) {
+        if (this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion === null) {
+            this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion = [matriculacion];
+        }else {
         this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
+    }
         this.updateProfesional();
     }
 
@@ -263,29 +268,47 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     formacionGradoSelected(formacion: any) {
-        if (this.mostrarGrado === true) {
-        this.indexFormacionGradoSelected = formacion;
-        this.mostrarGrado = false;
         this.mostrar = true;
+        this.indexFormacionGradoSelected = formacion;
+        if (this.mostrarGrado === true) {
+        this.mostrarGrado = false;
+
         } else {
-         this.indexFormacionGradoSelected = null;
          this.mostrarGrado = true;
-         this.mostrar = true;
      }
     }
 
     formacionPosgradoSelected(posgrado: any) {
-
-        if (this.mostrar === true) {
-
-        this.indexFormacionPosgradoSelected = posgrado;
-        this.mostrar = false;
         this.mostrarGrado = true;
+        this.indexFormacionPosgradoSelected = posgrado;
+        if (this.mostrar === true) {
+            this.mostrar = false;
         }else {
-            this.indexFormacionPosgradoSelected = null;
             this.mostrar = true;
-            this.mostrarGrado = true;
         }
+
+        // console.log(posgrado)
+        // if (this.mostrar === true) {
+        //     console.log("mostrar")
+        // this.indexFormacionPosgradoSelected = posgrado;
+        // this.mostrar = false;
+        // this.mostrarGrado = true;
+        // }else {
+        //     this.indexFormacionPosgradoSelected = null;
+        //     this.mostrar = true;
+        //     this.mostrarGrado = true;
+        // }
     }
+
+
+    generarCredencial() {
+
+                // this._profesionalService.getCredencial(this.profesional.id)
+                //     .subscribe((resp) => {
+                        const pdf = this._pdfUtils.generarCredencial(this.profesional);
+                        pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+                        // this.loading = false;
+                 //   });
+            }
 }
 

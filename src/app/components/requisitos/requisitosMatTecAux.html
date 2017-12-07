@@ -1,3 +1,5 @@
+<section>
+<plex-box>
 <div class="row">
     <div class="col-md-12">
         <h3>Requisitos para Matriculación de Profesionales Técnicos y Auxiliares</h3>
@@ -53,12 +55,20 @@
 </div>
 
     <div class="row">
-        <div class="col-md-12" style="text-align: center; margin-top: 22%;">
+        <div class="col-md-12" style="text-align: center;">
             <plex-bool [(ngModel)]="terminosLeidos" label="He leído y acepto los requisitos" name="terminosLeidos"></plex-bool><br />
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12" style="text-align: center; margin-top: 15%;">
+        <div class="col-md-12" style="text-align: center; margin-top: 2%;">
             <plex-button label="Solicitar Turno" type="primary" [disabled]="!terminosLeidos" (click)="onClick()"></plex-button>
         </div>
     </div>
+  </plex-box>
+</section>
+
+
+
+<footer>
+    <plex-button label="Volver" type="danger" routerLink="/requisitosGenerales"></plex-button> 
+</footer> 

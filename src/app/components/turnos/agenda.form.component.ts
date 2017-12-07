@@ -13,11 +13,11 @@ import { AgendaService } from './../../services/agenda.service';
 import * as enumerados from './../../utils/enumerados';
 
 @Component({
-    selector: 'app-configuracion-agenda',
-    templateUrl: 'configuracion-agenda.html'
+    selector: 'app-agenda-form',
+    templateUrl: 'agenda.form.html'
 })
 
-export class ConfiguracionAgendaComponent implements OnInit {
+export class agendaFormComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
         _id: null,
@@ -27,23 +27,38 @@ export class ConfiguracionAgendaComponent implements OnInit {
         fechasExcluidas: null,
         duracionTurno: null,
     };
+
+    @Input() agendaAmodificar: any = null;
     dias: any[];
     boxType: String;
     feriados: Array<any>;
     agendas: any;
     agendasDiasHabilitados: any;
-    agendaSelect: any;
-    mostrar = false;
+    agendasFeriados: any;
+
     constructor( private agendaService: AgendaService, private plex: Plex) {
             this.feriados  = [];
          }
 
+
     ngOnInit() {
+        console.log(this.agendaAmodificar);
+
+        this.agendaService.get().subscribe((datos) => {
+            console.log(datos[0]);
+            this.agendas = datos;
+            this.agendasDiasHabilitados = datos;
+            this.agendasFeriados = datos[0].fechasExcluidas;
 
 
-        this.traeListado();
+            if (this.agendaAmodificar !== null) {
+                this.currentAgenda = this.agendaAmodificar;
+                this.feriados = this.agendaAmodificar.fechasExcluidas;
+               this.agendaAmodificar.fechasExcluidas = null;
+                }
 
-          
+        });
+
         // Inicio el select de días de la semana.
         this.dias = enumerados.getObjDias();
 
@@ -62,9 +77,6 @@ export class ConfiguracionAgendaComponent implements OnInit {
     }
 
     agregarFeriado() {
-        if(this.currentAgenda.fechasExcluidas === null){
-            this.currentAgenda.fechasExcluidas = []
-        }
         this.feriados.push(this.currentAgenda.fechasExcluidas);
     }
 
@@ -74,10 +86,7 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
     guardarConfiguracion($event, form) {
         if ($event.formValid) {
-            console.log(this.currentAgenda)
-            if(this.currentAgenda.fechasExcluidas === null){
-                this.currentAgenda.fechasExcluidas = []
-            }
+            console.log(this.currentAgenda);
             this.currentAgenda.fechasExcluidas =  this.feriados;
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
@@ -92,21 +101,7 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
     traeListado() {
         this.agendaService.get().subscribe((datos) => {
-            console.log(datos[0])
-            this.agendas = datos;
-            this.agendasDiasHabilitados = datos;        
-        });
-    }
-
-    showEditar(agenda) {
-        console.log(agenda);
-        this.mostrar = true;
-        this.agendaSelect = agenda;
-    }
-
-    showListar(){
-        this.mostrar = false;
-        this.traeListado();
+            console.log(datos); });
     }
 
 

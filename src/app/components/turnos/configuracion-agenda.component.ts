@@ -43,7 +43,7 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
         this.traeListado();
 
-          
+
         // Inicio el select de días de la semana.
         this.dias = enumerados.getObjDias();
 
@@ -62,8 +62,8 @@ export class ConfiguracionAgendaComponent implements OnInit {
     }
 
     agregarFeriado() {
-        if(this.currentAgenda.fechasExcluidas === null){
-            this.currentAgenda.fechasExcluidas = []
+        if (this.currentAgenda.fechasExcluidas === null) {
+            this.currentAgenda.fechasExcluidas = [];
         }
         this.feriados.push(this.currentAgenda.fechasExcluidas);
     }
@@ -74,9 +74,9 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
     guardarConfiguracion($event, form) {
         if ($event.formValid) {
-            console.log(this.currentAgenda)
-            if(this.currentAgenda.fechasExcluidas === null){
-                this.currentAgenda.fechasExcluidas = []
+            console.log(this.currentAgenda);
+            if (this.currentAgenda.fechasExcluidas === null) {
+                this.currentAgenda.fechasExcluidas = [];
             }
             this.currentAgenda.fechasExcluidas =  this.feriados;
             let agendaOperation: Observable<IAgendaMatriculaciones>;
@@ -92,9 +92,9 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
     traeListado() {
         this.agendaService.get().subscribe((datos) => {
-            console.log(datos[0])
+            console.log(datos[0]);
             this.agendas = datos;
-            this.agendasDiasHabilitados = datos;        
+            this.agendasDiasHabilitados = datos;
         });
     }
 
@@ -104,7 +104,7 @@ export class ConfiguracionAgendaComponent implements OnInit {
         this.agendaSelect = agenda;
     }
 
-    showListar(){
+    showListar() {
         this.mostrar = false;
         this.traeListado();
     }

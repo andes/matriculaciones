@@ -40,7 +40,7 @@ import { RequisitosGeneralesComponent,
 import { HomeComponent } from './components/home/home.component';
 import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
 import { AgendaComponent } from './components/turnos/agenda.component';
-import { agendaFormComponent } from './components/turnos/agenda.form.component';
+import { AgendaFormComponent } from './components/turnos/agenda.form.component';
 import { NuevoTurnoComponent } from './components/turnos/nuevo-turno.component';
 import { SolicitarTurnoMatriculacionComponent } from './components/turnos/solicitar-turno-matriculacion.component';
 import { SolicitarTurnoRenovacionComponent } from './components/turnos/solicitar-turno-renovacion.component';
@@ -114,7 +114,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent,
-    AgendaComponent, ConfiguracionAgendaComponent, agendaFormComponent,
+    AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
     NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
     ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,
     TurnosComponent,

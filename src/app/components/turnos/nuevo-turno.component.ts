@@ -136,7 +136,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
         let i = horaInicio;
         let flag = true;
         let nx = 0;
-        while ( n < horaFin && flag === true) {
+        while ( n <= horaFin && flag === true) {
           while ( nx < (60 / this.agendaConfig.duracionTurno) && flag === true) {
             if (entradaU === false ) {
              entradaU = true;
@@ -148,7 +148,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                             minutos =  (minutos + this.agendaConfig.duracionTurno) - 60;
                             i++;
                             }else {
-                                  if ((this.agendaConfig.duracionTurno + minutos) < 60) {
+                                  if ((this.agendaConfig.duracionTurno + minutos) <= 60) {
                                     res = minutos + this.agendaConfig.duracionTurno;
                                     }
                                     minutos = res;

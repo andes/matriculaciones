@@ -28,19 +28,29 @@
             <label>Fecha del Título</label> 
             <div>{{formacionGrado.fechaTitulo | date: 'dd/MM/yyyy'}}</div>
         </div>
-        <div class="col-5">
+        <div class="col-3">
             <label>Entidad Formadora</label> 
             <div>{{formacionGrado.entidadFormadora.nombre}}</div>
         </div>
-        <div class="col-2" *ngIf='!formacionGrado.matriculacion' >
-            <label>Estado Papeles</label> 
-            <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Sin verificar</div>
-            <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-success">Verificados</div>
+        <div class="col-2" *ngIf='!formacionGrado.matriculacion && formacionGrado.revalida === true' >
+
+            <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
+            <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-success">Papeles <br>  Verificados</div>
         </div>
-        <div class="col-2"  *ngIf='formacionGrado.matriculacion' >
+        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === true' >
            <span *ngIf=' hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin && formacionGrado.papelesVerificados ' class="badge badge-danger"> Matricula <br> suspendida</span>
            <span *ngIf='formacionGrado.matriculacion && hoy < formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' class="badge badge-success"> Matriculado</span>
         </div>
+        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === false && hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' >          
+  
+            <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
+             <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-success">Papeles <br> verificados</div>
+         </div>
+        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === false && hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' >
+            <span *ngIf=' hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' class="badge badge-danger"> Matricula <br> suspendida</span>
+
+        </div>
+
         
         <!--<div class="col-1">
             <plex-button class="float-right" type="primary" icon="information-outline"  *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" (click)="showPosgrado(i)"></plex-button>            

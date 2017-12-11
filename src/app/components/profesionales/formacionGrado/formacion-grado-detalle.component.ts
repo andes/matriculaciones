@@ -3,7 +3,8 @@ import {
     Component,
     Input,
     Output,
-    EventEmitter } from '@angular/core';
+    EventEmitter, 
+    OnInit} from '@angular/core';
 // Plex
 import {
     Plex
@@ -25,12 +26,12 @@ import { PDFUtils } from './../../../utils/PDFUtils';
     selector: 'app-formacion-grado-detalle',
     templateUrl: 'formacion-grado-detalle.html'
 })
-export class FormacionGradoDetalleComponent {
+export class FormacionGradoDetalleComponent  implements OnInit  {
 
     @Input() formacion: any;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
-
+    private hoy = null;
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
         private _pdfUtils: PDFUtils, private plex: Plex) { }
@@ -47,6 +48,10 @@ export class FormacionGradoDetalleComponent {
 
 
     // }
+    ngOnInit() {
+        this.hoy = new Date();
+ 
+     }
 
     matricularProfesional(formacion: any, mantenerNumero) {
         let texto = '¿Desea agregar una nueva matricula?';
@@ -84,7 +89,11 @@ export class FormacionGradoDetalleComponent {
                          this.matriculacion.emit(oMatriculacion);
                      });
             });
-
+            this.formacion.revalida = true;
+            this._profesionalService.putProfesional(this.profesional)
+            .subscribe(resp => {
+                this.profesional = resp;
+            });
         }
     });
     }
@@ -98,12 +107,13 @@ export class FormacionGradoDetalleComponent {
         });
     }
 
-    volverAVerificar() {
+    renovar() {
+        this.formacion.revalida = false;
         this.formacion.papelesVerificados = false;
-        // this._profesionalService.putProfesional(this.profesional)
-        // .subscribe(resp => {
-        //     this.profesional = resp;
-        // });
+         this._profesionalService.putProfesional(this.profesional)
+        .subscribe(resp => {
+             this.profesional = resp;
+        });
     }
 
 }

@@ -17,7 +17,7 @@ import * as enumerados from './../../utils/enumerados';
     templateUrl: 'agenda.form.html'
 })
 
-export class agendaFormComponent implements OnInit {
+export class AgendaFormComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
         _id: null,

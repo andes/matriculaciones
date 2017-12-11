@@ -23,7 +23,7 @@ const jsPDF = require('jspdf');
     templateUrl: 'solicitar-turno-matriculacion.html'
 })
 export class SolicitarTurnoMatriculacionComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente    
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public tipoTurno: Enums.TipoTurno;
     private formTurno: FormGroup;
     public turnoSeleccionado: boolean;

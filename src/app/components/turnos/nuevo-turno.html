@@ -20,6 +20,7 @@
                 <label>Hora</label>
           
             <div class="row"  >
+                <span *ngIf='horariosDisponibles.length === 0' class="alert alert-danger">No hay mas turnos para la fecha seleccionada</span>
                 <div *ngFor="let turno of horariosDisponibles; let idx = index">
                    <div class="col-md-6" style=" margin-bottom: 6px;" >
                         <button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado"   class="btn btn-primary" (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'active':isActive(horariosDisponibles[idx]) == true}" >

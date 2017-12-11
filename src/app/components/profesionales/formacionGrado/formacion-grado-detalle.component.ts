@@ -33,7 +33,7 @@ export class FormacionGradoDetalleComponent {
 
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils) { }
+        private _pdfUtils: PDFUtils, private plex: Plex) { }
 
 
     // generarCredencial() {
@@ -48,7 +48,14 @@ export class FormacionGradoDetalleComponent {
 
     // }
 
-    matricularProfesional(formacion: any) {
+    matricularProfesional(formacion: any, mantenerNumero) {
+        let texto = '¿Desea agregar una nueva matricula?';
+        if (mantenerNumero) {
+            texto = '¿Desea mantener el numero de la matricula?';
+        }
+
+        this.plex.confirm(texto).then((resultado) => {
+            if (resultado) {
         let revNumero = null;
         if (formacion.matriculacion === null) {
             revNumero = 0;
@@ -57,9 +64,13 @@ export class FormacionGradoDetalleComponent {
         }
         this._numeracionesService.getOne(formacion.profesion.id)
             .subscribe((num) => {
+               let  matriculaNumero = num[0].proximoNumero + 1;
+                if (mantenerNumero) {
+                    matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
+                }
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {
-                    matriculaNumero: num[0].proximoNumero + 1,
+                    matriculaNumero: matriculaNumero,
                     libro: '',
                     folio: '',
                     inicio: new Date(),
@@ -73,6 +84,9 @@ export class FormacionGradoDetalleComponent {
                          this.matriculacion.emit(oMatriculacion);
                      });
             });
+
+        }
+    });
     }
 
     papelesVerificados() {

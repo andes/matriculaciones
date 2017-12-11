@@ -22,16 +22,16 @@ import { NumeracionMatriculasService } from './../../../services/numeracionMatri
     selector: 'app-formacion-grado',
     templateUrl: 'formacion-grado.html'
 })
-export class FormacionGradoComponent implements OnInit{
+export class FormacionGradoComponent implements OnInit {
 
     @Input() profesional: IProfesional;
     @Output() formacionGradoSelected = new EventEmitter();
-
+    hoy = null;
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService) { }
 
     ngOnInit() {
-        
+       this.hoy = new Date();
 
     }
 

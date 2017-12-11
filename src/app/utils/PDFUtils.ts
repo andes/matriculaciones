@@ -4,8 +4,7 @@ const jsPDF = require('jspdf');
 export class PDFUtils {
 
     public generarCredencial( profesional: any): any {
-        console.log(profesional)
-        console.log(profesional.formacionGrado[0].matriculacion)
+
         const ultimaRenovacion = profesional.formacionGrado[0].matriculacion[profesional.formacionGrado[0].matriculacion.length - 1];
 
         const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
@@ -21,7 +20,7 @@ export class PDFUtils {
         doc.addPage();
         doc.setFillColor(0, 153, 0);
         doc.rect(9, 9, 30, 30, 'F');
-        //doc.addImage(imgsData.foto, 'jpg', 10, 10, 28, 28);
+        // doc.addImage(imgsData.foto, 'jpg', 10, 10, 28, 28);
         doc.text(/*'BO TEC. EN LABORATORIO'*/profesional.formacionGrado[0].profesion.nombre, 43, 13);
         doc.text(/*'PINO'*/profesional.apellido, 43, 18);
         doc.text(/*'JORGE PABLO'*/profesional.nombre, 43, 23);

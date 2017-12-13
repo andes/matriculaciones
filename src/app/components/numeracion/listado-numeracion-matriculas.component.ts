@@ -89,6 +89,10 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     cambio(ingreso) {
         this.numeracionElegida = ingreso;
     }
+    
+    cerrar(){
+        this.numeracionElegida = null;
+    }
 
 
     generarMatricula(event?: any) {

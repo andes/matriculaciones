@@ -49,6 +49,7 @@ import { ProfesionalComponent } from './components/profesionales/profesional.com
 import { ListadoTurnosComponent } from './components/turnos/listado-turnos.component';
 import { DetalleProfesionalComponent } from './components/profesionales/detalle-profesional.component';
 import { ListadoNumeracionMatriculasComponent } from './components/numeracion/listado-numeracion-matriculas.component';
+import { NumeracionMatriculasFormComponent } from './components/numeracion/numeracion-matriculas-form.component';
 import { NumeracionMatriculasComponent } from './components/numeracion/numeracion-matriculas.component';
 import { ListadoComponent } from './components/base/mat-listado.component';
 import { SolicitarTurnoComponent } from './components/turnos/solicitar-turno.component';
@@ -116,7 +117,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosMatriculaTecnicaAuxiliarComponent,
     AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
     NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
-    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,
+    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,NumeracionMatriculasFormComponent,
     TurnosComponent,
     FotoGeneralComponent,
     EdadPipe,

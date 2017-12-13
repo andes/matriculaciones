@@ -60,7 +60,10 @@
             </div>
         </div>
     </div>
-    <hr>
+    <div *ngIf='formacion.matriculacion'>
+        <plex-button type="success" *ngIf=' hoy > formacion.matriculacion[formacion.matriculacion.length - 1].fin' label='Renovar' (click)="renovar()"></plex-button>
+    </div>
+     <hr>
     <div class="row">
         <div class="col-12">
             

@@ -50,7 +50,7 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
     // }
     ngOnInit() {
         this.hoy = new Date();
- 
+
      }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -115,5 +115,6 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
              this.profesional = resp;
         });
     }
+
 
 }

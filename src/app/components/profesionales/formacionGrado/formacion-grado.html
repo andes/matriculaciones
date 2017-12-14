@@ -13,7 +13,13 @@
                         type="primary"
                         class="float-right"
                         icon="information-outline"            
-                        (click)="showFormacion(i)"></plex-button>            
+                        (click)="showFormacion(i)"></plex-button>
+                        <plex-button *ngIf='formacionGrado.matriculacion'
+                        title="Generar credencial"
+                        type="success"
+                        class="float-right"
+                        icon="mdi mdi-credit-card"            
+                        (click)="generarCredencial(i)"></plex-button>              
                 </div>
             </div>
         </div>

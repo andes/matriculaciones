@@ -302,14 +302,14 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
 
-    generarCredencial() {
+    // generarCredencial() {
 
-                // this._profesionalService.getCredencial(this.profesional.id)
-                //     .subscribe((resp) => {
-                        const pdf = this._pdfUtils.generarCredencial(this.profesional);
-                        pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                        // this.loading = false;
-                 //   });
-            }
+    //             // this._profesionalService.getCredencial(this.profesional.id)
+    //             //     .subscribe((resp) => {
+    //                     const pdf = this._pdfUtils.generarCredencial(this.profesional);
+    //                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+    //                     // this.loading = false;
+    //              //   });
+    //         }
 }
 

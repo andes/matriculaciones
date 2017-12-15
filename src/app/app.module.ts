@@ -27,6 +27,7 @@ import { LocalidadService } from './services/localidad.service';
 import { ProfesionService } from './services/profesion.service';
 import { EntidadFormadoraService } from './services/entidadFormadora.service';
 import { TurnoService } from './services/turno.service';
+import { ExcelService } from './services/excel.service';
 import { ProfesionalService } from './services/profesional.service';
 import { SexoService } from './services/sexo.service';
 import { NumeracionMatriculasService } from './services/numeracionMatriculas.service';
@@ -117,7 +118,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosMatriculaTecnicaAuxiliarComponent,
     AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
     NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
-    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,NumeracionMatriculasFormComponent,
+    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent, NumeracionMatriculasFormComponent,
     TurnosComponent,
     FotoGeneralComponent,
     EdadPipe,
@@ -148,6 +149,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     LocalidadService,
     Server,
     ProfesionService,
+    ExcelService,
     EntidadFormadoraService,
     TurnoService,
     ProfesionalService,

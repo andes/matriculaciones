@@ -3,7 +3,7 @@ import {
     Component,
     Input,
     Output,
-    EventEmitter, 
+    EventEmitter,
     OnInit} from '@angular/core';
 // Plex
 import {
@@ -91,7 +91,7 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
             });
             this.formacion.revalida = false;
             this.formacion.matriculado = true;
-            this.actualizar()
+            this.actualizar();
         }
     });
     }
@@ -99,25 +99,25 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
     papelesVerificados() {
         this.formacion.papelesVerificados = true;
 
-        this.actualizar()
+        this.actualizar();
     }
 
     renovar() {
         this.formacion.revalida = true;
         this.formacion.papelesVerificados = false;
-       this.actualizar()
+       this.actualizar();
     }
 
-    darDeBaja(){
+    darDeBaja() {
         this.formacion.matriculado = false;
-        this.actualizar()
+        this.actualizar();
     }
 
-    actualizar(){
+    actualizar() {
         this._profesionalService.putProfesional(this.profesional)
         .subscribe(resp => {
              this.profesional = resp;
-        }); 
+        });
     }
 
 

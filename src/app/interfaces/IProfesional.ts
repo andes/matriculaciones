@@ -67,6 +67,7 @@ export interface IProfesional {
             fin: Date;
             revalidacionNumero: Number;
         }];
+        matriculado: boolean
     }];
     formacionPosgrado: [{
         profesion: {

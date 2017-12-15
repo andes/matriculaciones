@@ -51,6 +51,7 @@ export class DetalleProfesionalComponent implements OnInit {
     public vieneDeDetalle = null;
     public flag = null;
     public confirmar = true;
+    public tieneFirma = null;
 
     @Input()  public profesional: IProfesional = {
         id: null,
@@ -125,7 +126,7 @@ export class DetalleProfesionalComponent implements OnInit {
             titulo: null,
             fechaEgreso: null,
             fechaTitulo: null,
-            revalida: true,
+            revalida: false,
             papelesVerificados: false,
             matriculacion: [{
                 matriculaNumero: null,
@@ -135,6 +136,7 @@ export class DetalleProfesionalComponent implements OnInit {
                 fin: null,
                 revalidacionNumero: null,
             }],
+            matriculado: false
         }],
         formacionPosgrado: null,
         origen: null,
@@ -288,20 +290,8 @@ export class DetalleProfesionalComponent implements OnInit {
             this.mostrar = true;
         }
 
-        // console.log(posgrado)
-        // if (this.mostrar === true) {
-        //     console.log("mostrar")
-        // this.indexFormacionPosgradoSelected = posgrado;
-        // this.mostrar = false;
-        // this.mostrarGrado = true;
-        // }else {
-        //     this.indexFormacionPosgradoSelected = null;
-        //     this.mostrar = true;
-        //     this.mostrarGrado = true;
-        // }
+
     }
-
-
     // generarCredencial() {
 
     //             // this._profesionalService.getCredencial(this.profesional.id)

@@ -147,9 +147,10 @@ export class ProfesionalComponent implements OnInit {
       titulo: null,
       fechaEgreso: null,
       fechaTitulo: null,
-      revalida: true,
+      revalida: false,
       papelesVerificados: false,
       matriculacion: null,
+      matriculado : false
     }],
     formacionPosgrado: null,
     origen: null,

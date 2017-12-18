@@ -35,6 +35,7 @@ import {
   ProfesionalService
 } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
+import { ExcelService } from '../../services/excel.service';
 
 @Component({
   selector: 'app-listar-profesionales',
@@ -50,6 +51,7 @@ export class ListarProfesionalesComponent implements OnInit {
   public vieneDeListado = null;
   constructor(
     private _profesionalService: ProfesionalService,
+    private excelService: ExcelService,
     private route: ActivatedRoute,
     private router: Router,
     public auth: Auth) {}
@@ -74,6 +76,7 @@ export class ListarProfesionalesComponent implements OnInit {
     this._profesionalService.getProfesional({documento: doc, apellido: apellidoProf})
       .subscribe((data) => {
         this.profesionales = data;
+        //this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
   }
   cerrarResumenProfesional() {

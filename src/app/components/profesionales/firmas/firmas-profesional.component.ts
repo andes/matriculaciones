@@ -34,9 +34,9 @@ import { ProfesionalService } from '../../../services/profesional.service';
     templateUrl: 'firmas-profesional.html'
 })
 export class FirmasProfesionalComponent implements OnInit {
-    uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/firma'});
     @Input() profesional: IProfesional;
     @Output() onFileUploaded = new EventEmitter();
+    @Output() tieneFirma = new EventEmitter();
     public binaryString = null;
     public firmas = null;
     public urlFirma = null;
@@ -69,6 +69,7 @@ export class FirmasProfesionalComponent implements OnInit {
     upload() {
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
         this.onFileUploaded.emit(this.base64textString);
+        this.tieneFirma.emit(true);
         this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
     }
 

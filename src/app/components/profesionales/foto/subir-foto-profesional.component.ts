@@ -33,7 +33,6 @@ import {
     templateUrl: 'subir-foto-profesional.html'
 })
 export class SubirFotoProfesionalComponent implements OnInit {
-    uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
     @Input() profesional: IProfesional;
     @Output() onFileUploaded = new EventEmitter();
     @Output() previewImg = new EventEmitter();
@@ -65,7 +64,6 @@ export class SubirFotoProfesionalComponent implements OnInit {
 
 
     upload() {
-        this.uploader.uploadAll();
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
         this.onFileUploaded.emit(this.base64textString);
     }

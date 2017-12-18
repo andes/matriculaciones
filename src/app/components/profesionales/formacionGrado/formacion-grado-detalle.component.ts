@@ -3,7 +3,7 @@ import {
     Component,
     Input,
     Output,
-    EventEmitter, 
+    EventEmitter,
     OnInit} from '@angular/core';
 // Plex
 import {
@@ -50,7 +50,7 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
     // }
     ngOnInit() {
         this.hoy = new Date();
- 
+
      }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -89,11 +89,9 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
                          this.matriculacion.emit(oMatriculacion);
                      });
             });
-            this.formacion.revalida = true;
-            this._profesionalService.putProfesional(this.profesional)
-            .subscribe(resp => {
-                this.profesional = resp;
-            });
+            this.formacion.revalida = false;
+            this.formacion.matriculado = true;
+            this.actualizar();
         }
     });
     }
@@ -101,19 +99,26 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
     papelesVerificados() {
         this.formacion.papelesVerificados = true;
 
-        this._profesionalService.putProfesional(this.profesional)
-        .subscribe(resp => {
-            this.profesional = resp;
-        });
+        this.actualizar();
     }
 
     renovar() {
-        this.formacion.revalida = false;
+        this.formacion.revalida = true;
         this.formacion.papelesVerificados = false;
-         this._profesionalService.putProfesional(this.profesional)
+       this.actualizar();
+    }
+
+    darDeBaja() {
+        this.formacion.matriculado = false;
+        this.actualizar();
+    }
+
+    actualizar() {
+        this._profesionalService.putProfesional(this.profesional)
         .subscribe(resp => {
              this.profesional = resp;
         });
     }
+
 
 }

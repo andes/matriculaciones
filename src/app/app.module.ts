@@ -27,6 +27,7 @@ import { LocalidadService } from './services/localidad.service';
 import { ProfesionService } from './services/profesion.service';
 import { EntidadFormadoraService } from './services/entidadFormadora.service';
 import { TurnoService } from './services/turno.service';
+import { ExcelService } from './services/excel.service';
 import { ProfesionalService } from './services/profesional.service';
 import { SexoService } from './services/sexo.service';
 import { NumeracionMatriculasService } from './services/numeracionMatriculas.service';
@@ -49,6 +50,7 @@ import { ProfesionalComponent } from './components/profesionales/profesional.com
 import { ListadoTurnosComponent } from './components/turnos/listado-turnos.component';
 import { DetalleProfesionalComponent } from './components/profesionales/detalle-profesional.component';
 import { ListadoNumeracionMatriculasComponent } from './components/numeracion/listado-numeracion-matriculas.component';
+import { NumeracionMatriculasFormComponent } from './components/numeracion/numeracion-matriculas-form.component';
 import { NumeracionMatriculasComponent } from './components/numeracion/numeracion-matriculas.component';
 import { ListadoComponent } from './components/base/mat-listado.component';
 import { SolicitarTurnoComponent } from './components/turnos/solicitar-turno.component';
@@ -116,7 +118,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosMatriculaTecnicaAuxiliarComponent,
     AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
     NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
-    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent,
+    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent, NumeracionMatriculasFormComponent,
     TurnosComponent,
     FotoGeneralComponent,
     EdadPipe,
@@ -147,6 +149,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     LocalidadService,
     Server,
     ProfesionService,
+    ExcelService,
     EntidadFormadoraService,
     TurnoService,
     ProfesionalService,

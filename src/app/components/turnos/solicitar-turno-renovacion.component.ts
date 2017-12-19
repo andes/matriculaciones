@@ -15,6 +15,7 @@ import { TurnoService } from './../../services/turno.service';
 // Utils
 import { PDFUtils } from './../../utils/PDFUtils';
 import * as Enums from './../../utils/enumerados';
+import { IProfesional } from '../../interfaces/IProfesional';
 
 const jsPDF = require('jspdf');
 
@@ -30,6 +31,94 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     private _turnoSeleccionado: Date;
     private _profesionalID: string;
     public _nuevoProfesional: any;
+
+    @Input() public profesional: IProfesional = {
+        id: null,
+        habilitado: true,
+        nombre: null,
+        apellido: null,
+        documento: null,
+        documentoVencimiento: null,
+        cuit: null,
+        fechaNacimiento: null,
+        lugarNacimiento: '',
+        nacionalidad: {
+          nombre: null,
+          codigo: null,
+        },
+        sexo: undefined,
+        estadoCivil: undefined,
+        contactos: [{
+          tipo: 'celular',
+          valor: '',
+          rank: 0,
+          activo: true,
+          ultimaActualizacion: new Date()
+        }],
+        domicilios: [{
+            tipo: 'real',
+            valor: '',
+            codigoPostal: '',
+            ubicacion: {
+              localidad: '',
+              provincia: '',
+              pais: '',
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+          },
+          {
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+              localidad: null,
+              provincia: null,
+              pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+          },
+          {
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+              localidad: null,
+              provincia: null,
+              pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+          }
+        ],
+        fotoArchivo: null,
+        firmas: null,
+        formacionGrado: [{
+          profesion: {
+            nombre: null,
+            codigo: null,
+          },
+          entidadFormadora: {
+            nombre: null,
+            codigo: null,
+          },
+          titulo: null,
+          fechaEgreso: null,
+          fechaTitulo: null,
+          revalida: false,
+          papelesVerificados: false,
+          matriculacion: null,
+          matriculado : false
+        }],
+        formacionPosgrado: null,
+        origen: null,
+        sanciones: null,
+        notas: null,
+        rematriculado: false
+      };
+
+
 
     constructor(private _formBuilder: FormBuilder,
         private _turnosService: TurnoService,
@@ -70,8 +159,19 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             });
     }
 
-    onProfesionalCompleto(profesional: any) {
-        this._turnosService.saveTurnoSolicitados(profesional)
+    onProfesionalCompleto() {
+
+        // this.profesional.domicilios[0].ubicacion.localidad = ""
+        // this.profesional.domicilios[0].ubicacion.provincia = ""
+        // this.profesional.domicilios[0].ubicacion.pais = ""
+        // this.profesional.domicilios[1].ubicacion.localidad = ""
+        // this.profesional.domicilios[1].ubicacion.provincia = ""
+        // this.profesional.domicilios[1].ubicacion.pais = ""
+        // this.profesional.domicilios[2].ubicacion.localidad = ""
+        // this.profesional.domicilios[2].ubicacion.provincia = ""
+        // this.profesional.domicilios[2].ubicacion.pais = ""
+        // console.log(this.profesional)
+        this._turnosService.saveTurnoSolicitados(this.profesional)
         .subscribe((nuevoProfesional) => {
             if (nuevoProfesional == null) {
                 this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');

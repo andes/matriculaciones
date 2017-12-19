@@ -36,16 +36,17 @@
                                 <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)" [ngClass]="{'active': isSelected(turno)}">
  
                                     <div class="row" style="width: 100%">
-                                        <div class="col-11">
+                                        <div class="col-10">
                                             <h6 class="box-title-elemento">
                                                 {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs <br>
                                                 {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }} | <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documento : '') }}</small>
                                             </h6>
                                         </div>
-                                        <div class="col float-right">
-                                            <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="i === 1">
-                                            </span> -->
-                                        </div>
+                                        <div class="col-2">
+                                                <h6 class="box-title-elemento badge badge-info">
+                                                     {{ turno.tipo }} 
+                                                </h6>
+                                            </div>
 
                                     </div>
 

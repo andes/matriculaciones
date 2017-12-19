@@ -47,6 +47,7 @@ export class TurnosComponent implements OnInit {
         });
 
         this.buscar();
+
     }
 
     showTurno(turno: any) {
@@ -65,13 +66,14 @@ export class TurnosComponent implements OnInit {
 
         const consulta = this.formBuscarTurno.value;
         consulta.offset = event ? event.query.offset : 0;
-        consulta.size = event ? event.query.size : 10;
+        consulta.size = event ? event.query.size : 20;
 
         this._turnoService.getTurnosProximos(consulta)
             .subscribe((resp) => {
 
                 this.turnos = resp.data;
                 if (event) {
+
                     event.callback(resp);
                 }
             });

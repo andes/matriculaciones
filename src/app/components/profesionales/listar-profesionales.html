@@ -4,7 +4,14 @@
     <div class="col">
       <plex-box>
         <header>
-          <div class="page-title">Buscar un profesional</div>
+          <div class="row">
+            <div class="col">
+              <div class="page-title">Buscar un profesional</div>
+            </div>
+            <div class="col">
+              <plex-button type="primary float-right" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>    
+            </div>
+        </div>
         </header>
         <div class="row">
           <div class="col-6">
@@ -35,15 +42,28 @@
             <table *ngIf="profesionales && profesionales.length" class="table table-striped">
               <thead>
                 <tr>
+                    <th></th>
                   <th>Documento</th>
                   <th>Apellido y Nombre</th>
                   <th>Fecha de Nacimiento</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="hover" *ngFor="let profesional of profesionales" (click)="seleccionar(profesional)">
+                <tr class="hover" *ngFor="let profesional of profesionales"  (click)="seleccionar(profesional)">
                   <td>
-                    <span *ngIf="profesional?.documento !== ''">{{profesional.documento}}</span>
+                    <div >
+                        <span *ngIf="profesional.rematriculado === true" class="badge badge-danger">
+                           Rematriculado
+                          </span>
+                       </div>
+                       <div >
+                          <span *ngIf="profesional.rematriculado === false" class="badge badge-success">
+                             Matriculado
+                            </span>
+                         </div>
+                      </td>
+                  <td >
+                    <span   *ngIf="profesional?.documento !== ''">{{profesional.documento}}</span>
                     <span *ngIf="profesional?.documento === ''" class="text-danger">Sin documento</span>
                   </td>
                   <td>{{profesional | profesional}}</td>

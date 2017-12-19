@@ -206,7 +206,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
             this.horariosDisponibles.forEach(horario => {
                 horario.ocupado = false;
             });
-            // Obtengo los horarios ocupados del día.
+            // Obtengo los horarios ocupados del día
             if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
                 this._turnoService.getTurnosMatriculacion(fecha, {
                         anio: fecha.getFullYear(),

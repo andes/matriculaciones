@@ -14,7 +14,7 @@
                         class="float-right"
                         icon="information-outline"            
                         (click)="showFormacion(i)"></plex-button>
-                        <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma'
+                        <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && formacionGrado.matriculado'
                         title="Generar credencial"
                         type="success"
                         class="float-right"

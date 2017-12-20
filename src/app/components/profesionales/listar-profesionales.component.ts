@@ -49,6 +49,10 @@ export class ListarProfesionalesComponent implements OnInit {
   public dni: string = null;
   public apellido: string = null;
   public vieneDeListado = null;
+  public totalProfesionales = null;
+  public profesionalesRematriculados = []
+  public profesionalesMatriculados = []
+  public matriculaVencida = null;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -70,13 +74,26 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   buscar(event ?: any) {
+    this.profesionalesMatriculados = [];
+    this.profesionalesRematriculados = [];
     this.profesionalElegido = null;
     const doc = this.dni ? this.dni : '';
     const apellidoProf = this.apellido ? this.apellido : '';
     this._profesionalService.getProfesional({documento: doc, apellido: apellidoProf})
       .subscribe((data) => {
         this.profesionales = data;
-        //this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
+        this.totalProfesionales = data.length;
+
+        for (var _i = 0; _i < this.profesionales.length; _i++) {
+          if (this.profesionales[_i].rematriculado !== false) {
+            this.profesionalesRematriculados.push(this.profesionales[_i]);
+            
+          }else {
+            this.profesionalesMatriculados.push(this.profesionales[_i]);
+          }
+
+       }
+        // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
   }
   cerrarResumenProfesional() {

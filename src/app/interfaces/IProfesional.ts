@@ -120,4 +120,5 @@ export interface IProfesional {
         vencimiento: Date;
     }];
     notas: String;
+    rematriculado: Boolean;
 }

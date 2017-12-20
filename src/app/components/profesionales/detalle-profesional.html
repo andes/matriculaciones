@@ -10,10 +10,9 @@
                      <div class="col-10 margenFoto">
                      <app-header-profesional [profesional]="profesional" ></app-header-profesional>
                                 </div>
-                                <div class="col-1 ">
-                                        <button  class="float-right btn btn-primary" ><i class="mdi mdi-pencil"></i></button>
-                                        
-                                 </div>   
+                        <div class="col-1 ">
+                                <button  class="float-right btn btn-primary" (click)="editar()"  ><i class="mdi mdi-pencil"></i></button>    
+                        </div>   
                      </div> 
                        
                 </header>
@@ -66,7 +65,7 @@
                     
                     <!-- Firmas -->
                     <plex-tab label="Firmas">
-                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)" (tieneFirma)="this.tieneFirma = true" ></app-firmas-profesional>
+                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)" (tieneFirma)="this.tieneFirma = true"  ></app-firmas-profesional>
                     </plex-tab>
 
                     <!-- Notas -->
@@ -141,7 +140,7 @@
     </div>
 </section>
 <section  *ngIf="flag == false">
-<app-profesional [profesional]='profesional' [confirmar]='confirmar' ></app-profesional>
+<app-profesional [profesional]='profesional' [confirmar]='confirmar' (editado) = "this.flag = true" [editable]='editable' ></app-profesional>
 </section>
 
 <footer>

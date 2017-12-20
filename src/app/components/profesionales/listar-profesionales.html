@@ -15,20 +15,16 @@
         </header>
         <div class="row">
           <div class="col-6">
-            <plex-text label="Documento" [(ngModel)]="dni" [autoFocus]="autoFocus" placeholder="escriba un documento">
+            <plex-text label="Documento" [(ngModel)]="dni" [autoFocus]="autoFocus" (change)="buscar()" placeholder="escriba un documento">
             </plex-text>
           </div>
           <div class="col-6">
-            <plex-text label="apellido" [(ngModel)]="apellido" placeholder="escriba apellido">
+            <plex-text label="apellido" [(ngModel)]="apellido" (change)="buscar()" placeholder="escriba apellido">
             </plex-text>
           </div>
         </div>
         <div class="row">&nbsp;</div>
-        <div class="row">
-          <div class="col">
-            <plex-button label="Buscar" type="info" (click)="buscar()"></plex-button>
-          </div>
-        </div>
+
         <div class="row">&nbsp;</div>
         <div class="row">
           <div class="col">

@@ -66,7 +66,7 @@ export class TurnosComponent implements OnInit {
 
         const consulta = this.formBuscarTurno.value;
         consulta.offset = event ? event.query.offset : 0;
-        consulta.size = event ? event.query.size : 20;
+        consulta.size = event ? event.query.size : 50;
 
         this._turnoService.getTurnosProximos(consulta)
             .subscribe((resp) => {

@@ -109,8 +109,13 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
     }
 
     darDeBaja() {
-        this.formacion.matriculado = false;
-        this.actualizar();
+        this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
+            if (resultado) {
+                this.formacion.matriculado = false;
+                this.actualizar();
+            }
+        });
+
     }
 
     actualizar() {

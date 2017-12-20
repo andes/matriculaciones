@@ -70,6 +70,8 @@ export class ProfesionalComponent implements OnInit {
   public tipoComunicacion: any[];
   public vacio = [];
   @Input() confirmar = false;
+  @Input() editable = false;
+  @Output() editado = new EventEmitter();
 
   // public estadosCiviles: any[];
   public showOtraEntidadFormadora: Boolean = false;
@@ -176,8 +178,6 @@ export class ProfesionalComponent implements OnInit {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
-
-
   }
 
 
@@ -220,6 +220,7 @@ export class ProfesionalComponent implements OnInit {
             this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
           } else {
             this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+            this.editado.emit(true);
           }
 
         });
@@ -290,5 +291,18 @@ export class ProfesionalComponent implements OnInit {
     this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
     this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
+  }
+
+  actualizar() {
+    this.profesional.contactos.map(elem => {
+      elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
+      return elem;
+    });
+    this._profesionalService.putProfesional(this.profesional)
+    .subscribe(resp => {
+        this.profesional = resp;
+        this.plex.toast('success', 'Se modifico con exito!', 'informacion', 1000);
+        this.editado.emit(true);
+    });
   }
 }

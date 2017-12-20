@@ -3,7 +3,8 @@
 <div class="row">
     <div class="col-12 text-center">
         <header>
-            <div class="page-title">Registro de Profesional</div>
+            <div *ngIf='editable === false' class="page-title">Registro de Profesional</div>
+            <div *ngIf='editable === true' class="page-title">Editar Profesional</div>
         </header>
     </div>
 </div>
@@ -209,9 +210,13 @@
             <br>
             <div class="row">
                 <div class="col-md-12 text-right">
+                <div *ngIf="editable === false" >
                         <plex-button *ngIf="confirmar == true" type="success" label="Confirmar Datos"  (click)="confirmarDatosAdmin($event)"
                         class="pull-right" validateForm="true"></plex-button>
                     <plex-button *ngIf="confirmar == false" type="success" label="Confirmar Turno"  (click)="confirmarDatos($event)"
+                        class="pull-right" validateForm="true"></plex-button>
+                </div>
+                    <plex-button *ngIf="editable === true" type="success" label="Confirmar Datos"  (click)="actualizar()"
                         class="pull-right" validateForm="true"></plex-button>
                 </div>
             </div>

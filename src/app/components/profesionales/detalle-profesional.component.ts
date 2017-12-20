@@ -49,9 +49,10 @@ export class DetalleProfesionalComponent implements OnInit {
     public mostrarGrado = true;
     public img64 = null;
     public vieneDeDetalle = null;
-    public flag = null;
+    @Input() public flag = null;
     public confirmar = true;
     public tieneFirma = null;
+    public editable = false;
 
     @Input()  public profesional: IProfesional = {
         id: null,
@@ -292,6 +293,11 @@ export class DetalleProfesionalComponent implements OnInit {
         }
 
 
+    }
+
+    editar() {
+        this.flag = false;
+        this.editable = true;
     }
     // generarCredencial() {
 

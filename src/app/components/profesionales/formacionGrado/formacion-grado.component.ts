@@ -85,19 +85,19 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }*/
 
     generarCredencial(grado) {
-                         this._profesionalService.getProfesionalFoto({id: this.profesional.id})
-                            .subscribe((resp) => {
-                                const img = 'data:image/jpeg;base64,' + resp;
-                                this._profesionalService.getProfesionalFirma({id: this.profesional.id})
-                                .subscribe((respFirma) => {
-                                    const firma = 'data:image/jpeg;base64,' + respFirma;
+        this._profesionalService.getProfesionalFoto({id: this.profesional.id})
+        .subscribe((resp) => {
+            const img = 'data:image/jpeg;base64,' + resp;
+            this._profesionalService.getProfesionalFirma({id: this.profesional.id})
+            .subscribe((respFirma) => {
+                const firma = 'data:image/jpeg;base64,' + respFirma;
 
-                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma);
-                                    pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                                    // this.loading = false;
-                               });
-                           });
-                    }
+                const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma);
+                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+                // this.loading = false;
+            });
+        });
+        }
 
     verificaVencimiento() {
         for (var _i = 0; _i < this.profesional.formacionGrado.length; _i++) {

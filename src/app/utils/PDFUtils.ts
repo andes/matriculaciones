@@ -3,7 +3,7 @@ const jsPDF = require('jspdf');
 
 export class PDFUtils {
 
-    public generarCredencial( profesional: any, grado: any,fotoProfesional, firmaProfesional): any {
+    public generarCredencial( profesional: any, grado: any, fotoProfesional, firmaProfesional): any {
         const ultimaRenovacion = profesional.formacionGrado[grado].matriculacion[profesional.formacionGrado[grado].matriculacion.length - 1];
 
         const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
@@ -17,7 +17,11 @@ export class PDFUtils {
         doc.text('Dr. Ruben Monsalvo', 42, 41);
         doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionGrado[grado].fechaTitulo), 50, 48);
         doc.addPage();
-        doc.setFillColor(0, 153, 0);
+        if (profesional.rematriculado === true) {
+            doc.setFillColor(255, 0, 0);
+        }else {
+            doc.setFillColor(0, 153, 0);
+        }
         doc.rect(9, 9, 30, 30, 'F');
          doc.addImage(fotoProfesional, 10, 10, 28, 28);
         doc.text(/*'BO TEC. EN LABORATORIO'*/profesional.formacionGrado[grado].profesion.nombre, 43, 13);

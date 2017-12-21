@@ -104,6 +104,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
             if (this.profesional.formacionGrado[_i].matriculacion) {
     if (this.profesional.formacionGrado[_i].matriculacion[this.profesional.formacionGrado[_i].matriculacion.length - 1].fin < this.hoy) {
         this.profesional.formacionGrado[_i].matriculado = false;
+        this.profesional.formacionGrado[_i].papelesVerificados = false;
                  }
              }
          }

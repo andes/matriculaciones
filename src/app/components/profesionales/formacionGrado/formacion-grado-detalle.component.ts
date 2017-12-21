@@ -29,6 +29,7 @@ import { PDFUtils } from './../../../utils/PDFUtils';
 export class FormacionGradoDetalleComponent  implements OnInit  {
 
     @Input() formacion: any;
+    @Input() index: any;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     private hoy = null;
@@ -89,6 +90,8 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
                          this.matriculacion.emit(oMatriculacion);
                      });
             });
+            this.profesional.formacionGrado[this.index].revalida = false;
+            this.profesional.formacionGrado[this.index].matriculado = true;
             this.formacion.revalida = false;
             this.formacion.matriculado = true;
             this.actualizar();
@@ -97,24 +100,27 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
     }
 
     papelesVerificados() {
+        this.profesional.formacionGrado[this.index].papelesVerificados = true;
         this.formacion.papelesVerificados = true;
-
         this.actualizar();
     }
 
     renovar() {
-        this.formacion.revalida = true;
-        this.formacion.papelesVerificados = false;
-       this.actualizar();
+        this.profesional.formacionGrado[this.index].papelesVerificados = false;
+        this.profesional.formacionGrado[this.index].revalida = true;
+         this.formacion.papelesVerificados = false;
+         this.formacion.revalida = true;
+        this.actualizar();
     }
 
     darDeBaja() {
-        this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
-            if (resultado) {
-                this.formacion.matriculado = false;
+         this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
+             if (resultado) {
+                this.profesional.formacionGrado[this.index].matriculado = false;
+                this.profesional.formacionGrado[this.index].papelesVerificados = false;
                 this.actualizar();
             }
-        });
+         });
 
     }
 

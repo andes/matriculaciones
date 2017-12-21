@@ -77,6 +77,7 @@ export class FormacionGradoFormComponent implements OnInit {
     }
 
     onSubmit($event, form) {
+        if ($event.formValid) {
         console.log(this.profesional);
      this.profesional.formacionGrado.push(this.profesionalGrado);
 
@@ -84,6 +85,7 @@ export class FormacionGradoFormComponent implements OnInit {
          .subscribe(resp => {
          });
 
+        }
     }
 
 

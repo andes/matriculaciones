@@ -129,6 +129,7 @@
             
             <app-formacion-grado-detalle  
                 [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" 
+                [index]="indexFormacionGradoSelected"
                 [profesional]="profesional" 
                 (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
          </div>   

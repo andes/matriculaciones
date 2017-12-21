@@ -41,7 +41,7 @@
         <div class="col-2" *ngIf='!formacionGrado.matriculacion && formacionGrado.revalida === false' >
 
             <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
-            <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-success">Papeles <br>  Verificados</div>
+            <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-info">Papeles <br>  Verificados</div>
         </div>
         <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === false' >
            <span *ngIf='formacionGrado.matriculado === false' class="badge badge-danger"> Matricula <br> suspendida</span>
@@ -50,7 +50,7 @@
         <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === true' >          
   
             <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
-             <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-success">Papeles <br> verificados</div>
+             <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-info">Papeles <br> verificados</div>
          </div>
         <!-- <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === false && hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' >
             <span *ngIf=' hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' class="badge badge-danger"> Matricula <br> suspendida</span>

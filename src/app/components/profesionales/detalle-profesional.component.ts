@@ -239,6 +239,17 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateFirma(oFirma);
     }
 
+    guardarFirmaAdminGrid(oFirma) {
+        const firmaADmin = {
+            'firma': oFirma.firma,
+            'nombreCompleto': oFirma.nombreCompleto,
+            'idProfesional': this.profesional.id
+        };
+        this._profesionalService.saveProfesional({firmaAdmin: firmaADmin}).subscribe(resp => {
+
+        });
+    }
+
     guardarNotas(textoNotas) {
         this.profesional.notas = textoNotas;
         this.updateProfesional();

@@ -1,4 +1,4 @@
-<app-formacion-grado-form [profesional]="profesional" ></app-formacion-grado-form>
+<app-formacion-grado-form [profesional]="profesional" (submitGrado)="addFormacionGrado($event)" ></app-formacion-grado-form>
 <plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
     <header>
         <div class="row">
@@ -14,7 +14,7 @@
                         class="float-right"
                         icon="information-outline"            
                         (click)="showFormacion(i)"></plex-button>
-                        <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && formacionGrado.matriculado'
+                        <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                         title="Generar credencial"
                         type="success"
                         class="float-right"

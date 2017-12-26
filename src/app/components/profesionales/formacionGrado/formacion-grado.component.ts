@@ -29,6 +29,9 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     @Output() formacionGradoSelected = new EventEmitter();
     hoy = null;
     @Input()  tieneFirma = null;
+    @Input()  tieneFirmaAdmin = null;
+    @Output() updateProfesional = new EventEmitter();
+
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
         private _pdfUtils: PDFUtils) { }
@@ -40,6 +43,10 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         .subscribe((respFirma) => {
            this.tieneFirma = respFirma;
        });
+       this._profesionalService.getProfesionalFirma({firmaAdmin: this.profesional.id})
+       .subscribe((respFirmaAdmin) => {
+          this.tieneFirmaAdmin = respFirmaAdmin;
+      });
 
     }
 
@@ -49,6 +56,12 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     showFormacion(formacion: any) {
         this.formacionGradoSelected.emit(formacion);
+    }
+
+    addFormacionGrado(fGrado: any) {
+            this.profesional.formacionGrado.push(fGrado);
+
+        this.updateProfesional.emit(this.profesional);
     }
 
 
@@ -90,12 +103,18 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
             const img = 'data:image/jpeg;base64,' + resp;
             this._profesionalService.getProfesionalFirma({id: this.profesional.id})
             .subscribe((respFirma) => {
+                this._profesionalService.getProfesionalFirma({firmaAdmin: this.profesional.id})
+                .subscribe((respFirmaAdmin) => {
                 const firma = 'data:image/jpeg;base64,' + respFirma;
-
-                const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma);
+                const firmaAdmin = {
+                    firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
+                    administracion: respFirmaAdmin.administracion
+                };
+                const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin);
                 pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
                 // this.loading = false;
             });
+        });
         });
         }
 

@@ -26,7 +26,7 @@
                     <!-- Formación de Grado -->
                     <plex-tab label="Formación de Grado">
                         <app-formacion-grado [profesional]="profesional" 
-                            (formacionGradoSelected)="formacionGradoSelected($event)" [tieneFirma]="tieneFirma"></app-formacion-grado>
+                            (formacionGradoSelected)="formacionGradoSelected($event)" [tieneFirma]="tieneFirma" [tieneFirmaAdmin]="tieneFirmaAdmin"  (updateProfesional)="updateProfesional($event)"></app-formacion-grado>
                     </plex-tab>
 
                     <!-- Renovaciones -->
@@ -65,7 +65,7 @@
                     
                     <!-- Firmas -->
                     <plex-tab label="Firmas">
-                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)" (tieneFirma)="this.tieneFirma = true"  ></app-firmas-profesional>
+                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)" (onFileUploadedFirmaAdmin)="guardarFirmaAdminGrid($event)" (tieneFirma)="this.tieneFirma = true" (tieneFirmaAdmin)="this.tieneFirmaAdmin = true"  ></app-firmas-profesional>
                     </plex-tab>
 
                     <!-- Notas -->

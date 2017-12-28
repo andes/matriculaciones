@@ -50,8 +50,8 @@ export class ListarProfesionalesComponent implements OnInit {
   public apellido: string = null;
   public vieneDeListado = null;
   public totalProfesionales = null;
-  public profesionalesRematriculados = []
-  public profesionalesMatriculados = []
+  public profesionalesRematriculados = [];
+  public profesionalesMatriculados = [];
   public matriculaVencida = null;
   constructor(
     private _profesionalService: ProfesionalService,
@@ -87,7 +87,7 @@ export class ListarProfesionalesComponent implements OnInit {
         for (var _i = 0; _i < this.profesionales.length; _i++) {
           if (this.profesionales[_i].rematriculado !== false) {
             this.profesionalesRematriculados.push(this.profesionales[_i]);
-            
+
           }else {
             this.profesionalesMatriculados.push(this.profesionales[_i]);
           }
@@ -98,5 +98,9 @@ export class ListarProfesionalesComponent implements OnInit {
   }
   cerrarResumenProfesional() {
     this.profesionalElegido = null;
+  }
+
+  sobreTurno(profesional: any) {
+    this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
 }

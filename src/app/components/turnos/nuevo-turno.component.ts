@@ -20,6 +20,7 @@ import { AgendaService } from './../../services/agenda.service';
 
 // Interfaces
 import { IAgendaMatriculaciones } from './../../interfaces/IAgendaMatriculaciones';
+import { Plex } from '@andes/plex';
 
 const jQuery = window['jQuery'] = require('jquery/dist/jquery');
 const moment = window['moment'] = require('moment/moment.js');
@@ -50,7 +51,10 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     private options: any = {};
     public boxType: string;
     public horarioSi = false;
+    public horario = null;
+    public fecha = null;
     public fechaComparacion: Date;
+    @Input() sobreTurno: any;
 
     @Output() onTurnoSeleccionado = new EventEmitter<Date>();
     @Input() private tipoTurno: Enums.TipoTurno;
@@ -59,7 +63,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
 
     constructor(private _element: ElementRef,
         private _turnoService: TurnoService,
-        private _agendaService: AgendaService) {}
+        private _agendaService: AgendaService,
+        private plex: Plex) {}
 
     /**
      * Lifecycle hooks
@@ -73,16 +78,19 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     ngOnInit() {
         // Setteo el formato utilizado para las fechas.
         this.format = 'DD/MM/YYYY';
+
         // moment.locale('es');
          // this.horarioSi = this.fechaElegida.getHours();
     }
 
     ngAfterViewInit() {
         // Inicio los objetos jQuery.
+        if (!this.sobreTurno) {
         this.initjQueryObjects();
 
         // Obtengo la configuración de la agenda.
         this.getConfiguracionAgenda();
+    }
     }
 
     // ngOnDestroy() {
@@ -340,6 +348,37 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
         this.boxType = 'success';
         this.turnoElegido = true;
         this.onTurnoSeleccionado.emit(this.fechaElegida);
+    }
+
+    confirmSobreTurno() {
+
+        const minutos = this.horario.getMinutes();
+        const hora = this.horario.getHours();
+
+        this.fecha.setHours(hora);
+        this.fecha.setMinutes(minutos);
+        this.lblTurno = moment(this.fecha).format('llll');
+        this.lblTurno = diasSemana[this.fecha.getDay()] + ' '
+            + this.fecha.getDate().toString() + ' de '
+            + meses[this.fecha.getMonth()] + ' de '
+            + this.fecha.getFullYear() + ', '
+            + this.fecha.getHours();
+
+        if (this.fecha.getMinutes() > 0) {
+            this.lblTurno += ':' + this.fecha.getMinutes();
+        }
+
+        this.lblTurno += ' hs';
+
+        this.plex.confirm(this.lblTurno).then((resultado) => {
+            if (resultado) {
+                this.onTurnoSeleccionado.emit(this.fecha);
+
+                }
+        // this.boxType = 'success';
+        // this.turnoElegido = true;
+
+        });
     }
 
     private writeValue(date: any) {

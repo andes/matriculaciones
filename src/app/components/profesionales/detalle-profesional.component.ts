@@ -266,7 +266,6 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     matricularProfesional(matriculacion: any) {
-        console.log(this.indexFormacionGradoSelected);
         if (this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion === null) {
             this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion = [matriculacion];
         }else {

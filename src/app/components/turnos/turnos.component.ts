@@ -27,6 +27,9 @@ export class TurnosComponent implements OnInit {
     private turnos: any[] = [];
     private turnoElegido: any;
     private showListado: Boolean = true;
+    offset = 0;
+    limit = 10;
+    turnosTotal = null;
 
     constructor(private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
@@ -65,18 +68,32 @@ export class TurnosComponent implements OnInit {
         }
 
         const consulta = this.formBuscarTurno.value;
-        consulta.offset = event ? event.query.offset : 0;
-        consulta.size = event ? event.query.size : 50;
+        consulta.offset = event ? event.query.offset : this.offset;
+        consulta.size = event ? event.query.size : this.limit;
 
         this._turnoService.getTurnosProximos(consulta)
             .subscribe((resp) => {
-
                 this.turnos = resp.data;
                 if (event) {
 
                     event.callback(resp);
                 }
+
+
+            const consultaTotal = this.formBuscarTurno.value;
+            consultaTotal.offset = event ? event.query.offset : null;
+            consultaTotal.size = event ? event.query.size : null;
+
+            this._turnoService.getTurnosProximos(consultaTotal)
+                .subscribe((res) => {
+                    this.turnosTotal = res.data.length;
+                    if (event) {
+
+                        event.callback(res);
+                    }
+                });
             });
+
     }
 
     showProfesional(turno: any) {
@@ -98,4 +115,11 @@ export class TurnosComponent implements OnInit {
     cerrarDetalleTurno() {
         this.turnoElegido = null;
     }
+
+    nextPage() {
+        this.limit += 10;
+        this.buscar();
+    }
+
+
 }

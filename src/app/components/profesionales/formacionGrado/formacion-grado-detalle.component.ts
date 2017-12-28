@@ -86,7 +86,6 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
                 num[0].proximoNumero = num[0].proximoNumero + 1;
                 this._numeracionesService.saveNumeracion(num[0])
                 .subscribe(newNum => {
-                        // console.log('Numeracion Actualizada');
                          this.matriculacion.emit(oMatriculacion);
                      });
             });

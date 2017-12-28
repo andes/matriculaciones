@@ -52,6 +52,9 @@
 
                                 </li>
                             </ul>
+                            <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button"  (click)="nextPage()" >
+                                <p class="text-center" > Ver más </p>
+                            </div>
                         </div>
                     </div>
 

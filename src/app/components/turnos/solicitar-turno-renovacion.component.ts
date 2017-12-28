@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex/src/lib/core/service';
 // import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -16,6 +16,7 @@ import { TurnoService } from './../../services/turno.service';
 import { PDFUtils } from './../../utils/PDFUtils';
 import * as Enums from './../../utils/enumerados';
 import { IProfesional } from '../../interfaces/IProfesional';
+import { Params, ActivatedRoute } from '@angular/router';
 
 const jsPDF = require('jspdf');
 
@@ -24,6 +25,7 @@ const jsPDF = require('jspdf');
     templateUrl: 'solicitar-turno-renovacion.html'
 })
 export class SolicitarTurnoRenovacionComponent implements OnInit {
+  @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public tipoTurno: Enums.TipoTurno;
     private formTurno: FormGroup;
     public turnoSeleccionado: boolean;
@@ -31,6 +33,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     private _turnoSeleccionado: Date;
     private _profesionalID: string;
     public _nuevoProfesional: any;
+    public id = null;
 
     @Input() public profesional: IProfesional = {
         id: null,
@@ -123,6 +126,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     constructor(private _formBuilder: FormBuilder,
         private _turnosService: TurnoService,
         private _paisService: PaisService,
+        private route: ActivatedRoute,
         private _provinciaService: ProvinciaService,
         private _localidadService: LocalidadService,
         private _profesionService: ProfesionService,
@@ -136,12 +140,21 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
          }
 
     ngOnInit() {
+      this.route.params.subscribe(params => {
+        this.id = params['id'];
+
+
+    });
+
 
     }
 
     onTurnoSeleccionado(turno: Date) {
         this._turnoSeleccionado = turno;
         this.turnoSeleccionado = true;
+        if (this.id) {
+        this.saveSobreTurno();
+        }
     }
 
     saveTurno() {
@@ -159,8 +172,20 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             });
     }
 
-    onProfesionalCompleto() {
+    saveSobreTurno() {
 
+        this.formTurno = this._formBuilder.group({
+            fecha: this._turnoSeleccionado,
+            tipo: this.tipoTurno,
+            profesional: this.id
+        });
+
+        this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
+            .subscribe(turno => {
+            });
+    }
+
+    onProfesionalCompleto() {
         // this.profesional.domicilios[0].ubicacion.localidad = ""
         // this.profesional.domicilios[0].ubicacion.provincia = ""
         // this.profesional.domicilios[0].ubicacion.pais = ""
@@ -170,7 +195,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
         // this.profesional.domicilios[2].ubicacion.localidad = ""
         // this.profesional.domicilios[2].ubicacion.provincia = ""
         // this.profesional.domicilios[2].ubicacion.pais = ""
-        // console.log(this.profesional)
         this._turnosService.saveTurnoSolicitados(this.profesional)
         .subscribe((nuevoProfesional) => {
             if (nuevoProfesional == null) {

@@ -42,10 +42,8 @@ export class AgendaFormComponent implements OnInit {
 
 
     ngOnInit() {
-        console.log(this.agendaAmodificar);
 
         this.agendaService.get().subscribe((datos) => {
-            console.log(datos[0]);
             this.agendas = datos;
             this.agendasDiasHabilitados = datos;
             this.agendasFeriados = datos[0].fechasExcluidas;
@@ -86,7 +84,6 @@ export class AgendaFormComponent implements OnInit {
 
     guardarConfiguracion($event, form) {
         if ($event.formValid) {
-            console.log(this.currentAgenda);
             this.currentAgenda.fechasExcluidas =  this.feriados;
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 

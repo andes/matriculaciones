@@ -121,4 +121,5 @@ export interface IProfesional {
     }];
     notas: String;
     rematriculado: Boolean;
+    agenteMatriculador: String;
 }

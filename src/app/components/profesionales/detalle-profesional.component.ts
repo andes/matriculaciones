@@ -30,6 +30,7 @@ import { DataService } from './../../services/data.service';
 import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
+import { Auth } from '@andes/auth';
 
 
 const jsPDF = require('jspdf');
@@ -143,7 +144,8 @@ export class DetalleProfesionalComponent implements OnInit {
         origen: null,
         sanciones: null,
         notas: null,
-        rematriculado: false
+        rematriculado: false,
+        agenteMatriculador: ''
     };
 
 
@@ -158,7 +160,8 @@ export class DetalleProfesionalComponent implements OnInit {
         private _pdfUtils: PDFUtils,
         private _numeracionesService: NumeracionMatriculasService,
         private route: ActivatedRoute,
-        private router: Router) {}
+        private router: Router,
+        public auth: Auth) {}
 
 
     ngOnInit() {
@@ -196,6 +199,7 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     updateProfesional(callbackData?: any) {
+        this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
          this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;

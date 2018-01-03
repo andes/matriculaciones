@@ -13,13 +13,11 @@
                     </header>
                 </div>
                 <div class="col-md-6">
-                        <plex-datetime label="hora" type="time"  [(ngModel)]="horario" name='hora' [required]="true"></plex-datetime>
-                 </div>
-                 <div class="col-md-6">
                         <plex-datetime label="fecha" type="date"  [(ngModel)]="fecha" name='hora' [required]="true"></plex-datetime>
                  </div>
-                 
-
+                <div class="col-md-6">
+                        <plex-datetime label="hora" type="time"  [(ngModel)]="horario" name='hora' [required]="true"></plex-datetime>
+                 </div>
         </div>
 
     <div class="row" *ngIf="!turnoElegido && !sobreTurno">

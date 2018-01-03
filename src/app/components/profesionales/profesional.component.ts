@@ -56,6 +56,7 @@ import {
 import {
   ISiisa
 } from './../../interfaces/ISiisa';
+import { Auth } from '@andes/auth';
 
 @Component({
   selector: 'app-profesional',
@@ -158,7 +159,8 @@ export class ProfesionalComponent implements OnInit {
     origen: null,
     sanciones: null,
     notas: null,
-    rematriculado: false
+    rematriculado: false,
+    agenteMatriculador: ''
   };
 
 
@@ -172,9 +174,11 @@ export class ProfesionalComponent implements OnInit {
     private _profesionService: ProfesionService,
     private _profesionalService: ProfesionalService,
     private _entidadFormadoraService: EntidadFormadoraService,
-    private plex: Plex) {}
+    private plex: Plex,
+    public auth: Auth) {}
 
   ngOnInit() {
+
     this.estadoCivil = enumerados.getObjsEstadoCivil();
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
@@ -205,6 +209,7 @@ export class ProfesionalComponent implements OnInit {
 
   confirmarDatosAdmin($event) {
     if ($event.formValid) {
+      this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
       // tslint:disable-next-line:max-line-length
       this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
@@ -212,7 +217,6 @@ export class ProfesionalComponent implements OnInit {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
-      // this.onProfesionalCompleto.emit(this.profesional);
 
       this._profesionalService.saveProfesional({profesional : this.profesional})
         .subscribe(nuevoProfesional => {
@@ -224,7 +228,6 @@ export class ProfesionalComponent implements OnInit {
           }
 
         });
-      // this.onProfesionalCompleto.emit(this.profesional);
     }
   }
 
@@ -294,6 +297,7 @@ export class ProfesionalComponent implements OnInit {
   }
 
   actualizar() {
+    this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
     this.profesional.contactos.map(elem => {
       elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
       return elem;

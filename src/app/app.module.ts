@@ -61,6 +61,7 @@ import { FormacionPosgradoDetalleComponent } from './components/profesionales/fo
 import { RenovacionesProfesionalComponent } from './components/profesionales/renovaciones-profesional.component';
 import { SubirFotoProfesionalComponent } from './components/profesionales/foto/subir-foto-profesional.component';
 import { FotoGeneralComponent } from './components/profesionales/foto-general.component';
+import { OtroDatosComponent } from './components/profesionales/otrosDatos/otros-datos.component';
 import { FirmasProfesionalComponent } from './components/profesionales/firmas/firmas-profesional.component';
 import { NotasProfesionalComponent } from './components/profesionales/notas/notas-profesional.component';
 import { SancionesComponent } from './components/profesionales/sanciones/sanciones.component';
@@ -98,7 +99,8 @@ const COMPS_PROFESIONAL = [
   FormacionPosgradoComponent,
   FormacionPosgradoDetalleComponent,
   FormacionPosgradoFormComponent,
-  ListarProfesionalesComponent
+  ListarProfesionalesComponent,
+  OtroDatosComponent
 ];
 
 // Pipes

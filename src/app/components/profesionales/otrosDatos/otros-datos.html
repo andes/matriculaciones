@@ -1,0 +1,59 @@
+<plex-accordion>
+    <plex-panel tituloPrincipal="Otros datos" icon="plus-circle-outline" [active]="activeAcc">
+        <div class="row">
+            <div class="col">
+                <form #otros='ngForm'>
+                    <div class="row">
+                        <div class="col-4">
+                            <plex-text label="matricula provincial" [(ngModel)]="otrosDatos.matriculaProvincial" name="matriculaProvincial" [required]="true"></plex-text>
+                        </div>
+                        <div class="col-md-4">
+                            <plex-text label="folio" [(ngModel)]="otrosDatos.folio" name='folio' [required]="true"></plex-text>
+                        </div>
+                        <div class="col-md-4">
+                            <plex-text label="libro" [(ngModel)]="otrosDatos.libro" name='libro' [required]="true"></plex-text>
+                        </div>
+                        <div class="col-md-4">
+                            <plex-int label="anio"  [(ngModel)]="otrosDatos.anio" name='anio' [required]="true"></plex-int>
+                        </div>
+
+                    </div>
+
+                    <hr>
+
+                    <div class="row">
+                        <div class="col">
+                            <plex-button label="Guardar" type="success" class="float-right" (click)="onSubmit($event,otros)" validateForm="true"></plex-button>
+
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </plex-panel>
+    <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>matricula Provincial</th>
+                            <th>libro</th>
+                            <th>folio</th>
+                            <th>año</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        <tr>
+                            <td>{{otrosDatos.matriculaProvincial}}</td>
+                            <td>{{otrosDatos.libro}}</td>
+                            <td>{{otrosDatos.folio}}</td>
+                            <td>{{otrosDatos.anio}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+    
+        </div>
+</plex-accordion>

@@ -14,13 +14,13 @@
         <div class="col-12">
             <plex-box type="primary">
                 <header>
-                    <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
+                    <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)" [sobreTurno]="id"></app-nuevo-turno>
                 </header>
 
               
               
               
-                <form #formNuevoProf='ngForm'  *ngIf="turnoSeleccionado">
+                <form #formNuevoProf='ngForm'  *ngIf="turnoSeleccionado && !id">
                         <fieldset>
                                 <legend>Datos para la renovacion</legend>
                                 <div class="col-md-12">
@@ -56,8 +56,11 @@
                         </div>
                     
                     </form>
-            
             </plex-box>
         </div>
     </div>
 </section>
+<footer>
+        <plex-button label="Volver" *ngIf='!id'  type="danger" routerLink="/requisitosGenerales" icon="arrow-left-bold"></plex-button>
+        <plex-button label="Volver" *ngIf='id'  type="danger" routerLink="/listarProfesionales" icon="arrow-left-bold"></plex-button>
+    </footer>

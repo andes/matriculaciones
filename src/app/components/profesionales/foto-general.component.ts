@@ -37,7 +37,7 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
     uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
     @Input() profesional: IProfesional;
     @Input() img64 = null;
-    public foto = null;
+    public foto;
     public url = '/core/tm/profesionales/foto/';
 
     constructor(public sanitizer: DomSanitizer, private plex: Plex,
@@ -58,7 +58,7 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
          if (this.img64 !== undefined &&  this.img64 !== null) {
             this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
             }
-                 });
+        });
         }
 
 

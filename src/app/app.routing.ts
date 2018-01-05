@@ -43,6 +43,7 @@ const appRoutes: Routes = [
     { path: 'nuevoProfesional', component: ProfesionalComponent },
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
     { path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent },
+    { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent },
     { path: 'turnos', component: TurnosComponent },
     { path: 'profesional/:documento', component: DetalleProfesionalComponent },
     { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },

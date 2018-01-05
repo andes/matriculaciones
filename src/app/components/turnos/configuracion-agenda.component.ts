@@ -74,7 +74,6 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
     guardarConfiguracion($event, form) {
         if ($event.formValid) {
-            console.log(this.currentAgenda);
             if (this.currentAgenda.fechasExcluidas === null) {
                 this.currentAgenda.fechasExcluidas = [];
             }
@@ -92,14 +91,12 @@ export class ConfiguracionAgendaComponent implements OnInit {
 
     traeListado() {
         this.agendaService.get().subscribe((datos) => {
-            console.log(datos[0]);
             this.agendas = datos;
             this.agendasDiasHabilitados = datos;
         });
     }
 
     showEditar(agenda) {
-        console.log(agenda);
         this.mostrar = true;
         this.agendaSelect = agenda;
     }

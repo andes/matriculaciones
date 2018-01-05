@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-12" style="padding-bottom: 10px;">
+    <div class="col-12" style="padding-bottom: 10px;" >
         <div style="display: inline-block;">
             <!-- <img   [src]="urlFoto" class="img-circle"> -->
             
@@ -9,9 +9,26 @@
                 <span style="font-weight: bold">{{profesional.apellido + ', '}}</span>{{profesional.nombre}}
             </div>
             <span class="datos-profesional">
-                {{profesional | edad}} | {{'DNI ' + profesional.documento }}<br />
-                {{profesional.fechaNacimiento | fecha }} 
+                {{profesional | edad}} | {{'DNI ' + profesional.documento }} | {{'CUIT ' + profesional.cuit }} <br />
+                {{profesional.fechaNacimiento | fecha }} | {{profesional.estadoCivil }} | {{profesional.contactos[0].valor }}
+
             </span>
+        </div>
+        <div class="float-right">
+            <ul>
+                <li class=" badge badge-info" >
+                    <span class="font-weight-bold">Agente matriculador</span>
+                    <br>
+                    <span *ngIf='profesional.agenteMatriculador' >{{profesional.agenteMatriculador}}</span>
+                    <span *ngIf='!profesional.agenteMatriculador' >{{agenteMatriculador}}</span>
+                </li>
+                <li class=" badge badge-info">
+                    <span class="font-weight-bold">Supervisor</span>
+                    <br>
+                    <span *ngIf='supervisor' >{{supervisor}}</span>
+                    <span *ngIf='!supervisor' >No tiene supervisor</span>
+                </li>
+            </ul>
         </div>
     </div>
 </div>

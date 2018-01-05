@@ -1,4 +1,4 @@
-<app-formacion-grado-form [profesional]="profesional" ></app-formacion-grado-form>
+<app-formacion-grado-form [profesional]="profesional" (submitGrado)="addFormacionGrado($event)" ></app-formacion-grado-form>
 <plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
     <header>
         <div class="row">
@@ -14,7 +14,7 @@
                         class="float-right"
                         icon="information-outline"            
                         (click)="showFormacion(i)"></plex-button>
-                        <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && formacionGrado.matriculado'
+                        <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                         title="Generar credencial"
                         type="success"
                         class="float-right"
@@ -38,19 +38,19 @@
             <label>Entidad Formadora</label> 
             <div>{{formacionGrado.entidadFormadora.nombre}}</div>
         </div>
-        <div class="col-2" *ngIf='!formacionGrado.matriculacion && formacionGrado.revalida === false' >
+        <div class="col-2" *ngIf='!formacionGrado.matriculacion && formacionGrado.renovacion === false' >
 
             <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
-            <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-success">Papeles <br>  Verificados</div>
+            <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-info">Papeles <br>  Verificados</div>
         </div>
-        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === false' >
+        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.renovacion === false' >
            <span *ngIf='formacionGrado.matriculado === false' class="badge badge-danger"> Matricula <br> suspendida</span>
            <span *ngIf='formacionGrado.matriculado' class="badge badge-success"> Matriculado</span>
         </div>
-        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === true' >          
+        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.renovacion === true' >          
   
             <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
-             <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-success">Papeles <br> verificados</div>
+             <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-info">Papeles <br> verificados</div>
          </div>
         <!-- <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === false && hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' >
             <span *ngIf=' hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin' class="badge badge-danger"> Matricula <br> suspendida</span>

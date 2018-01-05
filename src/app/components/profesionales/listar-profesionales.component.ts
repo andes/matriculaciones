@@ -50,9 +50,10 @@ export class ListarProfesionalesComponent implements OnInit {
   public apellido: string = null;
   public vieneDeListado = null;
   public totalProfesionales = null;
-  public profesionalesRematriculados = []
-  public profesionalesMatriculados = []
+  public profesionalesRematriculados = [];
+  public profesionalesMatriculados = [];
   public matriculaVencida = null;
+  public hoy = null;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -61,8 +62,11 @@ export class ListarProfesionalesComponent implements OnInit {
     public auth: Auth) {}
 
   ngOnInit() {
+
     this.buscar();
     this.vieneDeListado = true;
+    this.hoy = new Date();
+
   }
 
   showProfesional(profesional: any) {
@@ -87,16 +91,36 @@ export class ListarProfesionalesComponent implements OnInit {
         for (var _i = 0; _i < this.profesionales.length; _i++) {
           if (this.profesionales[_i].rematriculado !== false) {
             this.profesionalesRematriculados.push(this.profesionales[_i]);
-            
+
           }else {
             this.profesionalesMatriculados.push(this.profesionales[_i]);
           }
 
        }
+
+       for (var _n = 0; _n < this.profesionales.length; _n++) {
+            for (var _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
+              if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
+                  if (this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin < this.hoy) {
+                    this.profesionales[_n].formacionGrado[_i].matriculado = false;
+                    this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;
+                    this._profesionalService.putProfesional(this.profesionales[_n])
+                    .subscribe(resp => {
+                      this.profesionales[_n] = resp
+                    });
+                  }
+               }
+           }
+
+          }
         // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
   }
   cerrarResumenProfesional() {
     this.profesionalElegido = null;
+  }
+
+  sobreTurno(profesional: any) {
+    this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
 }

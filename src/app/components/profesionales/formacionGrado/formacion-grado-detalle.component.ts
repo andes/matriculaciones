@@ -29,6 +29,7 @@ import { PDFUtils } from './../../../utils/PDFUtils';
 export class FormacionGradoDetalleComponent  implements OnInit  {
 
     @Input() formacion: any;
+    @Input() index: any;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     private hoy = null;
@@ -37,17 +38,7 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
         private _pdfUtils: PDFUtils, private plex: Plex) { }
 
 
-    // generarCredencial() {
 
-    //     this._profesionalService.getCredencial(this.profesional.id)
-    //         .subscribe((resp) => {
-    //             const pdf = this._pdfUtils.generarCredencial(resp, this.profesional, this.formacion);
-    //             pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-    //             // this.loading = false;
-    //         });
-
-
-    // }
     ngOnInit() {
         this.hoy = new Date();
 
@@ -85,32 +76,44 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
                 num[0].proximoNumero = num[0].proximoNumero + 1;
                 this._numeracionesService.saveNumeracion(num[0])
                 .subscribe(newNum => {
-                        // console.log('Numeracion Actualizada');
                          this.matriculacion.emit(oMatriculacion);
                      });
             });
-            this.formacion.revalida = false;
+            // this.profesional.formacionGrado[this.index].renovacion = false;
+            // this.profesional.formacionGrado[this.index].matriculado = true;
+            this.formacion.renovacion = false;
             this.formacion.matriculado = true;
+            this.profesional.formacionGrado[this.index] = this.formacion;
             this.actualizar();
         }
     });
     }
 
     papelesVerificados() {
+        // this.profesional.formacionGrado[this.index].papelesVerificados = true;
         this.formacion.papelesVerificados = true;
-
+        this.profesional.formacionGrado[this.index] = this.formacion;
         this.actualizar();
     }
 
     renovar() {
-        this.formacion.revalida = true;
-        this.formacion.papelesVerificados = false;
-       this.actualizar();
+        // this.profesional.formacionGrado[this.index].papelesVerificados = false;
+        // this.profesional.formacionGrado[this.index].renovacion = true;
+         this.formacion.papelesVerificados = false;
+         this.formacion.renovacion = true;
+         this.profesional.formacionGrado[this.index] = this.formacion;
+        this.actualizar();
     }
 
     darDeBaja() {
-        this.formacion.matriculado = false;
-        this.actualizar();
+         this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
+             if (resultado) {
+                this.profesional.formacionGrado[this.index].matriculado = false;
+                this.profesional.formacionGrado[this.index].papelesVerificados = false;
+                this.actualizar();
+            }
+         });
+
     }
 
     actualizar() {

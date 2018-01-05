@@ -1,79 +1,82 @@
-<section  *ngIf="flag == true">
+<section *ngIf="flag == true">
     <div class="row">
         <div class="col-8">
-            <plex-box >
+            <plex-box>
                 <header>
-                        <div class="row">
-                                <div class="col-1">       
-                     <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+                    <div class="row">
+                        <div class="col-1">
+                            <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+                        </div>
+                        <div class="col-10 margenFoto">
+                            <app-header-profesional [profesional]="profesional"></app-header-profesional>
+                        </div>
+                        <div class="col-1 ">
+                            <button class="float-right btn btn-primary" (click)="editar()">
+                                <i class="mdi mdi-pencil"></i>
+                            </button>
+                        </div>
                     </div>
-                     <div class="col-10 margenFoto">
-                     <app-header-profesional [profesional]="profesional" ></app-header-profesional>
-                                </div>
-                                <div class="col-1 ">
-                                        <button  class="float-right btn btn-primary" ><i class="mdi mdi-pencil"></i></button>
-                                        
-                                 </div>   
-                     </div> 
-                       
+
                 </header>
                 <div id="wrapper">
-                <plex-tabs>
-                    <!-- Contacto y Domicilios -->
-                    <plex-tab label="Contacto y Domicilios">
-                        <app-contacto-domicilios-profesional [profesional]="profesional"></app-contacto-domicilios-profesional>
-                    </plex-tab>
-                    
-                    <!-- Formación de Grado -->
-                    <plex-tab label="Formación de Grado">
-                        <app-formacion-grado [profesional]="profesional" 
-                            (formacionGradoSelected)="formacionGradoSelected($event)" [tieneFirma]="tieneFirma"></app-formacion-grado>
-                    </plex-tab>
+                    <plex-tabs>
+                        <!-- Contacto y Domicilios -->
+                        <plex-tab label="Contacto y Domicilios">
+                            <app-contacto-domicilios-profesional [profesional]="profesional"></app-contacto-domicilios-profesional>
+                        </plex-tab>
 
-                    <!-- Renovaciones -->
-                    <!--<plex-tab label="Renovaciones">
+                        <!-- Formación de Grado -->
+                        <plex-tab label="Formación de Grado">
+                            <app-formacion-grado [profesional]="profesional" (formacionGradoSelected)="formacionGradoSelected($event)" [tieneFirma]="tieneFirma"
+                                [tieneFirmaAdmin]="tieneFirmaAdmin" (updateProfesional)="updateProfesional($event)"></app-formacion-grado>
+                        </plex-tab>
+
+                        <!-- Renovaciones -->
+                        <!--<plex-tab label="Renovaciones">
                         <app-renovaciones-profesional [profesional]="profesional"></app-renovaciones-profesional>
                     </plex-tab>-->
 
-                    <!-- Formacion Posgrado -->
-                    <plex-tab label="Formación de Posgrado">
-                        <app-formacion-posgrado [profesional]="profesional" 
-                            (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)" 
-                            (updateProfesional)="updateProfesional($event)" ></app-formacion-posgrado>
-                    </plex-tab>
+                        <!-- Formacion Posgrado -->
+                        <plex-tab label="Formación de Posgrado">
+                            <app-formacion-posgrado [profesional]="profesional" (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)"
+                                (updateProfesional)="updateProfesional($event)"></app-formacion-posgrado>
+                        </plex-tab>
 
-                    <!-- Sanciones -->
-                    <plex-tab label="Sanciones">
-                        <app-sanciones [profesional]="profesional" 
-                        (updateProfesional)="updateProfesional($event)"></app-sanciones>
-                    </plex-tab>
-                    
-                    <!-- Foto -->
-                    <plex-tab label="Foto">
+                        <!-- Sanciones -->
+                        <plex-tab label="Sanciones">
+                            <app-sanciones [profesional]="profesional" (updateProfesional)="updateProfesional($event)"></app-sanciones>
+                        </plex-tab>
+
+                        <!-- Foto -->
+                        <plex-tab label="Foto">
                             <div class="row">
-                                    <div class="col-12 text-center">
-                                        <div class="form-group">
-                                            <label style="font-weight: bold">Foto Actual</label>
-                                       
-                                            <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
-                                            
-                                        </div>
-                                    </div>
-                            </div>
-                           
-                        <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)" (previewImg)="previewImg($event)"></app-foto-profesional>
-                    </plex-tab>
-                    
-                    <!-- Firmas -->
-                    <plex-tab label="Firmas">
-                        <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)" (tieneFirma)="this.tieneFirma = true" ></app-firmas-profesional>
-                    </plex-tab>
+                                <div class="col-12 text-center">
+                                    <div class="form-group">
+                                        <label style="font-weight: bold">Foto Actual</label>
 
-                    <!-- Notas -->
-                    <plex-tab label="Notas">
-                        <app-notas-profesional [profesional]="profesional" (onSaved)="guardarNotas($event)"></app-notas-profesional>
-                    </plex-tab>
-                </plex-tabs>
+                                        <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)" (previewImg)="previewImg($event)"></app-foto-profesional>
+                        </plex-tab>
+
+                        <!-- Firmas -->
+                        <plex-tab label="Firmas">
+                            <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)" (onFileUploadedFirmaAdmin)="guardarFirmaAdminGrid($event)"
+                                (tieneFirma)="this.tieneFirma = true" (tieneFirmaAdmin)="this.tieneFirmaAdmin = true"></app-firmas-profesional>
+                        </plex-tab>
+
+                        <!-- Notas -->
+                        <plex-tab label="Notas">
+                            <app-notas-profesional [profesional]="profesional" (onSaved)="guardarNotas($event)"></app-notas-profesional>
+                        </plex-tab>
+                        <plex-tab label="Otros">
+                            <app-otros-datos [profesional]="profesional" (submitOtrosDatos)="guardarOtrosDatos($event)"></app-otros-datos>
+                        </plex-tab>
+                    </plex-tabs>
                 </div>
 
 
@@ -127,28 +130,22 @@
         </plex-box>
         </div> -->
         <div class="col-4" *ngIf="!mostrarGrado">
-            
-            <app-formacion-grado-detalle  
-                [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" 
-                [profesional]="profesional" 
-                (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
-         </div>   
-         <div class="col-4" *ngIf="!mostrar" >
-            <app-formacion-posgrado-detalle  
-                [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
-            </div>
+
+            <app-formacion-grado-detalle [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" [index]="indexFormacionGradoSelected"
+                [profesional]="profesional" (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
+        </div>
+        <div class="col-4" *ngIf="!mostrar">
+            <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
+        </div>
 
     </div>
 </section>
-<section  *ngIf="flag == false">
-<app-profesional [profesional]='profesional' [confirmar]='confirmar' ></app-profesional>
+<section *ngIf="flag == false">
+    <app-profesional [profesional]='profesional' [confirmar]='confirmar' (editado)="this.flag = true" [editable]='editable'></app-profesional>
 </section>
 
 <footer>
 
-<plex-button type="danger" label="Ir a turnos" (click)="volver()" icon="arrow-left-bold"></plex-button>  <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
+    <plex-button type="danger" label="Ir a turnos" (click)="volver()" icon="arrow-left-bold"></plex-button>
+    <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
 </footer>
-       
-
-
-                    

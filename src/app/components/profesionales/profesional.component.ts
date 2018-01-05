@@ -56,6 +56,7 @@ import {
 import {
   ISiisa
 } from './../../interfaces/ISiisa';
+import { Auth } from '@andes/auth';
 
 @Component({
   selector: 'app-profesional',
@@ -70,6 +71,8 @@ export class ProfesionalComponent implements OnInit {
   public tipoComunicacion: any[];
   public vacio = [];
   @Input() confirmar = false;
+  @Input() editable = false;
+  @Output() editado = new EventEmitter();
 
   // public estadosCiviles: any[];
   public showOtraEntidadFormadora: Boolean = false;
@@ -147,7 +150,7 @@ export class ProfesionalComponent implements OnInit {
       titulo: null,
       fechaEgreso: null,
       fechaTitulo: null,
-      revalida: false,
+      renovacion: false,
       papelesVerificados: false,
       matriculacion: null,
       matriculado : false
@@ -156,7 +159,9 @@ export class ProfesionalComponent implements OnInit {
     origen: null,
     sanciones: null,
     notas: null,
-    rematriculado: false
+    rematriculado: false,
+    agenteMatriculador: '',
+    OtrosDatos: null,
   };
 
 
@@ -170,14 +175,14 @@ export class ProfesionalComponent implements OnInit {
     private _profesionService: ProfesionService,
     private _profesionalService: ProfesionalService,
     private _entidadFormadoraService: EntidadFormadoraService,
-    private plex: Plex) {}
+    private plex: Plex,
+    public auth: Auth) {}
 
   ngOnInit() {
+
     this.estadoCivil = enumerados.getObjsEstadoCivil();
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
-
-
   }
 
 
@@ -205,6 +210,7 @@ export class ProfesionalComponent implements OnInit {
 
   confirmarDatosAdmin($event) {
     if ($event.formValid) {
+      this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
       // tslint:disable-next-line:max-line-length
       this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
@@ -212,7 +218,6 @@ export class ProfesionalComponent implements OnInit {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
-      // this.onProfesionalCompleto.emit(this.profesional);
 
       this._profesionalService.saveProfesional({profesional : this.profesional})
         .subscribe(nuevoProfesional => {
@@ -220,10 +225,10 @@ export class ProfesionalComponent implements OnInit {
             this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
           } else {
             this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+            this.editado.emit(true);
           }
 
         });
-      // this.onProfesionalCompleto.emit(this.profesional);
     }
   }
 
@@ -290,5 +295,20 @@ export class ProfesionalComponent implements OnInit {
     this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
     this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
+  }
+
+  actualizar() {
+    console.log(this.profesional.OtrosDatos)
+    this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
+    this.profesional.contactos.map(elem => {
+      elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
+      return elem;
+    });
+    this._profesionalService.putProfesional(this.profesional)
+    .subscribe(resp => {
+        this.profesional = resp;
+        this.plex.toast('success', 'Se modifico con exito!', 'informacion', 1000);
+        this.editado.emit(true);
+    });
   }
 }

@@ -30,6 +30,7 @@ import { DataService } from './../../services/data.service';
 import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
+import { Auth } from '@andes/auth';
 
 
 const jsPDF = require('jspdf');
@@ -49,9 +50,10 @@ export class DetalleProfesionalComponent implements OnInit {
     public mostrarGrado = true;
     public img64 = null;
     public vieneDeDetalle = null;
-    public flag = null;
+    @Input() public flag = null;
     public confirmar = true;
     public tieneFirma = null;
+    public editable = false;
 
     @Input()  public profesional: IProfesional = {
         id: null,
@@ -126,7 +128,7 @@ export class DetalleProfesionalComponent implements OnInit {
             titulo: null,
             fechaEgreso: null,
             fechaTitulo: null,
-            revalida: false,
+            renovacion: false,
             papelesVerificados: false,
             matriculacion: [{
                 matriculaNumero: null,
@@ -142,7 +144,10 @@ export class DetalleProfesionalComponent implements OnInit {
         origen: null,
         sanciones: null,
         notas: null,
-        rematriculado: false
+        rematriculado: false,
+        agenteMatriculador: '',
+        OtrosDatos: null
+
     };
 
 
@@ -157,7 +162,8 @@ export class DetalleProfesionalComponent implements OnInit {
         private _pdfUtils: PDFUtils,
         private _numeracionesService: NumeracionMatriculasService,
         private route: ActivatedRoute,
-        private router: Router) {}
+        private router: Router,
+        public auth: Auth) {}
 
 
     ngOnInit() {
@@ -195,6 +201,7 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     updateProfesional(callbackData?: any) {
+        this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
          this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;
@@ -238,6 +245,17 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateFirma(oFirma);
     }
 
+    guardarFirmaAdminGrid(oFirma) {
+        const firmaADmin = {
+            'firma': oFirma.firma,
+            'nombreCompleto': oFirma.nombreCompleto,
+            'idProfesional': this.profesional.id
+        };
+        this._profesionalService.saveProfesional({firmaAdmin: firmaADmin}).subscribe(resp => {
+
+        });
+    }
+
     guardarNotas(textoNotas) {
         this.profesional.notas = textoNotas;
         this.updateProfesional();
@@ -253,8 +271,12 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateProfesional();
     }
 
+    guardarOtrosDatos(otrosDatos) {
+        this.profesional.OtrosDatos = otrosDatos;
+        this.updateProfesional();
+    }
+
     matricularProfesional(matriculacion: any) {
-        console.log(this.indexFormacionGradoSelected);
         if (this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion === null) {
             this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion = [matriculacion];
         }else {
@@ -292,6 +314,11 @@ export class DetalleProfesionalComponent implements OnInit {
         }
 
 
+    }
+
+    editar() {
+        this.flag = false;
+        this.editable = true;
     }
     // generarCredencial() {
 

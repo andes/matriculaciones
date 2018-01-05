@@ -80,7 +80,13 @@
             <td>{{agenda.duracionTurno }}</td>
             <td>
                 <span *ngIf='agendasFeriados === null'>No hay fechas excluidas</span>
-     <div  *ngFor="let feriados of agenda.fechasExcluidas,let m = index">  {{feriados | date: 'dd/MM/yyyy'}}</div>
+                <div class="row">
+                 <div class="col-2"  *ngFor="let feriados of agenda.fechasExcluidas,let m = index">
+                    <div >
+                        {{feriados | date: 'dd/MM/yyyy'}}
+                    </div>
+                </div>
+               </div>
             </td>
           </tr>
         </tbody>

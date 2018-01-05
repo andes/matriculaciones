@@ -30,6 +30,7 @@ import { ProfesionService } from '../../../services/profesion.service';
 })
 export class FormacionGradoFormComponent implements OnInit {
     formPosgrado: FormGroup;
+    @Input() profesional: IProfesional;
     activeAcc = false;
     profesiones: any[];
     profesionalGrado: any = {
@@ -44,7 +45,7 @@ export class FormacionGradoFormComponent implements OnInit {
         titulo: null,
         fechaEgreso: null,
         fechaTitulo: null,
-        revalida: false,
+        renovacion: false,
         papelesVerificados: false,
         matriculacion: null,
       };
@@ -58,8 +59,7 @@ export class FormacionGradoFormComponent implements OnInit {
             // }],
 
 
-    @Input() profesional: IProfesional;
-    @Output() submitPosgrado = new EventEmitter();
+    @Output() submitGrado = new EventEmitter();
 
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
@@ -77,12 +77,10 @@ export class FormacionGradoFormComponent implements OnInit {
     }
 
     onSubmit($event, form) {
-        console.log(this.profesional);
-     this.profesional.formacionGrado.push(this.profesionalGrado);
-
-        this._profesionalService.putProfesional(this.profesional)
-         .subscribe(resp => {
-         });
+        if ($event.formValid) {
+        this.submitGrado.emit(this.profesionalGrado);
+        form.reset();
+        }
 
     }
 

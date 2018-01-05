@@ -38,17 +38,7 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
         private _pdfUtils: PDFUtils, private plex: Plex) { }
 
 
-    // generarCredencial() {
 
-    //     this._profesionalService.getCredencial(this.profesional.id)
-    //         .subscribe((resp) => {
-    //             const pdf = this._pdfUtils.generarCredencial(resp, this.profesional, this.formacion);
-    //             pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-    //             // this.loading = false;
-    //         });
-
-
-    // }
     ngOnInit() {
         this.hoy = new Date();
 
@@ -89,26 +79,29 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
                          this.matriculacion.emit(oMatriculacion);
                      });
             });
-            this.profesional.formacionGrado[this.index].revalida = false;
-            this.profesional.formacionGrado[this.index].matriculado = true;
-            this.formacion.revalida = false;
+            // this.profesional.formacionGrado[this.index].renovacion = false;
+            // this.profesional.formacionGrado[this.index].matriculado = true;
+            this.formacion.renovacion = false;
             this.formacion.matriculado = true;
+            this.profesional.formacionGrado[this.index] = this.formacion;
             this.actualizar();
         }
     });
     }
 
     papelesVerificados() {
-        this.profesional.formacionGrado[this.index].papelesVerificados = true;
+        // this.profesional.formacionGrado[this.index].papelesVerificados = true;
         this.formacion.papelesVerificados = true;
+        this.profesional.formacionGrado[this.index] = this.formacion;
         this.actualizar();
     }
 
     renovar() {
-        this.profesional.formacionGrado[this.index].papelesVerificados = false;
-        this.profesional.formacionGrado[this.index].revalida = true;
+        // this.profesional.formacionGrado[this.index].papelesVerificados = false;
+        // this.profesional.formacionGrado[this.index].renovacion = true;
          this.formacion.papelesVerificados = false;
-         this.formacion.revalida = true;
+         this.formacion.renovacion = true;
+         this.profesional.formacionGrado[this.index] = this.formacion;
         this.actualizar();
     }
 

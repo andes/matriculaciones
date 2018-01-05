@@ -109,7 +109,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
           titulo: null,
           fechaEgreso: null,
           fechaTitulo: null,
-          revalida: false,
+          renovacion: false,
           papelesVerificados: false,
           matriculacion: null,
           matriculado : false
@@ -119,7 +119,8 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
         sanciones: null,
         notas: null,
         rematriculado: false,
-        agenteMatriculador: ''
+        agenteMatriculador: '',
+        OtrosDatos: null
       };
 
 

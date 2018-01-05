@@ -37,7 +37,8 @@ export class OtroDatosComponent implements OnInit {
         folio: null,
         anio: null
     };
-
+    @Input() profesional: IProfesional;
+    @Output() submitOtrosDatos = new EventEmitter();
 
 
 
@@ -50,11 +51,9 @@ export class OtroDatosComponent implements OnInit {
 
     onSubmit($event, form) {
 
-       console.log(this.otrosDatos);
-        // if ($event.formValid) {
-        // this.submitGrado.emit(this.profesionalGrado);
-        // form.reset();
-        // }
+        if ($event.formValid) {
+         this.submitOtrosDatos.emit(this.otrosDatos);
+         }
 
     }
 

@@ -45,7 +45,7 @@ export class FormacionGradoFormComponent implements OnInit {
         titulo: null,
         fechaEgreso: null,
         fechaTitulo: null,
-        revalida: false,
+        renovacion: false,
         papelesVerificados: false,
         matriculacion: null,
       };

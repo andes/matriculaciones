@@ -38,16 +38,16 @@
             <label>Entidad Formadora</label> 
             <div>{{formacionGrado.entidadFormadora.nombre}}</div>
         </div>
-        <div class="col-2" *ngIf='!formacionGrado.matriculacion && formacionGrado.revalida === false' >
+        <div class="col-2" *ngIf='!formacionGrado.matriculacion && formacionGrado.renovacion === false' >
 
             <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
             <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-info">Papeles <br>  Verificados</div>
         </div>
-        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === false' >
+        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.renovacion === false' >
            <span *ngIf='formacionGrado.matriculado === false' class="badge badge-danger"> Matricula <br> suspendida</span>
            <span *ngIf='formacionGrado.matriculado' class="badge badge-success"> Matriculado</span>
         </div>
-        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.revalida === true' >          
+        <div class="col-2"  *ngIf='formacionGrado.matriculacion && formacionGrado.renovacion === true' >          
   
             <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles <br> sin verificar</div>
              <div *ngIf='formacionGrado.papelesVerificados' class="badge badge-info">Papeles <br> verificados</div>

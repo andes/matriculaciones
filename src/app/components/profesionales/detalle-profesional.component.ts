@@ -128,7 +128,7 @@ export class DetalleProfesionalComponent implements OnInit {
             titulo: null,
             fechaEgreso: null,
             fechaTitulo: null,
-            revalida: false,
+            renovacion: false,
             papelesVerificados: false,
             matriculacion: [{
                 matriculaNumero: null,
@@ -145,7 +145,9 @@ export class DetalleProfesionalComponent implements OnInit {
         sanciones: null,
         notas: null,
         rematriculado: false,
-        agenteMatriculador: ''
+        agenteMatriculador: '',
+        OtrosDatos: null
+
     };
 
 
@@ -266,6 +268,11 @@ export class DetalleProfesionalComponent implements OnInit {
 
     guardarFormacionPosgrado(posgrado: any) {
         this.profesional.formacionPosgrado.push(posgrado);
+        this.updateProfesional();
+    }
+
+    guardarOtrosDatos(otrosDatos) {
+        this.profesional.OtrosDatos = otrosDatos;
         this.updateProfesional();
     }
 

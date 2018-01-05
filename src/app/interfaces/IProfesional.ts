@@ -57,7 +57,7 @@ export interface IProfesional {
         titulo: string;
         fechaEgreso: Date;
         fechaTitulo: Date;
-        revalida: boolean;
+        renovacion: boolean;
         papelesVerificados: boolean;
         matriculacion?: [{
             matriculaNumero: Number;
@@ -118,6 +118,12 @@ export interface IProfesional {
         normaLegal: String;
         fecha: Date;
         vencimiento: Date;
+    }];
+    OtrosDatos:  [{
+        matriculaProvincial: Number;
+        folio: String;
+        libro: String;
+        anio: Number;
     }];
     notas: String;
     rematriculado: Boolean;

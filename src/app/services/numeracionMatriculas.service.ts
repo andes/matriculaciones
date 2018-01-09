@@ -11,8 +11,8 @@ export class NumeracionMatriculasService extends BaseService {
         super(_http);
     }
 
-    getOne(codigo: number): Observable<any> {
-        return this.server.get(this.numeracionesURL + '/' + codigo);
+    getOne(params: any): Observable<any> {
+        return this.server.get(this.numeracionesURL + '/' , { params: params, showError: true });
     }
 
     saveNumeracion(numeracionModel): Observable<any> {
@@ -20,7 +20,7 @@ export class NumeracionMatriculasService extends BaseService {
     }
 
     getNumeraciones(searchParams: any): Observable<any> {
-
+        console.log(searchParams)
         const query = new URLSearchParams();
 
         if (searchParams.offset) {
@@ -33,6 +33,9 @@ export class NumeracionMatriculasService extends BaseService {
 
         if (searchParams.profesion) {
             query.set('codigo', searchParams.profesion._id);
+        }
+        if (searchParams.especialidad) {
+            query.set('codigoEspecialidad', searchParams.especialidad._id);
         }
 
         return this.get(this.numeracionesURL, query);

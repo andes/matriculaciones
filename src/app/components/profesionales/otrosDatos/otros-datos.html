@@ -43,14 +43,15 @@
                             <th>año</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf='profesional.OtrosDatos !== null '>
 
-                        <tr *ngIf='profesional.OtrosDatos.length > 0'>
+                        <tr *ngIf='profesional.OtrosDatos.length > 0  '>
                              <td>{{profesional.OtrosDatos[0].matriculaProvincial}}</td> 
                             <td>{{profesional.OtrosDatos[0].libro}}</td>
                             <td>{{profesional.OtrosDatos[0].folio}}</td>
                             <td>{{profesional.OtrosDatos[0].anio}}</td>
                         </tr>
+
                     </tbody>
                 </table>
             </div>

@@ -12,6 +12,7 @@ import {
 // Services
 import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
 import { ProfesionService } from './../../services/profesion.service';
+import { SIISAService } from '../../services/siisa.service';
 
 @Component({
     selector: 'app-listado-numeracion-matriculas',
@@ -28,7 +29,8 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     constructor(private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
         private _formBuilder: FormBuilder,
-        private _router: Router) {
+        private _router: Router,
+        private _siisaSrv: SIISAService) {
 
             this.numeraciones = [];
     }
@@ -38,7 +40,8 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     }
     ngOnInit() {
         this.formBuscarNumeracion = this._formBuilder.group({
-            profesion: new FormControl()
+            profesion: new FormControl(),
+            especialidad: new FormControl()
         });
         this.buscar();
     }
@@ -59,6 +62,10 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
             });
     }
 
+    loadEspecialidades(event: any) {
+        this._siisaSrv.getEspecialidades(null).subscribe(event.callback);
+    }
+
     buscar(event?: any) {
 
         const consulta = this.formBuscarNumeracion.value;
@@ -66,16 +73,19 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         // if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
         //     consulta.profesion = null;
         // }
-
+        console.log(consulta.especialidad)
+        console.log(consulta.profesion)
         consulta.offset = event ? event.query.offset : 0;
         consulta.size = event ? event.query.size : 10;
         consulta.profesion = event ? event.query.codigo : consulta.profesion;
+        consulta.especialidad = event ? event.query.codigoEspecialidad : consulta.especialidad;
         if (!event) {
             this.numeracionElegida = null;
         }
 
         this._numeracionesService.getNumeraciones(consulta)
             .subscribe((resp) => {
+                console.log(resp)
                 this.numeraciones = resp.data;
                 if (event) {
                     event.callback(resp);

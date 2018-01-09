@@ -58,9 +58,14 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
         }else {
             revNumero = formacion.matriculacion.length;
         }
-        this._numeracionesService.getOne(formacion.profesion.id)
+        this._numeracionesService.getOne({profesion: formacion.profesion.id})
             .subscribe((num) => {
-               let  matriculaNumero = num[0].proximoNumero + 1;
+                let matriculaNumero;
+                if (mantenerNumero === false) {
+                matriculaNumero = num[0].proximoNumero;
+                num[0].proximoNumero = matriculaNumero + 1 ;
+                }
+
                 if (mantenerNumero) {
                     matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
                 }
@@ -73,7 +78,6 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
                     fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
                     revalidacionNumero: revNumero + 1
                 };
-                num[0].proximoNumero = num[0].proximoNumero + 1;
                 this._numeracionesService.saveNumeracion(num[0])
                 .subscribe(newNum => {
                          this.matriculacion.emit(oMatriculacion);

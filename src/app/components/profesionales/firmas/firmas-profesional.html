@@ -18,7 +18,7 @@
         </div>
         <div class="col-6">
                 <div class="page-title">Firma administracion</div>    
-                <img  [src]="urlFirmaAdmin" style="width: 300px"/> 
+                <img *ngIf='firmaAdmin'  [src]="urlFirmaAdmin" style="width: 300px"/> 
                 <plex-text label="Nombre completo"  [(ngModel)]="nombreAdministrativo" name="nombreAdministrativo">
                   </plex-text>                               
             <div class="form-group">                                

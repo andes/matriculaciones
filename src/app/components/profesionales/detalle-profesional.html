@@ -135,7 +135,8 @@
                 [profesional]="profesional" (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
         </div>
         <div class="col-4" *ngIf="!mostrar">
-            <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"></app-formacion-posgrado-detalle>
+            <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]" [profesional]="profesional"
+            (matriculacion)="matricularProfesionalEspecialidad($event)"></app-formacion-posgrado-detalle>
         </div>
 
     </div>

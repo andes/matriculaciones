@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 // Services
 import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
 import { ProfesionService } from './../../services/profesion.service';
+import { SIISAService } from '../../services/siisa.service';
 
 @Component({
     selector: 'app-numeracion-form-matriculas',
@@ -23,7 +24,8 @@ export class NumeracionMatriculasFormComponent implements OnInit {
     constructor(private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
         private _formBuilder: FormBuilder,
-        private plex: Plex) {
+        private plex: Plex,
+        private _siisaSrv: SIISAService) {
 
     }
 
@@ -44,6 +46,10 @@ export class NumeracionMatriculasFormComponent implements OnInit {
 
     loadProfesiones(event) {
         this._profesionService.getProfesiones().subscribe(event.callback);
+    }
+
+    loadEspecialidades(event: any) {
+        this._siisaSrv.getEspecialidades(null).subscribe(event.callback);
     }
 
     volverAlListado() {

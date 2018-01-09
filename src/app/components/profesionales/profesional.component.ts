@@ -142,6 +142,7 @@ export class ProfesionalComponent implements OnInit {
       profesion: {
         nombre: null,
         codigo: null,
+        tipoDeFormacion:null
       },
       entidadFormadora: {
         nombre: null,

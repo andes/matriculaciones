@@ -101,6 +101,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
           profesion: {
             nombre: null,
             codigo: null,
+            tipoDeFormacion: null
           },
           entidadFormadora: {
             nombre: null,

@@ -106,7 +106,7 @@ export class ListarProfesionalesComponent implements OnInit {
                     this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;
                     this._profesionalService.putProfesional(this.profesionales[_n])
                     .subscribe(resp => {
-                      this.profesionales[_n] = resp
+                      this.profesionales[_n] = resp;
                     });
                   }
                }

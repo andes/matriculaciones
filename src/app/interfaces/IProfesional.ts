@@ -49,6 +49,7 @@ export interface IProfesional {
         profesion: {
             nombre: string;
             codigo: number;
+            tipoDeFormacion: String;
         };
         entidadFormadora: {
             nombre: string;

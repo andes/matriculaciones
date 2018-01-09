@@ -120,6 +120,7 @@ export class DetalleProfesionalComponent implements OnInit {
             profesion: {
                 nombre: null,
                 codigo: null,
+                tipoDeFormacion: null
             },
             entidadFormadora: {
                 nombre: null,
@@ -281,6 +282,15 @@ export class DetalleProfesionalComponent implements OnInit {
             this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion = [matriculacion];
         }else {
         this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
+    }
+        this.updateProfesional();
+    }
+
+    matricularProfesionalEspecialidad(matriculacion: any) {
+        if (this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion === null) {
+            this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion = [matriculacion];
+        }else {
+        this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion.push(matriculacion);
     }
         this.updateProfesional();
     }

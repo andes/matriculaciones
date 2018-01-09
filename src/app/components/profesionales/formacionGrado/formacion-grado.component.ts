@@ -22,7 +22,8 @@ import { PDFUtils } from '../../../utils/PDFUtils';
 
 @Component({
     selector: 'app-formacion-grado',
-    templateUrl: 'formacion-grado.html'
+    templateUrl: 'formacion-grado.html',
+    styles: ['.btnGrado { margin-left: 5px }']
 })
 export class FormacionGradoComponent implements OnInit, OnChanges {
 
@@ -83,6 +84,12 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                             });
                     });
             });
+    }
+
+    generarCertificadoEtica(i) {
+        const grado = this.profesional.formacionGrado[i];
+        const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
+        pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
     }
 
     // verificaVencimiento() {

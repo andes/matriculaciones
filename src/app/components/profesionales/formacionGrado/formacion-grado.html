@@ -11,15 +11,23 @@
                 <div class="btn-group float-right">           
                     <plex-button *ngIf="!formacionGrado.matriculacion?.matriculacionNumero"
                         type="primary"
-                        class="float-right"
+                        class="float-right btnGrado"
                         icon="information-outline"            
                         (click)="showFormacion(i)"></plex-button>
                         <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                         title="Generar credencial"
                         type="success"
-                        class="float-right"
+                        class="float-right btnGrado"
                         icon="mdi mdi-credit-card"            
-                        (click)="generarCredencial(i)"></plex-button>              
+                        (click)="generarCredencial(i)"></plex-button>
+                        <plex-button 
+                        title="Generar certificado de etica"
+                        type="warning"
+                        *ngIf='formacionGrado.matriculacion && formacionGrado.matriculado'
+                        class="float-right btnGrado"
+                        icon="mdi mdi-certificate" 
+                        (click)="generarCertificadoEtica(i)"           
+                        ></plex-button>             
                 </div>
             </div>
         </div>

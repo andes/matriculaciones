@@ -92,7 +92,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
         this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
 
 
-        form.resetForm();
+       // form.resetForm();
         }
     }
 

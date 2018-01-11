@@ -142,7 +142,7 @@ export class ProfesionalComponent implements OnInit {
       profesion: {
         nombre: null,
         codigo: null,
-        tipoDeFormacion:null
+        tipoDeFormacion: null
       },
       entidadFormadora: {
         nombre: null,
@@ -180,7 +180,6 @@ export class ProfesionalComponent implements OnInit {
     public auth: Auth) {}
 
   ngOnInit() {
-
     this.estadoCivil = enumerados.getObjsEstadoCivil();
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
@@ -219,7 +218,6 @@ export class ProfesionalComponent implements OnInit {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
-
       this._profesionalService.saveProfesional({profesional : this.profesional})
         .subscribe(nuevoProfesional => {
           if (nuevoProfesional === null) {
@@ -299,7 +297,6 @@ export class ProfesionalComponent implements OnInit {
   }
 
   actualizar() {
-    console.log(this.profesional.OtrosDatos)
     this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
     this.profesional.contactos.map(elem => {
       elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));

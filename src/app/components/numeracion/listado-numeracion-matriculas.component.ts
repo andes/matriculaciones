@@ -21,7 +21,7 @@ import { SIISAService } from '../../services/siisa.service';
 export class ListadoNumeracionMatriculasComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente    
     private formBuscarNumeracion: FormGroup;
-    private numeraciones: any[] ;
+    private numeraciones: any[];
     private numeracionElegida: any;
     private showListado: Boolean = true;
     public var: Number;
@@ -32,7 +32,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         private _router: Router,
         private _siisaSrv: SIISAService) {
 
-            this.numeraciones = [];
+        this.numeraciones = [];
     }
     onScroll(event: any) {
         /*this.currentPage++;
@@ -73,8 +73,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         // if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
         //     consulta.profesion = null;
         // }
-        console.log(consulta.especialidad)
-        console.log(consulta.profesion)
+
         consulta.offset = event ? event.query.offset : 0;
         consulta.size = event ? event.query.size : 10;
         consulta.profesion = event ? event.query.codigo : consulta.profesion;
@@ -85,7 +84,6 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
 
         this._numeracionesService.getNumeraciones(consulta)
             .subscribe((resp) => {
-                console.log(resp)
                 this.numeraciones = resp.data;
                 if (event) {
                     event.callback(resp);
@@ -100,8 +98,8 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     cambio(ingreso) {
         this.numeracionElegida = ingreso;
     }
-    
-    cerrar(){
+
+    cerrar() {
         this.numeracionElegida = null;
     }
 

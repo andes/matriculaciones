@@ -1,0 +1,55 @@
+<section>
+    <div class="row">
+        <div class="col-12">
+            <plex-box type="primary">
+                <form #cambioDni='ngForm'>
+                    <fieldset>
+                        <legend>Solicitud de cambio de DNI</legend>
+                        <div class="col-md-12">
+                            <!-- contacto -->
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <plex-text label="apellido" [(ngModel)]="cambioDNI.apellido" name="apellido" [required]="true"></plex-text>
+                                </div>
+                                <div class="col-md-6">
+                                    <plex-text label="Nombre" [(ngModel)]="cambioDNI.nombre" name="nombre" [required]="true"></plex-text>
+                                </div>
+                                <div class="col-md-4">
+                                    <plex-select label="Sexo" [(ngModel)]="cambioDNI.sexo" name="sexo" [data]="sexos" [required]="true"></plex-select>
+                                </div>
+                                <div class="col-md-4">
+                                    <plex-select label="Nacionalidad" [(ngModel)]="cambioDNI.nacionalidad" name="nacionalidad" (getData)="loadPaises($event)"
+                                        [required]="true"></plex-select>
+                                </div>
+                            </div>
+                            <br>
+                            <hr>
+                            <div class="row">
+                                <div class="col-md-5">
+                                    <plex-text label="DNI Actual" [(ngModel)]="cambioDNI.dniActual" name="dniActual" [required]="true"></plex-text>
+                                </div>
+                                <!-- <div class="col-md-2 text-center">
+                                    <span class="mdi mdi-arrow-right-bold-box-outline text-info" style='font-size:50px; position:absolute; top: 28.2%; right: 37.73%;'></span>
+                                </div> -->
+                                <div class="col-md-5">
+                                    <plex-text label="DNI Nuevo" [(ngModel)]="cambioDNI.dniNuevo" name="dniNuevo" [required]="true"></plex-text>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <br>
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <plex-button type="success" label="Confirmar Datos" (click)="save($event,cambioDni)" class="pull-right" validateForm="true"></plex-button>
+                        </div>
+                    </div>
+
+                </form>
+            </plex-box>
+        </div>
+    </div>
+</section>
+
+<footer>
+        <plex-button label="Volver" type="danger" routerLink="/requisitosGenerales"></plex-button> 
+    </footer> 

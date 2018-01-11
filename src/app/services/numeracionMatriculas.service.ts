@@ -20,7 +20,6 @@ export class NumeracionMatriculasService extends BaseService {
     }
 
     getNumeraciones(searchParams: any): Observable<any> {
-        console.log(searchParams)
         const query = new URLSearchParams();
 
         if (searchParams.offset) {

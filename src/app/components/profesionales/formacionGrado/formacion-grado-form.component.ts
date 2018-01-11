@@ -75,16 +75,12 @@ export class FormacionGradoFormComponent implements OnInit {
                 return value.profesion;
             });
         }
-
-        this._profesionService.getProfesiones().subscribe(resp => {
-            console.log(resp)
-                    });
     }
 
     onSubmit($event, form) {
-        console.log(this.profesionalGrado)
         if ($event.formValid) {
         this.submitGrado.emit(this.profesionalGrado);
+        this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
        // form.reset();
         }
 

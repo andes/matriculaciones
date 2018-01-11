@@ -39,6 +39,7 @@ const jsPDF = require('jspdf');
     selector: 'app-detalle-profesional',
     templateUrl: 'detalle-profesional.html',
     styles: ['.margenFoto { padding-left: 4%; padding-bottom: 1%; }']
+
 })
 export class DetalleProfesionalComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente

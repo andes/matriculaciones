@@ -50,7 +50,7 @@ export class SancionesFormComponent implements OnInit {
         if ($event.formValid) {
         this.submitSancion.emit(this.sanciones);
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
-        form.reset();
+       // form.reset();
     }
     }
 

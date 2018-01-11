@@ -9,23 +9,24 @@
               <div class="page-title">Buscar un profesional</div>
             </div>
             <div class="col">
-              <plex-button type="primary float-right" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>    
+              <plex-button type="primary float-right" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>
             </div>
-        </div>
-        </header>
-        <div class="row">            
-          <div class="col-6">
-            <plex-text label="Documento" [(ngModel)]="dni" [autoFocus]="autoFocus" (change)="buscar()" placeholder="escriba un documento">
-            </plex-text>
           </div>
-          <div class="col-6">
-            <plex-text label="apellido" [(ngModel)]="apellido" (change)="buscar()" placeholder="escriba apellido">
-            </plex-text>
-          </div>
-        </div>
-        <div class="row">&nbsp;</div>
 
-        <div class="row">&nbsp;</div>
+          <div class="row">
+            <div class="col-6">
+              <plex-text label="Documento" [(ngModel)]="dni" [autoFocus]="autoFocus" (change)="buscar()" placeholder="escriba un documento">
+              </plex-text>
+            </div>
+            <div class="col-6">
+              <plex-text label="apellido" [(ngModel)]="apellido" (change)="buscar()" placeholder="escriba apellido">
+              </plex-text>
+            </div>
+          </div>
+          <br>
+        </header>
+
+
         <div class="row">
           <div class="col">
             <!--Loader-->
@@ -38,28 +39,28 @@
             <table *ngIf="profesionales && profesionales.length" class="table table-striped">
               <thead>
                 <tr>
-                    <th></th>
+                  <th></th>
                   <th>Documento</th>
                   <th>Apellido y Nombre</th>
                   <th>Fecha de Nacimiento</th>
                 </tr>
               </thead>
               <tbody>
-                <tr class="hover" *ngFor="let profesional of profesionales"  (click)="seleccionar(profesional)">
+                <tr class="hover" *ngFor="let profesional of profesionales" (click)="seleccionar(profesional)">
                   <td>
-                    <div >
-                        <span *ngIf="profesional.rematriculado === true" class="badge badge-danger">
-                           Rematriculado
-                          </span>
-                       </div>
-                       <div >
-                          <span *ngIf="profesional.rematriculado === false" class="badge badge-success">
-                             Matriculado
-                            </span>
-                         </div>
-                      </td>
-                  <td >
-                    <span   *ngIf="profesional?.documento !== ''">{{profesional.documento}}</span>
+                    <div>
+                      <span *ngIf="profesional.rematriculado === true" class="badge badge-danger">
+                        Rematriculado
+                      </span>
+                    </div>
+                    <div>
+                      <span *ngIf="profesional.rematriculado === false" class="badge badge-success">
+                        Matriculado
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span *ngIf="profesional?.documento !== ''">{{profesional.documento}}</span>
                     <span *ngIf="profesional?.documento === ''" class="text-danger">Sin documento</span>
                   </td>
                   <td>{{profesional | profesional}}</td>
@@ -74,12 +75,12 @@
                   </td>
 
                   <td>
-                      <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
-                          <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null " class="badge badge-danger">
-                              {{profesionalGrado.profesion.nombre}}: Matricula vencida
-                            </span>
-                         </div>
-                    </td>
+                    <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
+                      <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null " class="badge badge-danger">
+                        {{profesionalGrado.profesion.nombre}}: Matricula vencida
+                      </span>
+                    </div>
+                  </td>
                 </tr>
               </tbody>
             </table>
@@ -89,60 +90,60 @@
     </div>
 
 
-  <div class="col-2" *ngIf='!profesionalElegido'>
-    <plex-box>
-      <header>
-        <div class="page-title">Estadisticas</div>
-      </header>
+    <div class="col-2" *ngIf='!profesionalElegido'>
+      <plex-box>
+        <header>
+          <div class="page-title">Estadisticas</div>
+        </header>
 
-  <div class="row text-center">
+        <div class="row text-center">
 
-      <div class="col-12">
-        <div class="h3 badge badge-info">
-          <div class="row">
-            <div class="col-4">
-              <i class="mdi mdi-account-multiple mdi-36px info"></i>
+          <div class="col-12">
+            <div class="h3 badge badge-info">
+              <div class="row">
+                <div class="col-4">
+                  <i class="mdi mdi-account-multiple mdi-36px info"></i>
+                </div>
+                <div class="col-8">
+                  <span class="h3">{{totalProfesionales}}</span>
+                </div>
+              </div>
             </div>
-            <div class="col-8">
-              <span class="h3">{{totalProfesionales}}</span>
-            </div>
-        </div>
-      </div>
-        <h6 class="text-info">Total Profesionales</h6>
-      </div>
+            <h6 class="text-info">Total Profesionales</h6>
+          </div>
 
-      <div class="col-12">
-          <br>
-          <div class="h3 badge badge-danger">
-          <div class="row">
-              <div class="col-4">
+          <div class="col-12">
+            <br>
+            <div class="h3 badge badge-danger">
+              <div class="row">
+                <div class="col-4">
                   <i class="mdi mdi-account mdi-36px"></i>
+                </div>
+                <div class="col-8">
+                  <!-- <span class="h3" *ngIf='!profesionalesRematriculados'>0</span> -->
+                  <span class="h3">{{profesionalesRematriculados.length}}</span>
+                </div>
               </div>
-              <div class="col-8">
-                <!-- <span class="h3" *ngIf='!profesionalesRematriculados'>0</span> -->
-                <span class="h3" >{{profesionalesRematriculados.length}}</span>             
+            </div>
+            <h6 class="text-danger">Profesionales Rematriculados</h6>
+          </div>
+          <div class="col-12">
+            <br>
+            <div class="h3 badge badge-success">
+              <div class="row">
+                <div class="col-4">
+                  <i class="mdi mdi-account mdi-36px"></i>
+                </div>
+                <div class="col-8">
+                  <span class="h3">{{profesionalesMatriculados.length}}</span>
+                </div>
               </div>
+            </div>
+            <h6 class="text-success">Profesionales Matriculados</h6>
           </div>
         </div>
-          <h6 class="text-danger">Profesionales Rematriculados</h6>
-      </div>
-      <div class="col-12">
-          <br>
-          <div class="h3 badge badge-success">
-              <div class="row">
-                  <div class="col-4">
-                      <i class="mdi mdi-account mdi-36px"></i>
-                  </div>
-                  <div class="col-8">
-                    <span class="h3">{{profesionalesMatriculados.length}}</span>
-                  </div>
-              </div>
-        </div>
-          <h6 class="text-success">Profesionales Matriculados</h6>
-      </div>
-  </div>
-</plex-box>
-</div>
+      </plex-box>
+    </div>
 
 
 
@@ -150,7 +151,9 @@
     <div class="col-4" *ngIf='profesionalElegido'>
       <plex-box>
         <header>
-            <button  class="float-right btn btn-danger" (click)="cerrarResumenProfesional()"><i class="mdi mdi-window-close"></i></button>
+          <button class="float-right btn btn-danger" (click)="cerrarResumenProfesional()">
+            <i class="mdi mdi-window-close"></i>
+          </button>
           <div class="page-title">Resumen profesional</div>
         </header>
         <div>
@@ -158,7 +161,7 @@
             <div class="col-md-12">
               <div class="row mb-1">
                 <div class="col text-center">
-                  <app-foto-general [profesional]="profesionalElegido" [img64]="img64" ></app-foto-general>
+                  <app-foto-general [profesional]="profesionalElegido" [img64]="img64"></app-foto-general>
                 </div>
               </div>
               <div class="row mb-1" *ngIf="profesionalElegido.apellido">
@@ -204,7 +207,7 @@
             </span>
 
             <plex-button label="Dar sobreturno" icon="mdi mdi-timetable" type="primary" (click)="sobreTurno(profesionalElegido)"></plex-button>
-            
+
 
           </h4>
         </div>
@@ -213,5 +216,5 @@
   </div>
 </section>
 <footer>
-    <plex-button label="Volver"  type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
+  <plex-button label="Volver" type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
 </footer>

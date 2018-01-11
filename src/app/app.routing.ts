@@ -29,7 +29,8 @@ import { FormacionPosgradoFormComponent } from './components/profesionales/forma
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { FotoGeneralComponent } from './components/profesionales/foto-general.component';
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
-
+import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
+import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
 
 
 const appRoutes: Routes = [
@@ -44,6 +45,8 @@ const appRoutes: Routes = [
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
     { path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent },
     { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent },
+    { path: 'cambioDni', component: CambioDniComponent },
+    { path: 'listadoCambioDni', component: ListadoCambioDniComponent },
     { path: 'turnos', component: TurnosComponent },
     { path: 'profesional/:documento', component: DetalleProfesionalComponent },
     { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },

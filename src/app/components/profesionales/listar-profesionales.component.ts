@@ -40,6 +40,7 @@ import { ExcelService } from '../../services/excel.service';
 @Component({
   selector: 'app-listar-profesionales',
   templateUrl: 'listar-profesionales.html'
+
 })
 export class ListarProfesionalesComponent implements OnInit {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
@@ -88,7 +89,7 @@ export class ListarProfesionalesComponent implements OnInit {
         this.profesionales = data;
         this.totalProfesionales = data.length;
 
-        for (var _i = 0; _i < this.profesionales.length; _i++) {
+        for (let _i = 0; _i < this.profesionales.length; _i++) {
           if (this.profesionales[_i].rematriculado !== false) {
             this.profesionalesRematriculados.push(this.profesionales[_i]);
 
@@ -98,9 +99,10 @@ export class ListarProfesionalesComponent implements OnInit {
 
        }
 
-       for (var _n = 0; _n < this.profesionales.length; _n++) {
-            for (var _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
+       for (let _n = 0; _n < this.profesionales.length; _n++) {
+            for (let _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
               if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
+                  // tslint:disable-next-line:max-line-length
                   if (this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin < this.hoy) {
                     this.profesionales[_n].formacionGrado[_i].matriculado = false;
                     this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;

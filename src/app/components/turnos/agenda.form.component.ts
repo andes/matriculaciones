@@ -92,7 +92,7 @@ export class AgendaFormComponent implements OnInit {
               agendaOperation.subscribe(resultado => {
                 this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
             });
-            form.resetForm();
+            // form.resetForm();
         }
     }
 

@@ -13,6 +13,7 @@ import { TurnoService } from './../../services/turno.service';
 
 import { PDFUtils } from './../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
+import { CambioDniService } from '../../services/cambioDni.service';
 
 const jsPDF = require('jspdf');
 
@@ -27,6 +28,7 @@ export class TurnosComponent implements OnInit {
     private turnos: any[] = [];
     private turnoElegido: any;
     private showListado: Boolean = true;
+    public solicitudesDeCambio;
     offset = 0;
     limit = 10;
     turnosTotal = null;
@@ -36,6 +38,7 @@ export class TurnosComponent implements OnInit {
         private _pdfUtils: PDFUtils,
         private route: ActivatedRoute,
         private router: Router,
+        private _cambioDniService: CambioDniService,
         public auth: Auth) { }
 
     onScroll() {
@@ -50,6 +53,7 @@ export class TurnosComponent implements OnInit {
         });
 
         this.buscar();
+        this.contadorDeCambiosDni();
 
     }
 
@@ -119,6 +123,18 @@ export class TurnosComponent implements OnInit {
     nextPage() {
         this.limit += 10;
         this.buscar();
+    }
+
+    contadorDeCambiosDni() {
+        let contador = 0;
+        this._cambioDniService.get().subscribe(data => {
+            for (let _n = 0; _n < data.length; _n++) {
+                if (data[_n].atendida === false) {
+                    contador += 1;
+                }
+            }
+            this.solicitudesDeCambio = contador;
+        });
     }
 
 

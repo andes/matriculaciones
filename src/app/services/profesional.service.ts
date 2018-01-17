@@ -9,6 +9,7 @@ import { Server } from '@andes/shared';
 @Injectable()
 export class ProfesionalService extends BaseService {
     profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
+    resumenProfesional = AppSettings.API_ENDPOINT + '/core/tm/resumen/';
 
     constructor(_http: Http, private server: Server) {
         super(_http);
@@ -55,6 +56,10 @@ export class ProfesionalService extends BaseService {
 
     getCredencial(idProf: string): any {
         return this.server.get(this.profesionalesURL + 'matricula/' + idProf);
+    }
+
+    getResumenProfesional(params: any): Observable<any> {
+        return this.server.get(this.resumenProfesional, { params: params, showError: true });
     }
 
 }

@@ -60,7 +60,7 @@ export class ListarProfesionalesComponent implements OnInit {
     private excelService: ExcelService,
     private route: ActivatedRoute,
     private router: Router,
-    public auth: Auth) {}
+    public auth: Auth) { }
 
   ngOnInit() {
 
@@ -68,23 +68,25 @@ export class ListarProfesionalesComponent implements OnInit {
     this.vieneDeListado = true;
     this.hoy = new Date();
 
+
+
   }
 
   showProfesional(profesional: any) {
-    this.router.navigate(['/profesional', profesional.documento]);
+    this.router.navigate(['/profesional', profesional.id]);
   }
 
   seleccionar(profesional: any) {
     this.profesionalElegido = profesional;
   }
 
-  buscar(event ?: any) {
+  buscar(event?: any) {
     this.profesionalesMatriculados = [];
     this.profesionalesRematriculados = [];
     this.profesionalElegido = null;
     const doc = this.dni ? this.dni : '';
     const apellidoProf = this.apellido ? this.apellido : '';
-    this._profesionalService.getProfesional({documento: doc, apellido: apellidoProf})
+    this._profesionalService.getProfesional({ documento: doc, apellido: apellidoProf })
       .subscribe((data) => {
         this.profesionales = data;
         this.totalProfesionales = data.length;
@@ -93,28 +95,15 @@ export class ListarProfesionalesComponent implements OnInit {
           if (this.profesionales[_i].rematriculado !== false) {
             this.profesionalesRematriculados.push(this.profesionales[_i]);
 
-          }else {
+          } else {
             this.profesionalesMatriculados.push(this.profesionales[_i]);
           }
 
-       }
+        }
+        this.comprebaVenciomientoGrado();
+        this.comprebaVenciomientoPosGrado();
 
-       for (let _n = 0; _n < this.profesionales.length; _n++) {
-            for (let _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
-              if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
-                  // tslint:disable-next-line:max-line-length
-                  if (this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin < this.hoy) {
-                    this.profesionales[_n].formacionGrado[_i].matriculado = false;
-                    this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;
-                    this._profesionalService.putProfesional(this.profesionales[_n])
-                    .subscribe(resp => {
-                      this.profesionales[_n] = resp;
-                    });
-                  }
-               }
-           }
 
-          }
         // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
   }
@@ -125,4 +114,46 @@ export class ListarProfesionalesComponent implements OnInit {
   sobreTurno(profesional: any) {
     this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
+
+  comprebaVenciomientoGrado() {
+    for (let _n = 0; _n < this.profesionales.length; _n++) {
+      for (let _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
+        if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
+          // tslint:disable-next-line:max-line-length
+          if (this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin < this.hoy) {
+            this.profesionales[_n].formacionGrado[_i].matriculado = false;
+            this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;
+            this._profesionalService.putProfesional(this.profesionales[_n])
+              .subscribe(resp => {
+                this.profesionales[_n] = resp;
+              });
+          }
+        }
+      }
+
+    }
+  }
+
+  comprebaVenciomientoPosGrado() {
+    for (let _n = 0; _n < this.profesionales.length; _n++) {
+      if (this.profesionales[_n].formacionPosgrado) {
+        for (let _i = 0; _i < this.profesionales[_n].formacionPosgrado.length; _i++) {
+          if (this.profesionales[_n].formacionPosgrado[_i].matriculacion.length > 0) {
+            // tslint:disable-next-line:max-line-length
+            if (this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin.getFullYear() <= this.hoy.getFullYear()) {
+              this.profesionales[_n].formacionPosgrado[_i].matriculado = false;
+              this.profesionales[_n].formacionPosgrado[_i].papelesVerificados = false;
+              this._profesionalService.putProfesional(this.profesionales[_n])
+                .subscribe(resp => {
+                  this.profesionales[_n] = resp;
+                });
+            }
+          }
+        }
+      }
+
+    }
+  }
+
+
 }

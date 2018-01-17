@@ -29,7 +29,7 @@ export class ListadoCambioDniComponent implements OnInit {
     public cambioDNI: any = {
         nombre: null,
         apellido: null,
-        sexo: null,
+        idProfesional: null,
         nacionalidad: null,
         dniActual: null,
         dniNuevo: null
@@ -55,6 +55,7 @@ export class ListadoCambioDniComponent implements OnInit {
     ngOnInit() {
         this.sexos = enumerados.getObjSexos();
         this.traeListado();
+
     };
 
     loadPaises(event) {
@@ -87,12 +88,15 @@ export class ListadoCambioDniComponent implements OnInit {
     aprobar() {
 
 
-        this._profesionalService.getProfesional({ documento: this.solicitudElegida.dniActual }).subscribe(profesional => {
+        this._profesionalService.getProfesional({ id: this.solicitudElegida.idProfesional }).subscribe(profesional => {
             if (profesional.length === 0) {
                 this.plex.alert('No existe ningun profesional con este DNI');
                 this.Match = false;
             } else {
+                console.log(profesional)
                 profesional[0].documento = this.solicitudElegida.dniNuevo;
+                profesional[0].documentoViejo = this.solicitudElegida.dniActual;
+                console.log(profesional[0]);
                 this._profesionalService.putProfesional(profesional[0]).subscribe(newProf => {
                     this.solicitudElegida.atendida = true;
                     this._cambioDniService.saveCambio(this.solicitudElegida).subscribe();

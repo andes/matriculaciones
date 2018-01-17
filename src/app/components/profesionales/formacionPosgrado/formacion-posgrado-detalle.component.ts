@@ -27,6 +27,7 @@ import { NumeracionMatriculasService } from './../../../services/numeracionMatri
 export class FormacionPosgradoDetalleComponent implements OnInit {
 
     @Input() formacion: any;
+    @Input() index: any;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
 
@@ -38,7 +39,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        console.log(this.index)
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -84,9 +85,45 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                                     this.matriculacion.emit(oMatriculacion);
                                 });
                         }
+                        this.formacion.revalida = false;
+                        this.formacion.matriculado = true;
+                        this.profesional.formacionPosgrado[this.index] = this.formacion;
+                        this.actualizar();
                     });
+
                 ;
             }
+        });
+    }
+
+    papelesVerificados() {
+        this.formacion.papelesVerificados = true;
+        this.profesional.formacionPosgrado[this.index] = this.formacion;
+        this.actualizar();
+    }
+
+    darDeBaja() {
+        this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
+            if (resultado) {
+               this.profesional.formacionPosgrado[this.index].matriculado = false;
+               this.profesional.formacionPosgrado[this.index].papelesVerificados = false;
+               this.actualizar();
+           }
+        });
+
+   }
+
+   renovar() {
+     this.formacion.papelesVerificados = false;
+     this.formacion.revalida = true;
+     this.profesional.formacionPosgrado[this.index] = this.formacion;
+    this.actualizar();
+}
+
+    actualizar() {
+        this._profesionalService.putProfesional(this.profesional)
+        .subscribe(resp => {
+             this.profesional = resp;
         });
     }
 }

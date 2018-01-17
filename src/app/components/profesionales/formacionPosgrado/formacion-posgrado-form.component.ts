@@ -59,6 +59,9 @@ export class FormacionPosgradoFormComponent implements OnInit {
                     codigo: null,
                 },
             },
+            papelesVerificados: false,
+            matriculado: false,
+            revalida: false
             // matriculacion: [{
             //     matriculaNumero: null,
             //     libro: null,

@@ -138,6 +138,7 @@ export class DetalleProfesionalComponent implements OnInit {
                 folio: null,
                 inicio: null,
                 fin: null,
+                baja: null,
                 revalidacionNumero: null,
             }],
             matriculado: false
@@ -148,8 +149,9 @@ export class DetalleProfesionalComponent implements OnInit {
         notas: null,
         rematriculado: false,
         agenteMatriculador: '',
-        OtrosDatos: null
-
+        OtrosDatos: null,
+        idRenovacion: null,
+        documentoViejo: null
     };
 
 
@@ -169,10 +171,11 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     ngOnInit() {
+        this.route.params.subscribe( params => console.log(params));
         this.vieneDeDetalle = true;
         this.route.params
             .switchMap((params: Params)  =>
-                this._profesionalService.getProfesional({documento: params['documento']})
+                this._profesionalService.getProfesional({id: params['id']})
             ).subscribe(
                 (profesional:  any) => {
                     // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
@@ -186,7 +189,7 @@ export class DetalleProfesionalComponent implements OnInit {
                     if (this.flag === false) {
                     this.route.params
                         .switchMap((paramsTemporal: Params)  =>
-                            this._turnoService.getTurnoSolicitados(paramsTemporal['documento'])
+                            this._turnoService.getTurnoSolicitados(paramsTemporal['id'])
                         ).subscribe(
                             (profesionalTemporal: any) => {
                                 this.profesional = profesionalTemporal;

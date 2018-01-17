@@ -32,6 +32,7 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
     @Input() index: any;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
+    public motivoBaja;
     private hoy = null;
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
@@ -75,6 +76,10 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
                     libro: '',
                     folio: '',
                     inicio: new Date(),
+                    baja : {
+                        motivo: '',
+                        fecha: null
+                    },
                     fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
                     revalidacionNumero: revNumero + 1
                 };
@@ -114,6 +119,9 @@ export class FormacionGradoDetalleComponent  implements OnInit  {
              if (resultado) {
                 this.profesional.formacionGrado[this.index].matriculado = false;
                 this.profesional.formacionGrado[this.index].papelesVerificados = false;
+                // tslint:disable-next-line:max-line-length
+                this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.motivo = this.motivoBaja;
+                this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.fecha = new Date();
                 this.actualizar();
             }
          });

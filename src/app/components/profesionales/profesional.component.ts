@@ -82,6 +82,7 @@ export class ProfesionalComponent implements OnInit {
     nombre: null,
     apellido: null,
     documento: null,
+    documentoViejo: null,
     documentoVencimiento: null,
     cuit: null,
     fechaNacimiento: null,
@@ -163,6 +164,8 @@ export class ProfesionalComponent implements OnInit {
     rematriculado: false,
     agenteMatriculador: '',
     OtrosDatos: null,
+    idRenovacion: null,
+   
   };
 
 
@@ -297,6 +300,7 @@ export class ProfesionalComponent implements OnInit {
   }
 
   actualizar() {
+    console.log(this.profesional)
     this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
     this.profesional.contactos.map(elem => {
       elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));

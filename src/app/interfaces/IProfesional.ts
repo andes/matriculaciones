@@ -65,6 +65,10 @@ export interface IProfesional {
             libro: String;
             folio: String;
             inicio: Date;
+            baja: {
+                motivo: '',
+                fecha: Date
+            }
             fin: Date;
             revalidacionNumero: Number;
         }];
@@ -103,10 +107,17 @@ export interface IProfesional {
             libro: String;
             folio: String;
             inicio: Date;
+            baja: {
+                motivo: '',
+                fecha: null
+            }
             fin: Date;
             revalidacionNumero: Number;
-        } | null
-    ];
+        }
+    ]
+    papelesVerificados: boolean;
+    matriculado: boolean;
+    revalida: boolean;
     }];
     origen: String;
     sanciones:  [{
@@ -129,4 +140,6 @@ export interface IProfesional {
     notas: String;
     rematriculado: Boolean;
     agenteMatriculador: String;
+    idRenovacion: String;
+    documentoViejo: Number;
 }

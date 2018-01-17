@@ -14,7 +14,7 @@
                             <plex-text label="libro" [(ngModel)]="otrosDatos.libro" name='libro' [required]="true"></plex-text>
                         </div>
                         <div class="col-md-4">
-                            <plex-int label="anio"  [(ngModel)]="otrosDatos.anio" name='anio' [required]="true"></plex-int>
+                            <plex-int label="anio" [(ngModel)]="otrosDatos.anio" name='anio' [required]="true"></plex-int>
                         </div>
 
                     </div>
@@ -33,28 +33,34 @@
 
     </plex-panel>
     <div class="row">
-            <div class="col-12">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th>matricula Provincial</th>
-                            <th>libro</th>
-                            <th>folio</th>
-                            <th>año</th>
-                        </tr>
-                    </thead>
-                    <tbody *ngIf='profesional.OtrosDatos !== null '>
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>matricula Provincial</th>
+                        <th>libro</th>
+                        <th>folio</th>
+                        <th>año</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf='profesional.OtrosDatos !== null '>
 
-                        <tr *ngIf='profesional.OtrosDatos.length > 0  '>
-                             <td>{{profesional.OtrosDatos[0].matriculaProvincial}}</td> 
-                            <td>{{profesional.OtrosDatos[0].libro}}</td>
-                            <td>{{profesional.OtrosDatos[0].folio}}</td>
-                            <td>{{profesional.OtrosDatos[0].anio}}</td>
-                        </tr>
+                    <tr *ngIf='profesional.OtrosDatos.length > 0  '>
+                        <td>{{profesional.OtrosDatos[0].matriculaProvincial}}</td>
+                        <td>{{profesional.OtrosDatos[0].libro}}</td>
+                        <td>{{profesional.OtrosDatos[0].folio}}</td>
+                        <td>{{profesional.OtrosDatos[0].anio}}</td>
+                    </tr>
 
-                    </tbody>
-                </table>
-            </div>
-    
+                </tbody>
+            </table>
         </div>
+
+    </div>
+    <div class="row">
+        <div class="col-12" *ngIf='profesional.documentoViejo'>
+            <br><br>
+            <span><span class="text-danger">*</span>Realizo un cambio de documento del N°<strong>{{profesional.documentoViejo}}</strong>  al <strong>{{profesional.documento}} </strong> </span>
+        </div>
+    </div>
 </plex-accordion>

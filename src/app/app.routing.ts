@@ -48,7 +48,7 @@ const appRoutes: Routes = [
     { path: 'cambioDni', component: CambioDniComponent },
     { path: 'listadoCambioDni', component: ListadoCambioDniComponent },
     { path: 'turnos', component: TurnosComponent },
-    { path: 'profesional/:documento', component: DetalleProfesionalComponent },
+    { path: 'profesional/:id', component: DetalleProfesionalComponent },
     { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },
     { path: 'numeraciones', component: NumeracionMatriculasComponent },
     { path: 'nuevoTurno', component: SolicitarTurnoComponent },

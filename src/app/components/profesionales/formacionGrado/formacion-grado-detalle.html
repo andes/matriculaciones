@@ -21,9 +21,9 @@
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
                 </div>
                 <div *ngIf='formacion.matriculacion'>
-                        <plex-button type="success" class="btn-group float-right" *ngIf='formacion.matriculado === false && formacion.papelesVerificados === false && formacion.renovacion === false'
-                            label='Renovar' (click)="renovar()"></plex-button>
-                    </div>
+                    <plex-button type="success" class="btn-group float-right" *ngIf='formacion.matriculado === false && formacion.papelesVerificados === false && formacion.renovacion === false'
+                        label='Renovar' (click)="renovar()"></plex-button>
+                </div>
             </div>
         </div>
     </header>
@@ -88,17 +88,17 @@
                 <div class="col-12 badge badge-danger  " style='margin-top: 45px; margin-bottom: 7px;' *ngIf='formacion.matriculado === false && formacion.matriculacion 
                 && formacion.matriculacion[formacion.matriculacion.length - 1].baja  && formacion.matriculacion[formacion.matriculacion.length - 1].baja.motivo'>
                     <div class="row">
-                    <div class="form-group col-6 ">
-                        <strong>Motivo de la baja</strong>
-                        <br> {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja.motivo }}
+                        <div class="form-group col-6 ">
+                            <strong>Motivo de la baja</strong>
+                            <br> {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja.motivo }}
 
-                    </div>
-                    <div class="form-group col-6 ">
+                        </div>
+                        <div class="form-group col-6 ">
                             <strong>Fecha</strong>
                             <br> {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja.fecha | fecha }}
-    
+
                         </div>
-                </div>
+                    </div>
                 </div>
 
 
@@ -133,6 +133,27 @@
                         </div>
                     </div>
 
+                </plex-panel>
+            </plex-accordion>
+            <hr>
+            <plex-accordion style="color:black !important" *ngIf='tieneBajas !== false'>
+                <plex-panel tituloPrincipal="Bajas" [active]="false">
+                    <div class="col-12">
+                        <table class="table">
+                            <thead>
+                                <th>N° Matricula</th>
+                                <th>Motivo</th>
+                                <th>Fecha</th>
+                            </thead>
+                            <tbody >
+                                <tr *ngFor="let matriculacion of formacion.matriculacion" >
+                                    <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.matriculaNumero }}</td>
+                                    <td *ngIf='matriculacion.baja.motivo !== ""'> {{ matriculacion.baja.motivo }}</td>
+                                    <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja.fecha | fecha }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </plex-panel>
             </plex-accordion>
         </div>

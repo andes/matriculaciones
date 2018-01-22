@@ -39,7 +39,8 @@ import { ExcelService } from '../../services/excel.service';
 
 @Component({
   selector: 'app-listar-profesionales',
-  templateUrl: 'listar-profesionales.html'
+  templateUrl: 'listar-profesionales.html',
+  styleUrls: ['listar-profesionales.scss']
 
 })
 export class ListarProfesionalesComponent implements OnInit {
@@ -48,13 +49,31 @@ export class ListarProfesionalesComponent implements OnInit {
   private profesionalElegido: IProfesional;
   private showListado: Boolean = true;
   public dni: string = null;
+  public estadoSeleccionadoG;
+  public estadoSeleccionadoE;
   public apellido: string = null;
   public vieneDeListado = null;
   public totalProfesionales = null;
+  public estadoEspecialidad: {
+    id: null,
+    nombre: null
+  };
+  public totalProfesionalesRematriculados = null;
+  public totalProfesionalesMatriculados = null;
   public profesionalesRematriculados = [];
   public profesionalesMatriculados = [];
   public matriculaVencida = null;
   public hoy = null;
+  public muestraFiltro = false;
+  public estado: {
+    id: null,
+    nombre: null
+  };
+  public estadosMatriculas: any;
+  public filtroRematriculados;
+  public filtroMatriculados;
+  public filtroTodos;
+  public verBajas = false;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -67,8 +86,7 @@ export class ListarProfesionalesComponent implements OnInit {
     this.buscar();
     this.vieneDeListado = true;
     this.hoy = new Date();
-
-
+    this.estadosMatriculas = Enums.getObjEstadosMatriculas();
 
   }
 
@@ -81,31 +99,57 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   buscar(event?: any) {
+
     this.profesionalesMatriculados = [];
     this.profesionalesRematriculados = [];
     this.profesionalElegido = null;
     const doc = this.dni ? this.dni : '';
     const apellidoProf = this.apellido ? this.apellido : '';
-    this._profesionalService.getProfesional({ documento: doc, apellido: apellidoProf })
+    this._profesionalService.getProfesional({
+      documento: doc,
+      apellido: apellidoProf,
+      estado: this.estadoSeleccionadoG,
+      estadoE: this.estadoSeleccionadoE,
+      bajaMatricula: this.verBajas ? this.verBajas : false
+    })
       .subscribe((data) => {
         this.profesionales = data;
         this.totalProfesionales = data.length;
-
+        let totalR = 0;
+        let totalM = 0;
         for (let _i = 0; _i < this.profesionales.length; _i++) {
           if (this.profesionales[_i].rematriculado !== false) {
             this.profesionalesRematriculados.push(this.profesionales[_i]);
-
+            totalR += 1;
           } else {
             this.profesionalesMatriculados.push(this.profesionales[_i]);
+            totalM += 1;
           }
 
+
+
         }
+        this.totalProfesionalesRematriculados = totalR;
+        this.totalProfesionalesMatriculados = totalM;
+        if (this.filtroTodos === true) {
+          this.profesionales = data;
+        }
+        if (this.filtroRematriculados === true) {
+          this.profesionales = this.profesionalesRematriculados;
+        }
+        if (this.filtroMatriculados === true) {
+          this.profesionales = this.profesionalesMatriculados;
+        }
+
+
         this.comprebaVenciomientoGrado();
         this.comprebaVenciomientoPosGrado();
 
 
         // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
+
+
   }
   cerrarResumenProfesional() {
     this.profesionalElegido = null;
@@ -153,6 +197,72 @@ export class ListarProfesionalesComponent implements OnInit {
       }
 
     }
+  }
+
+  matriculadoGrado() {
+    if (this.estado == null) {
+      this.estadoSeleccionadoG = null;
+    } else {
+      if (this.estado.nombre === 'Suspendidas') {
+        this.estadoSeleccionadoG = this.estado.nombre;
+      }
+      if (this.estado.nombre === 'Vigentes') {
+        this.estadoSeleccionadoG = this.estado.nombre;
+      }
+      if (this.estado.nombre === 'Todos') {
+        this.estadoSeleccionadoG = null;
+      }
+    }
+    this.buscar();
+  }
+
+  matriculadoEspecialidad() {
+    if (this.estadoEspecialidad == null) {
+      this.estadoSeleccionadoE = null;
+    } else {
+      if (this.estadoEspecialidad.nombre === 'Suspendidas') {
+        this.estadoSeleccionadoE = this.estadoEspecialidad.nombre;
+      }
+      if (this.estadoEspecialidad.nombre === 'Vigentes') {
+        this.estadoSeleccionadoE = this.estadoEspecialidad.nombre;
+      }
+      if (this.estadoEspecialidad.nombre === 'Todos') {
+        this.estadoSeleccionadoE = null;
+      }
+    }
+    this.buscar();
+  }
+
+  filtrarRematriculados() {
+    this.filtroRematriculados = true;
+    this.filtroMatriculados = false;
+    this.buscar();
+  }
+
+  filtrarMatriculados() {
+    this.filtroMatriculados = true;
+    this.filtroRematriculados = false;
+    this.buscar();
+  }
+
+  filtrarTodos() {
+    this.filtroTodos = true;
+    this.filtroRematriculados = false;
+    this.filtroMatriculados = false;
+    this.buscar();
+  }
+
+  mostrarFiltros() {
+    if (this.muestraFiltro === false) {
+      this.muestraFiltro = true;
+    } else {
+      this.muestraFiltro = false;
+    }
+
+  }
+
+  bajas() {
+    this.buscar(this.verBajas);
   }
 
 

@@ -165,7 +165,7 @@ export class ProfesionalComponent implements OnInit {
     agenteMatriculador: '',
     OtrosDatos: null,
     idRenovacion: null,
-   
+
   };
 
 
@@ -300,7 +300,6 @@ export class ProfesionalComponent implements OnInit {
   }
 
   actualizar() {
-    console.log(this.profesional)
     this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
     this.profesional.contactos.map(elem => {
       elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));

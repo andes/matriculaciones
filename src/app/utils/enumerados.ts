@@ -3,6 +3,10 @@ export enum Dia {
   'lunes', 'martes', 'miércoles', 'jueves', 'viernes'
 }
 
+export enum EstadoMatricula {
+  'todos', 'suspendidas', 'vigentes'
+}
+
 export enum Sexo {
   'masculino',
   'femenino',
@@ -80,6 +84,19 @@ export function getObjsEstadoCivil() {
 
 export function getObjDias() {
   let arrEstadoC = Object.keys(Dia);
+
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  const salida = arrEstadoC.map((elem, index) => {
+      return {
+          'id': index,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+export function getObjEstadosMatriculas() {
+  let arrEstadoC = Object.keys(EstadoMatricula);
 
   arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
   const salida = arrEstadoC.map((elem, index) => {

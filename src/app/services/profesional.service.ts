@@ -29,6 +29,13 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL, profesionalModel);
     }
 
+    enviarMail(profesionalModel: any) {
+        return this.server.post(this.profesionalesURL + 'sendMail', profesionalModel);
+    }
+    enviarSms(sms: any) {
+        return this.server.post(this.profesionalesURL + 'sms', sms);
+    }
+
     // saveProfesional(profesionalModel: any) {
     //     return this.server.post(this.profesionalesURL, profesionalModel);
     // }

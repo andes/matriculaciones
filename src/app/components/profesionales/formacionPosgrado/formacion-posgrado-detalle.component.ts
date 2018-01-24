@@ -76,10 +76,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                                 libro: '',
                                 folio: '',
                                 inicio: new Date(),
-                                fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
+                                notificacionVencimiento: false,
+                                fin: new Date(new Date("01/01/2000").setFullYear(vencimientoAnio)),
                                 revalidacionNumero: revNumero + 1
                             };
-
                             this._numeracionesService.saveNumeracion(num[0])
                                 .subscribe(newNum => {
                                     this.matriculacion.emit(oMatriculacion);

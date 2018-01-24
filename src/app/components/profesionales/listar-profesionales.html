@@ -100,7 +100,7 @@
                         </span>
                       </div>
                       <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
-                        <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion !== null " class="badge badge-warning">
+                        <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 " class="badge badge-warning">
                           {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
                         </span>
                       </div>

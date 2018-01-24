@@ -11,6 +11,8 @@ import {
   Plex
 } from '@andes/plex/src/lib/core/service';
 import * as Enums from './../../utils/enumerados';
+import * as moment from 'moment';
+
 import {
   FormBuilder,
   FormGroup,
@@ -36,7 +38,6 @@ import {
 } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
-
 @Component({
   selector: 'app-listar-profesionales',
   templateUrl: 'listar-profesionales.html',
@@ -79,7 +80,8 @@ export class ListarProfesionalesComponent implements OnInit {
     private excelService: ExcelService,
     private route: ActivatedRoute,
     private router: Router,
-    public auth: Auth) { }
+    public auth: Auth,
+    public plex: Plex) { }
 
   ngOnInit() {
 
@@ -159,18 +161,68 @@ export class ListarProfesionalesComponent implements OnInit {
     this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
 
+
   comprebaVenciomientoGrado() {
     for (let _n = 0; _n < this.profesionales.length; _n++) {
       for (let _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
         if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
           // tslint:disable-next-line:max-line-length
-          if (this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin < this.hoy) {
+
+          // tslint:disable-next-line:max-line-length
+          const notificado = this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento;
+          const fechaFin = moment(this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin);
+          const hoy = moment(this.hoy);
+          const contactos = this.profesionales[_n].contactos;
+          let tieneEmail = false;
+          let tieneCelular = false;
+          let numeroCelular;
+          contactos.forEach(element => {
+            if (element.tipo === 'email') {
+              tieneEmail = true;
+            }
+            if (element.tipo === 'celular') {
+              tieneCelular = true;
+              numeroCelular = Number(element.valor);
+            }
+          });
+
+          if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
+            const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
+            const smsParams = {
+              telefono: numeroCelular,
+              // tslint:disable-next-line:max-line-length
+              mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
+            };
+            this._profesionalService.enviarSms(smsParams).subscribe();
+            // tslint:disable-next-line:max-line-length
+            this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+            this._profesionalService.putProfesional(this.profesionales[_n])
+              .subscribe(resp => {
+                this.profesionales[_n] = resp;
+              });
+
+          }
+
+          if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
+            // tslint:disable-next-line:max-line-length
+            this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+            this._profesionalService.putProfesional(this.profesionales[_n])
+              .subscribe(resp => {
+                this.profesionales[_n] = resp;
+              });
+            this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
+
+          }
+
+          // tslint:disable-next-line:max-line-length
+          if (this.profesionales[_n].formacionGrado[_i].matriculado === true && this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin <= this.hoy) {
             this.profesionales[_n].formacionGrado[_i].matriculado = false;
             this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;
             this._profesionalService.putProfesional(this.profesionales[_n])
               .subscribe(resp => {
                 this.profesionales[_n] = resp;
               });
+
           }
         }
       }
@@ -184,13 +236,58 @@ export class ListarProfesionalesComponent implements OnInit {
         for (let _i = 0; _i < this.profesionales[_n].formacionPosgrado.length; _i++) {
           if (this.profesionales[_n].formacionPosgrado[_i].matriculacion.length > 0) {
             // tslint:disable-next-line:max-line-length
-            if (this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin.getFullYear() <= this.hoy.getFullYear()) {
+            const notificado = this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento;
+            const fechaFin = moment(this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin);
+            const hoy = moment(this.hoy);
+            const contactos = this.profesionales[_n].contactos;
+            let tieneEmail = false;
+            let tieneCelular = false;
+            let numeroCelular;
+            contactos.forEach(element => {
+              if (element.tipo === 'email') {
+                tieneEmail = true;
+              }
+              if (element.tipo === 'celular') {
+                tieneCelular = true;
+                numeroCelular = Number(element.valor);
+              }
+            });
+
+            if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
+              const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
+              const smsParams = {
+                telefono: numeroCelular,
+                // tslint:disable-next-line:max-line-length
+                mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
+              };
+              this._profesionalService.enviarSms(smsParams).subscribe();
+              // tslint:disable-next-line:max-line-length
+              this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+              this._profesionalService.putProfesional(this.profesionales[_n])
+                .subscribe(resp => {
+                  this.profesionales[_n] = resp;
+                });
+
+            }
+            if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
+              // tslint:disable-next-line:max-line-length
+              this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+              this._profesionalService.putProfesional(this.profesionales[_n])
+                .subscribe(resp => {
+                  this.profesionales[_n] = resp;
+                });
+              this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
+
+            }
+            // tslint:disable-next-line:max-line-length
+            if (this.profesionales[_n].formacionPosgrado[_i].matriculado === true && this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin.getFullYear() <= this.hoy.getFullYear()) {
               this.profesionales[_n].formacionPosgrado[_i].matriculado = false;
               this.profesionales[_n].formacionPosgrado[_i].papelesVerificados = false;
               this._profesionalService.putProfesional(this.profesionales[_n])
                 .subscribe(resp => {
                   this.profesionales[_n] = resp;
                 });
+
             }
           }
         }
@@ -262,7 +359,7 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   bajas() {
-    this.buscar(this.verBajas);
+    this.buscar();
   }
 
 

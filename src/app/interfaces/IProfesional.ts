@@ -68,7 +68,8 @@ export interface IProfesional {
             baja: {
                 motivo: '',
                 fecha: Date
-            }
+            },
+            notificacionVencimiento: Boolean;
             fin: Date;
             revalidacionNumero: Number;
         }];
@@ -111,6 +112,7 @@ export interface IProfesional {
                 motivo: '',
                 fecha: null
             }
+            notificacionVencimiento: Boolean;            
             fin: Date;
             revalidacionNumero: Number;
         }

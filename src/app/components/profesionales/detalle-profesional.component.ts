@@ -139,6 +139,7 @@ export class DetalleProfesionalComponent implements OnInit {
                 inicio: null,
                 fin: null,
                 baja: null,
+                notificacionVencimiento: false,
                 revalidacionNumero: null,
             }],
             matriculado: false
@@ -171,7 +172,6 @@ export class DetalleProfesionalComponent implements OnInit {
 
 
     ngOnInit() {
-        this.route.params.subscribe( params => console.log(params));
         this.vieneDeDetalle = true;
         this.route.params
             .switchMap((params: Params)  =>

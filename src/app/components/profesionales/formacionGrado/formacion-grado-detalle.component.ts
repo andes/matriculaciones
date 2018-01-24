@@ -83,6 +83,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
                                 motivo: '',
                                 fecha: null
                             },
+                            notificacionVencimiento: false,
                             fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
                             revalidacionNumero: revNumero + 1
                         };

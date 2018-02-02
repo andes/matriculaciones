@@ -44,6 +44,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
         habilitado: true,
         nombre: null,
         apellido: null,
+        tipoDocumento: null,        
         documento: null,
         documentoVencimiento: null,
         cuit: null,

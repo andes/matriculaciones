@@ -59,10 +59,9 @@ export class ListarProfesionalesComponent implements OnInit {
     id: null,
     nombre: null
   };
+  public nuevoProfesional = false;
   public totalProfesionalesRematriculados = null;
   public totalProfesionalesMatriculados = null;
-  public profesionalesRematriculados = [];
-  public profesionalesMatriculados = [];
   public matriculaVencida = null;
   public hoy = null;
   public muestraFiltro = false;
@@ -70,11 +69,14 @@ export class ListarProfesionalesComponent implements OnInit {
     id: null,
     nombre: null
   };
+  public editable = false;
+  public confirmar = false;
   public estadosMatriculas: any;
-  public filtroRematriculados;
-  public filtroMatriculados;
-  public filtroTodos;
   public verBajas = false;
+  public estaRematriculado;
+  public estaMatriculado;
+  public mostrarRestablecer;
+  public verDeshabilitado;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -101,9 +103,6 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   buscar(event?: any) {
-
-    this.profesionalesMatriculados = [];
-    this.profesionalesRematriculados = [];
     this.profesionalElegido = null;
     const doc = this.dni ? this.dni : '';
     const apellidoProf = this.apellido ? this.apellido : '';
@@ -112,7 +111,11 @@ export class ListarProfesionalesComponent implements OnInit {
       apellido: apellidoProf,
       estado: this.estadoSeleccionadoG,
       estadoE: this.estadoSeleccionadoE,
-      bajaMatricula: this.verBajas ? this.verBajas : false
+      bajaMatricula: this.verBajas ? this.verBajas : false,
+      rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
+      matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
+      habilitado: this.verDeshabilitado
+
     })
       .subscribe((data) => {
         this.profesionales = data;
@@ -121,32 +124,18 @@ export class ListarProfesionalesComponent implements OnInit {
         let totalM = 0;
         for (let _i = 0; _i < this.profesionales.length; _i++) {
           if (this.profesionales[_i].rematriculado !== false) {
-            this.profesionalesRematriculados.push(this.profesionales[_i]);
             totalR += 1;
           } else {
-            this.profesionalesMatriculados.push(this.profesionales[_i]);
             totalM += 1;
           }
-
-
-
         }
         this.totalProfesionalesRematriculados = totalR;
         this.totalProfesionalesMatriculados = totalM;
-        if (this.filtroTodos === true) {
-          this.profesionales = data;
-        }
-        if (this.filtroRematriculados === true) {
-          this.profesionales = this.profesionalesRematriculados;
-        }
-        if (this.filtroMatriculados === true) {
-          this.profesionales = this.profesionalesMatriculados;
-        }
+
 
 
         this.comprebaVenciomientoGrado();
         this.comprebaVenciomientoPosGrado();
-
 
         // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
@@ -164,80 +153,14 @@ export class ListarProfesionalesComponent implements OnInit {
 
   comprebaVenciomientoGrado() {
     for (let _n = 0; _n < this.profesionales.length; _n++) {
-      for (let _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
-        if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
-          // tslint:disable-next-line:max-line-length
-
-          // tslint:disable-next-line:max-line-length
-          const notificado = this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento;
-          const fechaFin = moment(this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin);
-          const hoy = moment(this.hoy);
-          const contactos = this.profesionales[_n].contactos;
-          let tieneEmail = false;
-          let tieneCelular = false;
-          let numeroCelular;
-          contactos.forEach(element => {
-            if (element.tipo === 'email') {
-              tieneEmail = true;
-            }
-            if (element.tipo === 'celular') {
-              tieneCelular = true;
-              numeroCelular = Number(element.valor);
-            }
-          });
-
-          if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
-            const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
-            const smsParams = {
-              telefono: numeroCelular,
-              // tslint:disable-next-line:max-line-length
-              mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
-            };
-            this._profesionalService.enviarSms(smsParams).subscribe();
+      if (this.profesionales[_n].habilitado === true) {
+        for (let _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
+          if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
             // tslint:disable-next-line:max-line-length
-            this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
-            this._profesionalService.putProfesional(this.profesionales[_n])
-              .subscribe(resp => {
-                this.profesionales[_n] = resp;
-              });
 
-          }
-
-          if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
             // tslint:disable-next-line:max-line-length
-            this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
-            this._profesionalService.putProfesional(this.profesionales[_n])
-              .subscribe(resp => {
-                this.profesionales[_n] = resp;
-              });
-            this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
-
-          }
-
-          // tslint:disable-next-line:max-line-length
-          if (this.profesionales[_n].formacionGrado[_i].matriculado === true && this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin <= this.hoy) {
-            this.profesionales[_n].formacionGrado[_i].matriculado = false;
-            this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;
-            this._profesionalService.putProfesional(this.profesionales[_n])
-              .subscribe(resp => {
-                this.profesionales[_n] = resp;
-              });
-
-          }
-        }
-      }
-
-    }
-  }
-
-  comprebaVenciomientoPosGrado() {
-    for (let _n = 0; _n < this.profesionales.length; _n++) {
-      if (this.profesionales[_n].formacionPosgrado) {
-        for (let _i = 0; _i < this.profesionales[_n].formacionPosgrado.length; _i++) {
-          if (this.profesionales[_n].formacionPosgrado[_i].matriculacion.length > 0) {
-            // tslint:disable-next-line:max-line-length
-            const notificado = this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento;
-            const fechaFin = moment(this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin);
+            const notificado = this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento;
+            const fechaFin = moment(this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin);
             const hoy = moment(this.hoy);
             const contactos = this.profesionales[_n].contactos;
             let tieneEmail = false;
@@ -253,6 +176,7 @@ export class ListarProfesionalesComponent implements OnInit {
               }
             });
 
+
             if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
               const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
               const smsParams = {
@@ -262,32 +186,133 @@ export class ListarProfesionalesComponent implements OnInit {
               };
               this._profesionalService.enviarSms(smsParams).subscribe();
               // tslint:disable-next-line:max-line-length
-              this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
-              this._profesionalService.putProfesional(this.profesionales[_n])
-                .subscribe(resp => {
-                  this.profesionales[_n] = resp;
-                });
+              this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+              const cambio = {
+                'op': 'updateEstadoGrado',
+                'data': this.profesionales[_n].formacionGrado,
+              };
+
+              this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+
+              });
 
             }
+
             if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
               // tslint:disable-next-line:max-line-length
-              this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
-              this._profesionalService.putProfesional(this.profesionales[_n])
-                .subscribe(resp => {
-                  this.profesionales[_n] = resp;
-                });
-              this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
+              this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
 
+              this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
+              const cambio = {
+                'op': 'updateEstadoGrado',
+                'data': this.profesionales[_n].formacionGrado,
+              };
+
+              this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+
+              });
             }
             // tslint:disable-next-line:max-line-length
-            if (this.profesionales[_n].formacionPosgrado[_i].matriculado === true && this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin.getFullYear() <= this.hoy.getFullYear()) {
-              this.profesionales[_n].formacionPosgrado[_i].matriculado = false;
-              this.profesionales[_n].formacionPosgrado[_i].papelesVerificados = false;
-              this._profesionalService.putProfesional(this.profesionales[_n])
-                .subscribe(resp => {
-                  this.profesionales[_n] = resp;
+            if (this.profesionales[_n].formacionGrado[_i].matriculado === true && this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin <= this.hoy) {
+              this.profesionales[_n].formacionGrado[_i].matriculado = false;
+              this.profesionales[_n].formacionGrado[_i].papelesVerificados = false;
+
+              const cambio = {
+                'op': 'updateEstadoGrado',
+                'data': this.profesionales[_n].formacionGrado,
+              };
+
+              this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+
+              });
+
+            }
+
+          }
+
+        }
+      }
+
+    }
+  }
+
+  comprebaVenciomientoPosGrado() {
+    for (let _n = 0; _n < this.profesionales.length; _n++) {
+      if (this.profesionales[_n].habilitado === true) {
+        if (this.profesionales[_n].formacionPosgrado) {
+          for (let _i = 0; _i < this.profesionales[_n].formacionPosgrado.length; _i++) {
+            if (this.profesionales[_n].formacionPosgrado[_i].matriculacion.length > 0) {
+              // tslint:disable-next-line:max-line-length
+              const notificado = this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento;
+              const fechaFin = moment(this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin);
+              const hoy = moment(this.hoy);
+              const contactos = this.profesionales[_n].contactos;
+              let tieneEmail = false;
+              let tieneCelular = false;
+              let numeroCelular;
+              contactos.forEach(element => {
+                if (element.tipo === 'email') {
+                  tieneEmail = true;
+                }
+                if (element.tipo === 'celular') {
+                  tieneCelular = true;
+                  numeroCelular = Number(element.valor);
+                }
+              });
+
+              if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
+                const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
+                const smsParams = {
+                  telefono: numeroCelular,
+                  // tslint:disable-next-line:max-line-length
+                  mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
+                };
+                this._profesionalService.enviarSms(smsParams).subscribe();
+                // tslint:disable-next-line:max-line-length
+                this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+                const cambio = {
+                  'op': 'updateEstadoPosGrado',
+                  'data': this.profesionales[_n].formacionPosgrado,
+                };
+
+                this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+
                 });
 
+
+              }
+              if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
+                // tslint:disable-next-line:max-line-length
+                this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+
+                this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
+                const cambio = {
+                  'op': 'updateEstadoPosGrado',
+                  'data': this.profesionales[_n].formacionPosgrado,
+                };
+
+                this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+
+                });
+
+
+
+              }
+              // tslint:disable-next-line:max-line-length
+              if (this.profesionales[_n].formacionPosgrado[_i].matriculado === true && this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin.getFullYear() <= this.hoy.getFullYear()) {
+                this.profesionales[_n].formacionPosgrado[_i].matriculado = false;
+                this.profesionales[_n].formacionPosgrado[_i].papelesVerificados = false;
+                const cambio = {
+                  'op': 'updateEstadoPosGrado',
+                  'data': this.profesionales[_n].formacionPosgrado,
+                };
+
+                this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+
+                });
+
+
+              }
             }
           }
         }
@@ -331,21 +356,26 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   filtrarRematriculados() {
-    this.filtroRematriculados = true;
-    this.filtroMatriculados = false;
+    // this.filtroRematriculados = true;
+    // this.filtroMatriculados = false;
+    this.estaRematriculado = true;
+    this.estaMatriculado = false;
+    this.mostrarRestablecer = true;
     this.buscar();
   }
 
   filtrarMatriculados() {
-    this.filtroMatriculados = true;
-    this.filtroRematriculados = false;
+
+    this.estaMatriculado = true;
+    this.estaRematriculado = false;
+    this.mostrarRestablecer = true;
     this.buscar();
   }
 
   filtrarTodos() {
-    this.filtroTodos = true;
-    this.filtroRematriculados = false;
-    this.filtroMatriculados = false;
+    this.estaMatriculado = false;
+    this.estaRematriculado = false;
+    this.mostrarRestablecer = false;
     this.buscar();
   }
 
@@ -360,6 +390,23 @@ export class ListarProfesionalesComponent implements OnInit {
 
   bajas() {
     this.buscar();
+  }
+
+
+  deshabilitados() {
+
+    this.buscar();
+  }
+
+  verNuevoProfesional(valor) {
+    if (valor === true) {
+      this.nuevoProfesional = true;
+      this.confirmar = true;
+    } else {
+      this.nuevoProfesional = false;
+
+    }
+
   }
 
 

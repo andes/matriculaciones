@@ -121,9 +121,15 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 }
 
     actualizar() {
-        this._profesionalService.putProfesional(this.profesional)
-        .subscribe(resp => {
-             this.profesional = resp;
-        });
+        // this._profesionalService.putProfesional(this.profesional)
+        // .subscribe(resp => {
+        //      this.profesional = resp;
+        // });
+
+        const cambio = {
+            'op': 'updateEstadoPosGrado',
+            'data': this.profesional.formacionPosgrado
+        }
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
     }
 }

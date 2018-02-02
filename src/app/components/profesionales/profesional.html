@@ -1,4 +1,4 @@
-<plex-box title="Nuevo profesional" type="{{boxType}}">
+<plex-box  type="{{boxType}}">
 
     <div class="row">
         <div class="col-12 text-center">
@@ -47,7 +47,9 @@
                     </div>
                 </div>
                 <div class="row">
-
+                        <div class="col-md-4">
+                                <plex-select label="Tipo de Documento" [(ngModel)]="profesional.tipoDocumento" name="tipoDocumento" [data]="tipoDocumento" [required]="true"></plex-select>
+                            </div>
                     <div class="col-md-4">
                         <plex-int label="Nº de Documento" [(ngModel)]="profesional.documento" name="documento" [required]="true"></plex-int>
                     </div>

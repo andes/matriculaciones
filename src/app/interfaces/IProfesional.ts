@@ -10,6 +10,7 @@ export interface IProfesional {
     habilitado: Boolean;
     nombre: string;
     apellido: string;
+    tipoDocumento: string;
     documento: string;
     documentoVencimiento: Date;
     cuit: string;

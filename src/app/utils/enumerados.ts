@@ -13,6 +13,12 @@ export enum Sexo {
   'otro'
 }
 
+export enum TipoDoc {
+  'DNI',
+  'LE',
+  'LC'
+}
+
 export enum tipoComunicacion {
   'Teléfono Fijo',
   'Teléfono Celular',
@@ -115,6 +121,18 @@ export function getObjSexos() {
       return {
           'id': elem,
           'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+export function getObjTipoDoc() {
+  let arrTipoDoc = Object.keys(TipoDoc);
+  arrTipoDoc = arrTipoDoc.slice(arrTipoDoc.length / 2);
+  const salida = arrTipoDoc.map(elem => {
+      return {
+          'id': elem,
+          'nombre': elem
       };
   });
   return salida;

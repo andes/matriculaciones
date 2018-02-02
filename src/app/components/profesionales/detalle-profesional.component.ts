@@ -13,7 +13,8 @@ import {
     getEnumAsObjects,
     EstadoCivil,
     TipoContacto,
-    TipoDomicilio } from './../../utils/enumerados';
+    TipoDomicilio
+} from './../../utils/enumerados';
 
 // Services
 import { PaisService } from './../../services/pais.service';
@@ -56,11 +57,12 @@ export class DetalleProfesionalComponent implements OnInit {
     public tieneFirma = null;
     public editable = false;
 
-    @Input()  public profesional: IProfesional = {
+    @Input() public profesional: IProfesional = {
         id: null,
         habilitado: true,
         nombre: null,
         apellido: null,
+        tipoDocumento: null,
         documento: null,
         documentoVencimiento: null,
         cuit: null,
@@ -168,46 +170,48 @@ export class DetalleProfesionalComponent implements OnInit {
         private _numeracionesService: NumeracionMatriculasService,
         private route: ActivatedRoute,
         private router: Router,
-        public auth: Auth) {}
+        public auth: Auth) { }
 
 
     ngOnInit() {
+
         this.vieneDeDetalle = true;
         this.route.params
-            .switchMap((params: Params)  =>
-                this._profesionalService.getProfesional({id: params['id']})
+            .switchMap((params: Params) =>
+                this._profesionalService.getProfesional({ id: params['id'] })
             ).subscribe(
-                (profesional:  any) => {
-                    // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
-                    if (profesional.length === 0) {
-                        this.flag = false;
-                    }else {
-                        this.profesional = profesional[0];
-                        this.flag = true;
-                    }
-                    // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
-                    if (this.flag === false) {
+            (profesional: any) => {
+                // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
+                if (profesional.length === 0) {
+                    this.flag = false;
+                } else {
+                    this.profesional = profesional[0];
+                    this.flag = true;
+                }
+                // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
+                if (this.flag === false) {
                     this.route.params
-                        .switchMap((paramsTemporal: Params)  =>
+                        .switchMap((paramsTemporal: Params) =>
                             this._turnoService.getTurnoSolicitados(paramsTemporal['id'])
                         ).subscribe(
-                            (profesionalTemporal: any) => {
-                                this.profesional = profesionalTemporal;
-                            }
+                        (profesionalTemporal: any) => {
+                            this.profesional = profesionalTemporal;
+                        }
                         );
-                    }
-
-
-
                 }
+
+
+
+            }
 
             );
     }
+    
 
 
     updateProfesional(callbackData?: any) {
         this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
-         this._profesionalService.putProfesional(this.profesional)
+        this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;
                 if (callbackData) {
@@ -221,33 +225,26 @@ export class DetalleProfesionalComponent implements OnInit {
         this.img64 = img;
     }
 
-    updateFoto(img: any) {
+
+    guardarFotoGrid(img: any) {
         this.img64 = img;
         const imagenPro = {
             'img': img,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesional({imagen: imagenPro}).subscribe(resp => {
+        this._profesionalService.saveProfesional({ imagen: imagenPro }).subscribe(resp => {
 
         });
-   }
-
-   updateFirma(firma: any) {
-    const firmaPro = {
-        'firmaP': firma,
-        'idProfesional': this.profesional.id
-    };
-    this._profesionalService.saveProfesional({firma: firmaPro}).subscribe(resp => {
-
-    });
-   }
-
-    guardarFotoGrid(foto: any) {
-        this.updateFoto(foto);
     }
 
-    guardarFirmaGrid(oFirma) {
-        this.updateFirma(oFirma);
+    guardarFirmaGrid(firma) {
+        const firmaPro = {
+            'firmaP': firma,
+            'idProfesional': this.profesional.id
+        };
+        this._profesionalService.saveProfesional({ firma: firmaPro }).subscribe(resp => {
+
+        });
     }
 
     guardarFirmaAdminGrid(oFirma) {
@@ -256,51 +253,78 @@ export class DetalleProfesionalComponent implements OnInit {
             'nombreCompleto': oFirma.nombreCompleto,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesional({firmaAdmin: firmaADmin}).subscribe(resp => {
+        this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
 
         });
     }
 
     guardarNotas(textoNotas) {
-        this.profesional.notas = textoNotas;
-        this.updateProfesional();
+        const cambio = {
+            'op': 'updateNotas',
+            'data': textoNotas,
+            'agente': this.auth.usuario.nombreCompleto
+        }
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+
+        // this.updateProfesional();
     }
 
     guardarSancion(sancion: any) {
-        this.profesional.sanciones.push(sancion);
-        this.updateProfesional();
+
+        const cambio = {
+            'op': 'updateSancion',
+            'data': sancion,
+            'agente': this.auth.usuario.nombreCompleto
+        }
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
     }
 
     guardarFormacionPosgrado(posgrado: any) {
-        this.profesional.formacionPosgrado.push(posgrado);
-        this.updateProfesional();
+        const cambio = {
+            'op': 'updatePosGrado',
+            'data': posgrado,
+            'agente': this.auth.usuario.nombreCompleto
+        }
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
     }
 
     guardarOtrosDatos(otrosDatos) {
-        this.profesional.OtrosDatos = otrosDatos;
-        this.updateProfesional();
+        const cambio = {
+            'op': 'updateOtrosDatos',
+            'data': otrosDatos,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+            //this.profesional.OtrosDatos[0] = data;
+
+        });
     }
 
     matricularProfesional(matriculacion: any) {
         if (this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion === null) {
             this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion = [matriculacion];
-        }else {
-        this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
-    }
+        } else {
+            this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
+        }
         this.updateProfesional();
+        
     }
 
     matricularProfesionalEspecialidad(matriculacion: any) {
         if (this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion === null) {
             this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion = [matriculacion];
-        }else {
-        this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion.push(matriculacion);
-    }
+        } else {
+            this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion.push(matriculacion);
+        }
         this.updateProfesional();
     }
 
     volver() {
-        this.router.navigate(['/turnos', { id: this.profesional.id}]);
+        this.router.navigate(['/turnos', { id: this.profesional.id }]);
     }
     volverP() {
         this.router.navigate(['/listarProfesionales']);
@@ -311,11 +335,11 @@ export class DetalleProfesionalComponent implements OnInit {
         this.mostrar = true;
         this.indexFormacionGradoSelected = formacion;
         if (this.mostrarGrado === true) {
-        this.mostrarGrado = false;
+            this.mostrarGrado = false;
 
         } else {
-         this.mostrarGrado = true;
-     }
+            this.mostrarGrado = true;
+        }
     }
 
     formacionPosgradoSelected(posgrado: any) {
@@ -323,7 +347,7 @@ export class DetalleProfesionalComponent implements OnInit {
         this.indexFormacionPosgradoSelected = posgrado;
         if (this.mostrar === true) {
             this.mostrar = false;
-        }else {
+        } else {
             this.mostrar = true;
         }
 

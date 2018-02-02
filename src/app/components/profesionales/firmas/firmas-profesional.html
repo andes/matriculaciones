@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-6">
                 <div class="page-title">Firma Profesional</div>              
-                <img  [src]="urlFirma" style="width: 300px"/>                
+                <img *ngIf='urlFirma'  [src]="urlFirma" style="width: 300px"/>                
                 <div class="form-group">                                
                         <div>
                             <div>

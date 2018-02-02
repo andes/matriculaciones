@@ -106,7 +106,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
         // this.profesional.formacionGrado[this.index].papelesVerificados = true;
         this.formacion.papelesVerificados = true;
         this.profesional.formacionGrado[this.index] = this.formacion;
-        this.actualizar();
+         this.actualizar();
+
     }
 
     renovar() {
@@ -135,10 +136,16 @@ export class FormacionGradoDetalleComponent implements OnInit {
     }
 
     actualizar() {
-        this._profesionalService.putProfesional(this.profesional)
-            .subscribe(resp => {
-                this.profesional = resp;
-            });
+        const cambio = {
+            'op': 'updateEstadoGrado',
+            'data': this.profesional.formacionGrado
+        }
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+
+        // this._profesionalService.putProfesional(this.profesional)
+        // .subscribe(resp => {
+        //     this.profesional = resp;
+        // });
     }
 
     compruebaBajas() {

@@ -36,28 +36,34 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL + 'sms', sms);
     }
 
+    //borrar proximante los comentados
+
     // saveProfesional(profesionalModel: any) {
     //     return this.server.post(this.profesionalesURL, profesionalModel);
     // }
 
-    saveProfesionalFoto(foto: any) {
-        return this.server.post(this.profesionalesURL + 'foto' , {foto});
-    }
+    // saveProfesionalFoto(foto: any) {
+    //     return this.server.post(this.profesionalesURL + 'foto' , {foto});
+    // }
 
-    saveProfesionalFirma(firma: any) {
-        return this.server.post(this.profesionalesURL + 'firma' , {firma});
-    }
+    // saveProfesionalFirma(firma: any) {
+    //     return this.server.post(this.profesionalesURL + 'firma' , {firma});
+    // }
 
-    getUnProfesional(id: string = null): Observable<any> {
-        return this.getById(this.profesionalesURL, id);
-    }
-    getUnProfesionalDni(dni: any): Observable<any> {
-        return this.server.get(this.profesionalesURL + 'traePDni/' + dni);
-    }
+    // getUnProfesional(id: string = null): Observable<any> {
+    //     return this.getById(this.profesionalesURL, id);
+    // }
+    // getUnProfesionalDni(dni: any): Observable<any> {
+    //     return this.server.get(this.profesionalesURL + 'traePDni/' + dni);
+    // }
 
     putProfesional(profesionalModel): Observable<any> {
         return this.server.put(this.profesionalesURL + 'actualizar', profesionalModel);
         // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+    }
+
+    patchProfesional(id:string,cambios) : Observable<any> {
+        return this.server.patch(this.profesionalesURL  + id, cambios);
     }
 
 

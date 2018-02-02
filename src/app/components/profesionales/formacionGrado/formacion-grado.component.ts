@@ -19,6 +19,7 @@ import {
 import { ProfesionalService } from './../../../services/profesional.service';
 import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
 import { PDFUtils } from '../../../utils/PDFUtils';
+import { Auth } from '@andes/auth';
 
 @Component({
     selector: 'app-formacion-grado',
@@ -36,7 +37,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils) { }
+        private _pdfUtils: PDFUtils,public auth: Auth) { }
 
     ngOnInit() {
         this.hoy = new Date();
@@ -61,8 +62,15 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
 
     addFormacionGrado(fGrado: any) {
+        const cambio = {
+            'op': 'updateGrado',
+            'data': fGrado,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {console.log(data)});
         this.profesional.formacionGrado.push(fGrado);
-        this.updateProfesional.emit(this.profesional);
+
     }
 
     generarCredencial(grado) {

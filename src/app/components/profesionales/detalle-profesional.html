@@ -19,7 +19,7 @@
 
                 </header>
                 <div id="wrapper">
-                    <plex-tabs>
+                    <plex-tabs *ngIf ='profesional.habilitado === true'>
                         <!-- Contacto y Domicilios -->
                         <plex-tab label="Contacto y Domicilios">
                             <app-contacto-domicilios-profesional [profesional]="profesional"></app-contacto-domicilios-profesional>

@@ -1,4 +1,4 @@
-<section>
+<section *ngIf="nuevoProfesional === false">
   <div class="row">
     <!--Panel central-->
     <div class="col">
@@ -9,7 +9,10 @@
               <div class="page-title">Buscar un profesional</div>
             </div>
             <div class="col">
-              <plex-button type="primary float-right" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>
+              <plex-button type="primary float-right" icon="mdi mdi-account-plus" (click)="verNuevoProfesional(true)"></plex-button>
+            </div>
+            <div>
+                <plex-button type="primary float-right"  icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>                
             </div>
           </div>
 
@@ -36,9 +39,10 @@
             <div class="col-4">
               <plex-select label="Matriculas de Especialidades" [(ngModel)]="estadoEspecialidad" [data]="estadosMatriculas" (change)="matriculadoEspecialidad()"></plex-select>
             </div>
-            <div class="col-4 btnSlide">
+            <div class="col-2 btnSlide">
               <plex-bool type="slide" label="Ver bajas de matriculas" [(ngModel)]="verBajas" (change)="bajas()" name="especialidad.activo"></plex-bool>
-
+              <plex-bool type="slide" label="Deshabilitado" [(ngModel)]="verDeshabilitado" (change)="buscar()" name="especialidad.activo"></plex-bool>
+              
             </div>
           </div>
           <br>
@@ -64,8 +68,8 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="hover" *ngFor="let profesional of profesionales" (click)="seleccionar(profesional)">
-                  <td>
+                <tr class="hover" *ngFor="let profesional of profesionales; let i = index" (click)="seleccionar(profesional)">
+                  <td *ngIf="profesional.habilitado === true">
                     <div>
                       <span *ngIf="profesional.rematriculado === true" class="badge badge-danger">
                         Rematriculado
@@ -74,6 +78,13 @@
                     <div>
                       <span *ngIf="profesional.rematriculado === false" class="badge badge-success">
                         Matriculado
+                      </span>
+                    </div>
+                  </td>
+                  <td *ngIf="profesional.habilitado === false">
+                    <div>
+                      <span  class="badge badge-warning">
+                        Deshabilitado
                       </span>
                     </div>
                   </td>
@@ -93,6 +104,7 @@
                   </td>
 
                   <td>
+                    <div *ngIf='profesional.habilitado === true'>
                     <div *ngIf='verBajas === false'>
                       <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
                         <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null " class="badge badge-danger">
@@ -108,18 +120,22 @@
 
                     <div *ngIf='verBajas === true'>
                       <div class="row">
-                        <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger col-12 ">
-                          <div *ngFor="let matriculacion of profesionalGrado.matriculacion" class="text-danger badgeP  ">
-                            <div *ngIf='matriculacion.baja && matriculacion.baja.motivo !== "" && matriculacion.baja.fecha !== null'>
-                              <div  class="badge-danger ">
-                                {{profesionalGrado.profesion.nombre}} : N° {{matriculacion.matriculaNumero}} <br> {{matriculacion.baja.motivo }}
-                               <br>{{matriculacion.baja.fecha | fecha }}
+                        <div *ngFor="let profesionalGrado of profesional.formacionGrado">
+                          <div *ngIf='profesionalGrado.matriculacion && profesionalGrado.matriculacion.length > 0'>
+                            <div *ngFor="let matriculacion of profesionalGrado.matriculacion" class="text-danger badgeP  ">
+                              <div *ngIf='matriculacion.baja && matriculacion.baja.motivo !== "" && matriculacion.baja.fecha !== null'>
+                                <div class="badge-danger ">
+                                  {{profesionalGrado.profesion.nombre}} : N° {{matriculacion.matriculaNumero}}
+                                  <br> {{matriculacion.baja.motivo }}
+                                  <br>{{matriculacion.baja.fecha | fecha }}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
+                  </div>
                   </td>
                 </tr>
               </tbody>
@@ -139,7 +155,7 @@
         <div class="row text-center">
 
           <div class="col-12">
-            <div class="h3 badge badge-info hover" (click)='filtrarTodos()'>
+            <div class="h3 badge badge-info hover">
               <div class="row">
                 <div class="col-4">
                   <i class="mdi mdi-account-multiple mdi-36px info"></i>
@@ -180,6 +196,12 @@
               </div>
             </div>
             <h6 class="text-success">Profesionales Matriculados</h6>
+          </div>
+        </div>
+        <div class="row" *ngIf='mostrarRestablecer === true'>
+          <div class="col-12 text-center" style="margin-top:30px">
+            <plex-button type="primary" label='Restablecer' (click)='filtrarTodos()'></plex-button>
+
           </div>
         </div>
       </plex-box>
@@ -255,6 +277,9 @@
     </div>
   </div>
 </section>
+<app-profesional  *ngIf="nuevoProfesional === true" [confirmar]='confirmar'></app-profesional>
+
 <footer>
-  <plex-button label="Volver" type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
+  <plex-button *ngIf="nuevoProfesional === false" label="Volver" type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
+  <plex-button *ngIf="nuevoProfesional === true" label="Volver" type="danger" (click)="verNuevoProfesional(false)" icon="arrow-left-bold"></plex-button>
 </footer>

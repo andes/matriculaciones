@@ -38,10 +38,11 @@ export class NumeracionMatriculasComponent implements OnInit {
     }
 
     guardarNumeracion(model: any) {
-        this._numeracionesService.saveNumeracion(model)
+        this._numeracionesService.putNumeracion(model)
             .subscribe((resp) => {
+                this.cambio.emit();
             });
-        this.cambio.emit(model);
+
     }
 
     loadProfesiones(event) {

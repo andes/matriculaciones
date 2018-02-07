@@ -10,7 +10,7 @@
                 </div>
             </div>
             <br>
-            <app-numeracion-form-matriculas></app-numeracion-form-matriculas>
+            <app-numeracion-form-matriculas (saveNumeracion)='buscar($event)'></app-numeracion-form-matriculas>
             <br>
             <hr>
             <div [formGroup]="formBuscarNumeracion">
@@ -92,7 +92,7 @@
     </div>
     <div class="row">
         <div class="col-sm-12">
-            <app-numeracion-matriculas [numeracion]="numeracionElegida" [numeracion2]="numeracion" (cambio)="cambio($event)" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
+            <app-numeracion-matriculas [numeracion]="numeracionElegida" [numeracion2]="numeracion" (cambio)="buscar($event)" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
 
         </div>
     </div>

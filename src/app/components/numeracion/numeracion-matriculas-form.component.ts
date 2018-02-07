@@ -19,6 +19,7 @@ export class NumeracionMatriculasFormComponent implements OnInit {
         profesion: null,
         proximoNumero: null
     };
+    @Output() saveNumeracion = new EventEmitter();
 
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
@@ -33,15 +34,27 @@ export class NumeracionMatriculasFormComponent implements OnInit {
 
     }
 
-    guardarNumeracion($event) {
+    guardarNumeracion($event, tipo) {
+
         if ($event.formValid) {
-        this._numeracionesService.saveNumeracion(this.numeracionMatricula)
-        .subscribe((resp) => {
-            if (resp) {
-                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+            if (tipo === 'prof') {
+                this.numeracionMatricula.especialidad = null;
             }
-        });
-    }
+            if (tipo === 'esp') {
+                this.numeracionMatricula.profesion = null;
+            }
+            this._numeracionesService.saveNumeracion(this.numeracionMatricula)
+                .subscribe((resp) => {
+                    if (!resp) {
+                        this.plex.alert('Ya existe esta profesion/especialidad con una numeracion asignada');
+
+                    }else {
+                        this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+                        this.saveNumeracion.emit(null);
+                    }
+
+                });
+        }
     }
 
     loadProfesiones(event) {

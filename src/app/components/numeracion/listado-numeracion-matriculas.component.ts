@@ -19,7 +19,7 @@ import { SIISAService } from '../../services/siisa.service';
     templateUrl: 'listado-numeracion-matriculas.html'
 })
 export class ListadoNumeracionMatriculasComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente    
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     private formBuscarNumeracion: FormGroup;
     private numeraciones: any[];
     private numeracionElegida: any;
@@ -67,7 +67,6 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     }
 
     buscar(event?: any) {
-
         const consulta = this.formBuscarNumeracion.value;
 
         // if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
@@ -75,7 +74,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         // }
 
         consulta.offset = event ? event.query.offset : 0;
-        consulta.size = event ? event.query.size : 10;
+        consulta.size = event ? event.query.size : 50;
         consulta.profesion = event ? event.query.codigo : consulta.profesion;
         consulta.especialidad = event ? event.query.codigoEspecialidad : consulta.especialidad;
         if (!event) {
@@ -89,6 +88,8 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
                     event.callback(resp);
                 }
             });
+
+            this.showListado = true;
     }
 
     toggleListado(show) {

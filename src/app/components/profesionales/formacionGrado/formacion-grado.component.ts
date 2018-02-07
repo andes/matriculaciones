@@ -37,7 +37,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils,public auth: Auth) { }
+        private _pdfUtils: PDFUtils, public auth: Auth) { }
 
     ngOnInit() {
         this.hoy = new Date();
@@ -68,7 +68,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
             'agente': this.auth.usuario.nombreCompleto
         };
 
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {console.log(data)});
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
         this.profesional.formacionGrado.push(fGrado);
 
     }

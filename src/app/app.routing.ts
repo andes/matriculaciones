@@ -31,7 +31,7 @@ import { FotoGeneralComponent } from './components/profesionales/foto-general.co
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
-
+import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -54,6 +54,7 @@ const appRoutes: Routes = [
     { path: 'nuevoTurno', component: SolicitarTurnoComponent },
     { path: 'listarProfesionales', component: ListarProfesionalesComponent },
     { path: 'selectOrganizacion', component: SelectOrganizacionComponent },
+    { path: 'sobreTurnoMatriculacion', component: SolicitarSobreTurnoMatriculacionComponent },
     { path: '**', redirectTo: 'homeProfesionales' }
 ];
 

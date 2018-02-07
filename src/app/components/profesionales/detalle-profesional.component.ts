@@ -206,7 +206,6 @@ export class DetalleProfesionalComponent implements OnInit {
 
             );
     }
-    
 
 
     updateProfesional(callbackData?: any) {
@@ -263,7 +262,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'op': 'updateNotas',
             'data': textoNotas,
             'agente': this.auth.usuario.nombreCompleto
-        }
+        };
 
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
 
@@ -276,7 +275,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'op': 'updateSancion',
             'data': sancion,
             'agente': this.auth.usuario.nombreCompleto
-        }
+        };
 
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
     }
@@ -286,7 +285,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'op': 'updatePosGrado',
             'data': posgrado,
             'agente': this.auth.usuario.nombreCompleto
-        }
+        };
 
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
     }
@@ -299,7 +298,6 @@ export class DetalleProfesionalComponent implements OnInit {
         };
 
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-            //this.profesional.OtrosDatos[0] = data;
 
         });
     }
@@ -311,7 +309,7 @@ export class DetalleProfesionalComponent implements OnInit {
             this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
         }
         this.updateProfesional();
-        
+
     }
 
     matricularProfesionalEspecialidad(matriculacion: any) {

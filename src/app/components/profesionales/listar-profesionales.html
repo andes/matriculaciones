@@ -5,14 +5,16 @@
       <plex-box>
         <header>
           <div class="row">
-            <div class="col">
+            <div class="col-7">
               <div class="page-title">Buscar un profesional</div>
             </div>
-            <div class="col">
-              <plex-button type="primary float-right" icon="mdi mdi-account-plus" (click)="verNuevoProfesional(true)"></plex-button>
+            <div class="col-5 float-right">
+              <plex-button type="primary " icon="mdi mdi-account-plus" (click)="verNuevoProfesional(true)"></plex-button>
+              <plex-button type="primary"  icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>    
+              <plex-button type="primary  "  icon="mdi mdi-timetable" label='Sobre Turno' routerLink="/sobreTurnoMatriculacion" ></plex-button>                   
             </div>
             <div>
-                <plex-button type="primary float-right"  icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>                
+               
             </div>
           </div>
 

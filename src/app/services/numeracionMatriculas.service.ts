@@ -19,6 +19,11 @@ export class NumeracionMatriculasService extends BaseService {
         return this.server.post(this.numeracionesURL, numeracionModel);
     }
 
+    putNumeracion(numeracionModel): Observable<any> {
+        return this.server.put(this.numeracionesURL , numeracionModel);
+        // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+    }
+
     getNumeraciones(searchParams: any): Observable<any> {
         const query = new URLSearchParams();
 

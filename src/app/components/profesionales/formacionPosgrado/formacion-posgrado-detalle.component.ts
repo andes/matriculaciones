@@ -39,7 +39,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.index)
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -77,7 +76,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                                 folio: '',
                                 inicio: new Date(),
                                 notificacionVencimiento: false,
-                                fin: new Date(new Date("01/01/2000").setFullYear(vencimientoAnio)),
+                                fin: new Date(new Date('01/01/2000').setFullYear(vencimientoAnio)),
                                 revalidacionNumero: revNumero + 1
                             };
                             this._numeracionesService.saveNumeracion(num[0])
@@ -129,7 +128,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         const cambio = {
             'op': 'updateEstadoPosGrado',
             'data': this.profesional.formacionPosgrado
-        }
+        };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
     }
 }

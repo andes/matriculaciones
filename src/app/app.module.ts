@@ -76,7 +76,7 @@ import { SelectOrganizacionComponent } from './components/home/selectOrganizacio
 import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
-
+import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
 
 
 import { TurnosComponent } from './components/turnos/turnos.component';
@@ -124,7 +124,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent,
     AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
-    NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
+    NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarSobreTurnoMatriculacionComponent , SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
     ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent, NumeracionMatriculasFormComponent,
     TurnosComponent,
     FotoGeneralComponent,

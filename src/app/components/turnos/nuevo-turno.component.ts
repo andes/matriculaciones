@@ -51,8 +51,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     private options: any = {};
     public boxType: string;
     public horarioSi = false;
-    public horario = null;
-    public fecha = null;
+    public horario = new Date();
+    public fecha = new Date();
     public fechaComparacion: Date;
     @Input() sobreTurno: any;
 

@@ -54,7 +54,6 @@ export class OtroDatosComponent implements OnInit {
         if ($event.formValid) {
             this.profesional.OtrosDatos = [this.otrosDatos];
          this.submitOtrosDatos.emit(this.otrosDatos);
-         console.log(this.profesional)
 
          }
 

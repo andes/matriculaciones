@@ -103,7 +103,7 @@ export class TurnoService extends BaseService {
         return this._server.get(url, {params : parametros});
     }
 
-    patchTurnos(id:string,cambios) : Observable<any> {
+    patchTurnos(id: string, cambios): Observable<any> {
         return this._server.patch(this.turnosURL  + id, cambios);
     }
 

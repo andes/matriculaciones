@@ -67,6 +67,7 @@ export class ProfesionalComponent implements OnInit {
   public sexos: any;
   public provincias: any[];
   public localidades: any[];
+  public paises: any[];
   public estadoCivil: any;
   public tipoDocumento: any[];
   public tipoComunicacion: any[];
@@ -169,6 +170,9 @@ export class ProfesionalComponent implements OnInit {
     idRenovacion: null,
 
   };
+  localidadesReal: any[];
+  localidadesLegal: any[];
+  localidadesProfesional: any[];
 
 
   @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
@@ -189,8 +193,9 @@ export class ProfesionalComponent implements OnInit {
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
     this.tipoDocumento = enumerados.getObjTipoDoc();
-
-    console.log(this.tipoDocumento)
+    this.loadProvincias();
+    this.loadLocalidades(null);
+    console.log(this.tipoDocumento);
   }
 
 
@@ -205,6 +210,7 @@ export class ProfesionalComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
+      // tslint:disable-next-line:max-line-length
       this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
@@ -223,6 +229,7 @@ export class ProfesionalComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
+      // tslint:disable-next-line:max-line-length
       this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
@@ -242,13 +249,19 @@ export class ProfesionalComponent implements OnInit {
   }
 
   // Filtrado de combos
-  loadPaises(event) {
-    this._paisService.getPaises().subscribe(event.callback);
+  loadPaises() {
+    this._paisService.getPaises().subscribe(resp => {
+      this.paises = resp;
+    });
   }
 
-  loadProvincias(pais) {
+  loadProvincias(pais?) {
+    let paisValor = null;
+    if (pais) {
+      paisValor = pais.value.id;
+    }
     this._provinciaService.get({
-      'pais': pais.value.id
+      'pais': paisValor
     })
       .subscribe(resp => {
         this.provincias = resp;
@@ -256,12 +269,17 @@ export class ProfesionalComponent implements OnInit {
   }
 
   loadLocalidades(provincia) {
-    if (provincia.value) {
-      this._localidadService.getXProvincia(provincia.value.id)
+    let localidadValor = null;
+    if (provincia !== null) {
+      console.log(provincia.value.id);
+      localidadValor = provincia.value.id;
+    }
+      this._localidadService.getXProvincia(localidadValor)
         .subscribe(resp => {
           this.localidades = resp;
+
         });
-    }
+
   }
 
   loadProfesiones(event) {
@@ -308,8 +326,10 @@ export class ProfesionalComponent implements OnInit {
 
   actualizar() {
     this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
+    // tslint:disable-next-line:max-line-length
     this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
     this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
+    // tslint:disable-next-line:max-line-length
     this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
     this.profesional.contactos.map(elem => {
       elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));

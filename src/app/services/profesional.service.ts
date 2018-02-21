@@ -36,7 +36,7 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL + 'sms', sms);
     }
 
-    //borrar proximante los comentados
+    // borrar proximante los comentados
 
     // saveProfesional(profesionalModel: any) {
     //     return this.server.post(this.profesionalesURL, profesionalModel);
@@ -62,7 +62,7 @@ export class ProfesionalService extends BaseService {
         // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
     }
 
-    patchProfesional(id:string,cambios) : Observable<any> {
+    patchProfesional(id: string, cambios): Observable<any> {
         return this.server.patch(this.profesionalesURL  + id, cambios);
     }
 

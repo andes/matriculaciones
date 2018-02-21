@@ -62,14 +62,15 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
 
     addFormacionGrado(fGrado: any) {
-        const cambio = {
-            'op': 'updateGrado',
-            'data': fGrado,
-            'agente': this.auth.usuario.nombreCompleto
-        };
+        // const cambio = {
+        //     'op': 'updateGrado',
+        //     'data': fGrado,
+        //     'agente': this.auth.usuario.nombreCompleto
+        // };
 
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
-        this.profesional.formacionGrado.push(fGrado);
+        // // this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+        // this.profesional.formacionGrado.push(fGrado);
+        this.updateProfesional.emit(fGrado);
 
     }
 

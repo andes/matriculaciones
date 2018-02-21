@@ -4,6 +4,7 @@ const jsPDF = require('jspdf');
 export class PDFUtils {
 
     public generarCredencial( profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin): any {
+        // tslint:disable-next-line:max-line-length
         const ultimaRenovacion = profesional.formacionGrado[grado].matriculacion[profesional.formacionGrado[grado].matriculacion.length - 1];
 
         const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
@@ -114,6 +115,7 @@ export class PDFUtils {
 
         doc.setFontSize(9);
         doc.setFontStyle('bold');
+        // tslint:disable-next-line:max-line-length
         doc.text('Dirección de Fiscalización Sanitaria | Antartida Argentina y Colón, Edif. CAM 3 | CP (8300) Neuquén | Tel.: 0299 - 4495590 / 5591', 10, 290);
 
         return doc;
@@ -224,6 +226,7 @@ export class PDFUtils {
         // completado domicilios
         offsetLoop = 0;
         turno.profesional.domicilios.forEach(domicilio => {
+            if (domicilio.valor) {
             doc.setFontSize(12);
             doc.text(35, 148 + offsetLoop, domicilio.valor);
             doc.text(35, 154 + offsetLoop, domicilio.codigoPostal);
@@ -231,6 +234,7 @@ export class PDFUtils {
             doc.text(90, 160 + offsetLoop, domicilio.ubicacion.provincia.nombre);
             doc.text(150, 160 + offsetLoop, domicilio.ubicacion.localidad.nombre);
             offsetLoop += 26;
+        }
         });
 
         // Completado contactos

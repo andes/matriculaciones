@@ -81,7 +81,7 @@ export class FormacionGradoFormComponent implements OnInit {
         if ($event.formValid) {
         this.submitGrado.emit(this.profesionalGrado);
         this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
-       // form.reset();
+        //form.reset();
         }
 
     }

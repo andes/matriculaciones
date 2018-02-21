@@ -37,14 +37,14 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     public documento;
     public nombre;
     public apellido;
-    public profEncontrado: any = [];
+    public profEncontrado: any = null;
 
     @Input() public profesional: IProfesional = {
         id: null,
         habilitado: true,
         nombre: null,
         apellido: null,
-        tipoDocumento: null,        
+        tipoDocumento: null,
         documento: null,
         documentoVencimiento: null,
         cuit: null,
@@ -205,6 +205,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       this._profesionalService.getResumenProfesional({ documento: this.documento, nombre: this.nombre, apellido: this.apellido }).subscribe(resp => {
         console.log(resp);
+        console.log(resp)
         this.profEncontrado = resp;
       });
     }

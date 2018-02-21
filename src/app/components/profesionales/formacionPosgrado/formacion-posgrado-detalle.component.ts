@@ -79,15 +79,16 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                                 fin: new Date(new Date('01/01/2000').setFullYear(vencimientoAnio)),
                                 revalidacionNumero: revNumero + 1
                             };
-                            this._numeracionesService.saveNumeracion(num[0])
+                            this._numeracionesService.putNumeracion(num[0])
                                 .subscribe(newNum => {
                                     this.matriculacion.emit(oMatriculacion);
                                 });
-                        }
+
                         this.formacion.revalida = false;
                         this.formacion.matriculado = true;
                         this.profesional.formacionPosgrado[this.index] = this.formacion;
                         this.actualizar();
+                    }
                     });
 
                 ;

@@ -30,9 +30,11 @@ export class TurnosComponent implements OnInit {
     private turnoElegido: any;
     private showListado: Boolean = true;
     public solicitudesDeCambio;
+    public muestraAusente = false;
     offset = 0;
     limit = 10;
     turnosTotal = null;
+    public hoy = new Date();
 
     constructor(private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
@@ -50,17 +52,21 @@ export class TurnosComponent implements OnInit {
         this.formBuscarTurno = this._formBuilder.group({
             nombre: '',
             apellido: '',
-            fecha: null,
+            fecha: new Date(),
             documento: ''
         });
-
         this.buscar();
         this.contadorDeCambiosDni();
         this.avisoTurno();
     }
 
     showTurno(turno: any) {
+        this.muestraAusente = false;
         this.turnoElegido = turno;
+        if (moment(this.hoy).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')) {
+            this.muestraAusente = true;
+        }
+
     }
 
     isSelected(turno: any) {
@@ -72,7 +78,6 @@ export class TurnosComponent implements OnInit {
         if (!event) {
             this.turnoElegido = null;
         }
-
         const consulta = this.formBuscarTurno.value;
         consulta.offset = event ? event.query.offset : this.offset;
         consulta.size = event ? event.query.size : this.limit;
@@ -162,53 +167,56 @@ export class TurnosComponent implements OnInit {
 
             .subscribe((resp) => {
                 for (let _i = 0; _i < resp.data.length; _i++) {
-                    const fechaFin = moment(resp.data[_i].fecha);
-                    const hoy = moment(new Date());
-                    let contactos = resp.data[_i].profesional.contactos;
-                    contactos.forEach(element => {
-                        if (element.tipo === 'celular') {
-                            tieneCelular = true;
-                            numeroCelular = Number(element.valor);
-                        }
-                    });
 
-                    // tslint:disable-next-line:max-line-length
-                    this._profesionalService.getProfesional({ id: resp.data[_i].profesional.idRenovacion }).subscribe((profesional: any) => {
-                        if (resp.data[_i].tipo === 'renovacion') {
-                            contactos = profesional[0].contactos;
-                            contactos.forEach(element => {
-                                if (element.tipo === 'celular') {
-                                    tieneCelular = true;
-                                    numeroCelular = Number(element.valor);
-                                }
-                            });
-                        }
+                        const fechaFin = moment(resp.data[_i].fecha);
+                        const hoy = moment(new Date());
+                        if (resp.data[_i].notificado === false && fechaFin.diff(hoy, 'days') <= 3) {
+                        let contactos = resp.data[_i].profesional.contactos;
 
-                        if (fechaFin.diff(hoy, 'days') <= 3 && tieneCelular === true && resp.data[_i].notificado === false) {
+                        contactos.forEach(element => {
+                            if (element.tipo === 'celular') {
+                                tieneCelular = true;
+                                numeroCelular = Number(element.valor);
+                            }
+                        });
+
+                        // tslint:disable-next-line:max-line-length
+                        this._profesionalService.getProfesional({ id: resp.data[_i].profesional.idRenovacion }).subscribe((profesional: any) => {
+                            if (resp.data[_i].tipo === 'renovacion') {
+                                contactos = profesional[0].contactos;
+                                contactos.forEach(element => {
+                                    if (element.tipo === 'celular') {
+                                        tieneCelular = true;
+                                        numeroCelular = Number(element.valor);
+                                    }
+                                });
+                            }
+
+                            if (fechaFin.diff(hoy, 'days') <= 3 && tieneCelular === true && resp.data[_i].notificado === false) {
 
 
-                            const nombreCompleto = resp.data[_i].profesional.nombreCompleto;
-                            const smsParams = {
-                                telefono: numeroCelular,
-                                // tslint:disable-next-line:max-line-length
-                                mensaje: 'Estimado ' + nombreCompleto + ', le recordamos que usted tiene el turno para realizar el tramite de matriculacion el dia ' + moment(fechaFin).format('l') + ' a las ' + moment(fechaFin).format('LT') + ' '
-                            };
+                                const nombreCompleto = resp.data[_i].profesional.nombreCompleto;
+                                const smsParams = {
+                                    telefono: numeroCelular,
+                                    // tslint:disable-next-line:max-line-length
+                                    mensaje: 'Estimado ' + nombreCompleto + ', le recordamos que usted tiene el turno para realizar el tramite de matriculacion el dia ' + moment(fechaFin).format('l') + ' a las ' + moment(fechaFin).format('LT') + ' '
+                                };
+                                this._profesionalService.enviarSms(smsParams).subscribe();
+                                const cambio = {
+                                    'op': 'updateNotificado',
+                                    'data': true,
+                                };
 
-                            this._profesionalService.enviarSms(smsParams).subscribe();
-                            const cambio = {
-                                'op': 'updateNotificado',
-                                'data': true,
-                            };
+                                this._turnoService.patchTurnos(resp.data[_i].id, cambio).subscribe((data) => {
 
-                            this._turnoService.patchTurnos(resp.data[_i].id, cambio).subscribe((data) => {
+                                });
 
-                            });
+                            }
+                        });
 
-                        }
-                    });
-
+                    }
                 }
-            })
+            });
     }
 
 

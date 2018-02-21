@@ -53,7 +53,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
         if (mantenerNumero) {
             texto = '¿Desea mantener el numero de la matricula?';
         }
-
+        
         this.plex.confirm(texto).then((resultado) => {
             if (resultado) {
                 let revNumero = null;
@@ -87,7 +87,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
                             fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
                             revalidacionNumero: revNumero + 1
                         };
-                        this._numeracionesService.saveNumeracion(num[0])
+                        this._numeracionesService.putNumeracion(num[0])
                             .subscribe(newNum => {
                                 this.matriculacion.emit(oMatriculacion);
                             });
@@ -105,7 +105,10 @@ export class FormacionGradoDetalleComponent implements OnInit {
     papelesVerificados() {
         // this.profesional.formacionGrado[this.index].papelesVerificados = true;
         this.formacion.papelesVerificados = true;
+        this.formacion.matriculado = false;
         this.profesional.formacionGrado[this.index] = this.formacion;
+        console.log(this.formacion);
+        console.log(this.profesional.formacionGrado[this.index])
          this.actualizar();
 
     }

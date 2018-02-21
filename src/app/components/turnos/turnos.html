@@ -9,13 +9,16 @@
                         <div class="col">
                             <div class="page-title">Turnos</div>
                         </div>
+                         <!--
                         <div class="col">
-                            <div class="float-right badge" >
-                                <span class=" badge badge-info contadorBadge" *ngIf='solicitudesDeCambio > 0' ><strong class="contador">{{solicitudesDeCambio}}</strong> </span>
+                            <div class="float-right badge">
+                                <span class=" badge badge-info contadorBadge" *ngIf='solicitudesDeCambio > 0'>
+                                    <strong class="contador">{{solicitudesDeCambio}}</strong>
+                                </span>
 
-                                <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button>
+                                <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button> 
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                     <!-- SEARCH -->
                     <div [formGroup]="formBuscarTurno">
@@ -94,7 +97,10 @@
                                 <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
                                 <label>Tipo de turno</label>
                                 <h6 class="text-light  badge badge-info">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</h6>
-                                <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado()" *ngIf="!turnoElegido.sePresento"></plex-button>
+                                <br>
+                                <span *ngIf='turnoElegido.sePresento === true;' class="text-light  badge badge-success">Presente</span>
+                                <span *ngIf='turnoElegido.sePresento === false;' class="text-light  badge badge-danger">Ausente</span>
+                                <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado()" *ngIf="turnoElegido.sePresento === false"></plex-button>
                             </div>
                         </div>
                         <hr>

@@ -34,9 +34,9 @@ export interface IProfesional {
         valor: string;
         codigoPostal: string;
         ubicacion: {
-            localidad: string;
-            provincia: string;
-            pais: string
+            localidad: any;
+            provincia: any;
+            pais: any
         };
         ultimaActualizacion: Date;
         activo: boolean;

@@ -264,7 +264,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'agente': this.auth.usuario.nombreCompleto
         };
 
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
 
         // this.updateProfesional();
     }
@@ -277,7 +277,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'agente': this.auth.usuario.nombreCompleto
         };
 
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
     }
 
     guardarFormacionPosgrado(posgrado: any) {
@@ -287,7 +287,20 @@ export class DetalleProfesionalComponent implements OnInit {
             'agente': this.auth.usuario.nombreCompleto
         };
 
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+    }
+
+    guardarGrado(fGrado: any) {
+        console.log(fGrado);
+        const cambio = {
+            'op': 'updateGrado',
+            'data': fGrado,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+            this.profesional = data;
+        });
     }
 
     guardarOtrosDatos(otrosDatos) {

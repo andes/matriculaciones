@@ -7,7 +7,7 @@
                            <div class="page-title">Agenda</div>
                    </header>
                </div>
-    <app-agenda-form></app-agenda-form>
+    <app-agenda-form (emitAgenda)='insertar($event)'></app-agenda-form>
 <!-- <form #formAgenda="ngForm">
 
             <div class="row">
@@ -99,7 +99,7 @@
                            <div class="page-title">Modificar agenda</div>
                    </header>
                </div>
-            <app-agenda-form [agendaAmodificar]='agendaSelect'></app-agenda-form>
+            <app-agenda-form  [agendaAmodificar]='agendaSelect'></app-agenda-form>
     </div>
     </plex-box>
 </section>

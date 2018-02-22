@@ -113,7 +113,7 @@ export interface IProfesional {
                 motivo: '',
                 fecha: null
             }
-            notificacionVencimiento: Boolean;            
+            notificacionVencimiento: Boolean;
             fin: Date;
             revalidacionNumero: Number;
         }

@@ -20,7 +20,7 @@ import * as enumerados from './../../utils/enumerados';
 export class ConfiguracionAgendaComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
-        _id: null,
+        id: null,
         diasHabilitados: null,
         horarioInicioTurnos: null,
         horarioFinTurnos: null,
@@ -81,7 +81,6 @@ export class ConfiguracionAgendaComponent implements OnInit {
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
             agendaOperation = this.agendaService.save(this.currentAgenda);
-
               agendaOperation.subscribe(resultado => {
                 this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
             });
@@ -104,6 +103,10 @@ export class ConfiguracionAgendaComponent implements OnInit {
     showListar() {
         this.mostrar = false;
         this.traeListado();
+    }
+
+    insertar(agenda) {
+        this.agendas = [agenda];
     }
 
 

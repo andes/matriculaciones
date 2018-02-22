@@ -44,7 +44,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
     ngOnInit() {
         this.hoy = new Date();
-        this.compruebaBajas()
+        this.compruebaBajas();
 
     }
 
@@ -53,7 +53,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
         if (mantenerNumero) {
             texto = '¿Desea mantener el numero de la matricula?';
         }
-        
+
         this.plex.confirm(texto).then((resultado) => {
             if (resultado) {
                 let revNumero = null;
@@ -107,8 +107,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.formacion.papelesVerificados = true;
         this.formacion.matriculado = false;
         this.profesional.formacionGrado[this.index] = this.formacion;
-        console.log(this.formacion);
-        console.log(this.profesional.formacionGrado[this.index])
          this.actualizar();
 
     }
@@ -131,7 +129,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.motivo = this.motivoBaja;
                 this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.fecha = new Date();
                 this.actualizar();
-                this.compruebaBajas()
+                this.compruebaBajas();
             }
         });
 
@@ -142,7 +140,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
         const cambio = {
             'op': 'updateEstadoGrado',
             'data': this.profesional.formacionGrado
-        }
+        };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
 
         // this._profesionalService.putProfesional(this.profesional)
@@ -155,8 +153,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
         let contador = 0;
         if (this.profesional.formacionGrado[this.index].matriculacion) {
             for (let _n = 0; _n < this.profesional.formacionGrado[this.index].matriculacion.length; _n++) {
-                if (this.profesional.formacionGrado[this.index].matriculacion[_n].baja.motivo !== "") {
-                    contador += 1
+                if (this.profesional.formacionGrado[this.index].matriculacion[_n].baja.motivo !== '') {
+                    contador += 1;
                 }
             }
             if (contador > 0) {

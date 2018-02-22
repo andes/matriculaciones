@@ -26,7 +26,7 @@ export class CambioDniComponent implements OnInit {
     public dniActual;
     public nombre;
     public apellido;
-    public profEncontrado : any =null;
+    public profEncontrado: any = null;
     public profElegido;
     public cambioDNI: any = {
         nombre: null,

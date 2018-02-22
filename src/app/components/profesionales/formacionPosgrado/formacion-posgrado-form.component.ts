@@ -59,6 +59,9 @@ export class FormacionPosgradoFormComponent implements OnInit {
                     codigo: null,
                 },
             },
+            papelesVerificados: false,
+            matriculado: false,
+            revalida: false
             // matriculacion: [{
             //     matriculaNumero: null,
             //     libro: null,
@@ -92,7 +95,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
         this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
 
 
-        form.resetForm();
+       // form.resetForm();
         }
     }
 

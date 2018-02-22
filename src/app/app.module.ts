@@ -21,6 +21,7 @@ import { ImageUploadModule } from 'angular2-image-upload';
 
 // Servicios
 import { AgendaService } from './services/agenda.service';
+import { CambioDniService } from './services/cambioDni.service';
 import { PaisService } from './services/pais.service';
 import { ProvinciaService } from './services/provincia.service';
 import { LocalidadService } from './services/localidad.service';
@@ -73,7 +74,9 @@ import { FormacionGradoFormComponent } from './components/profesionales/formacio
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
-
+import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
+import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
+import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
 
 
 import { TurnosComponent } from './components/turnos/turnos.component';
@@ -100,7 +103,9 @@ const COMPS_PROFESIONAL = [
   FormacionPosgradoDetalleComponent,
   FormacionPosgradoFormComponent,
   ListarProfesionalesComponent,
-  OtroDatosComponent
+  OtroDatosComponent,
+  CambioDniComponent,
+  ListadoCambioDniComponent
 ];
 
 // Pipes
@@ -119,7 +124,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent,
     AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
-    NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
+    NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarSobreTurnoMatriculacionComponent , SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
     ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent, NumeracionMatriculasFormComponent,
     TurnosComponent,
     FotoGeneralComponent,
@@ -156,6 +161,7 @@ import {FechaPipe} from './pipes/fecha.pipe';
     TurnoService,
     ProfesionalService,
     SexoService,
+    CambioDniService,
     PDFUtils,
     NumeracionMatriculasService,
     appRoutingProviders,

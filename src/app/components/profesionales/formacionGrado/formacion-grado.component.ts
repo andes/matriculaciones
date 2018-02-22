@@ -19,10 +19,12 @@ import {
 import { ProfesionalService } from './../../../services/profesional.service';
 import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
 import { PDFUtils } from '../../../utils/PDFUtils';
+import { Auth } from '@andes/auth';
 
 @Component({
     selector: 'app-formacion-grado',
-    templateUrl: 'formacion-grado.html'
+    templateUrl: 'formacion-grado.html',
+    styles: ['.btnGrado { margin-left: 5px }']
 })
 export class FormacionGradoComponent implements OnInit, OnChanges {
 
@@ -35,7 +37,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils) { }
+        private _pdfUtils: PDFUtils, public auth: Auth) { }
 
     ngOnInit() {
         this.hoy = new Date();
@@ -60,8 +62,16 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
 
     addFormacionGrado(fGrado: any) {
-        this.profesional.formacionGrado.push(fGrado);
-        this.updateProfesional.emit(this.profesional);
+        // const cambio = {
+        //     'op': 'updateGrado',
+        //     'data': fGrado,
+        //     'agente': this.auth.usuario.nombreCompleto
+        // };
+
+        // // this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+        // this.profesional.formacionGrado.push(fGrado);
+        this.updateProfesional.emit(fGrado);
+
     }
 
     generarCredencial(grado) {
@@ -83,6 +93,12 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                             });
                     });
             });
+    }
+
+    generarCertificadoEtica(i) {
+        const grado = this.profesional.formacionGrado[i];
+        const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
+        pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
     }
 
     // verificaVencimiento() {

@@ -7,6 +7,7 @@ import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 // Services
 import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
 import { ProfesionService } from './../../services/profesion.service';
+import { SIISAService } from '../../services/siisa.service';
 
 @Component({
     selector: 'app-numeracion-form-matriculas',
@@ -18,12 +19,14 @@ export class NumeracionMatriculasFormComponent implements OnInit {
         profesion: null,
         proximoNumero: null
     };
+    @Output() saveNumeracion = new EventEmitter();
 
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
         private _formBuilder: FormBuilder,
-        private plex: Plex) {
+        private plex: Plex,
+        private _siisaSrv: SIISAService) {
 
     }
 
@@ -31,19 +34,35 @@ export class NumeracionMatriculasFormComponent implements OnInit {
 
     }
 
-    guardarNumeracion($event) {
+    guardarNumeracion($event, tipo) {
+
         if ($event.formValid) {
-        this._numeracionesService.saveNumeracion(this.numeracionMatricula)
-        .subscribe((resp) => {
-            if (resp) {
-                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+            if (tipo === 'prof') {
+                this.numeracionMatricula.especialidad = null;
             }
-        });
-    }
+            if (tipo === 'esp') {
+                this.numeracionMatricula.profesion = null;
+            }
+            this._numeracionesService.saveNumeracion(this.numeracionMatricula)
+                .subscribe((resp) => {
+                    if (!resp) {
+                        this.plex.alert('Ya existe esta profesion/especialidad con una numeracion asignada');
+
+                    }else {
+                        this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+                        this.saveNumeracion.emit(null);
+                    }
+
+                });
+        }
     }
 
     loadProfesiones(event) {
         this._profesionService.getProfesiones().subscribe(event.callback);
+    }
+
+    loadEspecialidades(event: any) {
+        this._siisaSrv.getEspecialidades(null).subscribe(event.callback);
     }
 
     volverAlListado() {

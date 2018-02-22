@@ -67,7 +67,9 @@ export class ProfesionalComponent implements OnInit {
   public sexos: any;
   public provincias: any[];
   public localidades: any[];
+  public paises: any[];
   public estadoCivil: any;
+  public tipoDocumento: any[];
   public tipoComunicacion: any[];
   public vacio = [];
   @Input() confirmar = false;
@@ -81,7 +83,9 @@ export class ProfesionalComponent implements OnInit {
     habilitado: true,
     nombre: null,
     apellido: null,
+    tipoDocumento: null,
     documento: null,
+    documentoViejo: null,
     documentoVencimiento: null,
     cuit: null,
     fechaNacimiento: null,
@@ -100,41 +104,41 @@ export class ProfesionalComponent implements OnInit {
       ultimaActualizacion: new Date()
     }],
     domicilios: [{
-        tipo: 'real',
-        valor: '',
-        codigoPostal: '',
-        ubicacion: {
-          localidad: '',
-          provincia: '',
-          pais: '',
-        },
-        ultimaActualizacion: new Date(),
-        activo: true
+      tipo: 'real',
+      valor: '',
+      codigoPostal: '',
+      ubicacion: {
+        localidad: '',
+        provincia: '',
+        pais: '',
       },
-      {
-        tipo: 'legal',
-        valor: null,
-        codigoPostal: null,
-        ubicacion: {
-          localidad: null,
-          provincia: null,
-          pais: null,
-        },
-        ultimaActualizacion: new Date(),
-        activo: true
+      ultimaActualizacion: new Date(),
+      activo: true
+    },
+    {
+      tipo: 'legal',
+      valor: null,
+      codigoPostal: null,
+      ubicacion: {
+        localidad: null,
+        provincia: null,
+        pais: null,
       },
-      {
-        tipo: 'profesional',
-        valor: null,
-        codigoPostal: null,
-        ubicacion: {
-          localidad: null,
-          provincia: null,
-          pais: null,
-        },
-        ultimaActualizacion: new Date(),
-        activo: true
-      }
+      ultimaActualizacion: new Date(),
+      activo: true
+    },
+    {
+      tipo: 'profesional',
+      valor: null,
+      codigoPostal: null,
+      ubicacion: {
+        localidad: null,
+        provincia: null,
+        pais: null,
+      },
+      ultimaActualizacion: new Date(),
+      activo: true
+    }
     ],
     fotoArchivo: null,
     firmas: null,
@@ -142,6 +146,7 @@ export class ProfesionalComponent implements OnInit {
       profesion: {
         nombre: null,
         codigo: null,
+        tipoDeFormacion: null
       },
       entidadFormadora: {
         nombre: null,
@@ -153,7 +158,7 @@ export class ProfesionalComponent implements OnInit {
       renovacion: false,
       papelesVerificados: false,
       matriculacion: null,
-      matriculado : false
+      matriculado: false
     }],
     formacionPosgrado: null,
     origen: null,
@@ -162,10 +167,15 @@ export class ProfesionalComponent implements OnInit {
     rematriculado: false,
     agenteMatriculador: '',
     OtrosDatos: null,
+    idRenovacion: null,
+
   };
+  localidadesReal: any[];
+  localidadesLegal: any[];
+  localidadesProfesional: any[];
 
 
-  @Output() public onProfesionalCompleto: EventEmitter < IProfesional > = new EventEmitter < IProfesional > ();
+  @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
   constructor(private _formBuilder: FormBuilder,
     private _sexoService: SexoService,
@@ -176,13 +186,16 @@ export class ProfesionalComponent implements OnInit {
     private _profesionalService: ProfesionalService,
     private _entidadFormadoraService: EntidadFormadoraService,
     private plex: Plex,
-    public auth: Auth) {}
+    public auth: Auth) { }
 
   ngOnInit() {
-
     this.estadoCivil = enumerados.getObjsEstadoCivil();
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
+    this.tipoDocumento = enumerados.getObjTipoDoc();
+    this.loadProvincias();
+    this.loadLocalidades(null);
+    console.log(this.tipoDocumento);
   }
 
 
@@ -197,6 +210,8 @@ export class ProfesionalComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
+      // tslint:disable-next-line:max-line-length
+      this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
@@ -214,12 +229,13 @@ export class ProfesionalComponent implements OnInit {
       // tslint:disable-next-line:max-line-length
       this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
+      // tslint:disable-next-line:max-line-length
+      this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
-
-      this._profesionalService.saveProfesional({profesional : this.profesional})
+      this._profesionalService.saveProfesional({ profesional: this.profesional })
         .subscribe(nuevoProfesional => {
           if (nuevoProfesional === null) {
             this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
@@ -233,26 +249,37 @@ export class ProfesionalComponent implements OnInit {
   }
 
   // Filtrado de combos
-  loadPaises(event) {
-    this._paisService.getPaises().subscribe(event.callback);
+  loadPaises() {
+    this._paisService.getPaises().subscribe(resp => {
+      this.paises = resp;
+    });
   }
 
-  loadProvincias(pais) {
+  loadProvincias(pais?) {
+    let paisValor = null;
+    if (pais) {
+      paisValor = pais.value.id;
+    }
     this._provinciaService.get({
-        'pais': pais.value.id
-      })
+      'pais': paisValor
+    })
       .subscribe(resp => {
         this.provincias = resp;
       });
   }
 
   loadLocalidades(provincia) {
-    if (provincia.value) {
-      this._localidadService.getXProvincia(provincia.value.id)
+    let localidadValor = null;
+    if (provincia !== null) {
+      console.log(provincia.value.id);
+      localidadValor = provincia.value.id;
+    }
+      this._localidadService.getXProvincia(localidadValor)
         .subscribe(resp => {
           this.localidades = resp;
+
         });
-    }
+
   }
 
   loadProfesiones(event) {
@@ -298,17 +325,21 @@ export class ProfesionalComponent implements OnInit {
   }
 
   actualizar() {
-    console.log(this.profesional.OtrosDatos)
     this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
+    // tslint:disable-next-line:max-line-length
+    this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
+    this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
+    // tslint:disable-next-line:max-line-length
+    this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
     this.profesional.contactos.map(elem => {
       elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
       return elem;
     });
     this._profesionalService.putProfesional(this.profesional)
-    .subscribe(resp => {
+      .subscribe(resp => {
         this.profesional = resp;
         this.plex.toast('success', 'Se modifico con exito!', 'informacion', 1000);
         this.editado.emit(true);
-    });
+      });
   }
 }

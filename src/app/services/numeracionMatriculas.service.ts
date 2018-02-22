@@ -11,16 +11,20 @@ export class NumeracionMatriculasService extends BaseService {
         super(_http);
     }
 
-    getOne(codigo: number): Observable<any> {
-        return this.server.get(this.numeracionesURL + '/' + codigo);
+    getOne(params: any): Observable<any> {
+        return this.server.get(this.numeracionesURL + '/' , { params: params, showError: true });
     }
 
     saveNumeracion(numeracionModel): Observable<any> {
         return this.server.post(this.numeracionesURL, numeracionModel);
     }
 
-    getNumeraciones(searchParams: any): Observable<any> {
+    putNumeracion(numeracionModel): Observable<any> {
+        return this.server.put(this.numeracionesURL , numeracionModel);
+        // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+    }
 
+    getNumeraciones(searchParams: any): Observable<any> {
         const query = new URLSearchParams();
 
         if (searchParams.offset) {
@@ -33,6 +37,9 @@ export class NumeracionMatriculasService extends BaseService {
 
         if (searchParams.profesion) {
             query.set('codigo', searchParams.profesion._id);
+        }
+        if (searchParams.especialidad) {
+            query.set('codigoEspecialidad', searchParams.especialidad._id);
         }
 
         return this.get(this.numeracionesURL, query);

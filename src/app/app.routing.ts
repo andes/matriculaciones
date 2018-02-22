@@ -29,8 +29,9 @@ import { FormacionPosgradoFormComponent } from './components/profesionales/forma
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { FotoGeneralComponent } from './components/profesionales/foto-general.component';
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
-
-
+import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
+import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
+import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -44,13 +45,16 @@ const appRoutes: Routes = [
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
     { path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent },
     { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent },
+    { path: 'cambioDni', component: CambioDniComponent },
+    { path: 'listadoCambioDni', component: ListadoCambioDniComponent },
     { path: 'turnos', component: TurnosComponent },
-    { path: 'profesional/:documento', component: DetalleProfesionalComponent },
+    { path: 'profesional/:id', component: DetalleProfesionalComponent },
     { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },
     { path: 'numeraciones', component: NumeracionMatriculasComponent },
     { path: 'nuevoTurno', component: SolicitarTurnoComponent },
     { path: 'listarProfesionales', component: ListarProfesionalesComponent },
     { path: 'selectOrganizacion', component: SelectOrganizacionComponent },
+    { path: 'sobreTurnoMatriculacion', component: SolicitarSobreTurnoMatriculacionComponent },
     { path: '**', redirectTo: 'homeProfesionales' }
 ];
 

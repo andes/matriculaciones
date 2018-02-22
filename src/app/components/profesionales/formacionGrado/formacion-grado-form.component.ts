@@ -36,6 +36,7 @@ export class FormacionGradoFormComponent implements OnInit {
     profesionalGrado: any = {
         profesion: {
           nombre: null,
+          tipoDeFormacion: null,
           codigo: null,
         },
         entidadFormadora: {
@@ -79,7 +80,8 @@ export class FormacionGradoFormComponent implements OnInit {
     onSubmit($event, form) {
         if ($event.formValid) {
         this.submitGrado.emit(this.profesionalGrado);
-        form.reset();
+        this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
+        //form.reset();
         }
 
     }

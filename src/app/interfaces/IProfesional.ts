@@ -10,6 +10,7 @@ export interface IProfesional {
     habilitado: Boolean;
     nombre: string;
     apellido: string;
+    tipoDocumento: string;
     documento: string;
     documentoVencimiento: Date;
     cuit: string;
@@ -33,9 +34,9 @@ export interface IProfesional {
         valor: string;
         codigoPostal: string;
         ubicacion: {
-            localidad: string;
-            provincia: string;
-            pais: string
+            localidad: any;
+            provincia: any;
+            pais: any
         };
         ultimaActualizacion: Date;
         activo: boolean;
@@ -49,6 +50,7 @@ export interface IProfesional {
         profesion: {
             nombre: string;
             codigo: number;
+            tipoDeFormacion: String;
         };
         entidadFormadora: {
             nombre: string;
@@ -64,6 +66,11 @@ export interface IProfesional {
             libro: String;
             folio: String;
             inicio: Date;
+            baja: {
+                motivo: '',
+                fecha: Date
+            },
+            notificacionVencimiento: Boolean;
             fin: Date;
             revalidacionNumero: Number;
         }];
@@ -102,10 +109,18 @@ export interface IProfesional {
             libro: String;
             folio: String;
             inicio: Date;
+            baja: {
+                motivo: '',
+                fecha: null
+            }
+            notificacionVencimiento: Boolean;            
             fin: Date;
             revalidacionNumero: Number;
-        } | null
-    ];
+        }
+    ]
+    papelesVerificados: boolean;
+    matriculado: boolean;
+    revalida: boolean;
     }];
     origen: String;
     sanciones:  [{
@@ -128,4 +143,6 @@ export interface IProfesional {
     notas: String;
     rematriculado: Boolean;
     agenteMatriculador: String;
+    idRenovacion: String;
+    documentoViejo: Number;
 }

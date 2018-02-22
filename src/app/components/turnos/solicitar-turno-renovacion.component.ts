@@ -34,12 +34,17 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     private _profesionalID: string;
     public _nuevoProfesional: any;
     public id = null;
+    public documento;
+    public nombre;
+    public apellido;
+    public profEncontrado: any = null;
 
     @Input() public profesional: IProfesional = {
         id: null,
         habilitado: true,
         nombre: null,
         apellido: null,
+        tipoDocumento: null,
         documento: null,
         documentoVencimiento: null,
         cuit: null,
@@ -101,6 +106,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
           profesion: {
             nombre: null,
             codigo: null,
+            tipoDeFormacion: null
           },
           entidadFormadora: {
             nombre: null,
@@ -120,8 +126,11 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
         notas: null,
         rematriculado: false,
         agenteMatriculador: '',
-        OtrosDatos: null
+        OtrosDatos: null,
+        idRenovacion: null,
+        documentoViejo: null
       };
+      public profElegido;
 
 
 
@@ -145,8 +154,8 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
       this.route.params.subscribe(params => {
         this.id = params['id'];
 
-
     });
+
 
 
     }
@@ -174,6 +183,10 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             });
     }
 
+    isSelected(turno: any) {
+        return this.profElegido;
+    }
+
     saveSobreTurno() {
 
         this.formTurno = this._formBuilder.group({
@@ -185,6 +198,17 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
         this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
             .subscribe(turno => {
             });
+    }
+
+    buscar($event) {
+        if ($event.formValid) {
+      // tslint:disable-next-line:max-line-length
+      this._profesionalService.getResumenProfesional({ documento: this.documento, nombre: this.nombre, apellido: this.apellido }).subscribe(resp => {
+        console.log(resp);
+        console.log(resp)
+        this.profEncontrado = resp;
+      });
+    }
     }
 
     onProfesionalCompleto() {
@@ -212,4 +236,15 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             }
     });
     }
+
+    profesionalEncontrado(profEncontrado) {
+      this.profElegido = profEncontrado;
+      this.profesional.idRenovacion = profEncontrado.idRenovacion;
+      this.profesional.nombre = profEncontrado.nombre;
+      this.profesional.apellido = profEncontrado.apellido;
+      this.profesional.documento = profEncontrado.documento;
+      this.profesional.fechaNacimiento = profEncontrado.fechaNacimiento;
+    }
+
+
 }

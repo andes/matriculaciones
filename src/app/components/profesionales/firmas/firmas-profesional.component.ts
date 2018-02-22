@@ -91,6 +91,7 @@ export class FirmasProfesionalComponent implements OnInit {
         this.binaryStringAdmin = readerEvt.target.result;
         this.base64textStringAdmin = btoa(this.binaryStringAdmin);
         this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textStringAdmin);
+        this.firmaAdmin = true;
       }
 
 
@@ -99,6 +100,7 @@ export class FirmasProfesionalComponent implements OnInit {
         this.onFileUploaded.emit(this.base64textString);
         this.tieneFirma.emit(true);
         this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
+
     }
 
     uploadFirmaAdmin() {

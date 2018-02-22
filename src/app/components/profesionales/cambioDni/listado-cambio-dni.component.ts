@@ -93,7 +93,6 @@ export class ListadoCambioDniComponent implements OnInit {
                 this.plex.alert('No existe ningun profesional con este DNI');
                 this.Match = false;
             } else {
-                console.log(profesional)
                 profesional[0].documento = this.solicitudElegida.dniNuevo;
                 profesional[0].documentoViejo = this.solicitudElegida.dniActual;
                 console.log(profesional[0]);

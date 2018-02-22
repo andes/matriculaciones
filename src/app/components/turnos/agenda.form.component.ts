@@ -20,7 +20,7 @@ import * as enumerados from './../../utils/enumerados';
 export class AgendaFormComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
-        _id: null,
+        id: null,
         diasHabilitados: null,
         horarioInicioTurnos: null,
         horarioFinTurnos: null,
@@ -35,6 +35,7 @@ export class AgendaFormComponent implements OnInit {
     agendas: any;
     agendasDiasHabilitados: any;
     agendasFeriados: any;
+    @Output() emitAgenda = new EventEmitter();
 
     constructor( private agendaService: AgendaService, private plex: Plex) {
             this.feriados  = [];
@@ -90,6 +91,7 @@ export class AgendaFormComponent implements OnInit {
             agendaOperation = this.agendaService.save(this.currentAgenda);
 
               agendaOperation.subscribe(resultado => {
+                this.emitAgenda.emit(this.currentAgenda);
                 this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
             });
             // form.resetForm();

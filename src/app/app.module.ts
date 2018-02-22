@@ -36,9 +36,11 @@ import { SIISAService } from './services/siisa.service';
 // import { DataService } from './services/data.service';
 
 // Componentes
-import { RequisitosGeneralesComponent,
+import {
+  RequisitosGeneralesComponent,
   RequisitosMatriculaUniversitariaComponent,
-  RequisitosMatriculaTecnicaAuxiliarComponent } from './components/requisitos/requisitos.component';
+  RequisitosMatriculaTecnicaAuxiliarComponent
+} from './components/requisitos/requisitos.component';
 import { HomeComponent } from './components/home/home.component';
 import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
 import { AgendaComponent } from './components/turnos/agenda.component';
@@ -76,7 +78,7 @@ import { SelectOrganizacionComponent } from './components/home/selectOrganizacio
 import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
-import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
+import { SolicitarSobreTurnoMatriculacionComponent } from './components/turnos/sobreTurnoMatriculacion.component';
 
 
 import { TurnosComponent } from './components/turnos/turnos.component';
@@ -110,8 +112,8 @@ const COMPS_PROFESIONAL = [
 
 // Pipes
 import { EdadPipe } from './pipes/edad.pipe';
-import {ProfesionalPipe} from './pipes/profesional.pipe';
-import {FechaPipe} from './pipes/fecha.pipe';
+import { ProfesionalPipe } from './pipes/profesional.pipe';
+import { FechaPipe } from './pipes/fecha.pipe';
 
 @NgModule({
   declarations: [
@@ -124,7 +126,9 @@ import {FechaPipe} from './pipes/fecha.pipe';
     RequisitosMatriculaUniversitariaComponent,
     RequisitosMatriculaTecnicaAuxiliarComponent,
     AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
-    NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent, SolicitarSobreTurnoMatriculacionComponent , SolicitarTurnoRenovacionComponent, SolicitarTurnoComponent,
+    NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent,
+    SolicitarSobreTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent,
+    SolicitarTurnoComponent,
     ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent, NumeracionMatriculasFormComponent,
     TurnosComponent,
     FotoGeneralComponent,

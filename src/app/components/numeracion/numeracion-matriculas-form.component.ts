@@ -14,8 +14,8 @@ import { SIISAService } from '../../services/siisa.service';
     templateUrl: 'numeracion-matriculas-form.html'
 })
 export class NumeracionMatriculasFormComponent implements OnInit {
-    private formNumeracion: FormGroup;
-    private numeracionMatricula: any = {
+    public formNumeracion: FormGroup;
+    public numeracionMatricula: any = {
         profesion: null,
         proximoNumero: null
     };

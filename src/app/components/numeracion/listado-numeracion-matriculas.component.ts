@@ -20,10 +20,10 @@ import { SIISAService } from '../../services/siisa.service';
 })
 export class ListadoNumeracionMatriculasComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
-    private formBuscarNumeracion: FormGroup;
-    private numeraciones: any[];
-    private numeracionElegida: any;
-    private showListado: Boolean = true;
+    public formBuscarNumeracion: FormGroup;
+    public numeraciones: any[];
+    public numeracionElegida: any;
+    public showListado: Boolean = true;
     public var: Number;
 
     constructor(private _numeracionesService: NumeracionMatriculasService,

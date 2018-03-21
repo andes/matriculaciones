@@ -7,6 +7,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import * as moment from 'moment';
 import 'rxjs/add/operator/switchMap';
 import { Observable } from 'rxjs/Observable';
+import { environment } from './../../../environments/environment';
 
 // Services
 import { TurnoService } from './../../services/turno.service';
@@ -25,10 +26,10 @@ const jsPDF = require('jspdf');
 })
 export class TurnosComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
-    private formBuscarTurno: FormGroup;
-    private turnos: any[] = [];
-    private turnoElegido: any;
-    private showListado: Boolean = true;
+    public formBuscarTurno: FormGroup;
+    public turnos: any[] = [];
+    public turnoElegido: any;
+    public showListado: Boolean = true;
     public solicitudesDeCambio;
     public muestraAusente = false;
     offset = 0;
@@ -57,7 +58,9 @@ export class TurnosComponent implements OnInit {
         });
         this.buscar();
         this.contadorDeCambiosDni();
-        this.avisoTurno();
+        if (environment.production === true) {
+            this.avisoTurno();
+        }
     }
 
     showTurno(turno: any) {
@@ -167,21 +170,20 @@ export class TurnosComponent implements OnInit {
 
             .subscribe((resp) => {
                 for (let _i = 0; _i < resp.data.length; _i++) {
-
-                        const fechaFin = moment(resp.data[_i].fecha);
-                        const hoy = moment(new Date());
-                        if (resp.data[_i].notificado === false && fechaFin.diff(hoy, 'days') <= 3) {
-                        let contactos = resp.data[_i].profesional.contactos;
-
-                        contactos.forEach(element => {
-                            if (element.tipo === 'celular') {
-                                tieneCelular = true;
-                                numeroCelular = Number(element.valor);
-                            }
-                        });
+                    const fechaFin = moment(resp.data[_i].fecha);
+                    const hoy = moment(new Date());
+                    if (resp.data[_i].notificado === false && fechaFin.diff(hoy, 'days') <= 3) {
 
                         // tslint:disable-next-line:max-line-length
                         this._profesionalService.getProfesional({ id: resp.data[_i].profesional.idRenovacion }).subscribe((profesional: any) => {
+                            let contactos = resp.data[_i].profesional.contactos;
+
+                            contactos.forEach(element => {
+                                if (element.tipo === 'celular') {
+                                    tieneCelular = true;
+                                    numeroCelular = Number(element.valor);
+                                }
+                            });
                             if (resp.data[_i].tipo === 'renovacion') {
                                 contactos = profesional[0].contactos;
                                 contactos.forEach(element => {
@@ -191,25 +193,25 @@ export class TurnosComponent implements OnInit {
                                     }
                                 });
                             }
-
                             if (fechaFin.diff(hoy, 'days') <= 3 && tieneCelular === true && resp.data[_i].notificado === false) {
-
-
                                 const nombreCompleto = resp.data[_i].profesional.nombreCompleto;
                                 const smsParams = {
                                     telefono: numeroCelular,
                                     // tslint:disable-next-line:max-line-length
                                     mensaje: 'Estimado ' + nombreCompleto + ', le recordamos que usted tiene el turno para realizar el tramite de matriculacion el dia ' + moment(fechaFin).format('l') + ' a las ' + moment(fechaFin).format('LT') + ' '
                                 };
-                                this._profesionalService.enviarSms(smsParams).subscribe();
-                                const cambio = {
-                                    'op': 'updateNotificado',
-                                    'data': true,
-                                };
+                                this._profesionalService.enviarSms(smsParams).subscribe(dataSms => {
 
-                                this._turnoService.patchTurnos(resp.data[_i].id, cambio).subscribe((data) => {
+                                    const cambio = {
+                                        'op': 'updateNotificado',
+                                        'data': true,
+                                    };
 
+                                    this._turnoService.patchTurnos(resp.data[_i].id, cambio).subscribe((data) => {
+
+                                    });
                                 });
+
 
                             }
                         });

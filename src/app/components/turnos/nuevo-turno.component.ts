@@ -46,7 +46,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     private cantidadTurnosPorHora: number;
     private horariosDisponibles: any[] = [];
     private fechaElegida: Date;
-    private turnoElegido: boolean;
+    public turnoElegido: boolean;
     private lblTurno: string;
     private options: any = {};
     public boxType: string;

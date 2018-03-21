@@ -13,7 +13,7 @@ import { ProfesionService } from './../../services/profesion.service';
     templateUrl: 'numeracion-matriculas.html'
 })
 export class NumeracionMatriculasComponent implements OnInit {
-    private formNumeracion: FormGroup;
+    public formNumeracion: FormGroup;
     @Input() numeracion: any;
     @Input() numeracion2: any;
     @Output() onShowListado = new EventEmitter();

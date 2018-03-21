@@ -12,8 +12,15 @@ export class PDFUtils {
         doc.setFontStyle('bold');
         doc.text(/*'Argentina'*/ profesional.nacionalidad.nombre, 14, 14);
         doc.text(/*'TEC. EN LABORATORIO CLINICO E HISTOPATOLOGIA'*/profesional.formacionGrado[grado].titulo, 20, 17);
-        doc.text(/*'UNIV. NAC. DE CORDOBA'*/profesional.formacionGrado[grado].entidadFormadora.nombre, 20, 20);
-        doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 28, 24);
+        // doc.text(/*'UNIV. NAC. DE CORDOBA'*/profesional.formacionGrado[grado].entidadFormadora.nombre, 20, 20);
+        const splitTitle = doc.splitTextToSize(profesional.formacionGrado[grado].entidadFormadora.nombre, 60);
+        let textoEntidad = 20;
+        splitTitle.forEach(element => {
+
+            doc.text(/*'UNIV. NAC. DE CORDOBA'*/element, 15, textoEntidad);
+            textoEntidad = textoEntidad + 3;
+        });
+        doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 28, 28);
        doc.addImage(firmaAdmin.firma, 'jpg', 38, 25, 30, 14);
        if (firmaAdmin.administracion === null) {
         doc.text('', 42, 41);
@@ -28,7 +35,7 @@ export class PDFUtils {
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Grado Universitario') {
             doc.setFillColor(45, 190, 63);
         }
-        if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Auxiliar') {
+        if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Auxiliarato') {
             doc.setFillColor(62, 37, 215);
         }
 

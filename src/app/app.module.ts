@@ -17,7 +17,7 @@ import { PDFUtils } from './utils/PDFUtils';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { ImageUploadModule } from 'angular2-image-upload';
 // import { Plex } from '@andes/plex';
-// import { ScrollComponent } from './components/base/plex-scroll.component';
+ import { ScrollComponent } from './components/base/plex-scroll.component';
 
 // Servicios
 import { AgendaService } from './services/agenda.service';
@@ -27,6 +27,8 @@ import { ProvinciaService } from './services/provincia.service';
 import { LocalidadService } from './services/localidad.service';
 import { ProfesionService } from './services/profesion.service';
 import { EntidadFormadoraService } from './services/entidadFormadora.service';
+import { ModalidadesCertificacionService } from './services/modalidadesCertificacion.service';
+
 import { TurnoService } from './services/turno.service';
 import { ExcelService } from './services/excel.service';
 import { ProfesionalService } from './services/profesional.service';
@@ -136,7 +138,9 @@ import { FechaPipe } from './pipes/fecha.pipe';
     ProfesionalPipe,
     FechaPipe,
     SelectOrganizacionComponent,
-    COMPS_PROFESIONAL
+    COMPS_PROFESIONAL,
+    RenovacionesProfesionalComponent,
+    ScrollComponent
   ],
   imports: [
     BrowserModule,
@@ -169,7 +173,8 @@ import { FechaPipe } from './pipes/fecha.pipe';
     PDFUtils,
     NumeracionMatriculasService,
     appRoutingProviders,
-    SIISAService
+    SIISAService,
+    ModalidadesCertificacionService
   ],
   bootstrap: [AppComponent]
 })

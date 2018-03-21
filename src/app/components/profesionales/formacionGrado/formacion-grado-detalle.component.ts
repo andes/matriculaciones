@@ -64,40 +64,45 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 }
                 this._numeracionesService.getOne({ profesion: formacion.profesion.id })
                     .subscribe((num) => {
-                        let matriculaNumero;
-                        if (mantenerNumero === false) {
-                            matriculaNumero = num[0].proximoNumero;
-                            num[0].proximoNumero = matriculaNumero + 1;
-                        }
+                        if (num.length === 0) {
+                            this.plex.alert('No tiene ningun numero de matricula asignado');
+                        } else {
+                            let matriculaNumero;
+                            if (mantenerNumero === false) {
+                                matriculaNumero = num[0].proximoNumero;
+                                num[0].proximoNumero = matriculaNumero + 1;
+                            }
 
-                        if (mantenerNumero) {
-                            matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
+                            if (mantenerNumero) {
+                                matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
+                            }
+                            const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
+                            const oMatriculacion = {
+                                matriculaNumero: matriculaNumero,
+                                libro: '',
+                                folio: '',
+                                inicio: new Date(),
+                                baja: {
+                                    motivo: '',
+                                    fecha: null
+                                },
+                                notificacionVencimiento: false,
+                                fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
+                                revalidacionNumero: revNumero + 1
+                            };
+                            this._numeracionesService.putNumeracion(num[0])
+                                .subscribe(newNum => {
+                                    this.matriculacion.emit(oMatriculacion);
+                                });
+                            // this.profesional.formacionGrado[this.index].renovacion = false;
+                            // this.profesional.formacionGrado[this.index].matriculado = true;
+                            this.formacion.renovacion = false;
+                            this.formacion.matriculado = true;
+                            this.profesional.formacionGrado[this.index] = this.formacion;
+                            this.actualizar();
                         }
-                        const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-                        const oMatriculacion = {
-                            matriculaNumero: matriculaNumero,
-                            libro: '',
-                            folio: '',
-                            inicio: new Date(),
-                            baja: {
-                                motivo: '',
-                                fecha: null
-                            },
-                            notificacionVencimiento: false,
-                            fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
-                            revalidacionNumero: revNumero + 1
-                        };
-                        this._numeracionesService.putNumeracion(num[0])
-                            .subscribe(newNum => {
-                                this.matriculacion.emit(oMatriculacion);
-                            });
                     });
-                // this.profesional.formacionGrado[this.index].renovacion = false;
-                // this.profesional.formacionGrado[this.index].matriculado = true;
-                this.formacion.renovacion = false;
-                this.formacion.matriculado = true;
-                this.profesional.formacionGrado[this.index] = this.formacion;
-                this.actualizar();
+
             }
         });
     }
@@ -107,7 +112,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.formacion.papelesVerificados = true;
         this.formacion.matriculado = false;
         this.profesional.formacionGrado[this.index] = this.formacion;
-         this.actualizar();
+        this.actualizar();
 
     }
 
@@ -141,7 +146,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
             'op': 'updateEstadoGrado',
             'data': this.profesional.formacionGrado
         };
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
 
         // this._profesionalService.putProfesional(this.profesional)
         // .subscribe(resp => {

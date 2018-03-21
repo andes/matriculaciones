@@ -42,7 +42,7 @@
               <plex-select label="Matriculas de Especialidades" [(ngModel)]="estadoEspecialidad" [data]="estadosMatriculas" (change)="matriculadoEspecialidad()"></plex-select>
             </div>
             <div class="col-2 btnSlide">
-              <plex-bool type="slide" label="Ver bajas de matriculas" [(ngModel)]="verBajas" (change)="bajas()" name="especialidad.activo"></plex-bool>
+              <plex-bool type="slide" label="Ver bajas de matriculas" [(ngModel)]="verBajas" (change)="buscar()" name="especialidad.activo"></plex-bool>
               <plex-bool type="slide" label="Deshabilitado" [(ngModel)]="verDeshabilitado" (change)="buscar()" name="especialidad.activo"></plex-bool>
 
             </div>

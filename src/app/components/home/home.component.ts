@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   public deshabilitar = false;
   public autoFocus = 1;
 
-  constructor(private plex: Plex, private auth: Auth, private router: Router, public appComponent: AppComponent) {};
+  constructor(private plex: Plex, public auth: Auth, private router: Router, public appComponent: AppComponent) {};
 
 
   ngOnInit() {

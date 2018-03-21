@@ -12,7 +12,7 @@ import {
 } from '@andes/plex/src/lib/core/service';
 import * as Enums from './../../utils/enumerados';
 import * as moment from 'moment';
-
+import { environment } from './../../../environments/environment';
 import {
   FormBuilder,
   FormGroup,
@@ -157,61 +157,65 @@ export class ListarProfesionalesComponent implements OnInit {
         for (let _i = 0; _i < this.profesionales[_n].formacionGrado.length; _i++) {
           if (this.profesionales[_n].formacionGrado[_i].matriculacion) {
             // tslint:disable-next-line:max-line-length
+            if (environment.production === true) {
+              // tslint:disable-next-line:max-line-length
+              const notificado = this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento;
+              const fechaFin = moment(this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin);
+              const hoy = moment(this.hoy);
+              const contactos = this.profesionales[_n].contactos;
+              let tieneEmail = false;
+              let tieneCelular = false;
+              let numeroCelular;
+              // Comprueba si tiene email y celular
+              contactos.forEach(element => {
+                if (element.tipo === 'email') {
+                  tieneEmail = true;
+                }
+                if (element.tipo === 'celular') {
+                  tieneCelular = true;
+                  numeroCelular = Number(element.valor);
+                }
+              });
 
-            // tslint:disable-next-line:max-line-length
-            const notificado = this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento;
-            const fechaFin = moment(this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin);
-            const hoy = moment(this.hoy);
-            const contactos = this.profesionales[_n].contactos;
-            let tieneEmail = false;
-            let tieneCelular = false;
-            let numeroCelular;
-            contactos.forEach(element => {
-              if (element.tipo === 'email') {
-                tieneEmail = true;
-              }
-              if (element.tipo === 'celular') {
-                tieneCelular = true;
-                numeroCelular = Number(element.valor);
-              }
-            });
-
-
-            if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
-              const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
-              const smsParams = {
-                telefono: numeroCelular,
+              // si faltan 5 dias,tiene un celular asignado y no esta notificado envia el mensaje
+              if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
+                const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
+                const smsParams = {
+                  telefono: numeroCelular,
+                  // tslint:disable-next-line:max-line-length
+                  mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
+                };
+                this._profesionalService.enviarSms(smsParams).subscribe();
                 // tslint:disable-next-line:max-line-length
-                mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
-              };
-              this._profesionalService.enviarSms(smsParams).subscribe();
-              // tslint:disable-next-line:max-line-length
-              this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
-              const cambio = {
-                'op': 'updateEstadoGrado',
-                'data': this.profesionales[_n].formacionGrado,
-              };
+                this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+                const cambio = {
+                  'op': 'updateEstadoGrado',
+                  'data': this.profesionales[_n].formacionGrado,
+                };
 
-              this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+                this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
 
-              });
+                });
 
+              }
+
+              // si faltan 5 dias,tiene un celular asignado y no esta notificado envia el mail
+              if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
+                // tslint:disable-next-line:max-line-length
+                this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+
+                this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
+                const cambio = {
+                  'op': 'updateEstadoGrado',
+                  'data': this.profesionales[_n].formacionGrado,
+                };
+
+                this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+
+                });
+              }
             }
-
-            if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
-              // tslint:disable-next-line:max-line-length
-              this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
-
-              this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
-              const cambio = {
-                'op': 'updateEstadoGrado',
-                'data': this.profesionales[_n].formacionGrado,
-              };
-
-              this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
-
-              });
-            }
+            // si se vence la matricula o se da de baja cambia estados de la misma
             // tslint:disable-next-line:max-line-length
             if (this.profesionales[_n].formacionGrado[_i].matriculado === true && this.profesionales[_n].formacionGrado[_i].matriculacion[this.profesionales[_n].formacionGrado[_i].matriculacion.length - 1].fin <= this.hoy) {
               this.profesionales[_n].formacionGrado[_i].matriculado = false;
@@ -242,61 +246,63 @@ export class ListarProfesionalesComponent implements OnInit {
         if (this.profesionales[_n].formacionPosgrado) {
           for (let _i = 0; _i < this.profesionales[_n].formacionPosgrado.length; _i++) {
             if (this.profesionales[_n].formacionPosgrado[_i].matriculacion.length > 0) {
-              // tslint:disable-next-line:max-line-length
-              const notificado = this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento;
-              const fechaFin = moment(this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin);
-              const hoy = moment(this.hoy);
-              const contactos = this.profesionales[_n].contactos;
-              let tieneEmail = false;
-              let tieneCelular = false;
-              let numeroCelular;
-              contactos.forEach(element => {
-                if (element.tipo === 'email') {
-                  tieneEmail = true;
-                }
-                if (element.tipo === 'celular') {
-                  tieneCelular = true;
-                  numeroCelular = Number(element.valor);
-                }
-              });
+              if (environment.production === true) {
+                // tslint:disable-next-line:max-line-length
+                const notificado = this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento;
+                const fechaFin = moment(this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin);
+                const hoy = moment(this.hoy);
+                const contactos = this.profesionales[_n].contactos;
+                let tieneEmail = false;
+                let tieneCelular = false;
+                let numeroCelular;
+                contactos.forEach(element => {
+                  if (element.tipo === 'email') {
+                    tieneEmail = true;
+                  }
+                  if (element.tipo === 'celular') {
+                    tieneCelular = true;
+                    numeroCelular = Number(element.valor);
+                  }
+                });
 
-              if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
-                const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
-                const smsParams = {
-                  telefono: numeroCelular,
+                if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneCelular) {
+                  const nombreCompleto = this.profesionales[_n].apellido + ' ' + this.profesionales[_n].nombre;
+                  const smsParams = {
+                    telefono: numeroCelular,
+                    // tslint:disable-next-line:max-line-length
+                    mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
+                  };
+                  this._profesionalService.enviarSms(smsParams).subscribe();
                   // tslint:disable-next-line:max-line-length
-                  mensaje: 'Estimado ' + nombreCompleto + ', una de sus matriculas esta por vencer, por favor sacar un turno para realizar la renovacion de la misma.',
-                };
-                this._profesionalService.enviarSms(smsParams).subscribe();
-                // tslint:disable-next-line:max-line-length
-                this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
-                const cambio = {
-                  'op': 'updateEstadoPosGrado',
-                  'data': this.profesionales[_n].formacionPosgrado,
-                };
+                  this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+                  const cambio = {
+                    'op': 'updateEstadoPosGrado',
+                    'data': this.profesionales[_n].formacionPosgrado,
+                  };
 
-                this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+                  this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
 
-                });
+                  });
 
 
-              }
-              if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
-                // tslint:disable-next-line:max-line-length
-                this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
+                }
+                if (fechaFin.diff(hoy, 'days') <= 5 && notificado === false && tieneEmail) {
+                  // tslint:disable-next-line:max-line-length
+                  this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].notificacionVencimiento = true;
 
-                this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
-                const cambio = {
-                  'op': 'updateEstadoPosGrado',
-                  'data': this.profesionales[_n].formacionPosgrado,
-                };
+                  this._profesionalService.enviarMail({ profesional: this.profesionales[_n] }).subscribe();
+                  const cambio = {
+                    'op': 'updateEstadoPosGrado',
+                    'data': this.profesionales[_n].formacionPosgrado,
+                  };
 
-                this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
+                  this._profesionalService.patchProfesional(this.profesionales[_n].id, cambio).subscribe((data) => {
 
-                });
+                  });
 
 
 
+                }
               }
               // tslint:disable-next-line:max-line-length
               if (this.profesionales[_n].formacionPosgrado[_i].matriculado === true && this.profesionales[_n].formacionPosgrado[_i].matriculacion[this.profesionales[_n].formacionPosgrado[_i].matriculacion.length - 1].fin.getFullYear() <= this.hoy.getFullYear()) {
@@ -388,15 +394,15 @@ export class ListarProfesionalesComponent implements OnInit {
 
   }
 
-  bajas() {
-    this.buscar();
-  }
+  // bajas() {
+  //   this.buscar();
+  // }
 
 
-  deshabilitados() {
+  // deshabilitados() {
 
-    this.buscar();
-  }
+  //   this.buscar();
+  // }
 
   verNuevoProfesional(valor) {
     if (valor === true) {

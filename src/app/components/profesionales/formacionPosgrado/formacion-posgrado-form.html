@@ -27,7 +27,7 @@
                     <div >
                         <div class="row">
                             <div class="col-4">
-                                <plex-select label="Modalidad" [(ngModel)]="profesionalP.modalidad" name="modalidad"  (getData)="loadModalidadesCertificacion($event)" ></plex-select>
+                                <plex-select label="Modalidad" [(ngModel)]="profesionalP.certificacion.modalidad" name="modalidad"  (getData)="loadModalidadesCertificacion($event)" ></plex-select>
                             </div>
                             <div class="col-4">
                                 <plex-select label="Establecimiento Certificador" [(ngModel)]="profesionalP.establecimiento" name="establecimiento" (getData)="loadEstablecimientosCertificadores($event)" ></plex-select>

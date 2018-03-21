@@ -1,4 +1,4 @@
-<plex-box type="{{boxType}}">
+<plex-box >
 
     <div class="row">
         <div class="col-12 text-center">
@@ -33,7 +33,7 @@
                         <plex-select label="Estado Civíl" [(ngModel)]="profesional.estadoCivil" name="estadoCivil" [data]="estadoCivil" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
-                        <plex-select label="Nacionalidad" [(ngModel)]="profesional.nacionalidad" name="nacionalidad" (getData)="loadPaises($event)"
+                        <plex-select label="Nacionalidad" [(ngModel)]="profesional.nacionalidad" name="nacionalidad" (getData)="loadPaises()"
                             [data]="paises" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
@@ -127,7 +127,7 @@
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provinciaReal" [(ngModel)]="profesional.domicilios[0].ubicacion.provincia" [data]="provincias"
-                            (change)="loadLocalidades($event,0)" [required]="true"></plex-select>
+                            (change)="loadLocalidades($event)" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Localidad" name="localidadReal" [(ngModel)]="profesional.domicilios[0].ubicacion.localidad" [data]="localidades"
@@ -156,7 +156,7 @@
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provinciaLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.provincia" [data]="provincias"
-                            (change)="loadLocalidades($event,1)" ></plex-select>
+                            (change)="loadLocalidades($event)" ></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Localidad" name="localidadLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.localidad" (getData)="loadLocalidades($event)"
@@ -183,7 +183,7 @@
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provincia" [(ngModel)]="profesional.domicilios[2].ubicacion.provincia" [data]="provincias"
-                            (change)="loadLocalidades($event,2)" ></plex-select>
+                            (change)="loadLocalidades($event)" ></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Localidad" name="localidad" [(ngModel)]="profesional.domicilios[2].ubicacion.localidad" [data]="localidades"

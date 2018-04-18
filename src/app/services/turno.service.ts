@@ -38,7 +38,7 @@ export class TurnoService extends BaseService {
     }
 
     saveTurnoMatriculacion(turnoModel: any): Observable<any> {
-        return this._server.post(this.turnosMatriculacionURL + turnoModel.profesional, turnoModel);
+        return this._server.post(this.turnosMatriculacionURL + turnoModel.turno.profesional, turnoModel);
     }
 
     saveTurno(turnoModel): Observable<any> {

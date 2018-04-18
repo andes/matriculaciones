@@ -158,7 +158,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
         let contador = 0;
         if (this.profesional.formacionGrado[this.index].matriculacion) {
             for (let _n = 0; _n < this.profesional.formacionGrado[this.index].matriculacion.length; _n++) {
-                if (this.profesional.formacionGrado[this.index].matriculacion[_n].baja.motivo !== '') {
+                // tslint:disable-next-line:max-line-length
+                if (this.profesional.formacionGrado[this.index].matriculacion[_n].baja && this.profesional.formacionGrado[this.index].matriculacion[_n].baja.motivo !== '') {
                     contador += 1;
                 }
             }

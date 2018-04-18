@@ -133,9 +133,11 @@ export class ListarProfesionalesComponent implements OnInit {
         this.totalProfesionalesMatriculados = totalM;
 
 
-
+        if (environment.production === true) {
         this.comprebaVenciomientoGrado();
         this.comprebaVenciomientoPosGrado();
+
+      }
 
         // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });

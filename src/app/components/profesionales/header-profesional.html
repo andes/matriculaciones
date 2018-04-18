@@ -14,7 +14,7 @@
                 <span *ngIf='profesional.tipoDocumento'>{{profesional.tipoDocumento}}</span>
                 <span *ngIf='!profesional.tipoDocumento'>DNI</span> {{ profesional.documento }}
                 <span *ngIf='profesional.documentoViejo' class="text-danger hover" title="Cambio el documento(ver otros)">*</span> | {{'CUIT ' + profesional.cuit }}
-                <br /> {{profesional.fechaNacimiento | fecha }} | {{profesional.estadoCivil }} | {{profesional.contactos[0].valor
+                <br /> {{profesional.fechaNacimiento | fecha }} | {{profesional.estadoCivil }} | {{profesional.contactos[0]?.valor
                 }} | {{profesional.nacionalidad.nombre}}
                 <br>
             </span>

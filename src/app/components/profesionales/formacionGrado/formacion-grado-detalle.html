@@ -148,8 +148,8 @@
                             <tbody >
                                 <tr *ngFor="let matriculacion of formacion.matriculacion" >
                                     <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.matriculaNumero }}</td>
-                                    <td *ngIf='matriculacion.baja.motivo !== ""'> {{ matriculacion.baja.motivo }}</td>
-                                    <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja.fecha | fecha }}</td>
+                                    <td *ngIf='matriculacion.baja.motivo !== ""'> {{ matriculacion.baja?.motivo }}</td>
+                                    <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja?.fecha | fecha }}</td>
                                 </tr>
                             </tbody>
                         </table>

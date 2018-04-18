@@ -105,7 +105,7 @@ export class ProfesionalComponent implements OnInit {
     }],
     domicilios: [{
       tipo: 'real',
-      valor: '',
+      valor: null,
       codigoPostal: '',
       ubicacion: {
         localidad: '',
@@ -195,7 +195,48 @@ export class ProfesionalComponent implements OnInit {
     this.tipoDocumento = enumerados.getObjTipoDoc();
     this.loadProvincias();
     this.loadLocalidades(null);
-    console.log(this.tipoDocumento);
+    if (this.editable) {
+     if (this.profesional.domicilios.length === 0) {
+
+       this.profesional.domicilios = [{
+        tipo: 'real',
+        valor: null,
+        codigoPostal: '',
+        ubicacion: {
+          localidad: '',
+          provincia: '',
+          pais: '',
+        },
+        ultimaActualizacion: new Date(),
+        activo: true
+      },
+      {
+        tipo: 'legal',
+        valor: null,
+        codigoPostal: null,
+        ubicacion: {
+          localidad: null,
+          provincia: null,
+          pais: null,
+        },
+        ultimaActualizacion: new Date(),
+        activo: true
+      },
+      {
+        tipo: 'profesional',
+        valor: null,
+        codigoPostal: null,
+        ubicacion: {
+          localidad: null,
+          provincia: null,
+          pais: null,
+        },
+        ultimaActualizacion: new Date(),
+        activo: true
+      }
+      ];
+     }
+    }
   }
 
 
@@ -271,7 +312,6 @@ export class ProfesionalComponent implements OnInit {
   loadLocalidades(provincia) {
     let localidadValor = null;
     if (provincia !== null) {
-      console.log(provincia.value.id);
       localidadValor = provincia.value.id;
     }
       this._localidadService.getXProvincia(localidadValor)

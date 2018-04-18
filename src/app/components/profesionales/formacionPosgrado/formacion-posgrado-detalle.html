@@ -48,7 +48,7 @@
     <div class="row">
         <div class="col-12 form-group">
             <label>Institución Formadora</label>
-            <div>{{ formacion.institucionFormadora.nombre }}</div>
+            <div>{{ formacion.institucionFormadora?.nombre }}</div>
         </div>
     </div>
     <div class="row">
@@ -58,7 +58,7 @@
         </div>
         <div class="col-6 form-group">
             <label>Fecha de Egreso</label>
-            <div>{{ formacion.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
+            <div>{{ formacion.fechaEgreso| date: 'dd/MM/yyyy'}}</div>
         </div>
     </div>
     <hr>
@@ -70,19 +70,19 @@
     <div class="row">
         <div class="col-12 form-group">
             <label>Modalidad</label>
-            <div>{{ formacion.certificacion.modalidad.nombre }}</div>
+            <div>{{ formacion.certificacion?.modalidad.nombre }}</div>
         </div>
     </div>
     <div class="row">
         <div class="col-12 form-group">
             <label>Establecimiento Certificador</label>
-            <div>{{ formacion.certificacion.establecimiento.nombre }}</div>
+            <div>{{ formacion.certificacion?.establecimiento.nombre }}</div>
         </div>
     </div>
     <div class="row">
         <div class="col-12 form-group">
             <label>Fecha de Certificación</label>
-            <div>{{ formacion.certificacion.fecha | date: 'dd/MM/yyyy' }}</div>
+            <div>{{ formacion.certificacion?.fecha | date: 'dd/MM/yyyy' }}</div>
         </div>
     </div>
     <div *ngIf='formacion.matriculacion.length > 0'>

@@ -64,7 +64,7 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
             profesional: this._nuevoProfesional._id
         });
 
-        this._turnosService.saveTurnoMatriculacion(this.formTurno.value)
+        this._turnosService.saveTurnoMatriculacion({turno: this.formTurno.value})
             .subscribe(turno => {
                 const pdf = this._pdfUtils.comprobanteTurno(turno);
                 pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');

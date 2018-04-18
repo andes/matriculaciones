@@ -26,7 +26,7 @@
 
         <div class="col-4">
             <label>Institución Formadora</label>
-            <div>{{ formacionPosgrado.institucionFormadora.nombre }}</div>
+            <div>{{ formacionPosgrado.institucionFormadora?.nombre }}</div>
         </div>
         <div class="col-4" *ngIf='formacionPosgrado.matriculacion.length  === 0 && formacionPosgrado.revalida === false'>
 

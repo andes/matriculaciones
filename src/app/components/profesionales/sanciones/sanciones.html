@@ -22,7 +22,7 @@
                     </tr>
                     <tr *ngFor="let san of profesional.sanciones;">
                         <td>{{san.numero}}</td>
-                        <td>{{san.sancion.nombre}}</td>
+                        <td>{{san.sancion?.nombre}}</td>
                         <td>{{san.motivo}}</td>
                         <td>{{san.normaLegal}}</td>
                         <td>{{san.fecha | date: 'dd/MM/yyyy'}}</td>

@@ -18,8 +18,8 @@ const jsPDF = require('jspdf');
 export class ListadoTurnosComponent implements OnInit {
     private formBuscarTurno: FormGroup;
     private turnos: any[] = [];
-    private turnoElegido: any;
-    private showListado: Boolean = true;
+    public turnoElegido: any;
+    public showListado: Boolean = true;
 
     constructor(private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
@@ -34,7 +34,7 @@ export class ListadoTurnosComponent implements OnInit {
             nombre: '',
             apellido: '',
             fecha: null,
-            documentoNumero: ''
+            documento: ''
         });
 
         this.buscar();

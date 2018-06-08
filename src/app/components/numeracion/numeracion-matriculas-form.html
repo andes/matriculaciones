@@ -1,0 +1,61 @@
+<plex-accordion>
+        <plex-panel tituloPrincipal="Nueva numeracion profesion" icon="plus-circle-outline">
+                <div class="row">
+                        <div class="col-12 text-center">
+                                <div class="page-title">Nueva numeracion profesion</div>
+                        </div>
+                </div>
+                <form #formNumeracion="ngForm">
+
+                        <br>
+                        <br>
+                        <div class="row">
+                                <div class="col-md-6">
+                                        <plex-select label="Profesión" [(ngModel)]="numeracionMatricula.profesion" name='profesion' (getData)="loadProfesiones($event)"
+                                                [required]="true"></plex-select>
+                                </div>
+                                <div class="col-md-6">
+                                        <plex-int label="numeracion de la matricula" [(ngModel)]="numeracionMatricula.proximoNumero" name='proximoNumero' [required]="true"></plex-int>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+                                        <br>
+                                        <plex-button (click)="guardarNumeracion($event,'prof')" label="Guardar" type="success float-right" validateForm="true"></plex-button>
+                                </div>
+                        </div>
+
+                </form>
+        </plex-panel>
+</plex-accordion>
+
+<plex-accordion>
+        <plex-panel tituloPrincipal="Nueva numeracion especialidad" icon="plus-circle-outline">
+                <div class="row">
+                        <div class="col-12 text-center">
+                                <div class="page-title">Nueva numeracion especialidad</div>
+                        </div>
+                </div>
+                <form #formNumeracion="ngForm">
+
+                        <br>
+                        <br>
+                        <div class="row">
+                                <div class="col-md-6">
+                                        <plex-select label="Especialidad" [(ngModel)]="numeracionMatricula.especialidad" name='profesion' (getData)="loadEspecialidades($event)"
+                                                [required]="true"></plex-select>
+                                </div>
+                                <div class="col-md-6">
+                                        <plex-int label="numeracion de la matricula" [(ngModel)]="numeracionMatricula.proximoNumero" name='proximoNumero' [required]="true"></plex-int>
+                                </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-md-12">
+                                        <br>
+                                        <plex-button (click)="guardarNumeracion($event,'esp')" label="Guardar" type="success float-right" validateForm="true"></plex-button>
+                                </div>
+                        </div>
+
+                </form>
+        </plex-panel>
+</plex-accordion>

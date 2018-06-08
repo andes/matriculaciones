@@ -3,10 +3,20 @@ export enum Dia {
   'lunes', 'martes', 'miércoles', 'jueves', 'viernes'
 }
 
+export enum EstadoMatricula {
+  'todos', 'suspendidas', 'vigentes'
+}
+
 export enum Sexo {
   'masculino',
   'femenino',
   'otro'
+}
+
+export enum TipoDoc {
+  'DNI',
+  'LE',
+  'LC'
 }
 
 export enum tipoComunicacion {
@@ -69,7 +79,7 @@ export function getEstadoCivil() {
 export function getObjsEstadoCivil() {
   let arrEstadoC = Object.keys(EstadoCivil);
   arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
-  let salida = arrEstadoC.map(elem => {
+  const salida = arrEstadoC.map(elem => {
       return {
           'id': elem,
           'nombre': titleCase(elem)
@@ -91,13 +101,38 @@ export function getObjDias() {
   return salida;
 }
 
+export function getObjEstadosMatriculas() {
+  let arrEstadoC = Object.keys(EstadoMatricula);
+
+  arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
+  const salida = arrEstadoC.map((elem, index) => {
+      return {
+          'id': index,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
 export function getObjSexos() {
   let arrSexo = Object.keys(Sexo);
   arrSexo = arrSexo.slice(arrSexo.length / 2);
-  let salida = arrSexo.map(elem => {
+  const salida = arrSexo.map(elem => {
       return {
           'id': elem,
           'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+export function getObjTipoDoc() {
+  let arrTipoDoc = Object.keys(TipoDoc);
+  arrTipoDoc = arrTipoDoc.slice(arrTipoDoc.length / 2);
+  const salida = arrTipoDoc.map(elem => {
+      return {
+          'id': elem,
+          'nombre': elem
       };
   });
   return salida;

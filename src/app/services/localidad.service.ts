@@ -18,7 +18,11 @@ export class LocalidadService {
    constructor(private server: Server, private http: Http) {}
 
     getXProvincia(provincia: String): Observable<ILocalidad[]> {
-       return this.server.get(this.localidadUrl + '?provincia=' + provincia);
+        if (provincia) {
+            return this.server.get(this.localidadUrl + '?provincia=' + provincia);
+        }else {
+            return this.server.get(this.localidadUrl);
+        }
    }
 
   handleError(error: any) {

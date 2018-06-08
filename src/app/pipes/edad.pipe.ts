@@ -7,7 +7,7 @@ export class EdadPipe implements PipeTransform {
     transform(value: any, args: string[]): any {
         let edad: any;
         let fechaNac: any;
-        let fechaActual: Date = new Date();
+        const fechaActual: Date = new Date();
         let fechaAct: any;
         let difAnios: any;
         let difDias: any;

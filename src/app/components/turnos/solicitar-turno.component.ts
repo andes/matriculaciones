@@ -31,7 +31,7 @@ export class SolicitarTurnoComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.formRematriculacion = this._formBuilder.group({
-            documentoNumero: [null, Validators.required],
+            documento: [null, Validators.required],
             matriculaNumero: [null, Validators.required]
         });
     }

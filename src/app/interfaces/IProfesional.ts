@@ -10,7 +10,8 @@ export interface IProfesional {
     habilitado: Boolean;
     nombre: string;
     apellido: string;
-    documentoNumero: string;
+    tipoDocumento: string;
+    documento: string;
     documentoVencimiento: Date;
     cuit: string;
     fechaNacimiento: Date;
@@ -33,9 +34,9 @@ export interface IProfesional {
         valor: string;
         codigoPostal: string;
         ubicacion: {
-            localidad: string;
-            provincia: string;
-            pais: string
+            localidad: any;
+            provincia: any;
+            pais: any
         };
         ultimaActualizacion: Date;
         activo: boolean;
@@ -49,6 +50,7 @@ export interface IProfesional {
         profesion: {
             nombre: string;
             codigo: number;
+            tipoDeFormacion: String;
         };
         entidadFormadora: {
             nombre: string;
@@ -57,15 +59,22 @@ export interface IProfesional {
         titulo: string;
         fechaEgreso: Date;
         fechaTitulo: Date;
-        revalida: boolean;
-        matriculacion: [{
+        renovacion: boolean;
+        papelesVerificados: boolean;
+        matriculacion?: [{
             matriculaNumero: Number;
             libro: String;
             folio: String;
             inicio: Date;
+            baja: {
+                motivo: '',
+                fecha: Date
+            },
+            notificacionVencimiento: Boolean;
             fin: Date;
             revalidacionNumero: Number;
         }];
+        matriculado: boolean
     }];
     formacionPosgrado: [{
         profesion: {
@@ -94,14 +103,24 @@ export interface IProfesional {
                 codigo: number;
             };
         };
-        matriculacion: [{
+        matriculacion?: [
+            {
             matriculaNumero: Number;
             libro: String;
             folio: String;
             inicio: Date;
+            baja: {
+                motivo: '',
+                fecha: null
+            }
+            notificacionVencimiento: Boolean;
             fin: Date;
             revalidacionNumero: Number;
-        }];
+        }
+    ]
+    papelesVerificados: boolean;
+    matriculado: boolean;
+    revalida: boolean;
     }];
     origen: String;
     sanciones:  [{
@@ -115,5 +134,15 @@ export interface IProfesional {
         fecha: Date;
         vencimiento: Date;
     }];
+    OtrosDatos:  [{
+        matriculaProvincial: Number;
+        folio: String;
+        libro: String;
+        anio: Number;
+    }];
     notas: String;
+    rematriculado: Boolean;
+    agenteMatriculador: String;
+    idRenovacion: String;
+    documentoViejo: Number;
 }

@@ -1,0 +1,41 @@
+
+.list-group-item{
+    cursor:pointer
+}
+
+.btn-primary.disabled, .btn-primary:disabled {
+    background-color: #9bc4d2;
+    border-color: #bcbdbd;
+}
+.contador{
+    position: relative;
+    top: 3px;
+    left: 1px;
+    // -webkit-animation: jumpInc 1s infinite;
+    // -moz-animation: jumpInc 1s infinite;
+    //   -o-animation: jumpInc 1s infinite;
+    //      animation: jumpInc 1s infinite;
+}
+
+// @-webkit-keyframes jumpInc {
+//     0%   {
+//       margin-left: 0%;
+//       opacity: 0;
+//     }
+//     50%  {
+//       margin-left: 0%;
+//       opacity: 1;
+//     }
+//     100% {
+//       margin-left: 0%;
+//       opacity: 0;
+//     }
+//   }
+  
+.contadorBadge{
+    padding: 6px;
+    padding-top: 5.4px;
+    padding-bottom: 10.5px; 
+    font-size: 15px;
+    display: inline;
+}

@@ -1,0 +1,27 @@
+<section>
+        <div class="row">
+            <div class="col-12">
+                <plex-box type="primary">
+                    <header>
+                            <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)" [sobreTurno]="id"></app-nuevo-turno>                    </header>
+    
+                    <app-profesional (onProfesionalCompleto)="onProfesionalCompleto($event)" *ngIf="turnoSeleccionado"></app-profesional>
+                </plex-box>
+            </div>
+        </div>
+    </section>
+    <footer>
+            <plex-button label="Volver"  type="danger" routerLink="/listarProfesionales" icon="arrow-left-bold"></plex-button>
+    </footer>
+    
+    
+    <!--
+    <div class="row">
+        <div class="col-md-9">
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-9" *ngIf="turnoSeleccionado">
+            <app-profesional (onProfesionalCompleto)="onProfesionalCompleto($event)"></app-profesional>
+        </div>
+    </div>-->

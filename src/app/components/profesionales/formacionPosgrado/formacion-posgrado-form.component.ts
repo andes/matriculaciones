@@ -22,6 +22,7 @@ import { ISiisa } from './../../../interfaces/ISiisa';
 import { SIISAService } from './../../../services/siisa.service';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from './../../../services/entidadFormadora.service';
+import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
 
 @Component({
     selector: 'app-formacion-posgrado-form',
@@ -59,6 +60,9 @@ export class FormacionPosgradoFormComponent implements OnInit {
                     codigo: null,
                 },
             },
+            papelesVerificados: false,
+            matriculado: false,
+            revalida: false
             // matriculacion: [{
             //     matriculaNumero: null,
             //     libro: null,
@@ -76,6 +80,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
         private _siisaSrv: SIISAService,
         private _profSrv: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
+        private _modalidadesCertificacionService: ModalidadesCertificacionService,
         private plex: Plex) {}
 
     ngOnInit() {
@@ -92,7 +97,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
         this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
 
 
-        form.resetForm();
+       // form.resetForm();
         }
     }
 
@@ -105,12 +110,13 @@ export class FormacionPosgradoFormComponent implements OnInit {
         this._siisaSrv.getEspecialidades(null).subscribe(event.callback);
     }
 
-    loadModalidadesCertificacion(event: any) {
-        this._siisaSrv.getModalidadesCertificacionEspecialidades(null).subscribe(event.callback);
-    }
 
     loadEntidadesFormadoras(event) {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
+    }
+
+    loadModalidadesCertificacion(event) {
+        this._modalidadesCertificacionService.getModalidadesCertificacion().subscribe(event.callback);
     }
 
     loadEstablecimientosCertificadores(event: any) {

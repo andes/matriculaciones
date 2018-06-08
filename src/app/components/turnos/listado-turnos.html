@@ -14,7 +14,7 @@
                     <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
                 </div>  
                 <div class="col-md-3">
-                    <plex-int label="Documento" formControlName="documentoNumero" (change)="buscar()"></plex-int>
+                    <plex-int label="Documento" formControlName="documento" (change)="buscar()"></plex-int>
                 </div>
                 <div class="col-md-3">
                     <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
@@ -30,7 +30,7 @@
         <ul class="list-group">
             <li class="list-group-item justify-content-between" *ngFor="let turno of turnos" (click)="showTurno(turno)">
                 <h6 class="box-title-elemento">
-                    {{ (turno.profesional ? 'DNI ' + turno.profesional.documentoNumero : '') }} - {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }}
+                    {{ (turno.profesional ? 'DNI ' + turno.profesional.documento : '') }} - {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }}
                 <br>
                 <small>{{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }}</small>
                 <br>
@@ -60,7 +60,7 @@
                         <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
                     </div>  
                     <div class="col-md-3">
-                        <plex-int label="Documento" formControlName="documentoNumero" (change)="buscar()"></plex-int>
+                        <plex-int label="Documento" formControlName="documento" (change)="buscar()"></plex-int>
                     </div>
                     <div class="col-md-3">
                         <plex-datetime type="date" label="Fecha" formControlName="fecha" (change)="buscar()"></plex-datetime>
@@ -87,7 +87,7 @@
                             <div class="col-11">
                                 <h6 class="box-title-elemento">
                                     {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs <br>                                
-                                    {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }} | <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documentoNumero : '') }}</small>
+                                    {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }} | <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documento : '') }}</small>
                                 </h6>
                             </div>
                             <div class="col float-right">
@@ -133,7 +133,7 @@
 
     <!--SIDE LISTADO-->
     <div class="col-4">       
-        <app-formacion-grado-detalle [formacion]="formacionSelected"></app-formacion-grado-detalle>
+        <!-- <app-formacion-grado-detalle [formacion]="formacionSelected"></app-formacion-grado-detalle> -->
 
         <plex-box type="invert" *ngIf="turnoElegido && showListado">
             <header>
@@ -147,7 +147,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="nombre-profesional">
-                                {{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs
+                                {{ turnoElegido.fecha | date: 'dd/MM/yyyy HH:mm'}} hs
                             </div>
                             <div class="datos-profesional">
                                 {{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}
@@ -162,7 +162,7 @@
                                 <span style="font-weight: bold">{{turnoElegido.profesional.apellido + ', '}}</span>{{turnoElegido.profesional.nombre}}
                             </div>
                             <div class="datos-profesional">
-                                {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documentoNumero }}<br />
+                                {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documento }}<br />
                             </div>
                             <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.renovacionVencida">
                                 <span style="margin-left: 5px;">Renovación Vencida</span>

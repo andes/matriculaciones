@@ -9,7 +9,12 @@ export class PaisService  {
 
     constructor(private server: Server) { }
 
-    getPaises(): Observable<any[]> {
-        return this.server.get(this.paisesURL);
+    getPaises(id?): Observable<any[]> {
+        if (id) {
+            return this.server.get(this.paisesURL + '/' + id );
+        }else {
+            return this.server.get(this.paisesURL);
+        }
+
     }
 }

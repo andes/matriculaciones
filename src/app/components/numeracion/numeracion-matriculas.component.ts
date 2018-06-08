@@ -13,7 +13,7 @@ import { ProfesionService } from './../../services/profesion.service';
     templateUrl: 'numeracion-matriculas.html'
 })
 export class NumeracionMatriculasComponent implements OnInit {
-    private formNumeracion: FormGroup;
+    public formNumeracion: FormGroup;
     @Input() numeracion: any;
     @Input() numeracion2: any;
     @Output() onShowListado = new EventEmitter();
@@ -38,10 +38,11 @@ export class NumeracionMatriculasComponent implements OnInit {
     }
 
     guardarNumeracion(model: any) {
-        this._numeracionesService.saveNumeracion(model)
+        this._numeracionesService.putNumeracion(model)
             .subscribe((resp) => {
+                this.cambio.emit();
             });
-        this.cambio.emit(model);
+
     }
 
     loadProfesiones(event) {

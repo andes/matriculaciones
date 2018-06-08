@@ -6,7 +6,21 @@
             <h2>Fecha y hora: {{ lblTurno }}.</h2>
         </div>
     </div>
-    <div class="row" *ngIf="!turnoElegido">
+    <div class="row" *ngIf="sobreTurno">
+            <div class="col-12 text-center">
+                    <header>
+                        <div class="page-title">Seleccione fecha</div>
+                    </header>
+                </div>
+                <div class="col-md-6">
+                        <plex-datetime label="fecha" type="date"  [(ngModel)]="fecha" name='hora' [required]="true"></plex-datetime>
+                 </div>
+                <div class="col-md-6">
+                        <plex-datetime label="hora" type="time"  [(ngModel)]="horario" name='hora' [required]="true"></plex-datetime>
+                 </div>
+        </div>
+
+    <div class="row" *ngIf="!turnoElegido && !sobreTurno">
             <div class="col-12 text-center">
                     <header>
                         <div class="page-title">Seleccione fecha</div>
@@ -17,23 +31,33 @@
             <input #input type="hidden">
         </div>
         <div class="col-md-6" *ngIf="fechaElegida != undefined">
-                <label>Hora</label>
-          
-            <div class="row"  >
-                <div *ngFor="let turno of horariosDisponibles; let idx = index">
-                   <div class="col-md-6" style=" margin-bottom: 6px;" >
-                        <button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado"   class="btn btn-primary" (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'active':isActive(horariosDisponibles[idx]) == true}" >
-                                {{ horariosDisponibles[idx].hora  }}:{{ (horariosDisponibles[idx].minutos == 0) ? '00' : horariosDisponibles[idx].minutos }} hs
-                        </button>
+
+            <div>
+
+                    <label>Hora</label>
+            
+                <div class="row"  >
+                    <span *ngIf='horariosDisponibles.length === 0' class="alert alert-danger">No hay mas turnos para la fecha seleccionada</span>
+                    <div *ngFor="let turno of horariosDisponibles; let idx = index">
+                    <div class="col-md-6" style=" margin-bottom: 6px;" >
+                            <button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado"   class="btn btn-primary" (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'active':isActive(horariosDisponibles[idx]) == true}" >
+                                    {{ horariosDisponibles[idx].hora  }}:{{ (horariosDisponibles[idx].minutos == 0) ? '00' : horariosDisponibles[idx].minutos }} hs
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
     </div>
-    <div class="row" *ngIf="!turnoElegido" style="margin-bottom: 15px">
-        <div class="col-sm-12 text-center">
+    <br>
+    <div class="col-sm-12 text-center" *ngIf="sobreTurno">
+            <button class="btn btn-success pull-right" style="margin-right: 8px; margin-top: 8px" (click)="confirmSobreTurno()">Confirmar</button>
+        </div>
+    <div class="row" *ngIf="!turnoElegido " style="margin-bottom: 15px">
+        <div class="col-sm-12 text-center" *ngIf="!sobreTurno">
             <button [disabled]="horarioSi == false" class="btn btn-success pull-right" style="margin-right: 8px; margin-top: 8px" (click)="confirmTurno()">Confirmar Turno</button>
         </div>
+
     </div>    
 <!--</plex-box>-->

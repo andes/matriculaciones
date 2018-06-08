@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Plex } from '@andes/plex/src/lib/core/service';
@@ -13,7 +13,8 @@ import {
     getEnumAsObjects,
     EstadoCivil,
     TipoContacto,
-    TipoDomicilio } from './../../utils/enumerados';
+    TipoDomicilio
+} from './../../utils/enumerados';
 
 // Services
 import { PaisService } from './../../services/pais.service';
@@ -29,6 +30,8 @@ import { DataService } from './../../services/data.service';
 // Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
+import { TurnoService } from '../../services/turno.service';
+import { Auth } from '@andes/auth';
 
 
 const jsPDF = require('jspdf');
@@ -36,9 +39,11 @@ const jsPDF = require('jspdf');
 @Component({
     selector: 'app-detalle-profesional',
     templateUrl: 'detalle-profesional.html',
-    styles: ['.margenFoto { padding-left: 3%; padding-bottom: 1%; }']
+    styles: ['.margenFoto { padding-left: 4%; padding-bottom: 1%; }']
+
 })
 export class DetalleProfesionalComponent implements OnInit {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public formSancion: FormGroup;
     public loading: Boolean = false;
     public indexFormacionGradoSelected: any;
@@ -46,183 +51,332 @@ export class DetalleProfesionalComponent implements OnInit {
     public mostrar = true;
     public mostrarGrado = true;
     public img64 = null;
+    public vieneDeDetalle = null;
+    @Input() public flag = null;
+    public confirmar = true;
+    public tieneFirma = null;
+    public editable = false;
+
+    @Input() public profesional: IProfesional = {
+        id: null,
+        habilitado: true,
+        nombre: null,
+        apellido: null,
+        tipoDocumento: null,
+        documento: null,
+        documentoVencimiento: null,
+        cuit: null,
+        fechaNacimiento: null,
+        lugarNacimiento: '',
+        nacionalidad: {
+            nombre: null,
+            codigo: null,
+        },
+        sexo: undefined,
+        estadoCivil: undefined,
+        contactos: [{
+            tipo: 'celular',
+            valor: '',
+            rank: 0,
+            activo: true,
+            ultimaActualizacion: new Date()
+        }],
+        domicilios: [{
+            tipo: 'real',
+            valor: '',
+            codigoPostal: '',
+            ubicacion: {
+                localidad: '',
+                provincia: '',
+                pais: '',
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },
+        {
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },
+        {
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }],
+        fotoArchivo: null,
+        firmas: null,
+        formacionGrado: [{
+            profesion: {
+                nombre: null,
+                codigo: null,
+                tipoDeFormacion: null
+            },
+            entidadFormadora: {
+                nombre: null,
+                codigo: null,
+            },
+            titulo: null,
+            fechaEgreso: null,
+            fechaTitulo: null,
+            renovacion: false,
+            papelesVerificados: false,
+            matriculacion: [{
+                matriculaNumero: null,
+                libro: null,
+                folio: null,
+                inicio: null,
+                fin: null,
+                baja: null,
+                notificacionVencimiento: false,
+                revalidacionNumero: null,
+            }],
+            matriculado: false
+        }],
+        formacionPosgrado: null,
+        origen: null,
+        sanciones: null,
+        notas: null,
+        rematriculado: false,
+        agenteMatriculador: '',
+        OtrosDatos: null,
+        idRenovacion: null,
+        documentoViejo: null
+    };
 
 
-    @Input() profesional: IProfesional;
+
     @Output() onShowListado = new EventEmitter();
     @Output() showFormacion = new EventEmitter();
 
 
     constructor(private _profesionalService: ProfesionalService,
+        private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
         private _numeracionesService: NumeracionMatriculasService,
         private route: ActivatedRoute,
-        private router: Router) {}
+        private router: Router,
+        public auth: Auth) { }
 
 
     ngOnInit() {
+
+        this.vieneDeDetalle = true;
         this.route.params
-            .switchMap((params: Params)  =>
-                this._profesionalService.getProfesional(params['id'])
+            .switchMap((params: Params) =>
+                this._profesionalService.getProfesional({ id: params['id'] })
             ).subscribe(
-                (profesional:  IProfesional) =>
-                this.profesional = profesional
+            (profesional: any) => {
+                // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
+                if (profesional.length === 0) {
+                    this.flag = false;
+                } else {
+                    this.profesional = profesional[0];
+                    this.flag = true;
+                }
+                // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
+                if (this.flag === false) {
+                    this.route.params
+                        .switchMap((paramsTemporal: Params) =>
+                            this._turnoService.getTurnoSolicitados(paramsTemporal['id'])
+                        ).subscribe(
+                        (profesionalTemporal: any) => {
+                            this.profesional = profesionalTemporal;
+                        }
+                        );
+                }
+
+
+
+            }
+
             );
     }
 
-    updateProfesional2(profesional: IProfesional) {
-        this._profesionalService.saveProfesional(profesional)
-            .subscribe(prof => {
-                this.profesional = prof;
-            });
-        // this.profesional = profesional;
-    }
 
     updateProfesional(callbackData?: any) {
-         this._profesionalService.saveProfesional(this.profesional)
+        this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
+        this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;
                 if (callbackData) {
                     callbackData.callback(callbackData.param);
                 }
             });
+
     }
 
-    updateFoto(img: any) {
+    previewImg(img: any) {
+        this.img64 = img;
+    }
+
+
+    guardarFotoGrid(img: any) {
         this.img64 = img;
         const imagenPro = {
             'img': img,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesionalFoto(imagenPro).subscribe(resp => {
+        this._profesionalService.saveProfesional({ imagen: imagenPro }).subscribe(resp => {
 
         });
-   }
-
-   updateFirma(firma: any) {
-    const firmaPro = {
-        'firmaP': firma,
-        'idProfesional': this.profesional.id
-    };
-    this._profesionalService.saveProfesionalFirma(firmaPro).subscribe(resp => {
-
-    });
-   }
-
-
-    // guardarFoto(fileName: any) {
-    //     this.profesional.fotoArchivo = fileName;
-    //     this.updateProfesional();
-    // }
-
-    guardarFotoGrid(foto: any) {
-        this.updateFoto(foto);
     }
 
-    // guardarFirma(oFirma) {
-    //     if (this.profesional.firmas) {
-    //         this.profesional.firmas.push(oFirma);
-    //     } else {
-    //         this.profesional.firmas = [oFirma];
-    //     }
-    //     this.updateProfesional();
-    // }
+    guardarFirmaGrid(firma) {
+        const firmaPro = {
+            'firmaP': firma,
+            'idProfesional': this.profesional.id
+        };
+        this._profesionalService.saveProfesional({ firma: firmaPro }).subscribe(resp => {
 
-    guardarFirmaGrid(oFirma) {
-        this.updateFirma(oFirma);
+        });
+    }
+
+    guardarFirmaAdminGrid(oFirma) {
+        const firmaADmin = {
+            'firma': oFirma.firma,
+            'nombreCompleto': oFirma.nombreCompleto,
+            'idProfesional': this.profesional.id
+        };
+        this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
+
+        });
     }
 
     guardarNotas(textoNotas) {
-        this.profesional.notas = textoNotas;
-        this.updateProfesional();
+        const cambio = {
+            'op': 'updateNotas',
+            'data': textoNotas,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+
+        // this.updateProfesional();
     }
 
     guardarSancion(sancion: any) {
-        this.profesional.sanciones.push(sancion);
-        this.updateProfesional();
+
+        const cambio = {
+            'op': 'updateSancion',
+            'data': sancion,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
     }
 
     guardarFormacionPosgrado(posgrado: any) {
-        this.profesional.formacionPosgrado.push(posgrado);
-        this.updateProfesional();
+        const cambio = {
+            'op': 'updatePosGrado',
+            'data': posgrado,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+    }
+
+    guardarGrado(fGrado: any) {
+        console.log(fGrado);
+        const cambio = {
+            'op': 'updateGrado',
+            'data': fGrado,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+            this.profesional = data;
+        });
+    }
+
+    guardarOtrosDatos(otrosDatos) {
+        const cambio = {
+            'op': 'updateOtrosDatos',
+            'data': otrosDatos,
+            'agente': this.auth.usuario.nombreCompleto
+        };
+
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+
+        });
     }
 
     matricularProfesional(matriculacion: any) {
-        this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
+        if (this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion === null) {
+            this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion = [matriculacion];
+        } else {
+            this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
+        }
+        this.updateProfesional();
+
+    }
+
+    matricularProfesionalEspecialidad(matriculacion: any) {
+        if (this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion === null) {
+            this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion = [matriculacion];
+        } else {
+            this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion.push(matriculacion);
+        }
         this.updateProfesional();
     }
 
-    /*aprobarProfesional() {
-        this._numeracionesService.getOne(this.profesional.formacionGrado[0].profesion.codigo.toString())
-            .subscribe((num) => {
-
-                const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-
-                const oMatriculacion = {
-                    matriculaNumero: num.proximoNumero++,
-                    libro: '',
-                    folio: '',
-                    inicio: new Date(),
-                    fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
-                    revalidacionNumero: this.profesional.formacionGrado[0].matriculacion.length + 1
-                };
-
-                this.profesional.formacionGrado[0].matriculacion.push(oMatriculacion);
-
-
-                this._profesionalService.saveProfesional(this.profesional)
-                    .subscribe(profesional => {
-
-                        this.profesional = profesional;
-                        this._numeracionesService.saveNumeracion(num)
-                            .subscribe(newNum => {
-                                // console.log('Numeracion Actualizada');
-                            });
-                    });
-            });
-    }*/
-
     volver() {
-        this.router.navigate(['/turnos', { id: this.profesional.id}]);
+        this.router.navigate(['/turnos', { id: this.profesional.id }]);
     }
     volverP() {
         this.router.navigate(['/listarProfesionales']);
     }
 
-   /* generarCredencial() {
-        this.loading = true;
-        this._profesionalService.getCredencial(this.profesional._id)
-            .subscribe((resp) => {
-                const pdf = this._pdfUtils.generarCredencial(resp, this.profesional);
-                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                //this.loading = false;
-            });
-
-
-    }*/
 
     formacionGradoSelected(formacion: any) {
-        if (this.mostrarGrado === true) {
-        this.indexFormacionPosgradoSelected = undefined;
+        this.mostrar = true;
         this.indexFormacionGradoSelected = formacion;
-        this.mostrarGrado = false;
+        if (this.mostrarGrado === true) {
+            this.mostrarGrado = false;
+
         } else {
-         this.indexFormacionGradoSelected = undefined;
-         this.mostrarGrado = true;
-     }
+            this.mostrarGrado = true;
+        }
     }
 
     formacionPosgradoSelected(posgrado: any) {
-
-        if (this.mostrar === true) {
-         this.indexFormacionGradoSelected = undefined;
+        this.mostrarGrado = true;
         this.indexFormacionPosgradoSelected = posgrado;
-        this.mostrar = false;
-        }else {
-            this.indexFormacionPosgradoSelected = undefined;
+        if (this.mostrar === true) {
+            this.mostrar = false;
+        } else {
             this.mostrar = true;
         }
+
+
     }
+
+    editar() {
+        this.flag = false;
+        this.editable = true;
+    }
+    // generarCredencial() {
+
+    //             // this._profesionalService.getCredencial(this.profesional.id)
+    //             //     .subscribe((resp) => {
+    //                     const pdf = this._pdfUtils.generarCredencial(this.profesional);
+    //                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+    //                     // this.loading = false;
+    //              //   });
+    //         }
 }
 

@@ -25,13 +25,17 @@ import 'rxjs/add/operator/catch';
 export class BaseService {
 
     // URL to web api
+
     protected turnosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnos/';
+    protected turnosSolicidatosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnoSolicitados/';
+    protected cambioDniUrl = AppSettings.API_ENDPOINT + '/modules/matriculaciones/cambioDni';  // URL to web api
     protected paisesURL = AppSettings.API_ENDPOINT + '/core/tm/paises';
     protected profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
     protected siisaURL = AppSettings.API_ENDPOINT + '/core/tm/siisa';
     protected numeracionesURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/numeraciones';
     protected profesionesURL = AppSettings.API_ENDPOINT + '/core/tm/profesiones';
     protected entidadFormadoraURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/entidadesFormadoras/';
+    protected modalidadesCertificacionURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/modalidadesCertificacion/';
     protected especialidadURL = AppSettings.API_ENDPOINT + '/core/tm/especialidades/';
     constructor(protected _http: Http) { }
 

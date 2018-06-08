@@ -33,9 +33,9 @@ import {
     templateUrl: 'subir-foto-profesional.html'
 })
 export class SubirFotoProfesionalComponent implements OnInit {
-    uploader: FileUploader = new FileUploader({url: AppSettings.API_ENDPOINT + '/core/tm/profesionales/foto'});
     @Input() profesional: IProfesional;
     @Output() onFileUploaded = new EventEmitter();
+    @Output() previewImg = new EventEmitter();
     public binaryString = null;
     private base64textString: String= '';
 
@@ -54,7 +54,9 @@ export class SubirFotoProfesionalComponent implements OnInit {
     }
     _handleReaderLoaded(readerEvt) {
        this.binaryString = readerEvt.target.result;
+
               this.base64textString = btoa(this.binaryString);
+              this.previewImg.emit(this.base64textString);
       }
 
     ngOnInit() {
@@ -62,7 +64,6 @@ export class SubirFotoProfesionalComponent implements OnInit {
 
 
     upload() {
-        this.uploader.uploadAll();
         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
         this.onFileUploaded.emit(this.base64textString);
     }

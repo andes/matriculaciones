@@ -32,6 +32,7 @@ import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
 import { Auth } from '@andes/auth';
+import { constants } from 'fs';
 
 
 const jsPDF = require('jspdf');
@@ -73,7 +74,7 @@ export class DetalleProfesionalComponent implements OnInit {
             codigo: null,
         },
         sexo: undefined,
-        estadoCivil: undefined,
+        estadoCivil : EstadoCivil.otro,
         contactos: [{
             tipo: 'celular',
             valor: '',

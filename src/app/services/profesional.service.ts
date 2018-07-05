@@ -4,12 +4,13 @@ import { BaseService } from './base.service';
 import { Observable } from 'rxjs/Rx';
 import { Http, URLSearchParams } from '@angular/http';
 import { IProfesional } from './../interfaces/IProfesional';
+import { environment } from './../../environments/environment';
 import { Server } from '@andes/shared';
 
 @Injectable()
 export class ProfesionalService extends BaseService {
-    profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
-    resumenProfesional = AppSettings.API_ENDPOINT + '/core/tm/resumen/';
+    profesionalesURL =  '/core/tm/profesionales/';
+    resumenProfesional = '/core/tm/resumen/';
 
     constructor(_http: Http, private server: Server) {
         super(_http);

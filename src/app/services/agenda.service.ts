@@ -4,6 +4,7 @@ import { Injectable } from '@angular/core';
 import { Server } from '@andes/shared';
 import { Headers, Http, RequestOptions, RequestMethod, Response } from '@angular/http';
 import 'rxjs/add/operator/toPromise';
+import { environment } from './../../environments/environment';
 
 import {Observable} from 'rxjs/Rx';
 // Import RxJs required methods
@@ -13,7 +14,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class AgendaService {
 
-   private agendaUrl = AppSettings.API_ENDPOINT + '/modules/matriculaciones/agendaMatriculaciones';  // URL to web api
+   private agendaUrl =  '/modules/matriculaciones/agendaMatriculaciones';  // URL to web api
 
    constructor(private server: Server) {}
 

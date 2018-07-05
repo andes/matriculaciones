@@ -9,8 +9,8 @@ import { Server } from '@andes/shared';
 
 @Injectable()
 export class ProfesionalService extends BaseService {
-    profesionalesURL = environment.API + '/core/tm/profesionales/';
-    resumenProfesional = environment.API + '/core/tm/resumen/';
+    profesionalesURL =  '/core/tm/profesionales/';
+    resumenProfesional = '/core/tm/resumen/';
 
     constructor(_http: Http, private server: Server) {
         super(_http);

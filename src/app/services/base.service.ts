@@ -27,17 +27,17 @@ export class BaseService {
 
     // URL to web api
     
-    protected turnosURL = environment.API + '/modules/matriculaciones/turnos/';
-    protected turnosSolicidatosURL = environment.API + '/modules/matriculaciones/turnoSolicitados/';
-    protected cambioDniUrl = environment.API + '/modules/matriculaciones/cambioDni';  // URL to web api
-    protected paisesURL = environment.API + '/core/tm/paises';
-    protected profesionalesURL = environment.API + '/core/tm/profesionales/';
-    protected siisaURL = environment.API + '/core/tm/siisa';
-    protected numeracionesURL = environment.API + '/modules/matriculaciones/numeraciones';
-    protected profesionesURL = environment.API + '/core/tm/profesiones';
-    protected entidadFormadoraURL = environment.API + '/modules/matriculaciones/entidadesFormadoras/';
-    protected modalidadesCertificacionURL = environment.API + '/modules/matriculaciones/modalidadesCertificacion/';
-    protected especialidadURL = environment.API + '/core/tm/especialidades/';
+    protected turnosURL = '/modules/matriculaciones/turnos/';
+    protected turnosSolicidatosURL =   '/modules/matriculaciones/turnoSolicitados/';
+    protected cambioDniUrl =  '/modules/matriculaciones/cambioDni';  // URL to web api
+    protected paisesURL =   '/core/tm/paises';
+    protected profesionalesURL =   '/core/tm/profesionales/';
+    protected siisaURL =  '/core/tm/siisa';
+    protected numeracionesURL =  '/modules/matriculaciones/numeraciones';
+    protected profesionesURL =  '/core/tm/profesiones';
+    protected entidadFormadoraURL =   '/modules/matriculaciones/entidadesFormadoras/';
+    protected modalidadesCertificacionURL =  '/modules/matriculaciones/modalidadesCertificacion/';
+    protected especialidadURL = '/core/tm/especialidades/';
     constructor(protected _http: Http) { }
 
     protected get(url: string, searchQuery?: URLSearchParams): Observable<any[]> {

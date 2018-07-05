@@ -9,15 +9,16 @@ import {Observable} from 'rxjs/Rx';
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import { Server } from '@andes/shared';
 
 @Injectable()
 export class EntidadFormadoraService extends BaseService {
 
     // private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
-    constructor(_http: Http) {
+    constructor(_http: Http,private server: Server) {
         super(_http);
     }
     getEntidadesFormadoras(): Observable<IEntidadFormadora[]> {
-        return this.get(this.entidadFormadoraURL);
+        return this.server.get(this.entidadFormadoraURL);
     }
 }

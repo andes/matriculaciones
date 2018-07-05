@@ -4,6 +4,8 @@ import { Injectable } from '@angular/core';
 import { Headers, Http, RequestOptions, RequestMethod, Response } from '@angular/http';
 import { Server } from '@andes/shared';
 import 'rxjs/add/operator/toPromise';
+import { environment } from './../../environments/environment';
+
 
 import {Observable} from 'rxjs/Rx';
 // Import RxJs required methods
@@ -13,7 +15,7 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class LocalidadService {
 
-   private localidadUrl = AppSettings.API_ENDPOINT + '/core/tm/localidades';  // URL to web api
+   private localidadUrl =  '/core/tm/localidades';  // URL to web api
 
    constructor(private server: Server, private http: Http) {}
 

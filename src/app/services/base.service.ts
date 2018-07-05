@@ -1,6 +1,7 @@
 import { AppSettings } from './../app.settings';
 import { ITurno } from './../interfaces/ITurno';
 import { Injectable } from '@angular/core';
+import { environment } from './../../environments/environment';
 import { Headers,
     Http,
     RequestOptions,
@@ -25,18 +26,18 @@ import 'rxjs/add/operator/catch';
 export class BaseService {
 
     // URL to web api
-
-    protected turnosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnos/';
-    protected turnosSolicidatosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnoSolicitados/';
-    protected cambioDniUrl = AppSettings.API_ENDPOINT + '/modules/matriculaciones/cambioDni';  // URL to web api
-    protected paisesURL = AppSettings.API_ENDPOINT + '/core/tm/paises';
-    protected profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
-    protected siisaURL = AppSettings.API_ENDPOINT + '/core/tm/siisa';
-    protected numeracionesURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/numeraciones';
-    protected profesionesURL = AppSettings.API_ENDPOINT + '/core/tm/profesiones';
-    protected entidadFormadoraURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/entidadesFormadoras/';
-    protected modalidadesCertificacionURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/modalidadesCertificacion/';
-    protected especialidadURL = AppSettings.API_ENDPOINT + '/core/tm/especialidades/';
+    
+    protected turnosURL = '/modules/matriculaciones/turnos/';
+    protected turnosSolicidatosURL =   '/modules/matriculaciones/turnoSolicitados/';
+    protected cambioDniUrl =  '/modules/matriculaciones/cambioDni';  // URL to web api
+    protected paisesURL =   '/core/tm/paises';
+    protected profesionalesURL =   '/core/tm/profesionales/';
+    protected siisaURL =  '/core/tm/siisa';
+    protected numeracionesURL =  '/modules/matriculaciones/numeraciones';
+    protected profesionesURL =  '/core/tm/profesiones';
+    protected entidadFormadoraURL =   '/modules/matriculaciones/entidadesFormadoras/';
+    protected modalidadesCertificacionURL =  '/modules/matriculaciones/modalidadesCertificacion/';
+    protected especialidadURL = '/core/tm/especialidades/';
     constructor(protected _http: Http) { }
 
     protected get(url: string, searchQuery?: URLSearchParams): Observable<any[]> {

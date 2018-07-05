@@ -25,23 +25,32 @@ export class NumeracionMatriculasService extends BaseService {
     }
 
     getNumeraciones(searchParams: any): Observable<any> {
-        const query = new URLSearchParams();
+        const parametros: any = {
+            offset: null,
+            size: null,
+            codigo: null,
+            codigoEspecialidad: null
+        };
 
         if (searchParams.offset) {
-            query.set('offset', searchParams.offset);
+            parametros.offset = searchParams.offset;
         }
 
         if (searchParams.size) {
-            query.set('size', searchParams.size);
+            parametros.size =  searchParams.size;
         }
 
-        if (searchParams.profesion) {
-            query.set('codigo', searchParams.profesion._id);
-        }
-        if (searchParams.especialidad) {
-            query.set('codigoEspecialidad', searchParams.especialidad._id);
+        if (searchParams.codigo) {
+            parametros.codigo = searchParams.codigo;
         }
 
-        return this.get(this.numeracionesURL, query);
+        if (searchParams.codigoEspecialidad) {
+            parametros.codigoEspecialidad = searchParams.codigoEspecialidad;
+        }
+
+        return this.server.get(this.numeracionesURL , {params : parametros});
     }
+
+
+
 }

@@ -9,10 +9,12 @@ import {Observable} from 'rxjs/Rx';
 // Import RxJs required methods
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
+import { environment } from './../../environments/environment';
+
 
 @Injectable()
 export class ProfesionService {
-    profesionesURL = AppSettings.API_ENDPOINT + '/core/tm/profesiones';
+    profesionesURL =  '/core/tm/profesiones';
 
     constructor(private server: Server) {
 

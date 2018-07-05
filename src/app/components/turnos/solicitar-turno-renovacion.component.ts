@@ -189,7 +189,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
         this._profesionalService.getProfesional({ id: this.id }).subscribe(
     (profesional: any) => {
-      console.log(profesional)
       profesional[0].idRenovacion =  this.id;
       profesional[0].id = null;
       delete profesional[0]._id;

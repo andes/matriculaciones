@@ -1,6 +1,7 @@
 import { AppSettings } from './../app.settings';
 import { ITurno } from './../interfaces/ITurno';
 import { Injectable } from '@angular/core';
+import { environment } from './../../environments/environment';
 import { Headers,
     Http,
     RequestOptions,
@@ -25,18 +26,18 @@ import 'rxjs/add/operator/catch';
 export class BaseService {
 
     // URL to web api
-
-    protected turnosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnos/';
-    protected turnosSolicidatosURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/turnoSolicitados/';
-    protected cambioDniUrl = AppSettings.API_ENDPOINT + '/modules/matriculaciones/cambioDni';  // URL to web api
-    protected paisesURL = AppSettings.API_ENDPOINT + '/core/tm/paises';
-    protected profesionalesURL = AppSettings.API_ENDPOINT + '/core/tm/profesionales/';
-    protected siisaURL = AppSettings.API_ENDPOINT + '/core/tm/siisa';
-    protected numeracionesURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/numeraciones';
-    protected profesionesURL = AppSettings.API_ENDPOINT + '/core/tm/profesiones';
-    protected entidadFormadoraURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/entidadesFormadoras/';
-    protected modalidadesCertificacionURL = AppSettings.API_ENDPOINT + '/modules/matriculaciones/modalidadesCertificacion/';
-    protected especialidadURL = AppSettings.API_ENDPOINT + '/core/tm/especialidades/';
+    
+    protected turnosURL = environment.API + '/modules/matriculaciones/turnos/';
+    protected turnosSolicidatosURL = environment.API + '/modules/matriculaciones/turnoSolicitados/';
+    protected cambioDniUrl = environment.API + '/modules/matriculaciones/cambioDni';  // URL to web api
+    protected paisesURL = environment.API + '/core/tm/paises';
+    protected profesionalesURL = environment.API + '/core/tm/profesionales/';
+    protected siisaURL = environment.API + '/core/tm/siisa';
+    protected numeracionesURL = environment.API + '/modules/matriculaciones/numeraciones';
+    protected profesionesURL = environment.API + '/core/tm/profesiones';
+    protected entidadFormadoraURL = environment.API + '/modules/matriculaciones/entidadesFormadoras/';
+    protected modalidadesCertificacionURL = environment.API + '/modules/matriculaciones/modalidadesCertificacion/';
+    protected especialidadURL = environment.API + '/core/tm/especialidades/';
     constructor(protected _http: Http) { }
 
     protected get(url: string, searchQuery?: URLSearchParams): Observable<any[]> {

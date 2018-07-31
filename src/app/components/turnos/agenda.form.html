@@ -22,12 +22,12 @@
                         <plex-int label="Duración de los Turnos (En minutos)" [(ngModel)]="currentAgenda.duracionTurno" name="duracionTurno" [required]="true" max="60"></plex-int>
                     </div>
                     <div class="col-md-4">                
-                        <plex-datetime label="Agregar Feriados" type="date" [(ngModel)]="currentAgenda.fechasExcluidas" name="fechasExcluidas" [required]="false"></plex-datetime>
+                        <plex-datetime label="Agregar Feriados" type="date" [(ngModel)]="feriadoNuevo" name="fechasExcluidas" [required]="false"></plex-datetime>
                     </div>
                     <div class="col-md-2">
                             <label>&nbsp;</label>
                             
-                            <plex-button label="Agregar Fecha" [disabled]="currentAgenda.fechasExcluidas == null" (click)="agregarFeriado()"></plex-button>
+                            <plex-button label="Agregar Fecha" [disabled]="feriadoNuevo === null" (click)="agregarFeriado()"></plex-button>
                         </div>
                 </div>
                 <div class="row">

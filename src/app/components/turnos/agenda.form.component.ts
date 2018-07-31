@@ -35,6 +35,7 @@ export class AgendaFormComponent implements OnInit {
     agendas: any;
     agendasDiasHabilitados: any;
     agendasFeriados: any;
+    public feriadoNuevo;
     @Output() emitAgenda = new EventEmitter();
 
     constructor( private agendaService: AgendaService, private plex: Plex) {
@@ -47,7 +48,11 @@ export class AgendaFormComponent implements OnInit {
         this.agendaService.get().subscribe((datos) => {
             this.agendas = datos;
             this.agendasDiasHabilitados = datos;
-            this.agendasFeriados = datos[0].fechasExcluidas;
+            console.log(datos);
+            if (datos.length > 0){
+                this.agendasFeriados = datos[0].fechasExcluidas;
+            }
+
 
 
             if (this.agendaAmodificar !== null) {
@@ -76,7 +81,7 @@ export class AgendaFormComponent implements OnInit {
     }
 
     agregarFeriado() {
-        this.feriados.push(this.currentAgenda.fechasExcluidas);
+        this.feriados.push(this.feriadoNuevo);
     }
 
     eliminarFeriado(idx: number) {
@@ -86,6 +91,7 @@ export class AgendaFormComponent implements OnInit {
     guardarConfiguracion($event, form) {
         if ($event.formValid) {
             this.currentAgenda.fechasExcluidas =  this.feriados;
+            this.feriadoNuevo = null;
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
             agendaOperation = this.agendaService.save(this.currentAgenda);

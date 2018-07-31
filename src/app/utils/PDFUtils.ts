@@ -3,7 +3,7 @@ const jsPDF = require('jspdf');
 
 export class PDFUtils {
 
-    public generarCredencial( profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin): any {
+    public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin): any {
         // tslint:disable-next-line:max-line-length
         const ultimaRenovacion = profesional.formacionGrado[grado].matriculacion[profesional.formacionGrado[grado].matriculacion.length - 1];
 
@@ -21,12 +21,12 @@ export class PDFUtils {
             textoEntidad = textoEntidad + 3;
         });
         doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 28, 28);
-       doc.addImage(firmaAdmin.firma, 'jpg', 38, 25, 30, 14);
-       if (firmaAdmin.administracion === null) {
-        doc.text('', 42, 41);
-       }else {
-        doc.text(firmaAdmin.administracion, 42, 41);
-       }
+        doc.addImage(firmaAdmin.firma, 'jpg', 38, 25, 30, 14);
+        if (firmaAdmin.administracion === null) {
+            doc.text('', 42, 41);
+        } else {
+            doc.text(firmaAdmin.administracion, 42, 41);
+        }
         doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionGrado[grado].fechaTitulo), 50, 48);
         doc.addPage();
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Tecnicatura') {
@@ -40,7 +40,7 @@ export class PDFUtils {
         }
 
         doc.rect(9, 9, 30, 30, 'F');
-         doc.addImage(fotoProfesional, 10, 10, 28, 28);
+        doc.addImage(fotoProfesional, 10, 10, 28, 28);
         doc.text(/*'BO TEC. EN LABORATORIO'*/profesional.formacionGrado[grado].profesion.nombre, 43, 13);
         doc.text(/*'PINO'*/profesional.apellido, 43, 18);
         doc.text(/*'JORGE PABLO'*/profesional.nombre, 43, 23);
@@ -49,7 +49,7 @@ export class PDFUtils {
         doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
         doc.text(/*'15/07/2010'*/ this.getDateStr(ultimaRenovacion.inicio), 43, 40);
         doc.text(/*'29/01/2015'*/ this.getDateStr(ultimaRenovacion.fin), 66, 40);
-       doc.addImage(firmaProfesional, 'jpg', 54, 41, 31, 10);
+        doc.addImage(firmaProfesional, 'jpg', 54, 41, 31, 10);
         doc.setFontSize(8);
         doc.text(/*'82'*/ultimaRenovacion.matriculaNumero.toString(), 74, 13);
 
@@ -181,25 +181,25 @@ export class PDFUtils {
 
         // Domicilios
         let offsetLoop = 0;
-         turno.profesional.domicilios.forEach(domicilio => {
+        turno.profesional.domicilios.forEach(domicilio => {
             doc.setFontSize(14);
-             doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
-            doc.line(20, 143 + offsetLoop , 190, 143 + offsetLoop);
-             doc.setFontSize(12);
-             doc.text(20, 148 + offsetLoop, 'Calle:');
-             doc.text(20, 154 + offsetLoop, 'C.P.:');
-             doc.text(20, 160 + offsetLoop, 'País:');
-             doc.text(70, 160 + offsetLoop, 'Provincia:');
-             doc.text(130, 160 + offsetLoop, 'Localidad:');
+            doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
+            doc.line(20, 143 + offsetLoop, 190, 143 + offsetLoop);
+            doc.setFontSize(12);
+            doc.text(20, 148 + offsetLoop, 'Calle:');
+            doc.text(20, 154 + offsetLoop, 'C.P.:');
+            doc.text(20, 160 + offsetLoop, 'País:');
+            doc.text(70, 160 + offsetLoop, 'Provincia:');
+            doc.text(130, 160 + offsetLoop, 'Localidad:');
             doc.setLineWidth(0.5);
-             doc.line(20, 162 + offsetLoop, 190, 162 +  offsetLoop);
-             offsetLoop += 26;
-         });
+            doc.line(20, 162 + offsetLoop, 190, 162 + offsetLoop);
+            offsetLoop += 26;
+        });
 
         // Contacto
         doc.setFontSize(14);
         doc.text(20, 219, 'Información de Contacto');
-        doc.line(20, 220 , 190, 220);
+        doc.line(20, 220, 190, 220);
         doc.setFontSize(12);
         offsetLoop = 0;
         turno.profesional.contactos.forEach(contacto => {
@@ -222,7 +222,7 @@ export class PDFUtils {
         doc.text(65, 77, 'DNI ' + turno.profesional.documento);
         doc.text(65, 83, this.getSimpleFormatedDate(turno.profesional.fechaNacimiento));
         doc.text(65, 89, turno.profesional.lugarNacimiento);
-         doc.text(65, 95, turno.profesional.sexo);
+        doc.text(65, 95, turno.profesional.sexo);
         doc.text(65, 101, turno.profesional.nacionalidad.nombre);
 
         doc.text(65, 111, turno.profesional.formacionGrado[0].profesion.nombre);
@@ -233,15 +233,15 @@ export class PDFUtils {
         // completado domicilios
         offsetLoop = 0;
         turno.profesional.domicilios.forEach(domicilio => {
-            if (domicilio.valor) {
-            doc.setFontSize(12);
-            doc.text(35, 148 + offsetLoop, domicilio.valor);
-            doc.text(35, 154 + offsetLoop, domicilio.codigoPostal);
-            doc.text(35, 160 + offsetLoop, domicilio.ubicacion.pais.nombre);
-            doc.text(90, 160 + offsetLoop, domicilio.ubicacion.provincia.nombre);
-            doc.text(150, 160 + offsetLoop, domicilio.ubicacion.localidad.nombre);
-            offsetLoop += 26;
-        }
+            if (domicilio.valor && domicilio.ubicacion && domicilio.ubicacion.provincia && domicilio.ubicacion.localidad && domicilio.ubicacion.pais && domicilio.codigoPostal) {
+                doc.setFontSize(12);
+                doc.text(35, 148 + offsetLoop, domicilio.valor);
+                doc.text(35, 154 + offsetLoop, domicilio.codigoPostal);
+                doc.text(35, 160 + offsetLoop, domicilio.ubicacion.pais.nombre);
+                doc.text(90, 160 + offsetLoop, domicilio.ubicacion.provincia.nombre);
+                doc.text(150, 160 + offsetLoop, domicilio.ubicacion.localidad.nombre);
+                offsetLoop += 26;
+            }
         });
 
         // Completado contactos

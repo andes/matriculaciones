@@ -7,7 +7,7 @@
         </div>
     </div>
     <div *ngFor="let domicilio of profesional.domicilios;">
-        <div *ngIf='domicilio.tipo &&  domicilio.valor && domicilio.codigoPostal && domicilio.ubicacion.localidad.nombre && domicilio.ubicacion.provincia.nombre && domicilio.ubicacion.pais.nombre '>
+        <div >
             <br>
             <header>
                 <legend class="info-subtitle">Domicilio {{domicilio.tipo}}</legend>
@@ -15,26 +15,26 @@
             <div class="row">
                 <div class="col-4">
                     <label>Dirección</label>
-                    <div>{{ domicilio.valor }}</div>
+                    <div>{{ domicilio?.valor }}</div>
                 </div>
                 <div class="col-4">
                     <label>C.P.</label>
-                    <div>{{ domicilio.codigoPostal }}</div>
+                    <div>{{ domicilio?.codigoPostal }}</div>
                 </div>
                 <div class="col-4">
                     <label>Localidad</label>
-                    <div>{{ domicilio.ubicacion.localidad.nombre }}</div>
+                    <div>{{ domicilio.ubicacion?.localidad?.nombre }}</div>
                 </div>
             </div>
             <div class="row">
 
                 <div class="col-4">
                     <label>Provincia</label>
-                    <div>{{ domicilio.ubicacion.provincia.nombre }}</div>
+                    <div>{{ domicilio.ubicacion?.provincia?.nombre }}</div>
                 </div>
                 <div class="col-4">
                     <label>País</label>
-                    <div>{{ domicilio.ubicacion.pais.nombre }}</div>
+                    <div>{{ domicilio.ubicacion?.pais?.nombre }}</div>
                 </div>
             </div>
         </div>

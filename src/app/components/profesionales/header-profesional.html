@@ -10,7 +10,8 @@
 
             </div>
             <span class="datos-profesional">
-                {{profesional | edad}} |
+                <span *ngIf='profesional.fechaNacimiento'>{{profesional | edad}} |</span>
+                
                 <span *ngIf='profesional.tipoDocumento'>{{profesional.tipoDocumento}}</span>
                 <span *ngIf='!profesional.tipoDocumento'>DNI</span> {{ profesional.documento }}
                 <span *ngIf='profesional.documentoViejo' class="text-danger hover" title="Cambio el documento(ver otros)">*</span> | {{'CUIT ' + profesional?.cuit }}

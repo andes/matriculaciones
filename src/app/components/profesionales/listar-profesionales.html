@@ -96,11 +96,11 @@
                   </td>
                   <td>{{profesional | profesional}}</td>
                   <td>
-                    <span *ngIf="profesional.fechaNacimiento !== null">
+                    <span *ngIf="profesional.fechaNacimiento">
                       {{profesional.fechaNacimiento | fecha}}
                       <br> {{profesional | edad}}
                     </span>
-                    <span *ngIf="profesional.fechaNacimiento === null" class="text-danger">
+                    <span *ngIf="!profesional.fechaNacimiento" class="text-danger">
                       Sin fecha de nacimiento
                     </span>
                   </td>

@@ -80,7 +80,6 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
         if (!event) {
             this.numeracionElegida = null;
         }
-
         this._numeracionesService.getNumeraciones(consulta)
             .subscribe((resp) => {
                 this.numeraciones = resp.data;

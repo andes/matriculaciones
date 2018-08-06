@@ -13,14 +13,14 @@
             <app-numeracion-form-matriculas (saveNumeracion)='buscar($event)'></app-numeracion-form-matriculas>
             <br>
             <hr>
-            <div [formGroup]="formBuscarNumeracion">
+            <div >
                 <div class="row">
                     <div class="col-6">
-                        <plex-select label="Profesión" formControlName="profesion" (getData)="loadProfesiones($event)" (change)="buscar()"></plex-select> 
+                        <plex-select label="Profesión"  name="Profesión" [(ngModel)]="consulta.profesion" (getData)="loadProfesiones($event)" (change)="buscar()"></plex-select> 
                         <br>                 
                     </div>
                     <div class="col-6">
-                        <plex-select label="Especialidad" formControlName="especialidad" (getData)="loadEspecialidades($event)" (change)="buscar()"></plex-select> 
+                        <plex-select label="Especialidad" name="Especialidad" [(ngModel)]="consulta.especialidad" (getData)="loadEspecialidades($event)" (change)="buscar()"></plex-select> 
                         <br>                 
                     </div>
                     

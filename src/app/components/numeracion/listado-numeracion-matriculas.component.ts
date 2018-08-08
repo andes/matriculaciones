@@ -25,6 +25,12 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     public numeracionElegida: any;
     public showListado: Boolean = true;
     public var: Number;
+    consulta = {
+        offset : 0,
+        size : 50,
+        profesion : null,
+        especialidad : null
+    };
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
@@ -63,25 +69,20 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     }
 
     loadEspecialidades(event: any) {
-        this._siisaSrv.getEspecialidades(null).subscribe(event.callback);
+        this._siisaSrv.getEspecialidades(null).subscribe(
+            (salida: any) => {
+                const list = [{
+                    id: '',
+                    nombre: 'Todas'
+                }].concat(salida);
+
+                event.callback(list);
+            });
+
     }
 
     buscar(event?: any) {
-        const consulta = this.formBuscarNumeracion.value;
-
-        // if (consulta.profesion && consulta.profesion.nombre === 'Todas') {
-        //     consulta.profesion = null;
-        // }
-
-        consulta.offset = event ? event.query.offset : 0;
-        consulta.size = event ? event.query.size : 50;
-        consulta.profesion = event ? event.query.codigo : consulta.profesion;
-        consulta.especialidad = event ? event.query.codigoEspecialidad : consulta.especialidad;
-        if (!event) {
-            this.numeracionElegida = null;
-        }
-
-        this._numeracionesService.getNumeraciones(consulta)
+        this._numeracionesService.getNumeraciones(this.consulta)
             .subscribe((resp) => {
                 this.numeraciones = resp.data;
                 if (event) {

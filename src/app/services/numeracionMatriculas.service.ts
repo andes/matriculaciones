@@ -29,7 +29,10 @@ export class NumeracionMatriculasService extends BaseService {
             offset: null,
             size: null,
             codigo: null,
-            codigoEspecialidad: null
+            codigoEspecialidad: null,
+            especialidad: null,
+            profesion: null
+
         };
 
         if (searchParams.offset) {
@@ -40,13 +43,14 @@ export class NumeracionMatriculasService extends BaseService {
             parametros.size =  searchParams.size;
         }
 
-        if (searchParams.codigo) {
-            parametros.codigo = searchParams.codigo;
+        if (searchParams.profesion) {
+            parametros.codigo = searchParams.profesion.id;
         }
 
-        if (searchParams.codigoEspecialidad) {
-            parametros.codigoEspecialidad = searchParams.codigoEspecialidad;
+        if (searchParams.especialidad) {
+            parametros.codigoEspecialidad = searchParams.especialidad.id;
         }
+
 
         return this.server.get(this.numeracionesURL , {params : parametros});
     }

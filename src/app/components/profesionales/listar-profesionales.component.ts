@@ -77,6 +77,9 @@ export class ListarProfesionalesComponent implements OnInit {
   public estaMatriculado;
   public mostrarRestablecer;
   public verDeshabilitado;
+  modalScrollDistance = 2;
+  modalScrollThrottle = 10;
+  public limit = 50;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -114,7 +117,8 @@ export class ListarProfesionalesComponent implements OnInit {
       bajaMatricula: this.verBajas ? this.verBajas : false,
       rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
       matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
-      habilitado: this.verDeshabilitado
+      habilitado: this.verDeshabilitado,
+      limit: this.limit
 
     })
       .subscribe((data) => {
@@ -134,10 +138,10 @@ export class ListarProfesionalesComponent implements OnInit {
 
 
         if (environment.production === true) {
-        this.comprebaVenciomientoGrado();
-        this.comprebaVenciomientoPosGrado();
+          this.comprebaVenciomientoGrado();
+          this.comprebaVenciomientoPosGrado();
 
-      }
+        }
 
         // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
@@ -416,6 +420,14 @@ export class ListarProfesionalesComponent implements OnInit {
     }
 
   }
+
+  onModalScrollDown() {
+    this.limit = this.limit + 15;
+    this.buscar();
+    // this.modalTitle = 'updated on ' + (new Date()).toString();
+    // this.modalBody += modalText;
+  }
+
 
 
 }

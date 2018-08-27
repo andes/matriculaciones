@@ -116,7 +116,6 @@ const COMPS_PROFESIONAL = [
 import { EdadPipe } from './pipes/edad.pipe';
 import { ProfesionalPipe } from './pipes/profesional.pipe';
 import { FechaPipe } from './pipes/fecha.pipe';
-
 @NgModule({
   declarations: [
     AppComponent,

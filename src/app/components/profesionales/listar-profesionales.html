@@ -51,7 +51,9 @@
         </header>
 
 
-        <div class="row">
+        <div class="row" style='max-height: 100%;
+        overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false"
+        (scrolled)="onModalScrollDown()">
           <div class="col">
             <!--Loader-->
             <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
@@ -60,7 +62,12 @@
               <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
             </div>
             <!--Tabla de resultados por SimpleQuery -->
-            <table *ngIf="profesionales && profesionales.length" class="table table-striped">
+            <table *ngIf="profesionales && profesionales.length" class="table table-striped"     
+                      infinite-scroll
+            [infiniteScrollDistance]="modalScrollDistance"
+            [infiniteScrollThrottle]="modalScrollThrottle"
+            [scrollWindow]="false"
+            (scrolled)="onModalScrollDown()">
               <thead>
                 <tr>
                   <th></th>
@@ -69,7 +76,11 @@
                   <th>Fecha de Nacimiento</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody
+              infinite-scroll
+              [scrollWindow]="false"
+              (scrolled)="onModalScrollDown()"
+              >
                 <tr class="hover" *ngFor="let profesional of profesionales; let i = index" (click)="seleccionar(profesional)">
                   <td *ngIf="profesional.habilitado === true">
                     <div>

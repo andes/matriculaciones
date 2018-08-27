@@ -68,9 +68,9 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
       valor: '',
       codigoPostal: '',
       ubicacion: {
-        localidad: '',
-        provincia: '',
-        pais: '',
+        localidad: null,
+        provincia: null,
+        pais: null,
       },
       ultimaActualizacion: new Date(),
       activo: true

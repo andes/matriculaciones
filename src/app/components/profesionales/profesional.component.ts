@@ -205,11 +205,11 @@ export class ProfesionalComponent implements OnInit {
         this.profesional.domicilios = [{
           tipo: 'real',
           valor: null,
-          codigoPostal: '',
+          codigoPostal: null,
           ubicacion: {
-            localidad: '',
-            provincia: '',
-            pais: '',
+            localidad: null,
+            provincia: null,
+            pais: null,
           },
           ultimaActualizacion: new Date(),
           activo: true

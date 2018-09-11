@@ -81,7 +81,7 @@ import { HomeAdministracionComponent } from './components/home/homeAdministracio
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
 import { SolicitarSobreTurnoMatriculacionComponent } from './components/turnos/sobreTurnoMatriculacion.component';
-
+import {WebcamModule} from 'ngx-webcam';
 
 import { TurnosComponent } from './components/turnos/turnos.component';
 
@@ -139,7 +139,7 @@ import { FechaPipe } from './pipes/fecha.pipe';
     SelectOrganizacionComponent,
     COMPS_PROFESIONAL,
     RenovacionesProfesionalComponent,
-    ScrollComponent
+    ScrollComponent,
   ],
   imports: [
     BrowserModule,
@@ -152,6 +152,8 @@ import { FechaPipe } from './pipes/fecha.pipe';
     InfiniteScrollModule,
     Daterangepicker,
     ImageUploadModule.forRoot(),
+    WebcamModule
+
   ],
   providers: [
     Plex,

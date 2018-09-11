@@ -41,7 +41,9 @@
                 </header>
 
                 <!-- LIST -->
-                <div class="row">
+                <div class="row" style='max-height: 100%;
+                overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false"
+                (scrolled)="onModalScrollDown()">
                     <div class="col-12">
                         <div *ngIf="turnos.length === 0" class="alert alert-danger">
                             <i class="mdi mdi-account-alert"></i> No se encontró ningún turno
@@ -68,9 +70,9 @@
 
                             </li>
                         </ul>
-                        <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button" (click)="nextPage()">
+                        <!-- <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button" (click)="nextPage()">
                             <p class="text-center"> Ver más </p>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
 

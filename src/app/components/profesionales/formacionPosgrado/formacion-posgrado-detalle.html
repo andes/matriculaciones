@@ -12,8 +12,8 @@
                     <plex-button type="primary" icon="mdi mdi-plus" title="Agregar nueva matricula" *ngIf='profesional.formacionPosgrado[index].matriculado === false'
                         (click)="matricularProfesional(formacion,false)"></plex-button>
 
-                    <plex-button type="danger" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && formacion.matriculado === true' icon="mdi mdi-block-helper"
-                        (click)="darDeBaja()"></plex-button>
+                    <plex-button type="danger" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && formacion.matriculado === true'
+                        icon="mdi mdi-block-helper" (click)="darDeBaja()"></plex-button>
                 </div>
                 <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && !formacion.papelesVerificados && formacion.revalida === true '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
@@ -120,6 +120,8 @@
             </plex-accordion>
         </div>
     </div>
+    <br><br><hr>
+    <plex-button class="float-right" type="danger" label='Cerrar' (click)="cerrar()"></plex-button>
 </plex-box>
 <!--</fieldset>-->
 

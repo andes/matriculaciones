@@ -33,6 +33,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
     @Input() index: any;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
+    @Output() cerrarDetalle = new EventEmitter();
+
     public motivoBaja;
     private hoy = null;
     public tieneBajas = false;
@@ -48,6 +50,11 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
     }
 
+    cerrar() {
+        this.cerrarDetalle.emit(false);
+    }
+
+
     matricularProfesional(formacion: any, mantenerNumero) {
         let texto = '¿Desea agregar una nueva matricula?';
         if (mantenerNumero) {
@@ -62,8 +69,12 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 } else {
                     revNumero = formacion.matriculacion.length;
                 }
-                this._numeracionesService.getOne({ profesion: formacion.profesion.id })
+                console.log(formacion.profesion);
+                this._numeracionesService.getOne({ codigoSisa: formacion.profesion.codigo })
                     .subscribe((num) => {
+
+                        num = num.data;
+                        console.log(num);
                         if (num.length === 0) {
                             this.plex.alert('No tiene ningun numero de matricula asignado');
                         } else {

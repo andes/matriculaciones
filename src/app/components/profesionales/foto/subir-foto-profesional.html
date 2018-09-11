@@ -1,23 +1,51 @@
 <plex-box>
 
-        <div class="row">
+    <div class="row" style="font-size: 35px;text-align: center">
 
         <div class="col-6">
-            <div class="form-group">                                
-                <div>
-                    <div>
-                        <!-- <image-upload url="https://httpbin.org/status/200"></image-upload> -->
-                        <label for="filePicker">Seleccione una foto:</label><br>
-                        <input type="file" id="filePicker"  accept="image/jpeg" (change)="handleFileSelect($event)">
-                    </div>
-                </div>
+            <div (click)='subirFoto = true;sacarFoto = false;'>
+                <span class="mdi mdi-upload" style="font-size: 100px;"></span>
+                <br>
+                <span>Subir Foto</span>
+            </div>
+        </div>
+
+        <div class="col-6">
+            <div (click)='subirFoto = false;sacarFoto = true;'>
+                <span class="mdi mdi-camera" style="font-size: 100px;"></span>
+                <br>
+                <span>Sacar Foto</span>
+            </div>
+        </div>
+
+    </div>
+    <div *ngIf='!sacarFoto && subirFoto' class="form-group">
+        <div>
+            <div>
+                <label for="filePicker">Seleccione una foto:</label>
+                <br>
+                <input type="file" id="filePicker" accept="image/jpeg" (change)="handleFileSelect($event)">
             </div>
         </div>
     </div>
+    <div *ngIf='sacarFoto && !subirFoto' class="text-center">
+        <webcam [height]="500" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam" [allowCameraSwitch]="allowCameraSwitch"
+            [switchCamera]="nextWebcamObservable" [videoOptions]="videoOptions" (cameraSwitched)="cameraWasSwitched($event)"
+            (initError)="handleInitError($event)"></webcam>
+        <br>
+        <plex-button label="Sacar foto" type="info" (click)="triggerSnapshot();"></plex-button>
+
+    </div>
+    <div *ngIf='fotoPreview && !sacarFoto && !subirFoto' class="text-center">
+        <img [src]="fotoPreview" alt="">
+        <br>
+        <plex-button label="Sacar otra foto" type="info" (click)="volverASacar();"></plex-button>
+
+    </div>
     <div class="row">
-        <div class="col-12">      
-            <br>      
-            <plex-button label="Guardar" type="success" (click)="upload()"  ></plex-button>
+        <div class="col-12" *ngIf='base64textString.length > 0'>
+            <br>
+            <plex-button label="Guardar" type="success" (click)="upload()"></plex-button>
         </div>
     </div>
 </plex-box>

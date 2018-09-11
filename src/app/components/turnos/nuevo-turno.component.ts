@@ -135,6 +135,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
         let res = null;
         let entradaU = false;
         let minutos = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('mm'), 10);
+        const minutosFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('mm'), 10);
         const horaInicio = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('HH'), 10);
         const horaFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('HH'), 10);
         const horaActual = parseInt(new moment().format('HH'), 10);
@@ -149,9 +150,11 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                 if (entradaU === false) {
                     entradaU = true;
                 } else {
-                    if ((i) === horaFin) {
+                    console.log('minutosactuales', minutos, minutosFin);
+                    if ((i === horaFin) && minutosFin === minutos) {
                         flag = false;
                     } else {
+
                         if ((this.agendaConfig.duracionTurno + minutos) >= 60) {
                             minutos = (minutos + this.agendaConfig.duracionTurno) - 60;
                             i++;
@@ -160,6 +163,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                                 res = minutos + this.agendaConfig.duracionTurno;
                             }
                             minutos = res;
+
                         }
                     }
                 }
@@ -183,12 +187,18 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                             }
                         }
                     } else {
+                        console.log(i, minutos);
+                        if (minutos === 60){
+                            minutos = 0;
+                            i++;
+                        }
                         this.horariosDisponibles.push({
                             hora: i,
                             minutos: minutos,
                             ocupado: false
                         });
                     }
+
                 }
                 nx++;
             }

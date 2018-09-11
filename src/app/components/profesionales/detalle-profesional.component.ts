@@ -1,10 +1,10 @@
-import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Plex } from '@andes/plex/src/lib/core/service';
 // Settings
 import { AppSettings } from './../../app.settings';
-
+import { Location } from '@angular/common';
 // Utils
 import { PDFUtils } from './../../utils/PDFUtils';
 
@@ -15,7 +15,7 @@ import {
     TipoContacto,
     TipoDomicilio
 } from './../../utils/enumerados';
-
+import { FotoGeneralComponent } from './foto-general.component';
 // Services
 import { PaisService } from './../../services/pais.service';
 import { ProvinciaService } from './../../services/provincia.service';
@@ -49,15 +49,15 @@ export class DetalleProfesionalComponent implements OnInit {
     public loading: Boolean = false;
     public indexFormacionGradoSelected: any;
     public indexFormacionPosgradoSelected: any;
-    public mostrar = true;
-    public mostrarGrado = true;
+    public mostrar = false;
+    public mostrarGrado = false;
     public img64 = null;
     public vieneDeDetalle = null;
     @Input() public flag = null;
     public confirmar = true;
     public tieneFirma = null;
     public editable = false;
-
+    @ViewChild('fotoHijo') fotoHijo: FotoGeneralComponent;
     @Input() public profesional: IProfesional = {
         id: null,
         habilitado: true,
@@ -74,7 +74,7 @@ export class DetalleProfesionalComponent implements OnInit {
             codigo: null,
         },
         sexo: undefined,
-        estadoCivil : EstadoCivil.otro,
+        estadoCivil: null,
         contactos: [{
             tipo: 'celular',
             valor: '',
@@ -157,11 +157,9 @@ export class DetalleProfesionalComponent implements OnInit {
         idRenovacion: null,
         documentoViejo: null
     };
-
-
-
     @Output() onShowListado = new EventEmitter();
     @Output() showFormacion = new EventEmitter();
+    @Output() showFoto = new EventEmitter();
 
 
     constructor(private _profesionalService: ProfesionalService,
@@ -171,7 +169,8 @@ export class DetalleProfesionalComponent implements OnInit {
         private _numeracionesService: NumeracionMatriculasService,
         private route: ActivatedRoute,
         private router: Router,
-        public auth: Auth) { }
+        public auth: Auth,
+        private location: Location) { }
 
 
     ngOnInit() {
@@ -181,29 +180,29 @@ export class DetalleProfesionalComponent implements OnInit {
             .switchMap((params: Params) =>
                 this._profesionalService.getProfesional({ id: params['id'] })
             ).subscribe(
-            (profesional: any) => {
-                // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
-                if (profesional.length === 0) {
-                    this.flag = false;
-                } else {
-                    this.profesional = profesional[0];
-                    this.flag = true;
+                (profesional: any) => {
+                    // me fijo si existe en la coleccion de profesionales permatentes si hay uno con ese dni
+                    if (profesional.length === 0) {
+                        this.flag = false;
+                    } else {
+                        this.profesional = profesional[0];
+                        this.flag = true;
+                    }
+                    // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
+                    if (this.flag === false) {
+                        this.route.params
+                            .switchMap((paramsTemporal: Params) =>
+                                this._turnoService.getTurnoSolicitados(paramsTemporal['id'])
+                            ).subscribe(
+                                (profesionalTemporal: any) => {
+                                    this.profesional = profesionalTemporal;
+                                }
+                            );
+                    }
+
+
+
                 }
-                // si flag es false significa que no hay entonces trae el profesional temporal para llenar el formulario
-                if (this.flag === false) {
-                    this.route.params
-                        .switchMap((paramsTemporal: Params) =>
-                            this._turnoService.getTurnoSolicitados(paramsTemporal['id'])
-                        ).subscribe(
-                        (profesionalTemporal: any) => {
-                            this.profesional = profesionalTemporal;
-                        }
-                        );
-                }
-
-
-
-            }
 
             );
     }
@@ -232,8 +231,10 @@ export class DetalleProfesionalComponent implements OnInit {
             'img': img,
             'idProfesional': this.profesional.id
         };
+        this.showFoto.emit(this.img64);
+        // this.fotoHijo.mostrarFoto(this.img64);
         this._profesionalService.saveProfesional({ imagen: imagenPro }).subscribe(resp => {
-
+            console.log('tarde', resp);
         });
     }
 
@@ -336,34 +337,57 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     volver() {
-        this.router.navigate(['/turnos', { id: this.profesional.id }]);
+        // this.router.navigate(['/turnos', { id: this.profesional.id }]);
+        this.location.back();
     }
     volverP() {
         this.router.navigate(['/listarProfesionales']);
     }
 
+    volverProfesional() {
+        if (this.flag === false && !this.editable) {
+            this.location.back();
+        }
+        if (this.flag === false && this.editable){
+            this.flag = true;
+        }
+
+
+    }
+
 
     formacionGradoSelected(formacion: any) {
         this.mostrar = true;
+        this.mostrarGrado = false;
         this.indexFormacionGradoSelected = formacion;
-        if (this.mostrarGrado === true) {
-            this.mostrarGrado = false;
 
-        } else {
-            this.mostrarGrado = true;
-        }
+        // if (this.mostrarGrado === true) {
+        //     this.mostrarGrado = false;
+
+        // } else {
+        //     this.mostrarGrado = true;
+        // }
     }
 
     formacionPosgradoSelected(posgrado: any) {
         this.mostrarGrado = true;
+        this.mostrar = false;
         this.indexFormacionPosgradoSelected = posgrado;
-        if (this.mostrar === true) {
+        // if (this.mostrar === true) {
+        //     this.mostrar = false;
+        // } else {
+        //     this.mostrar = true;
+        // }
+
+
+    }
+
+    cerrar(grado) {
+        if (grado === true) {
             this.mostrar = false;
         } else {
-            this.mostrar = true;
+            this.mostrarGrado = false;
         }
-
-
     }
 
     editar() {

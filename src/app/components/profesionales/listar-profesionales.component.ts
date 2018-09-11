@@ -138,8 +138,8 @@ export class ListarProfesionalesComponent implements OnInit {
 
 
         if (environment.production === true) {
-          this.comprebaVenciomientoGrado();
-          this.comprebaVenciomientoPosGrado();
+          // this.comprebaVenciomientoGrado();
+          // this.comprebaVenciomientoPosGrado();
 
         }
 

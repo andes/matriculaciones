@@ -35,6 +35,8 @@ export class TurnosComponent implements OnInit {
     offset = 0;
     limit = 10;
     turnosTotal = null;
+    modalScrollDistance = 2;
+    modalScrollThrottle = 10;
     public hoy = new Date();
 
     constructor(private _turnoService: TurnoService,
@@ -136,10 +138,14 @@ export class TurnosComponent implements OnInit {
         this.turnoElegido = null;
     }
 
-    nextPage() {
-        this.limit += 10;
+    onModalScrollDown() {
+        console.log('acaaaaa');
+        this.limit = this.limit + 15;
         this.buscar();
-    }
+        // this.modalTitle = 'updated on ' + (new Date()).toString();
+        // this.modalBody += modalText;
+      }
+
 
     contadorDeCambiosDni() {
         let contador = 0;

@@ -30,6 +30,7 @@ import { ProfesionalService } from '../../services/profesional.service';
 export class FotoGeneralComponent implements OnInit, OnChanges {
     @Input() profesional: IProfesional;
     @Input() img64 = null;
+    @Input() idProfesional;
     public foto: any ;
     public tieneFoto = false;
     constructor(public sanitizer: DomSanitizer, private plex: Plex,
@@ -60,14 +61,31 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
 
     // }
     ngOnChanges () {
-        if (this.profesional.id) {
-        this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
-         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
-         if (this.img64 !== undefined &&  this.img64 !== null) {
+        console.log(this.img64);
+        if (this.img64){
             this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
-            }
+        } else if (this.idProfesional){
+        this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
+            console.log('respuesta base64');
+         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
         });
         }
+
+        // if (this.profesional.id) {
+        //     console.log('llegue');
+        // this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
+        //     console.log('respuesta base64');
+        //  this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
+        //  if (this.img64 !== undefined &&  this.img64 !== null) {
+        //     this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
+        //     }
+        // });
+        }
+
+
+
+    mostrarFoto(foto){
+        console.log('aca', foto);
     }
 
 }

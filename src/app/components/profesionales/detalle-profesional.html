@@ -5,7 +5,7 @@
                 <header>
                     <div class="row">
                         <div class="col-1">
-                            <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
+                            <app-foto-general (showFoto)="mostrarFoto($event)" [profesional]="profesional" [img64]="img64"></app-foto-general>
                         </div>
                         <div class="col-10 margenFoto">
                             <app-header-profesional [profesional]="profesional"></app-header-profesional>
@@ -19,7 +19,7 @@
 
                 </header>
                 <div id="wrapper">
-                    <plex-tabs *ngIf ='profesional.habilitado === true'>
+                    <plex-tabs *ngIf='profesional.habilitado === true'>
                         <!-- Contacto y Domicilios -->
                         <plex-tab label="Contacto y Domicilios">
                             <app-contacto-domicilios-profesional [profesional]="profesional"></app-contacto-domicilios-profesional>
@@ -49,7 +49,7 @@
 
                         <!-- Foto -->
                         <plex-tab label="Foto">
-                            <div class="row">
+                            <!-- <div class="row">
                                 <div class="col-12 text-center">
                                     <div class="form-group">
                                         <label style="font-weight: bold">Foto Actual</label>
@@ -58,7 +58,7 @@
 
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
 
                             <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)" (previewImg)="previewImg($event)"></app-foto-profesional>
                         </plex-tab>
@@ -129,14 +129,14 @@
             </div>
         </plex-box>
         </div> -->
-        <div class="col-4" *ngIf="!mostrarGrado">
+        <div class="col-4" *ngIf="mostrar">
 
             <app-formacion-grado-detalle [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" [index]="indexFormacionGradoSelected"
-                [profesional]="profesional" (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
+                [profesional]="profesional" (cerrarDetalle)='cerrar(true)' (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
         </div>
-        <div class="col-4" *ngIf="!mostrar">
-            <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]" [index]="indexFormacionPosgradoSelected" [profesional]="profesional"
-            (matriculacion)="matricularProfesionalEspecialidad($event)"></app-formacion-posgrado-detalle>
+        <div class="col-4" *ngIf="mostrarGrado">
+            <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]" [index]="indexFormacionPosgradoSelected"
+                [profesional]="profesional" (matriculacion)="matricularProfesionalEspecialidad($event)" (cerrarDetalle)='cerrar(false)'></app-formacion-posgrado-detalle>
         </div>
 
     </div>
@@ -147,6 +147,7 @@
 
 <footer>
 
-    <plex-button type="danger" label="Ir a turnos" (click)="volver()" icon="arrow-left-bold"></plex-button>
-    <plex-button type="danger" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button>
+    <plex-button type="danger" *ngIf="flag == false" label="volver" (click)="volverProfesional()" icon="arrow-left-bold"></plex-button>
+    <plex-button type="danger" *ngIf="flag == true" label="volver" (click)="volver()" icon="arrow-left-bold"></plex-button>
+    <!-- <plex-button type="danger" *ngIf="flag == true" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button> -->
 </footer>

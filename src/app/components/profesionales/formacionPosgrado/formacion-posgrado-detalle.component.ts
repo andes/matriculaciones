@@ -30,7 +30,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     @Input() index: any;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
-
+    @Output() cerrarDetalle = new EventEmitter();
     constructor(private _profesionalService: ProfesionalService,
         private plex: Plex,
         private _numeracionesService: NumeracionMatriculasService, ) {
@@ -39,6 +39,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.formacion);
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -84,11 +85,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                                     this.matriculacion.emit(oMatriculacion);
                                 });
 
-                        this.formacion.revalida = false;
-                        this.formacion.matriculado = true;
-                        this.profesional.formacionPosgrado[this.index] = this.formacion;
-                        this.actualizar();
-                    }
+                            this.formacion.revalida = false;
+                            this.formacion.matriculado = true;
+                            this.profesional.formacionPosgrado[this.index] = this.formacion;
+                            this.actualizar();
+                        }
                     });
 
                 ;
@@ -105,20 +106,25 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     darDeBaja() {
         this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
             if (resultado) {
-               this.profesional.formacionPosgrado[this.index].matriculado = false;
-               this.profesional.formacionPosgrado[this.index].papelesVerificados = false;
-               this.actualizar();
-           }
+                this.profesional.formacionPosgrado[this.index].matriculado = false;
+                this.profesional.formacionPosgrado[this.index].papelesVerificados = false;
+                this.actualizar();
+            }
         });
 
-   }
+    }
 
-   renovar() {
-     this.formacion.papelesVerificados = false;
-     this.formacion.revalida = true;
-     this.profesional.formacionPosgrado[this.index] = this.formacion;
-    this.actualizar();
-}
+    renovar() {
+        this.formacion.papelesVerificados = false;
+        this.formacion.revalida = true;
+        this.profesional.formacionPosgrado[this.index] = this.formacion;
+        this.actualizar();
+    }
+
+
+    cerrar() {
+        this.cerrarDetalle.emit(false);
+    }
 
     actualizar() {
         // this._profesionalService.putProfesional(this.profesional)
@@ -130,6 +136,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             'op': 'updateEstadoPosGrado',
             'data': this.profesional.formacionPosgrado
         };
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
     }
 }

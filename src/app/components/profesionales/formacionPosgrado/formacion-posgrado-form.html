@@ -4,11 +4,16 @@
             <div class="col">
                 <form #posgrado='ngForm' >
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-4">
                             <plex-select label="Profesion" [(ngModel)]="profesionalP.profesion" name="profesion" [data]="profesiones" [required]="true"></plex-select>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <plex-select label="Especialidad" [(ngModel)]="profesionalP.especialidad" name="especialidad" (getData)="loadEspecialidades($event)" [required]="true"></plex-select>
+                        </div>
+                        <div class="col-4">
+                            <plex-int label="Matricula Nro" (change)='ultimaMatricula()' [(ngModel)]="profesionalP.matriculacion[0].matriculaNumero" name="matriculaNro" [required]="true"></plex-int>
+                            <!-- <span class="badge badge-info" *ngIf='profesionalP.matriculacion[0].matriculaNumero && !numeroMenor'>Ultimo Nro: {{ultimoNumeroMatricula}}</span> -->
+                            <span class="badge badge-danger" *ngIf='profesionalP.matriculacion[0].matriculaNumero && numeroMenor'>debe ingresar un numero mayor que  {{ultimoNumeroMatricula}} </span>
                         </div>
                     </div>
                     <div class="row">

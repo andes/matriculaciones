@@ -33,7 +33,7 @@ import { ProfesionService } from '../../../services/profesion.service';
 export class FormacionPosgradoFormComponent implements OnInit {
     formPosgrado: FormGroup;
     activeAcc = false;
-    profesiones: any[];
+    profesiones: any[] = [];
     numeroMenor = false;
     ultimoNumeroMatricula;
     vencimientoAnio = (new Date()).getUTCFullYear() + 5;
@@ -93,14 +93,20 @@ export class FormacionPosgradoFormComponent implements OnInit {
 
     ngOnInit() {
         if (this.profesional) {
-            this.profesiones = this.profesional.formacionGrado.map((value) => {
-                return value.profesion;
+            // this.profesiones = this.profesional.formacionGrado.map((value) => {
+            //     return value.profesion;
+            // });
+            this.profesional.formacionGrado.forEach(element => {
+                if ( element.profesion.codigo === 1 || element.profesion.codigo === 2 ) {
+                    this.profesiones.push(element.profesion);
+                  }
             });
+
         }
     }
 
     onSubmit($event, form) {
-        if ($event.formValid) {
+        if ($event.formValid && !this.numeroMenor) {
             this.profesionalP.matriculacion.revalidacionNumero++;
             this.submitPosgrado.emit(this.profesionalP);
             this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
@@ -133,15 +139,15 @@ export class FormacionPosgradoFormComponent implements OnInit {
     }
 
 
-    ultimaMatricula(){
-this._profesionalService.getUltimoPosgradoNro().subscribe( data => {
-    this.ultimoNumeroMatricula = data;
-    console.log(this.profesionalP.matriculacion[0].matriculaNumero, data);
-    if (this.profesionalP.matriculacion[0].matriculaNumero <= data){
-        this.numeroMenor = true;
-    }else{
-        this.numeroMenor = false;
-    }
-});
+    ultimaMatricula() {
+        this._profesionalService.getUltimoPosgradoNro().subscribe(data => {
+            this.ultimoNumeroMatricula = data;
+            console.log(this.profesionalP.matriculacion[0].matriculaNumero, data);
+            if (this.profesionalP.matriculacion[0].matriculaNumero <= data) {
+                this.numeroMenor = true;
+            } else {
+                this.numeroMenor = false;
+            }
+        });
     }
 }

@@ -201,10 +201,12 @@ export class DetalleProfesionalComponent implements OnInit {
                     }
 
 
+                    this.habilitaPosgrado();
 
                 }
 
             );
+
     }
 
 
@@ -348,7 +350,7 @@ export class DetalleProfesionalComponent implements OnInit {
         if (this.flag === false && !this.editable) {
             this.location.back();
         }
-        if (this.flag === false && this.editable){
+        if (this.flag === false && this.editable) {
             this.flag = true;
         }
 
@@ -393,6 +395,13 @@ export class DetalleProfesionalComponent implements OnInit {
     editar() {
         this.flag = false;
         this.editable = true;
+    }
+
+
+    habilitaPosgrado() {
+
+        const res = this.profesional.formacionGrado.find(p => p.profesion.codigo === 1 || p.profesion.codigo === 2);
+        return res;
     }
     // generarCredencial() {
 

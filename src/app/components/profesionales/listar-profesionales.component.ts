@@ -94,7 +94,12 @@ export class ListarProfesionalesComponent implements OnInit {
     this.vieneDeListado = true;
     this.hoy = new Date();
     this.estadosMatriculas = Enums.getObjEstadosMatriculas();
+    this._profesionalService.getEstadisticas().subscribe((data) => {
 
+      this.totalProfesionales = data.total;
+      this.totalProfesionalesMatriculados = data.totalMatriculados;
+      this.totalProfesionalesRematriculados = data.totalRematriculados;
+    });
   }
 
   showProfesional(profesional: any) {
@@ -123,7 +128,7 @@ export class ListarProfesionalesComponent implements OnInit {
     })
       .subscribe((data) => {
         this.profesionales = data;
-        this.totalProfesionales = data.length;
+        // this.totalProfesionales = data.length;
         let totalR = 0;
         let totalM = 0;
         for (let _i = 0; _i < this.profesionales.length; _i++) {
@@ -133,8 +138,8 @@ export class ListarProfesionalesComponent implements OnInit {
             totalM += 1;
           }
         }
-        this.totalProfesionalesRematriculados = totalR;
-        this.totalProfesionalesMatriculados = totalM;
+        // this.totalProfesionalesRematriculados = totalR;
+        // this.totalProfesionalesMatriculados = totalM;
 
 
         if (environment.production === true) {

@@ -38,8 +38,14 @@
 
                         <!-- Formacion Posgrado -->
                         <plex-tab label="Formación de Posgrado">
-                            <app-formacion-posgrado [profesional]="profesional" (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)"
-                                (updateProfesional)="updateProfesional($event)"></app-formacion-posgrado>
+                            <div *ngIf=' habilitaPosgrado() !== undefined'>
+                                <app-formacion-posgrado [profesional]="profesional" (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)"
+                                    (updateProfesional)="updateProfesional($event)"></app-formacion-posgrado>
+                            </div>
+                            <div *ngIf=' habilitaPosgrado() === undefined'>
+                                    <span class="badge badge-danger">Su profesion no le permite cargar un posgrado</span>
+
+                            </div>
                         </plex-tab>
 
                         <!-- Sanciones -->

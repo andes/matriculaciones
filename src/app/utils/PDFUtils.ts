@@ -255,6 +255,58 @@ export class PDFUtils {
 
     }
 
+    public comprobanteTurnoRenovacion(turno: any): any {
+        console.log(turno);
+        const fechaTurno = new Date(turno.fecha);
+
+        const doc = new jsPDF('p', 'mm', 'a4');
+        const hoy = new Date();
+
+        doc.text('Registro Único de Profesionales de la Salud', 120, 20, 'center');
+        doc.text('de la Provincia del Neuquén', 120, 26, 'center');
+        doc.setLineWidth(1);
+        doc.line(20, 40, 190, 40);
+        doc.setFontSize(12);
+        doc.text(20, 45, 'Planilla de Turno Otorgado');
+        doc.text(155, 45, 'RENOVACION');
+        doc.line(20, 47, 190, 47);
+        doc.setFontSize(10);
+        doc.text(20, 52,
+            'Su turno ha sido tramitado el día ' +
+            hoy.getDate() + '/' +
+            (hoy.getMonth() + 1) + '/' +
+            hoy.getFullYear());
+
+        doc.text(20, 57,
+            'Deberá presentarse el día ' +
+            fechaTurno.getDate() + '/' +
+            (fechaTurno.getMonth() + 1) + '/' +
+            fechaTurno.getFullYear() +
+            ' a las ' + fechaTurno.getHours() +
+            (fechaTurno.getMinutes() > 0 ? ':' + fechaTurno.getMinutes() : '') +
+            ' hs. en Antártida Argentina y Colón, Edif. CAM 3, Fisc. Sanitaria.');
+
+        doc.setLineWidth(0.5);
+        doc.line(20, 59, 190, 59);
+
+        doc.setFontSize(12);
+        doc.text(20, 65, 'Apellido/s:');
+        doc.text(20, 71, 'Nombre/s:');
+        doc.text(20, 77, 'Documento:');
+
+        doc.text(65, 65, turno.profesional.apellido);
+        doc.text(65, 71, turno.profesional.nombre);
+        doc.text(65, 77, 'DNI ' + turno.profesional.documento);
+
+        // Firmas
+        doc.text('..............................................', 50, 265, 'center');
+        doc.text('Interesado', 50, 271, 'center');
+
+        doc.text('..............................................', 160, 265, 'center');
+        doc.text('Agente Matriculador', 160, 271, 'center');
+        return doc;
+    }
+
     private getSimpleFormatedDate(date: any): string {
         const fecha = new Date(date);
         return fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear();

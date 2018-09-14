@@ -176,7 +176,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
     this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value })
       .subscribe(turno => {
-        const pdf = this._pdfUtils.comprobanteTurno(turno);
+        const pdf = this._pdfUtils.comprobanteTurnoRenovacion(turno);
         pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
       });
   }
@@ -209,6 +209,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
   buscar($event) {
     if ($event.formValid) {
+      console.log('entre weon');
       // tslint:disable-next-line:max-line-length
       this._profesionalService.getResumenProfesional({ documento: this.documento, nombre: this.nombre, apellido: this.apellido }).subscribe(resp => {
 

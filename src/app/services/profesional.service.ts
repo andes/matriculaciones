@@ -80,6 +80,10 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.resumenProfesional, { params: params, showError: true });
     }
 
+    getEstadisticas(): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'estadisticas');
+    }
+
 }
 
 

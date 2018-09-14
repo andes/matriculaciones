@@ -19,6 +19,7 @@ import {
 // Services
 import { ProfesionalService } from './../../../services/profesional.service';
 import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
+import { Auth } from '@andes/auth';
 
 @Component({
     selector: 'app-formacion-posgrado-detalle',
@@ -28,18 +29,21 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     @Input() formacion: any;
     @Input() index: any;
+    public esSupervisor;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
     constructor(private _profesionalService: ProfesionalService,
         private plex: Plex,
-        private _numeracionesService: NumeracionMatriculasService, ) {
+        private _numeracionesService: NumeracionMatriculasService, public auth: Auth ) {
 
 
     }
 
     ngOnInit() {
-        console.log(this.formacion);
+        this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
+        console.log(this.auth);
+        console.log(this.esSupervisor);
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {

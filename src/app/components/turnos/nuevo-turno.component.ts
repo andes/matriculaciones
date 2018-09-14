@@ -115,18 +115,18 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
             // Obtengo la cantidad de turnos por fecha del mes.
             const hoy = new Date();
 
-            if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+            // if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
 
                 this._turnoService.getTurnosMatriculacion(hoy, {})
                     .subscribe((countTurnosXDia) => {
                         this.buildCalendar(countTurnosXDia);
                     });
-            } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
-                this._turnoService.getTurnosRenovacion(hoy, {})
-                    .subscribe((countTurnosXDia) => {
-                        this.buildCalendar(countTurnosXDia);
-                    });
-            }
+            // } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
+            //     this._turnoService.getTurnosRenovacion(hoy, {})
+            //         .subscribe((countTurnosXDia) => {
+            //             this.buildCalendar(countTurnosXDia);
+            //         });
+            // }
         });
     }
 
@@ -225,7 +225,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                 horario.ocupado = false;
             });
             // Obtengo los horarios ocupados del día
-            if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
+            // if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
                 this._turnoService.getTurnosMatriculacion(fecha, {
                     anio: fecha.getFullYear(),
                     mes: fecha.getMonth() + 1,
@@ -241,23 +241,23 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                         });
                     });
                 });
-            } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
-                this._turnoService.getTurnosRenovacion(fecha, {
-                    anio: fecha.getFullYear(),
-                    mes: fecha.getMonth() + 1,
-                    dia: fecha.getDate()
-                }).subscribe((datos) => {
-                    // Deshabilito los horarios ocupados.
-                    datos.forEach(item => {
-                        const turnoOcupado = item._id;
-                        this.horariosDisponibles.forEach(horario => {
-                            if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
-                                horario.ocupado = true;
-                            }
-                        });
-                    });
-                });
-            }
+            // } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
+            //     this._turnoService.getTurnosRenovacion(fecha, {
+            //         anio: fecha.getFullYear(),
+            //         mes: fecha.getMonth() + 1,
+            //         dia: fecha.getDate()
+            //     }).subscribe((datos) => {
+            //         // Deshabilito los horarios ocupados.
+            //         datos.forEach(item => {
+            //             const turnoOcupado = item._id;
+            //             this.horariosDisponibles.forEach(horario => {
+            //                 if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
+            //                     horario.ocupado = true;
+            //                 }
+            //             });
+            //         });
+            //     });
+            // }
 
             /* this._turnoService.getTurnosMatriculacion(fecha, {
                  anio: fecha.getFullYear(),

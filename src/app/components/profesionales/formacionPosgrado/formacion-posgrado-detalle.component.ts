@@ -41,9 +41,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
-        console.log(this.auth);
-        console.log(this.esSupervisor);
+        // this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
+        // console.log(this.auth);
+        // console.log(this.esSupervisor);
+        this.esSupervisor = true;
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {

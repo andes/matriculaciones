@@ -22,6 +22,7 @@ import { NumeracionMatriculasService } from './../../../services/numeracionMatri
 
 // Utils
 import { PDFUtils } from './../../../utils/PDFUtils';
+import { Auth } from '@andes/auth';
 
 @Component({
     selector: 'app-formacion-grado-detalle',
@@ -34,20 +35,21 @@ export class FormacionGradoDetalleComponent implements OnInit {
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
-
+    public esSupervisor;
     public motivoBaja;
     private hoy = null;
     public tieneBajas = false;
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils, private plex: Plex) { }
+        private _pdfUtils: PDFUtils, private plex: Plex, public auth: Auth) { }
 
 
 
     ngOnInit() {
         this.hoy = new Date();
         this.compruebaBajas();
-
+        this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
+        // this.esSupervisor = true;
     }
 
     cerrar() {
@@ -122,7 +124,16 @@ export class FormacionGradoDetalleComponent implements OnInit {
         // this.profesional.formacionGrado[this.index].papelesVerificados = true;
         this.formacion.papelesVerificados = true;
         this.formacion.matriculado = false;
+        this.profesional.supervisor = {
+            id: this.auth.usuario.id,
+            nombreCompleto: this.auth.usuario.nombreCompleto
+        };
         this.profesional.formacionGrado[this.index] = this.formacion;
+        console.log(this.auth);
+        this._profesionalService.putProfesional(this.profesional)
+            .subscribe(resp => {
+                this.profesional = resp;
+            });
         this.actualizar();
 
     }

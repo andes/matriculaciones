@@ -32,6 +32,7 @@ import { SelectOrganizacionComponent } from './components/home/selectOrganizacio
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
 import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
+import { SupervisoresComponent } from './components/supervisor/listado-supervisores.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -55,6 +56,7 @@ const appRoutes: Routes = [
     { path: 'listarProfesionales', component: ListarProfesionalesComponent },
     { path: 'selectOrganizacion', component: SelectOrganizacionComponent },
     { path: 'sobreTurnoMatriculacion', component: SolicitarSobreTurnoMatriculacionComponent },
+    { path: 'supervisores', component: SupervisoresComponent },
     { path: '**', redirectTo: 'homeProfesionales' }
 ];
 

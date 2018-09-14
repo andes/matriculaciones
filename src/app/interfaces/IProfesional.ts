@@ -143,6 +143,10 @@ export interface IProfesional {
     notas: String;
     rematriculado: Boolean;
     agenteMatriculador: String;
+    supervisor?: {
+        id: String,
+        nombreCompleto: String
+    };
     idRenovacion: String;
     documentoViejo: Number;
 }

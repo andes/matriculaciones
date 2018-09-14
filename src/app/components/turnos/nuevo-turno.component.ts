@@ -21,6 +21,7 @@ import { AgendaService } from './../../services/agenda.service';
 // Interfaces
 import { IAgendaMatriculaciones } from './../../interfaces/IAgendaMatriculaciones';
 import { Plex } from '@andes/plex';
+import { Router } from '@angular/router';
 
 const jQuery = window['jQuery'] = require('jquery/dist/jquery');
 const moment = window['moment'] = require('moment/moment.js');
@@ -64,7 +65,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     constructor(private _element: ElementRef,
         private _turnoService: TurnoService,
         private _agendaService: AgendaService,
-        private plex: Plex) { }
+        private plex: Plex,
+        private router: Router ) { }
 
     /**
      * Lifecycle hooks
@@ -383,7 +385,8 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
         this.plex.confirm(this.lblTurno).then((resultado) => {
             if (resultado) {
                 this.onTurnoSeleccionado.emit(this.fecha);
-
+                this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+                this.router.navigate(['listarProfesionales']);
             }
             // this.boxType = 'success';
             // this.turnoElegido = true;

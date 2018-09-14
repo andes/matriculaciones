@@ -9,17 +9,21 @@
                     <plex-button title="Mantener el mismo numero de matricula" *ngIf='formacion.matriculacion.length > 0 && formacion.matriculado === false'
                         type="success" icon="equal" (click)="matricularProfesional(formacion,true)"></plex-button>
                     <!-- <plex-tooltip text="Asignar número de matrícula" position="right">-->
-                    <plex-button type="primary" icon="mdi mdi-plus" title="Agregar nueva matricula" *ngIf='profesional.formacionPosgrado[index].matriculado === false'
-                        (click)="matricularProfesional(formacion,false)"></plex-button>
+                    <!-- <plex-button type="primary" icon="mdi mdi-plus" title="Agregar nueva matricula" *ngIf='profesional.formacionPosgrado[index].matriculado === false'
+                        (click)="matricularProfesional(formacion,false)"></plex-button> -->
 
-                    <plex-button type="danger" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && formacion.matriculado === true' icon="mdi mdi-block-helper"
-                        (click)="darDeBaja()"></plex-button>
+                    <plex-button type="danger" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && formacion.matriculado === true'
+                        icon="mdi mdi-block-helper" (click)="darDeBaja()"></plex-button>
                 </div>
-                <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && !formacion.papelesVerificados && formacion.revalida === true '>
+                <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && !formacion.papelesVerificados && formacion.revalida === true  && esSupervisor '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
                 </div>
-                <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length === 0 && !profesional.formacionPosgrado[index].papelesVerificados '>
+                <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length === 0 && !profesional.formacionPosgrado[index].papelesVerificados  && esSupervisor '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
+                </div>
+                <div  class="btn-group float-right" *ngIf='formacion.matriculacion.length > 0'>
+                    <plex-button type="success" *ngIf='formacion.matriculado === false && formacion.papelesVerificados === false && formacion.revalida === false'
+                        label='Renovar' (click)="renovar()"></plex-button>
                 </div>
             </div>
         </div>
@@ -85,10 +89,7 @@
             <div>{{ formacion.certificacion?.fecha | date: 'dd/MM/yyyy' }}</div>
         </div>
     </div>
-    <div *ngIf='formacion.matriculacion.length > 0'>
-        <plex-button type="success" *ngIf='formacion.matriculado === false && formacion.papelesVerificados === false && formacion.revalida === false'
-            label='Renovar' (click)="renovar()"></plex-button>
-    </div>
+
     <hr>
     <div class="row">
         <div class="col-12">
@@ -120,6 +121,10 @@
             </plex-accordion>
         </div>
     </div>
+    <br>
+    <br>
+    <hr>
+    <plex-button class="float-right" type="danger" label='Cerrar' (click)="cerrar()"></plex-button>
 </plex-box>
 <!--</fieldset>-->
 

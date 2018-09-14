@@ -111,7 +111,7 @@
                     <plex-button title="Completa los siguientes domicilios con los mismos datos" type="success" label="completar domicilios"
                         type="primary btn-sm" (click)="completar()" class="pull-right"></plex-button>
                 </div>
-                <h5>Domicilio Real</h5>
+                <h5>Domicilio {{profesional.domicilios[0].tipo}}</h5>
                 <div class="row">
                     <div class="col-md-5">
                         <plex-text label="Dirección" name="direccionReal" [(ngModel)]="profesional.domicilios[0].valor" [required]="true"></plex-text>
@@ -139,7 +139,7 @@
             <br>
             <div class="col-md-12">
 
-                <h5>Domicilio Legal</h5>
+                <h5>Domicilio {{profesional.domicilios[1].tipo}}</h5>
                 <div class="row">
                     <div class="col-md-5">
                         <plex-text label="Dirección" name="direccionLegal" [(ngModel)]="profesional.domicilios[1].valor" ></plex-text>
@@ -167,7 +167,7 @@
             </div>
             <br>
             <div class="col-md-12">
-                <h5>Domicilio Profesional</h5>
+                <h5>Domicilio {{profesional.domicilios[2].tipo}}</h5>
                 <div class="row">
                     <div class="col-md-5">
                         <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor" ></plex-text>
@@ -232,7 +232,7 @@
                 <div *ngIf="editable === false">
                     <plex-button *ngIf="confirmar == true" type="success" label="Confirmar Datos" (click)="confirmarDatosAdmin($event)" class="pull-right"
                         validateForm="true"></plex-button>
-                    <plex-button *ngIf="confirmar == false" type="success" label="Confirmar Turno" (click)="confirmarDatos($event)" class="pull-right"
+                    <plex-button *ngIf="confirmar === false && !ocultarBtn" type="success" label="Confirmar Turno" (click)="confirmarDatos($event)" class="pull-right"
                         validateForm="true"></plex-button>
                 </div>
                 <plex-button *ngIf="editable === true" type="success" label="Confirmar Datos" (click)="actualizar()" class="pull-right" validateForm="true"></plex-button>

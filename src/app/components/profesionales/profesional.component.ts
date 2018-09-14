@@ -72,6 +72,7 @@ export class ProfesionalComponent implements OnInit {
   public tipoDocumento: any[];
   public tipoComunicacion: any[];
   public vacio = [];
+  public ocultarBtn = false;
   @Input() confirmar = false;
   @Input() editable = false;
   @Output() editado = new EventEmitter();
@@ -205,11 +206,11 @@ export class ProfesionalComponent implements OnInit {
         this.profesional.domicilios = [{
           tipo: 'real',
           valor: null,
-          codigoPostal: '',
+          codigoPostal: null,
           ubicacion: {
-            localidad: '',
-            provincia: '',
-            pais: '',
+            localidad: null,
+            provincia: null,
+            pais: null,
           },
           ultimaActualizacion: new Date(),
           activo: true
@@ -261,6 +262,7 @@ export class ProfesionalComponent implements OnInit {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
+      this.ocultarBtn = true;
       this.onProfesionalCompleto.emit(this.profesional);
 
       // this.onProfesionalCompleto.emit(this.profesional);

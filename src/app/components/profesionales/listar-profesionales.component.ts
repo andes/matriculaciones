@@ -77,6 +77,9 @@ export class ListarProfesionalesComponent implements OnInit {
   public estaMatriculado;
   public mostrarRestablecer;
   public verDeshabilitado;
+  modalScrollDistance = 2;
+  modalScrollThrottle = 10;
+  public limit = 50;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -91,7 +94,12 @@ export class ListarProfesionalesComponent implements OnInit {
     this.vieneDeListado = true;
     this.hoy = new Date();
     this.estadosMatriculas = Enums.getObjEstadosMatriculas();
+    this._profesionalService.getEstadisticas().subscribe((data) => {
 
+      this.totalProfesionales = data.total;
+      this.totalProfesionalesMatriculados = data.totalMatriculados;
+      this.totalProfesionalesRematriculados = data.totalRematriculados;
+    });
   }
 
   showProfesional(profesional: any) {
@@ -114,12 +122,13 @@ export class ListarProfesionalesComponent implements OnInit {
       bajaMatricula: this.verBajas ? this.verBajas : false,
       rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
       matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
-      habilitado: this.verDeshabilitado
+      habilitado: this.verDeshabilitado,
+      limit: this.limit
 
     })
       .subscribe((data) => {
         this.profesionales = data;
-        this.totalProfesionales = data.length;
+        // this.totalProfesionales = data.length;
         let totalR = 0;
         let totalM = 0;
         for (let _i = 0; _i < this.profesionales.length; _i++) {
@@ -129,15 +138,15 @@ export class ListarProfesionalesComponent implements OnInit {
             totalM += 1;
           }
         }
-        this.totalProfesionalesRematriculados = totalR;
-        this.totalProfesionalesMatriculados = totalM;
+        // this.totalProfesionalesRematriculados = totalR;
+        // this.totalProfesionalesMatriculados = totalM;
 
 
         if (environment.production === true) {
-        this.comprebaVenciomientoGrado();
-        this.comprebaVenciomientoPosGrado();
+          // this.comprebaVenciomientoGrado();
+          // this.comprebaVenciomientoPosGrado();
 
-      }
+        }
 
         // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
       });
@@ -416,6 +425,14 @@ export class ListarProfesionalesComponent implements OnInit {
     }
 
   }
+
+  onModalScrollDown() {
+    this.limit = this.limit + 15;
+    this.buscar();
+    // this.modalTitle = 'updated on ' + (new Date()).toString();
+    // this.modalBody += modalText;
+  }
+
 
 
 }

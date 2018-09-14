@@ -9,7 +9,7 @@ import { Server } from '@andes/shared';
 
 @Injectable()
 export class ProfesionalService extends BaseService {
-    profesionalesURL =  '/core/tm/profesionales/';
+    profesionalesURL = '/core/tm/profesionales/';
     resumenProfesional = '/core/tm/resumen/';
 
     constructor(_http: Http, private server: Server) {
@@ -20,10 +20,10 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.profesionalesURL, { params: params, showError: true });
     }
     getProfesionalFoto(params: any): Observable<any> {
-        return this.server.get(this.profesionalesURL + 'foto/' , {params: params});
+        return this.server.get(this.profesionalesURL + 'foto/', { params: params });
     }
     getProfesionalFirma(params: any): Observable<any> {
-        return this.server.get(this.profesionalesURL + 'firma/' , { params: params, showError: true });
+        return this.server.get(this.profesionalesURL + 'firma/', { params: params, showError: true });
     }
 
     saveProfesional(profesionalModel: any) {
@@ -64,7 +64,7 @@ export class ProfesionalService extends BaseService {
     }
 
     patchProfesional(id: string, cambios): Observable<any> {
-        return this.server.patch(this.profesionalesURL  + id, cambios);
+        return this.server.patch(this.profesionalesURL + id, cambios);
     }
 
 
@@ -72,8 +72,16 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.profesionalesURL + 'matricula/' + idProf);
     }
 
+    getUltimoPosgradoNro() {
+        return this.server.get(this.profesionalesURL + 'ultimoPosgrado');
+    }
+
     getResumenProfesional(params: any): Observable<any> {
         return this.server.get(this.resumenProfesional, { params: params, showError: true });
+    }
+
+    getEstadisticas(): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'estadisticas');
     }
 
 }

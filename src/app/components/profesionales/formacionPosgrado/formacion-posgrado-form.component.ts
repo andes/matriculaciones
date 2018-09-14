@@ -4,7 +4,8 @@ import {
     Component,
     Input,
     Output,
-    EventEmitter } from '@angular/core';
+    EventEmitter
+} from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -23,6 +24,7 @@ import { SIISAService } from './../../../services/siisa.service';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from './../../../services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
+import { ProfesionService } from '../../../services/profesion.service';
 
 @Component({
     selector: 'app-formacion-posgrado-form',
@@ -31,46 +33,50 @@ import { ModalidadesCertificacionService } from '../../../services/modalidadesCe
 export class FormacionPosgradoFormComponent implements OnInit {
     formPosgrado: FormGroup;
     activeAcc = false;
-    profesiones: any[];
+    profesiones: any[] = [];
+    numeroMenor = false;
+    ultimoNumeroMatricula;
+    vencimientoAnio = (new Date()).getUTCFullYear() + 5;
     profesionalP: any = {
 
-            profesion: {
+        profesion: {
+            nombre: null,
+            codigo: null,
+        },
+        institucionFormadora: {
+            nombre: null,
+            codigo: null,
+        },
+        especialidad: {
+            nombre: null,
+            codigo: null,
+        },
+        fechaIngreso: null,
+        fechaEgreso: null,
+        observacion: null,
+        certificacion: {
+            fecha: null,
+            modalidad: {
                 nombre: null,
                 codigo: null,
             },
-            institucionFormadora: {
+            establecimiento: {
                 nombre: null,
                 codigo: null,
             },
-            especialidad: {
-                nombre: null,
-                codigo: null,
-            },
-            fechaIngreso: null,
-            fechaEgreso: null,
-            observacion: null,
-            certificacion: {
-                fecha: null,
-                modalidad: {
-                    nombre: null,
-                    codigo: null,
-                },
-                establecimiento: {
-                    nombre: null,
-                    codigo: null,
-                },
-            },
-            papelesVerificados: false,
-            matriculado: false,
-            revalida: false
-            // matriculacion: [{
-            //     matriculaNumero: null,
-            //     libro: null,
-            //     folio: null,
-            //     inicio: null,
-            //     fin: null,
-            //     revalidacionNumero: null,
-            // }],
+        },
+        papelesVerificados: true,
+        matriculado: true,
+        revalida: false,
+        matriculacion: [{
+            matriculaNumero: null,
+            libro: '',
+            folio: '',
+            inicio: new Date(),
+            notificacionVencimiento: false,
+            fin: new Date(new Date('01/01/2000').setFullYear(this.vencimientoAnio)),
+            revalidacionNumero: 0,
+        }],
     };
 
     @Input() profesional: IProfesional;
@@ -81,23 +87,32 @@ export class FormacionPosgradoFormComponent implements OnInit {
         private _profSrv: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
         private _modalidadesCertificacionService: ModalidadesCertificacionService,
-        private plex: Plex) {}
+        private plex: Plex,
+        private _profesionalService: ProfesionalService,
+    ) { }
 
     ngOnInit() {
         if (this.profesional) {
-            this.profesiones = this.profesional.formacionGrado.map((value) => {
-                return value.profesion;
+            // this.profesiones = this.profesional.formacionGrado.map((value) => {
+            //     return value.profesion;
+            // });
+            this.profesional.formacionGrado.forEach(element => {
+                if ( element.profesion.codigo === 1 || element.profesion.codigo === 2 ) {
+                    this.profesiones.push(element.profesion);
+                  }
             });
+
         }
     }
 
     onSubmit($event, form) {
-        if ($event.formValid) {
-        this.submitPosgrado.emit(this.profesionalP);
-        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+        if ($event.formValid && !this.numeroMenor) {
+            this.profesionalP.matriculacion.revalidacionNumero++;
+            this.submitPosgrado.emit(this.profesionalP);
+            this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
 
 
-       // form.resetForm();
+            // form.resetForm();
         }
     }
 
@@ -121,5 +136,18 @@ export class FormacionPosgradoFormComponent implements OnInit {
 
     loadEstablecimientosCertificadores(event: any) {
         this._siisaSrv.getEstablecimientosCertificadores(null).subscribe(event.callback);
+    }
+
+
+    ultimaMatricula() {
+        this._profesionalService.getUltimoPosgradoNro().subscribe(data => {
+            this.ultimoNumeroMatricula = data;
+            console.log(this.profesionalP.matriculacion[0].matriculaNumero, data);
+            if (this.profesionalP.matriculacion[0].matriculaNumero <= data) {
+                this.numeroMenor = true;
+            } else {
+                this.numeroMenor = false;
+            }
+        });
     }
 }

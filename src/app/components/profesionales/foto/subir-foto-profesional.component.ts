@@ -5,9 +5,10 @@ import {
     Input,
     Output,
     OnChanges,
-    OnInit } from '@angular/core';
-    import { DomSanitizer } from '@angular/platform-browser';
-    import { environment } from '../../../../environments/environment';
+    OnInit
+} from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+import { environment } from '../../../../environments/environment';
 // Plex
 import {
     Plex
@@ -27,6 +28,9 @@ import {
 import {
     AppSettings
 } from './../../../app.settings';
+import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { Subject } from 'rxjs/Subject';
+import { Observable } from 'rxjs/Observable';
 
 @Component({
     selector: 'app-foto-profesional',
@@ -37,7 +41,26 @@ export class SubirFotoProfesionalComponent implements OnInit {
     @Output() onFileUploaded = new EventEmitter();
     @Output() previewImg = new EventEmitter();
     public binaryString = null;
-    private base64textString: String= '';
+    private base64textString: String = '';
+    public showWebcam = true;
+    public allowCameraSwitch = true;
+    public multipleWebcamsAvailable = false;
+    public deviceId: string;
+    public subirFoto = false;
+    public sacarFoto = false;
+    public videoOptions: MediaTrackConstraints = {
+        // width: {ideal: 1024},
+        // height: {ideal: 576}
+    };
+    public errors: WebcamInitError[] = [];
+
+    // latest snapshot
+    public webcamImage: WebcamImage = null;
+    public fotoPreview : any;
+    // webcam snapshot trigger
+    private trigger: Subject<void> = new Subject<void>();
+    // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
+    private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
 
     constructor(public sanitizer: DomSanitizer, private plex: Plex) {
     }
@@ -46,18 +69,19 @@ export class SubirFotoProfesionalComponent implements OnInit {
     handleFileSelect(evt) {
         const files = evt.target.files;
         const file = files[0];
-      if (files && file) {
-          const reader = new FileReader();
-          reader.onload = this._handleReaderLoaded.bind(this);
-          reader.readAsBinaryString(file);
-      }
+        if (files && file) {
+            const reader = new FileReader();
+            reader.onload = this._handleReaderLoaded.bind(this);
+            reader.readAsBinaryString(file);
+        }
     }
     _handleReaderLoaded(readerEvt) {
-       this.binaryString = readerEvt.target.result;
+        this.binaryString = readerEvt.target.result;
 
-              this.base64textString = btoa(this.binaryString);
-              this.previewImg.emit(this.base64textString);
-      }
+        this.base64textString = btoa(this.binaryString);
+        console.log(this.base64textString);
+        this.previewImg.emit(this.base64textString);
+    }
 
     ngOnInit() {
     }
@@ -68,5 +92,54 @@ export class SubirFotoProfesionalComponent implements OnInit {
         this.onFileUploaded.emit(this.base64textString);
     }
 
+
+    public triggerSnapshot(): void {
+        this.trigger.next();
+        console.log( this.trigger.next());
+    }
+
+    public toggleWebcam(): void {
+        this.showWebcam = !this.showWebcam;
+    }
+
+    public handleInitError(error: WebcamInitError): void {
+        this.errors.push(error);
+    }
+
+    public showNextWebcam(directionOrDeviceId: boolean | string): void {
+        // true => move forward through devices
+        // false => move backwards through devices
+        // string => move to device with given deviceId
+        this.nextWebcam.next(directionOrDeviceId);
+    }
+
+    public handleImage(webcamImage: WebcamImage): void {
+        console.info('received webcam image', webcamImage);
+        this.webcamImage = webcamImage;
+        const foto: any = webcamImage;
+        this.fotoPreview = this.sanitizer.bypassSecurityTrustResourceUrl(foto.imageAsDataUrl);
+        const img = this.webcamImage.imageAsDataUrl.substr(23, this.webcamImage.imageAsDataUrl.length);
+        this.base64textString = img;
+        this.sacarFoto = false;
+    }
+
+    public cameraWasSwitched(deviceId: string): void {
+        this.deviceId = deviceId;
+    }
+
+    public get triggerObservable(): Observable<void> {
+        return this.trigger.asObservable();
+
+    }
+
+    public get nextWebcamObservable(): Observable<boolean | string> {
+        return this.nextWebcam.asObservable();
+    }
+
+
+    volverASacar(){
+        this.sacarFoto = true;
+        this.fotoPreview = null;
+    }
 
 }

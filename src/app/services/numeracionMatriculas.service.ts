@@ -44,11 +44,11 @@ export class NumeracionMatriculasService extends BaseService {
         }
 
         if (searchParams.profesion) {
-            parametros.codigo = searchParams.profesion.id;
+            parametros.codigo = searchParams.profesion.codigo;
         }
 
         if (searchParams.especialidad) {
-            parametros.codigoEspecialidad = searchParams.especialidad.id;
+            parametros.codigoEspecialidad = searchParams.especialidad.codigo;
         }
 
 

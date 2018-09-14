@@ -35,6 +35,8 @@ export class TurnosComponent implements OnInit {
     offset = 0;
     limit = 10;
     turnosTotal = null;
+    modalScrollDistance = 2;
+    modalScrollThrottle = 10;
     public hoy = new Date();
 
     constructor(private _turnoService: TurnoService,
@@ -136,10 +138,14 @@ export class TurnosComponent implements OnInit {
         this.turnoElegido = null;
     }
 
-    nextPage() {
-        this.limit += 10;
+    onModalScrollDown() {
+        console.log('acaaaaa');
+        this.limit = this.limit + 15;
         this.buscar();
-    }
+        // this.modalTitle = 'updated on ' + (new Date()).toString();
+        // this.modalBody += modalText;
+      }
+
 
     contadorDeCambiosDni() {
         let contador = 0;
@@ -176,23 +182,23 @@ export class TurnosComponent implements OnInit {
 
                         // tslint:disable-next-line:max-line-length
                         this._profesionalService.getProfesional({ id: resp.data[_i].profesional.idRenovacion }).subscribe((profesional: any) => {
-                            let contactos = resp.data[_i].profesional.contactos;
+                            const contactos = resp.data[_i].profesional.contactos;
 
-                            contactos.forEach(element => {
-                                if (element.tipo === 'celular') {
-                                    tieneCelular = true;
-                                    numeroCelular = Number(element.valor);
-                                }
-                            });
-                            if (resp.data[_i].tipo === 'renovacion') {
-                                contactos = profesional[0].contactos;
-                                contactos.forEach(element => {
-                                    if (element.tipo === 'celular') {
-                                        tieneCelular = true;
-                                        numeroCelular = Number(element.valor);
-                                    }
-                                });
-                            }
+                            // contactos.forEach(element => {
+                            //     if (element.tipo === 'celular') {
+                            //         tieneCelular = true;
+                            //         numeroCelular = Number(element.valor);
+                            //     }
+                            // });
+                            // if (resp.data[_i].tipo === 'renovacion') {
+                            //     contactos = profesional[0].contactos;
+                            //     contactos.forEach(element => {
+                            //         if (element.tipo === 'celular') {
+                            //             tieneCelular = true;
+                            //             numeroCelular = Number(element.valor);
+                            //         }
+                            //     });
+                            // }
                             if (fechaFin.diff(hoy, 'days') <= 3 && tieneCelular === true && resp.data[_i].notificado === false) {
                                 const nombreCompleto = resp.data[_i].profesional.nombreCompleto;
                                 const smsParams = {

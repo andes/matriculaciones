@@ -14,10 +14,10 @@
                     <plex-button type="danger" *ngIf='formacion.matriculacion && formacion.matriculado === true' [disabled]="!motivoBaja" icon="mdi mdi-block-helper"
                         (click)="darDeBaja()"></plex-button>
                 </div>
-                <div class="btn-group float-right" *ngIf='formacion.matriculacion && !formacion.papelesVerificados && formacion.renovacion === true '>
+                <div class="btn-group float-right" *ngIf='formacion.matriculacion && !formacion.papelesVerificados && formacion.renovacion === true && esSupervisor '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
                 </div>
-                <div class="btn-group float-right" *ngIf='!profesional.formacionGrado[index].matriculacion && !profesional.formacionGrado[index].papelesVerificados '>
+                <div class="btn-group float-right" *ngIf='!profesional.formacionGrado[index].matriculacion && !profesional.formacionGrado[index].papelesVerificados && esSupervisor'>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
                 </div>
                 <div *ngIf='formacion.matriculacion'>

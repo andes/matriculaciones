@@ -116,6 +116,10 @@ const COMPS_PROFESIONAL = [
 import { EdadPipe } from './pipes/edad.pipe';
 import { ProfesionalPipe } from './pipes/profesional.pipe';
 import { FechaPipe } from './pipes/fecha.pipe';
+import { SupervisoresComponent } from './components/supervisor/listado-supervisores.component';
+import { TextFilterPipe } from './pipes/textFilter.pipe';
+import { UsuarioService } from './services/usuario.service';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -136,10 +140,12 @@ import { FechaPipe } from './pipes/fecha.pipe';
     EdadPipe,
     ProfesionalPipe,
     FechaPipe,
+    TextFilterPipe,
     SelectOrganizacionComponent,
     COMPS_PROFESIONAL,
     RenovacionesProfesionalComponent,
     ScrollComponent,
+    SupervisoresComponent
   ],
   imports: [
     BrowserModule,
@@ -175,7 +181,8 @@ import { FechaPipe } from './pipes/fecha.pipe';
     NumeracionMatriculasService,
     appRoutingProviders,
     SIISAService,
-    ModalidadesCertificacionService
+    ModalidadesCertificacionService,
+    UsuarioService
   ],
   bootstrap: [AppComponent]
 })

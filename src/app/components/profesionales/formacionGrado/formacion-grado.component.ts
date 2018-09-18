@@ -46,7 +46,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
             .subscribe((respFirma) => {
                 this.tieneFirma = respFirma;
             });
-        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.profesional.id })
+        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.auth.usuario.id })
             .subscribe((respFirmaAdmin) => {
                 this.tieneFirmaAdmin = respFirmaAdmin;
             });
@@ -80,12 +80,12 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                 const img = 'data:image/jpeg;base64,' + resp;
                 this._profesionalService.getProfesionalFirma({ id: this.profesional.id })
                     .subscribe((respFirma) => {
-                        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.profesional.id })
+                        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.auth.usuario.id })
                             .subscribe((respFirmaAdmin) => {
                                 const firma = 'data:image/jpeg;base64,' + respFirma;
                                 const firmaAdmin = {
                                     firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
-                                    administracion: respFirmaAdmin.administracion
+                                    administracion: this.auth.usuario.nombreCompleto
                                 };
                                 const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin);
                                 pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');

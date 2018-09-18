@@ -51,7 +51,7 @@ export class AppComponent {
   private menuList = [];
 
   public checkPermissions(): any {
-    let accessList = [];
+    const accessList = [];
     this.menuList = [];
     if (this.auth.loggedIn()) {
         this.auth.organizaciones().subscribe(data => {
@@ -79,6 +79,11 @@ export class AppComponent {
             label: 'Profesionales',
             icon: 'mdi mdi-account-multiple',
             route: '/listarProfesionales'
+          });
+          accessList.push({
+            label: 'Supervisores',
+            icon: 'mdi mdi-account-multiple',
+            route: '/supervisores'
           });
           accessList.push({
             divider: true

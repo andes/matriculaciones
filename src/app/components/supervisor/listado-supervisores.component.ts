@@ -1,0 +1,170 @@
+import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
+import { Plex } from '@andes/plex/src/lib/core/service';
+// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
+import * as Enums from './../../utils/enumerados';
+import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+
+// Services
+import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
+import { ProfesionService } from './../../services/profesion.service';
+import { SIISAService } from '../../services/siisa.service';
+import { UsuarioService } from '../../services/usuario.service';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ProfesionalService } from '../../services/profesional.service';
+import { Auth } from '@andes/auth';
+
+@Component({
+    selector: 'app-supervisores',
+    templateUrl: 'listado-supervisores.html'
+})
+export class SupervisoresComponent implements OnInit {
+    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    public esSupervisor = false;
+    public users;
+    public userSeleccionado;
+    public binaryString = null;
+    public firmas = null;
+    public indexOrganizacion;
+    public urlFirma = null;
+    public base64textString: String = '';
+    public binaryStringAdmin = null;
+    public urlFirmaAdmin = null;
+    public base64textStringAdmin: String = '';
+    public nombreAdministrativo = '';
+    public firmaAdmin = null;
+    constructor(private _numeracionesService: NumeracionMatriculasService,
+        private _profesionalService: ProfesionalService,
+        private usuarioService: UsuarioService,
+        public sanitizer: DomSanitizer,
+        public auth: Auth) {
+
+
+    }
+
+    ngOnInit() {
+
+        console.log(this.auth.organizacion._id);
+
+    }
+
+    /**
+ * Busca usuario cada vez que el campo de busca cambia su valor
+ */
+    public loadUsuarios() {
+        this.usuarioService.get().subscribe(
+            datos => {
+                this.users = datos;
+
+            }
+        );
+    }
+
+    selectUser(user) {
+        this.userSeleccionado = user;
+        console.log(this.userSeleccionado);
+        this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d._id === this.auth.organizacion._id);
+        console.log(this.indexOrganizacion);
+        const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
+        // const p = organizaciones.permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
+        if (permisoSupervisor) {
+            this.esSupervisor = true;
+        }else{
+            this.esSupervisor = false;
+        }
+        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.userSeleccionado._id }).subscribe(resp => {
+            this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp.firma);
+            this.firmaAdmin = resp.firma;
+            // this.nombreAdministrativo = resp.administracion;
+        });
+    }
+
+
+
+    handleFileSelect(evt) {
+        const files = evt.target.files;
+        const file = files[0];
+        if (files && file) {
+            const reader = new FileReader();
+            reader.onload = this._handleReaderLoaded.bind(this);
+            reader.readAsBinaryString(file);
+        }
+    }
+    _handleReaderLoaded(readerEvt) {
+        this.binaryString = readerEvt.target.result;
+        this.base64textString = btoa(this.binaryString);
+        this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
+    }
+
+    handleFileSelectFirmaAdmin(evt) {
+        const files = evt.target.files;
+        const file = files[0];
+        if (files && file) {
+            const reader = new FileReader();
+            reader.onload = this._handleReaderLoadedFirmaAdmin.bind(this);
+            reader.readAsBinaryString(file);
+        }
+    }
+    _handleReaderLoadedFirmaAdmin(readerEvt) {
+        this.binaryStringAdmin = readerEvt.target.result;
+        this.base64textStringAdmin = btoa(this.binaryStringAdmin);
+        this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textStringAdmin);
+        this.firmaAdmin = true;
+    }
+
+
+    guardarFirmaAdminGrid(oFirma) {
+        const firmaADmin = {
+            'firma': this.base64textStringAdmin,
+            'nombreCompleto': 'asda',
+            'idProfesional': this.userSeleccionado._id
+        };
+        this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
+
+        });
+    }
+
+    modificarPermiso(){
+        console.log(this.indexOrganizacion);
+        if (this.esSupervisor){
+            this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.push('matriculaciones:supervisor:aprobar');
+        }else{
+           const index = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.findIndex(d => d === 'matriculaciones:supervisor:aprobar'); // find index in your array
+            this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.splice(index, 1);
+
+        }
+
+        this.usuarioService.save(this.userSeleccionado).subscribe(data => {
+            console.log(data);
+        });
+        console.log(this.userSeleccionado);
+    }
+
+
+    // upload() {
+    //     this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
+    //     this.onFileUploaded.emit(this.base64textString);
+    //     this.tieneFirma.emit(true);
+    //     this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
+
+    // }
+
+    // uploadFirmaAdmin() {
+    //     let firmaAdministracion = this.base64textStringAdmin;
+    //     if (this.base64textStringAdmin === '') {
+    //         firmaAdministracion = this.firmaAdmin;
+
+    //     }
+
+    //     const administracion = {
+    //         firma: firmaAdministracion,
+    //         nombreCompleto : this.nombreAdministrativo
+    //     };
+    //      this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
+    //      this.onFileUploadedFirmaAdmin.emit(administracion);
+    //     this.tieneFirmaAdmin.emit(true);
+    //     this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + firmaAdministracion);
+    // }
+
+
+}

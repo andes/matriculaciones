@@ -57,6 +57,7 @@ import {
   ISiisa
 } from './../../interfaces/ISiisa';
 import { Auth } from '@andes/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profesional',
@@ -187,7 +188,8 @@ export class ProfesionalComponent implements OnInit {
     private _profesionalService: ProfesionalService,
     private _entidadFormadoraService: EntidadFormadoraService,
     private plex: Plex,
-    public auth: Auth) { }
+    public auth: Auth,
+    private router: Router ) { }
 
   ngOnInit() {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
@@ -264,7 +266,7 @@ export class ProfesionalComponent implements OnInit {
       });
       this.ocultarBtn = true;
       this.onProfesionalCompleto.emit(this.profesional);
-
+      this.router.navigate(['requisitosGenerales']);
       // this.onProfesionalCompleto.emit(this.profesional);
     }
 

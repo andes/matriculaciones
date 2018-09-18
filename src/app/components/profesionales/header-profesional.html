@@ -35,8 +35,8 @@
                 <li class=" badge badge-info">
                     <span class="font-weight-bold">Supervisor</span>
                     <br>
-                    <span *ngIf='supervisor'>{{supervisor}}</span>
-                    <span *ngIf='!supervisor'>No tiene supervisor</span>
+                    <span *ngIf='profesional.supervisor?.nombreCompleto'>{{profesional.supervisor.nombreCompleto}}</span>
+                    <span *ngIf='!profesional.supervisor'>No tiene supervisor</span>
                 </li>
             </ul>
         </div>

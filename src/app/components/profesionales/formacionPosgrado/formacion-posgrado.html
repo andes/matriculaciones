@@ -1,7 +1,7 @@
 <app-formacion-posgrado-form [profesional]="profesional" (submitPosgrado)="saveProfesional($event)"></app-formacion-posgrado-form>
 <!--<hr>-->
 <plex-box *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;">
-    <div *ngIf='formacionPosgrado.especialidad.nombre !== null'> 
+    <div *ngIf='formacionPosgrado.especialidad.nombre !== null'>
         <header>
             <div class="row">
                 <div class="col">
@@ -13,6 +13,10 @@
                     <div class="btn-group float-right">
                         <!-- <plex-button type="danger"                        
                         icon="delete" (click)="confirm(i)" ></plex-button> -->
+                        <span *ngIf="formacionPosgrado.matriculacion !== null" class="badge badge-info">Nro Matricula:
+                            <br> {{ formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].matriculaNumero }}
+                            </span>
+
                         <plex-button *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" type="primary" icon="information-outline" (click)="showPosgrado(i)"></plex-button>
 
                     </div>

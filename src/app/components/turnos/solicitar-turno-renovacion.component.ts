@@ -16,7 +16,7 @@ import { TurnoService } from './../../services/turno.service';
 import { PDFUtils } from './../../utils/PDFUtils';
 import * as Enums from './../../utils/enumerados';
 import { IProfesional } from '../../interfaces/IProfesional';
-import { Params, ActivatedRoute } from '@angular/router';
+import { Params, ActivatedRoute, Router } from '@angular/router';
 
 const jsPDF = require('jspdf');
 
@@ -144,7 +144,8 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     private _profesionalService: ProfesionalService,
     private _entidadFormadoraService: EntidadFormadoraService,
     private _pdfUtils: PDFUtils,
-    private plex: Plex) {
+    private plex: Plex,
+    private router: Router ) {
 
     this.tipoTurno = Enums.TipoTurno.renovacion;
 
@@ -219,15 +220,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   }
 
   onProfesionalCompleto() {
-    // this.profesional.domicilios[0].ubicacion.localidad = ""
-    // this.profesional.domicilios[0].ubicacion.provincia = ""
-    // this.profesional.domicilios[0].ubicacion.pais = ""
-    // this.profesional.domicilios[1].ubicacion.localidad = ""
-    // this.profesional.domicilios[1].ubicacion.provincia = ""
-    // this.profesional.domicilios[1].ubicacion.pais = ""
-    // this.profesional.domicilios[2].ubicacion.localidad = ""
-    // this.profesional.domicilios[2].ubicacion.provincia = ""
-    // this.profesional.domicilios[2].ubicacion.pais = ""
     this._turnosService.saveTurnoSolicitados(this.profesional)
       .subscribe((nuevoProfesional) => {
         if (nuevoProfesional == null) {
@@ -240,6 +232,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             this.saveTurno();
           }
           this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+          this.router.navigate(['requisitosGenerales']);
         }
       });
   }

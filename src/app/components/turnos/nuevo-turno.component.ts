@@ -360,6 +360,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
         this.boxType = 'success';
         this.turnoElegido = true;
         this.onTurnoSeleccionado.emit(this.fechaElegida);
+
     }
 
     confirmSobreTurno() {

@@ -1,39 +1,41 @@
 <plex-box>
     <div class="row">
         <div class="col-6">
-                <div class="page-title">Firma Profesional</div>              
-                <img *ngIf='urlFirma'  [src]="urlFirma" style="width: 300px"/>                
-                <div class="form-group">                                
-                        <div>
-                            <div>
-                                <label for="filePicker">Seleccione una foto:</label><br>
-                                <input type="file" id="filePicker"   accept="image/jpeg"  (change)="handleFileSelect($event)">
-                            </div>
-                        </div>
-                    </div>
-        <div class="col-12">
-                <br>      
-                <plex-button label="Guardar" type="success" (click)="upload()" [disabled]='!binaryString' ></plex-button>
-        </div>
-        </div>
-        <div class="col-6">
-                <div class="page-title">Firma administracion</div>    
-                <img *ngIf='firmaAdmin'  [src]="urlFirmaAdmin" style="width: 300px"/> 
-                <plex-text label="Nombre completo"  [(ngModel)]="nombreAdministrativo" name="nombreAdministrativo">
-                  </plex-text>                               
-            <div class="form-group">                                
+            <div class="page-title">Firma Profesional</div>
+            <img *ngIf='urlFirma' [src]="urlFirma" style="width: 300px" />
+            <div class="form-group">
+                <div>
                     <div>
-                        <div>
-                            <label for="filePicker">Seleccione una foto:</label><br>
-                            <input type="file" id="filePicker"   accept="image/jpeg"  (change)="handleFileSelectFirmaAdmin($event)">
-                        </div>
+                        <label for="filePicker">Seleccione una foto:</label>
+                        <br>
+                        <input type="file" id="filePicker" accept="image/jpeg" (change)="handleFileSelect($event)">
                     </div>
                 </div>
-        <div class="col-12">
-                <br>      
-                <plex-button label="Guardar" type="success" (click)="uploadFirmaAdmin()"  ></plex-button>
+            </div>
+            <div class="col-12">
+                <br>
+                <plex-button label="Guardar" type="success" (click)="upload()" [disabled]='!binaryString'></plex-button>
+            </div>
         </div>
-    </div>
+        <!-- <div class="col-6">
+            <div class="page-title">Firma administracion</div>
+            <img *ngIf='firmaAdmin' [src]="urlFirmaAdmin" style="width: 300px" />
+            <plex-text label="Nombre completo" [(ngModel)]="nombreAdministrativo" name="nombreAdministrativo">
+            </plex-text>
+            <div class="form-group">
+                <div>
+                    <div>
+                        <label for="filePicker">Seleccione una foto:</label>
+                        <br>
+                        <input type="file" id="filePicker" accept="image/jpeg" (change)="handleFileSelectFirmaAdmin($event)">
+                    </div>
+                </div>
+            </div>
+            <div class="col-12">
+                <br>
+                <plex-button label="Guardar" type="success" (click)="uploadFirmaAdmin()"></plex-button>
+            </div>
+        </div> -->
     </div>
     <div class="row">
 

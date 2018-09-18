@@ -9,6 +9,7 @@
             </div>
             <div class="col">
                 <div class="btn-group float-right">
+                    <span  *ngIf="formacionGrado.matriculacion !== null" class="badge badge-info">Nro Matricula: <br> {{ formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].matriculaNumero }} </span>
                     <plex-button *ngIf="!formacionGrado.matriculacion?.matriculacionNumero" type="primary" class="float-right btnGrado" icon="information-outline"
                         (click)="showFormacion(i)"></plex-button>
                     <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado' title="Generar credencial"

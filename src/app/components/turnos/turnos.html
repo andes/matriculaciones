@@ -111,7 +111,7 @@
                                 <label>Apellido y nombre</label>
                                 <h5>
                                     <strong>{{turnoElegido.profesional.apellido + ', '}} </strong>{{turnoElegido.profesional.nombre}}</h5>
-                                <h6 class="text-light">{{turnoElegido.profesional | edad}} | {{'DNI ' + turnoElegido.profesional.documento }}</h6>
+                                <h6 class="text-light"> {{'DNI ' + turnoElegido.profesional.documento }}</h6>
                                 <!--<div class="nombre-profesional">
                                         <span style="font-weight: bold">{{turnoElegido.profesional.apellido + ', '}}</span>{{turnoElegido.profesional.nombre}}
                                     </div>
@@ -132,10 +132,10 @@
                         </div>
                         <hr>
                         <div class="row">
-                            <div class="col-md-12">
+                            <!-- <div class="col-md-12">
                                 <plex-button type="primary" label="Generar Comprobante de Turno" class="pull-right" [disabled]="turnoElegido.sePresento"
                                     (click)="generarComprobante(turnoElegido)"></plex-button>
-                            </div>
+                            </div> -->
                         </div>
 
 

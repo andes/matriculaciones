@@ -12,7 +12,6 @@ export class EdadPipe implements PipeTransform {
         let difAnios: any;
         let difDias: any;
         let difMeses: any;
-        let difD: any;
         let difHs: any;
         let difMn: any;
 

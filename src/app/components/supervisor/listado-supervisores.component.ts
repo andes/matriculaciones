@@ -33,6 +33,7 @@ export class SupervisoresComponent implements OnInit {
     public base64textStringAdmin: String = '';
     public nombreAdministrativo = '';
     public firmaAdmin = null;
+    public textoLibre;
     constructor(
         private _profesionalService: ProfesionalService,
         private usuarioService: UsuarioService,
@@ -70,6 +71,7 @@ export class SupervisoresComponent implements OnInit {
         } else {
 
 
+            // tslint:disable-next-line:max-line-length
             const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
             // const p = organizaciones.permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
             if (permisoSupervisor) {

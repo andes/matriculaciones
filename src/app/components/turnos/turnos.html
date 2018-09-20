@@ -61,7 +61,7 @@
                                         </h6>
                                     </div>
                                     <div class="col-2">
-                                        <h6 class="box-title-elemento badge badge-info">
+                                        <h6 class="box-title-elemento badge " [ngClass]="{'badge-white': isSelected(turno), 'badge-info': !isSelected(turno)}">
                                             {{ turno.tipo }}
                                         </h6>
                                     </div>
@@ -98,7 +98,7 @@
                                 <label>Fecha y hora</label>
                                 <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
                                 <label>Tipo de turno</label>
-                                <h6 class="text-light  badge badge-info">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</h6>
+                                <h6 class="text-light  badge badge-info" >{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</h6>
                                 <br>
                                 <span *ngIf='turnoElegido.sePresento === true;' class="text-light  badge badge-success">Presente</span>
                                 <span *ngIf='turnoElegido.sePresento === false;' class="text-light  badge badge-danger">Ausente</span>

@@ -151,7 +151,7 @@ export class DetalleProfesionalComponent implements OnInit {
         origen: null,
         sanciones: null,
         notas: null,
-        rematriculado: false,
+        rematriculado: 0,
         agenteMatriculador: '',
         OtrosDatos: null,
         idRenovacion: null,

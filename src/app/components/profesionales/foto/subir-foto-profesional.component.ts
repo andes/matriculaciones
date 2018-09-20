@@ -56,7 +56,7 @@ export class SubirFotoProfesionalComponent implements OnInit {
 
     // latest snapshot
     public webcamImage: WebcamImage = null;
-    public fotoPreview : any;
+    public fotoPreview: any;
     // webcam snapshot trigger
     private trigger: Subject<void> = new Subject<void>();
     // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
@@ -77,9 +77,7 @@ export class SubirFotoProfesionalComponent implements OnInit {
     }
     _handleReaderLoaded(readerEvt) {
         this.binaryString = readerEvt.target.result;
-
         this.base64textString = btoa(this.binaryString);
-        console.log(this.base64textString);
         this.previewImg.emit(this.base64textString);
     }
 
@@ -95,7 +93,6 @@ export class SubirFotoProfesionalComponent implements OnInit {
 
     public triggerSnapshot(): void {
         this.trigger.next();
-        console.log( this.trigger.next());
     }
 
     public toggleWebcam(): void {
@@ -114,7 +111,6 @@ export class SubirFotoProfesionalComponent implements OnInit {
     }
 
     public handleImage(webcamImage: WebcamImage): void {
-        console.info('received webcam image', webcamImage);
         this.webcamImage = webcamImage;
         const foto: any = webcamImage;
         this.fotoPreview = this.sanitizer.bypassSecurityTrustResourceUrl(foto.imageAsDataUrl);
@@ -137,7 +133,7 @@ export class SubirFotoProfesionalComponent implements OnInit {
     }
 
 
-    volverASacar(){
+    volverASacar() {
         this.sacarFoto = true;
         this.fotoPreview = null;
     }

@@ -141,7 +141,7 @@ export interface IProfesional {
         anio: Number;
     }];
     notas: String;
-    rematriculado: Boolean;
+    rematriculado: Number;
     agenteMatriculador: String;
     supervisor?: {
         id: String,

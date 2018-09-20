@@ -18,42 +18,52 @@
 
           </div>
 
-          <div class="row">
-            <div class="col-6">
-              <plex-text label="Documento" [(ngModel)]="dni" [autoFocus]="autoFocus" (change)="buscar()" placeholder="escriba un documento">
-              </plex-text>
-            </div>
-            <div class="col-5">
-              <plex-text label="apellido" [(ngModel)]="apellido" (change)="buscar()" placeholder="escriba apellido">
-              </plex-text>
-            </div>
-            <div class="col-1">
-              <button class="btn btn-primary  btnFiltro" (click)='mostrarFiltros()'>
-                <i *ngIf='muestraFiltro === false' class="mdi mdi-chevron-down"></i>
-                <i *ngIf='muestraFiltro === true' class="mdi mdi-chevron-up"></i>
-              </button>
-            </div>
-          </div>
-          <div class="row" *ngIf='muestraFiltro === true'>
-            <div class="col-4">
-              <plex-select label="Matriculas de Profesiones" [(ngModel)]="estado" [data]="estadosMatriculas" (change)="matriculadoGrado()"></plex-select>
-            </div>
-            <div class="col-4">
-              <plex-select label="Matriculas de Especialidades" [(ngModel)]="estadoEspecialidad" [data]="estadosMatriculas" (change)="matriculadoEspecialidad()"></plex-select>
-            </div>
-            <div class="col-2 btnSlide">
-              <plex-bool type="slide" label="Ver bajas de matriculas" [(ngModel)]="verBajas" (change)="buscar()" name="especialidad.activo"></plex-bool>
-              <plex-bool type="slide" label="Deshabilitado" [(ngModel)]="verDeshabilitado" (change)="buscar()" name="especialidad.activo"></plex-bool>
 
+          <form [formGroup]="searchForm">
+            <div class="row">
+              <div class="col-3">
+                <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus" placeholder="escriba un documento">
+                </plex-text>
+              </div>
+              <div class="col-4">
+                <plex-text label="apellido" formControlName="apellido" placeholder="escriba apellido">
+                </plex-text>
+              </div>
+              <div class="col-4">
+                <plex-text label="nombre" formControlName="nombre" placeholder="escriba apellido">
+                </plex-text>
+              </div>
+              <div class="col-1">
+                <button class="btn btn-primary  btnFiltro" (click)='mostrarFiltros()'>
+                  <i *ngIf='muestraFiltro === false' class="mdi mdi-chevron-down"></i>
+                  <i *ngIf='muestraFiltro === true' class="mdi mdi-chevron-up"></i>
+                </button>
+              </div>
             </div>
-          </div>
+
+
+            <div class="row" *ngIf='muestraFiltro === true'>
+              <div class="col-3">
+                <plex-select label="Matriculas de Profesiones" formControlName="estado" [data]="estadosMatriculas"></plex-select>
+              </div>
+              <div class="col-3">
+                <plex-select label="Matriculas de Especialidades" formControlName="estadoEspecialidad" [data]="estadosMatriculas"></plex-select>
+              </div>
+                
+            <div class="col-2 btnSlide">
+              <plex-bool type="slide" label="Ver bajas de matriculas" formControlName="verBajas"  name="especialidad.activo"></plex-bool>
+              <plex-bool type="slide" label="Deshabilitado" formControlName="verDeshabilitado" name="especialidad.activo"></plex-bool>
+
+            </div> 
+            </div>
+          </form>
           <br>
         </header>
 
 
         <div class="row" style='max-height: 100%;
-        overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false"
-        (scrolled)="onModalScrollDown()">
+        overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
+          [scrollWindow]="false" (scrolled)="onModalScrollDown()">
           <div class="col">
             <!--Loader-->
             <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
@@ -62,12 +72,8 @@
               <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
             </div>
             <!--Tabla de resultados por SimpleQuery -->
-            <table *ngIf="profesionales && profesionales.length" class="table table-striped"     
-                      infinite-scroll
-            [infiniteScrollDistance]="modalScrollDistance"
-            [infiniteScrollThrottle]="modalScrollThrottle"
-            [scrollWindow]="false"
-            (scrolled)="onModalScrollDown()">
+            <table *ngIf="profesionales && profesionales.length" class="table table-striped" infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
+              [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
               <thead>
                 <tr>
                   <th></th>
@@ -76,21 +82,17 @@
                   <th>Fecha de Nacimiento</th>
                 </tr>
               </thead>
-              <tbody
-              infinite-scroll
-              [scrollWindow]="false"
-              (scrolled)="onModalScrollDown()"
-              >
+              <tbody infinite-scroll [scrollWindow]="false" (scrolled)="onModalScrollDown()">
                 <tr class="hover" *ngFor="let profesional of profesionales; let i = index" (click)="seleccionar(profesional)">
                   <td *ngIf="profesional.habilitado === true">
                     <div>
-                      <span *ngIf="profesional.rematriculado === true" class="badge badge-danger">
-                        Rematriculado
+                      <span *ngIf="profesional.rematriculado === 1" class="badge badge-info">
+                       RM
                       </span>
                     </div>
                     <div>
-                      <span *ngIf="profesional.rematriculado === false" class="badge badge-success">
-                        Matriculado
+                      <span *ngIf="profesional.rematriculado === 0" class="badge badge-info">
+                        MA
                       </span>
                     </div>
                   </td>
@@ -125,7 +127,8 @@
                           </span>
                         </div>
                         <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
-                          <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null " class="badge badge-warning">
+                          <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null "
+                            class="badge badge-warning">
                             {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
                           </span>
                         </div>

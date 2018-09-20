@@ -6,11 +6,11 @@
                     <h3>Administración de Supervisores</h3>
                 </header>
 
-                <plex-text [(ngModel)]="textoLibre" [autoFocus]="autoFocus" (change)="loadUsuarios()" prefix="<i class='mdi mdi-account-search'></i>"
+                <plex-text [(ngModel)]="textoLibre" (change)="loadUsuarios()" prefix="<i class='mdi mdi-account-search'></i>"
                     placeholder="Buscar por DNI, nombre o apellido">
                 </plex-text>
                 <!--Loader-->
-                <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
+                <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
                 <div *ngIf="users && !users.length" class="alert alert-danger">
                     <i class="mdi mdi-account-alert"></i> El usuario no se ha encontrado
                 </div>

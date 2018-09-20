@@ -27,7 +27,7 @@ export class PDFUtils {
         } else {
             doc.text(firmaAdmin.administracion, 42, 41);
         }
-        doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionGrado[grado].fechaTitulo), 50, 48);
+        doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 50, 48);
         doc.addPage();
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Tecnicatura') {
             doc.setFillColor(255, 0, 0);

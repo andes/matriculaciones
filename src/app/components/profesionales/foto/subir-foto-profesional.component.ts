@@ -41,7 +41,7 @@ export class SubirFotoProfesionalComponent implements OnInit {
     @Output() onFileUploaded = new EventEmitter();
     @Output() previewImg = new EventEmitter();
     public binaryString = null;
-    private base64textString: String = '';
+    public base64textString: String = '';
     public showWebcam = true;
     public allowCameraSwitch = true;
     public multipleWebcamsAvailable = false;

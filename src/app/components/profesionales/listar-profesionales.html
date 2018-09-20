@@ -86,12 +86,12 @@
                 <tr class="hover" *ngFor="let profesional of profesionales; let i = index" (click)="seleccionar(profesional)">
                   <td *ngIf="profesional.habilitado === true">
                     <div>
-                      <span *ngIf="profesional.rematriculado === 1" class="badge badge-info">
+                      <span *ngIf="profesional.rematriculado === 1" class="badge badge-danger">
                        RM
                       </span>
                     </div>
                     <div>
-                      <span *ngIf="profesional.rematriculado === 0" class="badge badge-info">
+                      <span *ngIf="profesional.rematriculado === 0" class="badge badge-success">
                         MA
                       </span>
                     </div>

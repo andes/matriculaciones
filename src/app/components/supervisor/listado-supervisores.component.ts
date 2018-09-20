@@ -33,19 +33,18 @@ export class SupervisoresComponent implements OnInit {
     public base64textStringAdmin: String = '';
     public nombreAdministrativo = '';
     public firmaAdmin = null;
-    constructor(private _numeracionesService: NumeracionMatriculasService,
+    constructor(
         private _profesionalService: ProfesionalService,
         private usuarioService: UsuarioService,
         public sanitizer: DomSanitizer,
-        public auth: Auth) {
+        public auth: Auth,
+        private plex: Plex,
+    ) {
 
 
     }
 
     ngOnInit() {
-
-        console.log(this.auth.organizacion._id);
-
     }
 
     /**
@@ -62,39 +61,30 @@ export class SupervisoresComponent implements OnInit {
 
     selectUser(user) {
         this.userSeleccionado = user;
-        console.log(this.userSeleccionado);
         this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d._id === this.auth.organizacion._id);
+        // tslint:disable-next-line:max-line-length
         console.log(this.indexOrganizacion);
-        const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
-        // const p = organizaciones.permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
-        if (permisoSupervisor) {
-            this.esSupervisor = true;
-        }else{
-            this.esSupervisor = false;
-        }
-        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.userSeleccionado._id }).subscribe(resp => {
-            this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp.firma);
-            this.firmaAdmin = resp.firma;
-            // this.nombreAdministrativo = resp.administracion;
-        });
-    }
+        if (this.indexOrganizacion === -1) {
+            this.plex.alert('Este usuario no esta en la organizacion');
+            this.userSeleccionado = null;
+        } else {
 
 
-
-    handleFileSelect(evt) {
-        const files = evt.target.files;
-        const file = files[0];
-        if (files && file) {
-            const reader = new FileReader();
-            reader.onload = this._handleReaderLoaded.bind(this);
-            reader.readAsBinaryString(file);
+            const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
+            // const p = organizaciones.permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
+            if (permisoSupervisor) {
+                this.esSupervisor = true;
+            } else {
+                this.esSupervisor = false;
+            }
+            this._profesionalService.getProfesionalFirma({ firmaAdmin: this.userSeleccionado._id }).subscribe(resp => {
+                this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp.firma);
+                this.firmaAdmin = resp.firma;
+                // this.nombreAdministrativo = resp.administracion;
+            });
         }
     }
-    _handleReaderLoaded(readerEvt) {
-        this.binaryString = readerEvt.target.result;
-        this.base64textString = btoa(this.binaryString);
-        this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
-    }
+
 
     handleFileSelectFirmaAdmin(evt) {
         const files = evt.target.files;
@@ -117,27 +107,24 @@ export class SupervisoresComponent implements OnInit {
         const firmaADmin = {
             'firma': this.base64textStringAdmin,
             'nombreCompleto': 'asda',
-            'idProfesional': this.userSeleccionado._id
+            'idSupervisor': this.userSeleccionado._id
         };
         this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
-
+            this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
         });
     }
 
-    modificarPermiso(){
-        console.log(this.indexOrganizacion);
-        if (this.esSupervisor){
+    modificarPermiso() {
+        if (this.esSupervisor) {
             this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.push('matriculaciones:supervisor:aprobar');
-        }else{
-           const index = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.findIndex(d => d === 'matriculaciones:supervisor:aprobar'); // find index in your array
+        } else {
+            // tslint:disable-next-line:max-line-length
+            const index = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.findIndex(d => d === 'matriculaciones:supervisor:aprobar'); // find index in your array
             this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.splice(index, 1);
 
         }
-
         this.usuarioService.save(this.userSeleccionado).subscribe(data => {
-            console.log(data);
         });
-        console.log(this.userSeleccionado);
     }
 
 

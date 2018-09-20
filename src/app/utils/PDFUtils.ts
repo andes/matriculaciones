@@ -111,7 +111,7 @@ export class PDFUtils {
         doc.text('CERTIFICA que ' + profesional.nombreCompleto.toUpperCase() + '  - DNI ' + profesional.documento + '', 8, 65);
         doc.text('se encuentra inscripto/a en el Registro Único de Profesionales de la Salud de la Provincia de Neuquén', 8, 70);
         // tslint:disable-next-line:max-line-length
-        doc.text('como ' + grado.profesion.nombre.toUpperCase() + ' bajo la matrícula Nº ' + grado.matriculacion[grado.matriculacion.length - 1].matriculaNumero + ' desde ' + fecha.getDate() + '/' + (fecha.getMonth() + 1) + '/' + fecha.getFullYear() + '.', 8, 75);
+        doc.text('como ' + grado.profesion.nombre.toUpperCase() + ' bajo la matrícula Nº ' + grado.matriculacion[grado.matriculacion.length - 1].matriculaNumero + ' desde ' + fecha.getFullYear() + '.', 8, 75);
         doc.text('A la fecha, no surge de nuestros registros presuntas infracciones emergentes del incumplimiento', 8, 86);
         doc.text('de la Ley Nº 578, y su Decreto Reglamentario Nº 338/78, referidas al citado profesional.', 8, 91);
         doc.setFontStyle('bold');
@@ -233,6 +233,7 @@ export class PDFUtils {
         // completado domicilios
         offsetLoop = 0;
         turno.profesional.domicilios.forEach(domicilio => {
+            // tslint:disable-next-line:max-line-length
             if (domicilio.valor && domicilio.ubicacion && domicilio.ubicacion.provincia && domicilio.ubicacion.localidad && domicilio.ubicacion.pais && domicilio.codigoPostal) {
                 doc.setFontSize(12);
                 doc.text(35, 148 + offsetLoop, domicilio.valor);

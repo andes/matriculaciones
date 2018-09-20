@@ -84,8 +84,7 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
 
 
 
-    mostrarFoto(foto){
-        console.log('aca', foto);
+    mostrarFoto(foto) {
     }
 
 }

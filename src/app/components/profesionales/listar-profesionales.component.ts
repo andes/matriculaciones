@@ -38,6 +38,8 @@ import {
 } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
+import { Subject } from 'rxjs/Subject';
+
 @Component({
   selector: 'app-listar-profesionales',
   templateUrl: 'listar-profesionales.html',
@@ -53,12 +55,14 @@ export class ListarProfesionalesComponent implements OnInit {
   public estadoSeleccionadoG;
   public estadoSeleccionadoE;
   public apellido: string = null;
+  public nombre: string = null;
   public vieneDeListado = null;
   public totalProfesionales = null;
   public estadoEspecialidad: {
     id: null,
     nombre: null
   };
+  $subject: Subject<void> = new Subject<void>();
   public nuevoProfesional = false;
   public totalProfesionalesRematriculados = null;
   public totalProfesionalesMatriculados = null;
@@ -80,22 +84,47 @@ export class ListarProfesionalesComponent implements OnInit {
   modalScrollDistance = 2;
   modalScrollThrottle = 10;
   public limit = 50;
+  searchForm: FormGroup;
+  value;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
     private route: ActivatedRoute,
     private router: Router,
     public auth: Auth,
-    public plex: Plex) { }
+    public plex: Plex,
+    private formBuilder: FormBuilder
+  ) { }
 
   ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      apellido: [''],
+      nombre: [''],
+      documento: [''],
+      estado: '',
+      estadoEspecialidad: '',
+      verBajas: false,
+      verDeshabilitado: false
+    });
+
+    this.searchForm.valueChanges.debounceTime(900).subscribe(
+      (value) => {
+        this.value = value;
+        if (this.value.estado.nombre === 'Todos') {
+          this.value.estado.nombre = '';
+        }
+        if (this.value.estadoEspecialidad.nombre === 'Todos') {
+          this.value.estadoEspecialidad.nombre = '';
+        }
+        this.buscar();
+      });
 
     this.buscar();
     this.vieneDeListado = true;
     this.hoy = new Date();
     this.estadosMatriculas = Enums.getObjEstadosMatriculas();
     this._profesionalService.getEstadisticas().subscribe((data) => {
-
+      console.log(data);
       this.totalProfesionales = data.total;
       this.totalProfesionalesMatriculados = data.totalMatriculados;
       this.totalProfesionalesRematriculados = data.totalRematriculados;
@@ -111,45 +140,47 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   buscar(event?: any) {
+    this.verBajas = this.value ? this.value.verBajas : false;
     this.profesionalElegido = null;
     const doc = this.dni ? this.dni : '';
     const apellidoProf = this.apellido ? this.apellido : '';
     this._profesionalService.getProfesional({
-      documento: doc,
-      apellido: apellidoProf,
-      estado: this.estadoSeleccionadoG,
-      estadoE: this.estadoSeleccionadoE,
-      bajaMatricula: this.verBajas ? this.verBajas : false,
+      documento: this.value ? this.value.documento : '',
+      apellido: this.value ? this.value.apellido : '',
+      nombre: this.value ? this.value.nombre : '',
+      estado: this.value ? this.value.estado.nombre : '',
+      estadoE: this.value ? this.value.estadoEspecialidad.nombre : '',
+      bajaMatricula: this.value ? this.value.verBajas : false,
       rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
       matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
-      habilitado: this.verDeshabilitado,
+      habilitado: this.value ? this.value.verDeshabilitado : false,
+      matriculacion : true,
       limit: this.limit
 
-    })
-      .subscribe((data) => {
-        this.profesionales = data;
-        // this.totalProfesionales = data.length;
-        let totalR = 0;
-        let totalM = 0;
-        for (let _i = 0; _i < this.profesionales.length; _i++) {
-          if (this.profesionales[_i].rematriculado !== false) {
-            totalR += 1;
-          } else {
-            totalM += 1;
-          }
+    }).subscribe((data) => {
+      this.profesionales = data;
+      // this.totalProfesionales = data.length;
+      let totalR = 0;
+      let totalM = 0;
+      for (let _i = 0; _i < this.profesionales.length; _i++) {
+        if (this.profesionales[_i].rematriculado === 1) {
+          totalR += 1;
+        } else {
+          totalM += 1;
         }
-        // this.totalProfesionalesRematriculados = totalR;
-        // this.totalProfesionalesMatriculados = totalM;
+      }
+      // this.totalProfesionalesRematriculados = totalR;
+      // this.totalProfesionalesMatriculados = totalM;
 
 
-        if (environment.production === true) {
-          // this.comprebaVenciomientoGrado();
-          // this.comprebaVenciomientoPosGrado();
+      if (environment.production === true) {
+        // this.comprebaVenciomientoGrado();
+        // this.comprebaVenciomientoPosGrado();
 
-        }
+      }
 
-        // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
-      });
+      // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
+    });
 
 
   }
@@ -405,15 +436,6 @@ export class ListarProfesionalesComponent implements OnInit {
 
   }
 
-  // bajas() {
-  //   this.buscar();
-  // }
-
-
-  // deshabilitados() {
-
-  //   this.buscar();
-  // }
 
   verNuevoProfesional(valor) {
     if (valor === true) {
@@ -429,8 +451,6 @@ export class ListarProfesionalesComponent implements OnInit {
   onModalScrollDown() {
     this.limit = this.limit + 15;
     this.buscar();
-    // this.modalTitle = 'updated on ' + (new Date()).toString();
-    // this.modalBody += modalText;
   }
 
 

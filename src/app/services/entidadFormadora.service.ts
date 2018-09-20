@@ -15,7 +15,7 @@ import { Server } from '@andes/shared';
 export class EntidadFormadoraService extends BaseService {
 
     // private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
-    constructor(_http: Http,private server: Server) {
+    constructor(_http: Http, private server: Server) {
         super(_http);
     }
     getEntidadesFormadoras(): Observable<IEntidadFormadora[]> {

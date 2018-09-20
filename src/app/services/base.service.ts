@@ -26,7 +26,7 @@ import 'rxjs/add/operator/catch';
 export class BaseService {
 
     // URL to web api
-    
+
     protected turnosURL = '/modules/matriculaciones/turnos/';
     protected turnosSolicidatosURL =   '/modules/matriculaciones/turnoSolicitados/';
     protected cambioDniUrl =  '/modules/matriculaciones/cambioDni';  // URL to web api

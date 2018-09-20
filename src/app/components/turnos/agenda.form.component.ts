@@ -49,7 +49,7 @@ export class AgendaFormComponent implements OnInit {
             this.agendas = datos;
             this.agendasDiasHabilitados = datos;
             console.log(datos);
-            if (datos.length > 0){
+            if (datos.length > 0) {
                 this.agendasFeriados = datos[0].fechasExcluidas;
             }
 

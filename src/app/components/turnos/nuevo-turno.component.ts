@@ -190,7 +190,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                         }
                     } else {
                         console.log(i, minutos);
-                        if (minutos === 60){
+                        if (minutos === 60) {
                             minutos = 0;
                             i++;
                         }

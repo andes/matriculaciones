@@ -21,7 +21,6 @@ export interface IProfesional {
         codigo: number;
     };
     sexo: Sexo;
-    estadoCivil: EstadoCivil;
     contactos: [{
         tipo: string;
         valor: string;
@@ -47,6 +46,7 @@ export interface IProfesional {
         fecha: Date;
     }];
     formacionGrado: [{
+        exportadoSisa?: Boolean,
         profesion: {
             nombre: string;
             codigo: number;

@@ -1,4 +1,4 @@
-<plex-box >
+<plex-box>
 
     <div class="row">
         <div class="col-12 text-center">
@@ -29,12 +29,12 @@
                     <div class="col-md-4">
                         <plex-select label="Sexo" [(ngModel)]="profesional.sexo" name="sexo" [data]="sexos" [required]="true"></plex-select>
                     </div>
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                         <plex-select label="Estado Civíl" [(ngModel)]="profesional.estadoCivil" name="estadoCivil" [data]="estadoCivil" [required]="true"></plex-select>
-                    </div>
+                    </div> -->
                     <div class="col-md-4">
-                        <plex-select label="Nacionalidad" [(ngModel)]="profesional.nacionalidad" name="nacionalidad" (getData)="loadPaises()"
-                            [data]="paises" [required]="true"></plex-select>
+                        <plex-select label="Nacionalidad" [(ngModel)]="profesional.nacionalidad" name="nacionalidad" (getData)="loadPaises()" [data]="paises"
+                            [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-datetime type="date" label="Fecha de Nacimiento" [(ngModel)]="profesional.fechaNacimiento" name="fechaNacimiento" [required]="true"></plex-datetime>
@@ -113,55 +113,56 @@
                 </div>
                 <h5>Domicilio {{profesional.domicilios[0].tipo}}</h5>
                 <div class="row">
-                    <div class="col-md-5">
+                    <div class="col-md-12">
                         <plex-text label="Dirección" name="direccionReal" [(ngModel)]="profesional.domicilios[0].valor" [required]="true"></plex-text>
                     </div>
-                    <div class="col-md-6">
-                        <plex-int label="Código Postal" name="codigoPostalReal" [(ngModel)]="profesional.domicilios[0].codigoPostal" [required]="true"></plex-int>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
+
+                    <!-- <div class="col-md-4">
                         <plex-select label="País" name="paisReal" [(ngModel)]="profesional.domicilios[0].ubicacion.pais" [data]="paises" (change)="loadProvincias($event)"
                             [required]="true"></plex-select>
-                    </div>
+                    </div> -->
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provinciaReal" [(ngModel)]="profesional.domicilios[0].ubicacion.provincia" [data]="provincias"
-                            (change)="loadLocalidades($event)" [required]="true"></plex-select>
+                            (change)="loadLocalidadesReal($event)" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
-                        <plex-select label="Localidad" name="localidadReal" [(ngModel)]="profesional.domicilios[0].ubicacion.localidad" [data]="localidades"
-                            [required]="true"></plex-select>
+                        <plex-select label="Localidad" name="localidadReal" (change)='cp($event, 0)' [(ngModel)]="profesional.domicilios[0].ubicacion.localidad" (getData)="loadLocalidadesReal($event)"
+                            [data]="localidadesReal" [required]="true"></plex-select>
+                    </div>
+                    <div class="col-md-2">
+                        <plex-int label="Código Postal" name="codigoPostalReal"   [(ngModel)]="profesional.domicilios[0].codigoPostal" [required]="true"></plex-int>
                     </div>
 
                 </div>
+
             </div>
             <br>
             <div class="col-md-12">
 
                 <h5>Domicilio {{profesional.domicilios[1].tipo}}</h5>
                 <div class="row">
-                    <div class="col-md-5">
-                        <plex-text label="Dirección" name="direccionLegal" [(ngModel)]="profesional.domicilios[1].valor" ></plex-text>
+                    <div class="col-md-12">
+                        <plex-text label="Dirección" name="direccionLegal" [(ngModel)]="profesional.domicilios[1].valor" [required]="true"></plex-text>
                     </div>
-                    <div class="col-md-6">
-                        <plex-int label="Código Postal" name="codigoPostalLegal" [(ngModel)]="profesional.domicilios[1].codigoPostal" ></plex-int>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <plex-select label="País" name="paisLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.pais" [data]="paises" (change)="loadProvincias($event)"
-                            ></plex-select>
 
-                    </div>
+                    <!-- <div class="col-md-4">
+                        <plex-select label="País" [disabled]='true' name="paisLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.pais" [data]="paises" (change)="loadProvincias($event)"
+                        [required]="true" ></plex-select>
+
+                    </div> -->
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provinciaLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.provincia" [data]="provincias"
-                            (change)="loadLocalidades($event)" ></plex-select>
+                            (change)="loadLocalidadesLegal($event)" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
-                        <plex-select label="Localidad" name="localidadLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.localidad" (getData)="loadLocalidades($event)"
-                            [data]="localidades" ></plex-select>
+                        <plex-select label="Localidad" name="localidadLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.localidad" (getData)="loadLocalidadesLegal($event)"
+                            [data]="localidadesLegal" (change)='cp($event, 1)' [required]="true"></plex-select>
                     </div>
+                    <div class="col-md-2">
+                        <plex-int label="Código Postal" name="codigoPostalLegal" [(ngModel)]="profesional.domicilios[1].codigoPostal" [required]="true"
+                            [required]="true"></plex-int>
+                    </div>
+
 
                 </div>
             </div>
@@ -169,25 +170,24 @@
             <div class="col-md-12">
                 <h5>Domicilio {{profesional.domicilios[2].tipo}}</h5>
                 <div class="row">
-                    <div class="col-md-5">
-                        <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor" ></plex-text>
+                    <div class="col-md-12">
+                        <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor" [required]="true"></plex-text>
                     </div>
-                    <div class="col-md-6">
-                        <plex-int label="Código Postal" name="codigoPostal" [(ngModel)]="profesional.domicilios[2].codigoPostal" ></plex-int>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
+
+                    <!-- <div class="col-md-4">
                         <plex-select label="País" name="pais" [(ngModel)]="profesional.domicilios[2].ubicacion.pais" [data]="paises" (change)="loadProvincias($event)"
-                            ></plex-select>
-                    </div>
+                        [required]="true"  ></plex-select>
+                    </div> -->
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provincia" [(ngModel)]="profesional.domicilios[2].ubicacion.provincia" [data]="provincias"
-                            (change)="loadLocalidades($event)" ></plex-select>
+                            (change)="loadLocalidadesProfesional($event)" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
-                        <plex-select label="Localidad" name="localidad" [(ngModel)]="profesional.domicilios[2].ubicacion.localidad" [data]="localidades"
-                            ></plex-select>
+                        <plex-select label="Localidad" name="localidad" [(ngModel)]="profesional.domicilios[2].ubicacion.localidad" [data]="localidadesProfesional"
+                            (getData)="loadLocalidadesProfesional($event)" (change)='cp($event, 2)' [required]="true"></plex-select>
+                    </div>
+                    <div class="col-md-2">
+                        <plex-int label="Código Postal" name="codigoPostal" [(ngModel)]="profesional.domicilios[2].codigoPostal" [required]="true"></plex-int>
                     </div>
 
                 </div>
@@ -232,8 +232,8 @@
                 <div *ngIf="editable === false">
                     <plex-button *ngIf="confirmar == true" type="success" label="Confirmar Datos" (click)="confirmarDatosAdmin($event)" class="pull-right"
                         validateForm="true"></plex-button>
-                    <plex-button *ngIf="confirmar === false && !ocultarBtn" type="success" label="Confirmar Turno" (click)="confirmarDatos($event)" class="pull-right"
-                        validateForm="true"></plex-button>
+                    <plex-button *ngIf="confirmar === false && !ocultarBtn" type="success" label="Confirmar Turno" (click)="confirmarDatos($event)"
+                        class="pull-right" validateForm="true"></plex-button>
                 </div>
                 <plex-button *ngIf="editable === true" type="success" label="Confirmar Datos" (click)="actualizar()" class="pull-right" validateForm="true"></plex-button>
             </div>

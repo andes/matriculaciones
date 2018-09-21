@@ -55,7 +55,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
       codigo: null,
     },
     sexo: undefined,
-    estadoCivil: undefined,
     contactos: [{
       tipo: 'celular',
       valor: '',

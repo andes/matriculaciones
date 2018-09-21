@@ -33,7 +33,7 @@ export class TurnosComponent implements OnInit {
     public solicitudesDeCambio;
     public muestraAusente = false;
     offset = 0;
-    limit = 10;
+    limit = 30;
     turnosTotal = null;
     modalScrollDistance = 2;
     modalScrollThrottle = 10;

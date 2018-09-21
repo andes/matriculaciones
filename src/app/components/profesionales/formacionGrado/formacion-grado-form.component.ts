@@ -34,6 +34,7 @@ export class FormacionGradoFormComponent implements OnInit {
     activeAcc = false;
     profesiones: any[];
     profesionalGrado: any = {
+        exportadoSisa: false,
         profesion: {
           nombre: null,
           tipoDeFormacion: null,

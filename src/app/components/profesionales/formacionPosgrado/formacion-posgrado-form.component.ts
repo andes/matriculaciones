@@ -38,7 +38,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
     ultimoNumeroMatricula;
     vencimientoAnio = (new Date()).getUTCFullYear() + 5;
     profesionalP: any = {
-
+        exportadoSisa: false,
         profesion: {
             nombre: null,
             codigo: null,

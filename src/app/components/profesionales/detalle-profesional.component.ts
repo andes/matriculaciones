@@ -74,7 +74,6 @@ export class DetalleProfesionalComponent implements OnInit {
             codigo: null,
         },
         sexo: undefined,
-        estadoCivil: null,
         contactos: [{
             tipo: 'celular',
             valor: '',

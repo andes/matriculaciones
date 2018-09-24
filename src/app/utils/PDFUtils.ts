@@ -255,7 +255,6 @@ export class PDFUtils {
     }
 
     public comprobanteTurnoRenovacion(turno: any): any {
-        console.log(turno);
         const fechaTurno = new Date(turno.fecha);
 
         const doc = new jsPDF('p', 'mm', 'a4');

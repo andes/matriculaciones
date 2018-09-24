@@ -139,7 +139,6 @@ export class TurnosComponent implements OnInit {
     }
 
     onModalScrollDown() {
-        console.log('acaaaaa');
         this.limit = this.limit + 5;
         this.buscar();
         // this.modalTitle = 'updated on ' + (new Date()).toString();

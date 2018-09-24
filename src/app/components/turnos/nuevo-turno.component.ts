@@ -152,7 +152,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                 if (entradaU === false) {
                     entradaU = true;
                 } else {
-                    console.log('minutosactuales', minutos, minutosFin);
                     if ((i === horaFin) && minutosFin === minutos) {
                         flag = false;
                     } else {
@@ -189,7 +188,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                             }
                         }
                     } else {
-                        console.log(i, minutos);
                         if (minutos === 60) {
                             minutos = 0;
                             i++;

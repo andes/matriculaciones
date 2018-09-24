@@ -235,7 +235,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this.showFoto.emit(this.img64);
         // this.fotoHijo.mostrarFoto(this.img64);
         this._profesionalService.saveProfesional({ imagen: imagenPro }).subscribe(resp => {
-            console.log('tarde', resp);
         });
     }
 
@@ -294,7 +293,6 @@ export class DetalleProfesionalComponent implements OnInit {
     }
 
     guardarGrado(fGrado: any) {
-        console.log(fGrado);
         const cambio = {
             'op': 'updateGrado',
             'data': fGrado,

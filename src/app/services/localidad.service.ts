@@ -20,7 +20,7 @@ export class LocalidadService {
 
     constructor(private server: Server, private http: Http) { }
 
-    getXProvincia(provincia: String){
+    getXProvincia(provincia: String) {
         if (provincia) {
             return this.server.get(this.localidadUrl + '?codigo=' + provincia);
         } else {

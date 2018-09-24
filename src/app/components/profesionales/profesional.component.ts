@@ -349,8 +349,8 @@ export class ProfesionalComponent implements OnInit {
               }
 
               this._localidadService.getXProvincia(localidadValor)
-                .subscribe(resp => {
-                  this.localidadesLegal = resp;
+                .subscribe(resp1 => {
+                  this.localidadesLegal = resp1;
 
                 });
             }
@@ -385,8 +385,8 @@ export class ProfesionalComponent implements OnInit {
                 localidadValor = resp.codigo;
               }
               this._localidadService.getXProvincia(localidadValor)
-                .subscribe(resp => {
-                  this.localidadesReal = resp;
+                .subscribe(resp2 => {
+                  this.localidadesReal = resp2;
 
                 });
 
@@ -405,7 +405,6 @@ export class ProfesionalComponent implements OnInit {
 
   loadLocalidadesProfesional(provincia?) {
     if (provincia.value) {
-      console.log(provincia.value);
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesProfesional = resp;
@@ -424,8 +423,8 @@ export class ProfesionalComponent implements OnInit {
                 localidadValor = resp.codigo;
               }
               this._localidadService.getXProvincia(localidadValor)
-                .subscribe(resp => {
-                  this.localidadesProfesional = resp;
+                .subscribe(resp3 => {
+                  this.localidadesProfesional = resp3;
 
                 });
             }
@@ -438,8 +437,6 @@ export class ProfesionalComponent implements OnInit {
   }
 
   cp(event, i) {
-    console.log(event);
-    console.log(i);
     this.profesional.domicilios[i].codigoPostal = event.value.codigoPostal;
   }
   loadProfesiones(event) {

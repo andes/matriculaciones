@@ -38,9 +38,9 @@ export class AgendaFormComponent implements OnInit {
     public feriadoNuevo;
     @Output() emitAgenda = new EventEmitter();
 
-    constructor( private agendaService: AgendaService, private plex: Plex) {
-            this.feriados  = [];
-         }
+    constructor(private agendaService: AgendaService, private plex: Plex) {
+        this.feriados = [];
+    }
 
 
     ngOnInit() {
@@ -48,7 +48,6 @@ export class AgendaFormComponent implements OnInit {
         this.agendaService.get().subscribe((datos) => {
             this.agendas = datos;
             this.agendasDiasHabilitados = datos;
-            console.log(datos);
             if (datos.length > 0) {
                 this.agendasFeriados = datos[0].fechasExcluidas;
             }
@@ -58,8 +57,8 @@ export class AgendaFormComponent implements OnInit {
             if (this.agendaAmodificar !== null) {
                 this.currentAgenda = this.agendaAmodificar;
                 this.feriados = this.agendaAmodificar.fechasExcluidas;
-               this.agendaAmodificar.fechasExcluidas = null;
-                }
+                this.agendaAmodificar.fechasExcluidas = null;
+            }
 
         });
 
@@ -90,13 +89,13 @@ export class AgendaFormComponent implements OnInit {
 
     guardarConfiguracion($event, form) {
         if ($event.formValid) {
-            this.currentAgenda.fechasExcluidas =  this.feriados;
+            this.currentAgenda.fechasExcluidas = this.feriados;
             this.feriadoNuevo = null;
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
             agendaOperation = this.agendaService.save(this.currentAgenda);
 
-              agendaOperation.subscribe(resultado => {
+            agendaOperation.subscribe(resultado => {
                 this.emitAgenda.emit(this.currentAgenda);
                 this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
             });
@@ -106,9 +105,9 @@ export class AgendaFormComponent implements OnInit {
 
     traeListado() {
         this.agendaService.get().subscribe((datos) => {
-            console.log(datos); });
+        });
     }
 
 
-    }
+}
 

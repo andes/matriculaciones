@@ -209,7 +209,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
   buscar($event) {
     if ($event.formValid) {
-      console.log('entre weon');
       // tslint:disable-next-line:max-line-length
       this._profesionalService.getResumenProfesional({ documento: this.documento, nombre: this.nombre, apellido: this.apellido }).subscribe(resp => {
 

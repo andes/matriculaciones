@@ -97,7 +97,6 @@ export class ProfesionalComponent implements OnInit {
       codigo: null,
     },
     sexo: undefined,
-    estadoCivil: undefined,
     contactos: [{
       tipo: 'celular',
       valor: '',
@@ -112,7 +111,10 @@ export class ProfesionalComponent implements OnInit {
       ubicacion: {
         localidad: '',
         provincia: '',
-        pais: '',
+        pais: {
+          'id': '57f3b5c469fe79a598e6281f',
+          'nombre': 'Argentina'
+        },
       },
       ultimaActualizacion: new Date(),
       activo: true
@@ -124,7 +126,10 @@ export class ProfesionalComponent implements OnInit {
       ubicacion: {
         localidad: null,
         provincia: null,
-        pais: null,
+        pais: {
+          'id': '57f3b5c469fe79a598e6281f',
+          'nombre': 'Argentina'
+        },
       },
       ultimaActualizacion: new Date(),
       activo: true
@@ -136,7 +141,10 @@ export class ProfesionalComponent implements OnInit {
       ubicacion: {
         localidad: null,
         provincia: null,
-        pais: null,
+        pais: {
+          'id': '57f3b5c469fe79a598e6281f',
+          'nombre': 'Argentina'
+        },
       },
       ultimaActualizacion: new Date(),
       activo: true
@@ -145,6 +153,7 @@ export class ProfesionalComponent implements OnInit {
     fotoArchivo: null,
     firmas: null,
     formacionGrado: [{
+      exportadoSisa: null,
       profesion: {
         nombre: null,
         codigo: null,
@@ -189,7 +198,7 @@ export class ProfesionalComponent implements OnInit {
     private _entidadFormadoraService: EntidadFormadoraService,
     private plex: Plex,
     public auth: Auth,
-    private router: Router ) { }
+    private router: Router) { }
 
   ngOnInit() {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
@@ -200,11 +209,10 @@ export class ProfesionalComponent implements OnInit {
     const cargaLocalidad = {
       id: null
     };
-    this.loadLocalidades(cargaLocalidad);
+    // this.loadLocalidades(cargaLocalidad);
     if (this.editable) {
       if (this.profesional.domicilios.length === 0) {
         // para que no tire palos
-        this.estadoCivil = EstadoCivil.otro;
         this.profesional.domicilios = [{
           tipo: 'real',
           valor: null,
@@ -256,9 +264,10 @@ export class ProfesionalComponent implements OnInit {
   confirmarDatos($event) {
     if ($event.formValid) {
       // tslint:disable-next-line:max-line-length
-      this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
+      // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
       // tslint:disable-next-line:max-line-length
+
       this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
@@ -275,8 +284,9 @@ export class ProfesionalComponent implements OnInit {
   confirmarDatosAdmin($event) {
     if ($event.formValid) {
       this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
+      this.profesional.formacionGrado[0].exportadoSisa = false;
       // tslint:disable-next-line:max-line-length
-      this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
+      // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
       // tslint:disable-next-line:max-line-length
       this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
@@ -317,20 +327,118 @@ export class ProfesionalComponent implements OnInit {
       });
   }
 
-  loadLocalidades(provincia?) {
-    let localidadValor = null;
-    console.log(provincia);
+  loadLocalidadesLegal(provincia?) {
     if (provincia.value) {
-      localidadValor = provincia.value.id;
-    }
-    this._localidadService.getXProvincia(localidadValor)
-      .subscribe(resp => {
-        this.localidades = resp;
+      this._localidadService.getXProvincia(provincia.value.codigo)
+        .subscribe(resp => {
+          this.localidadesLegal = resp;
 
-      });
+        });
+    } else {
+      if (this.profesional.domicilios[1].ubicacion.provincia) {
+        this._provinciaService.get({ id: this.profesional.domicilios[1].ubicacion.provincia.id })
+          .subscribe((resp: any) => {
+            if (resp) {
+
+
+              let localidadValor;
+              if (provincia.value) {
+                localidadValor = provincia.value._id;
+              } else {
+                localidadValor = resp.codigo;
+              }
+
+              this._localidadService.getXProvincia(localidadValor)
+                .subscribe(resp1 => {
+                  this.localidadesLegal = resp1;
+
+                });
+            }
+          });
+      } else {
+
+        this.localidadesLegal = [];
+
+
+      }
+
+    }
+
+  }
+  loadLocalidadesReal(provincia?) {
+    if (provincia.value) {
+      this._localidadService.getXProvincia(provincia.value.codigo)
+        .subscribe(resp => {
+          this.localidadesReal = resp;
+
+        });
+    } else {
+      if (this.profesional.domicilios[0].ubicacion.provincia) {
+        this._provinciaService.get({ id: this.profesional.domicilios[0].ubicacion.provincia.id })
+          .subscribe((resp: any) => {
+            if (resp) {
+
+              let localidadValor;
+              if (provincia.value) {
+                localidadValor = provincia.value._id;
+              } else {
+                localidadValor = resp.codigo;
+              }
+              this._localidadService.getXProvincia(localidadValor)
+                .subscribe(resp2 => {
+                  this.localidadesReal = resp2;
+
+                });
+
+            }
+          });
+      } else {
+
+        this.localidadesReal = [];
+
+
+      }
+
+    }
 
   }
 
+  loadLocalidadesProfesional(provincia?) {
+    if (provincia.value) {
+      this._localidadService.getXProvincia(provincia.value.codigo)
+        .subscribe(resp => {
+          this.localidadesProfesional = resp;
+
+        });
+    } else {
+      if (this.profesional.domicilios[2].ubicacion.provincia) {
+        this._provinciaService.get({ id: this.profesional.domicilios[2].ubicacion.provincia.id })
+          .subscribe((resp: any) => {
+            if (resp) {
+
+              let localidadValor;
+              if (provincia.value) {
+                localidadValor = provincia.value._id;
+              } else {
+                localidadValor = resp.codigo;
+              }
+              this._localidadService.getXProvincia(localidadValor)
+                .subscribe(resp3 => {
+                  this.localidadesProfesional = resp3;
+
+                });
+            }
+          });
+      } else {
+        this.localidadesProfesional = [];
+      }
+
+    }
+  }
+
+  cp(event, i) {
+    this.profesional.domicilios[i].codigoPostal = event.value.codigoPostal;
+  }
   loadProfesiones(event) {
     this._profesionService.getProfesiones().subscribe(event.callback);
   }
@@ -376,7 +484,7 @@ export class ProfesionalComponent implements OnInit {
   actualizar() {
     this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
     // tslint:disable-next-line:max-line-length
-    this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
+    // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
     this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
     // tslint:disable-next-line:max-line-length
     this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;

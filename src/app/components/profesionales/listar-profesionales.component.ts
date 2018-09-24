@@ -124,7 +124,6 @@ export class ListarProfesionalesComponent implements OnInit {
     this.hoy = new Date();
     this.estadosMatriculas = Enums.getObjEstadosMatriculas();
     this._profesionalService.getEstadisticas().subscribe((data) => {
-      console.log(data);
       this.totalProfesionales = data.total;
       this.totalProfesionalesMatriculados = data.totalMatriculados;
       this.totalProfesionalesRematriculados = data.totalRematriculados;

@@ -188,9 +188,8 @@ export class PDFUtils {
             doc.setFontSize(12);
             doc.text(20, 148 + offsetLoop, 'Calle:');
             doc.text(20, 154 + offsetLoop, 'C.P.:');
-            doc.text(20, 160 + offsetLoop, 'País:');
-            doc.text(70, 160 + offsetLoop, 'Provincia:');
-            doc.text(130, 160 + offsetLoop, 'Localidad:');
+            doc.text(20, 160 + offsetLoop, 'Provincia:');
+            doc.text(70, 160 + offsetLoop, 'Localidad:');
             doc.setLineWidth(0.5);
             doc.line(20, 162 + offsetLoop, 190, 162 + offsetLoop);
             offsetLoop += 26;
@@ -238,9 +237,8 @@ export class PDFUtils {
                 doc.setFontSize(12);
                 doc.text(35, 148 + offsetLoop, domicilio.valor);
                 doc.text(35, 154 + offsetLoop, domicilio.codigoPostal);
-                doc.text(35, 160 + offsetLoop, domicilio.ubicacion.pais.nombre);
-                doc.text(90, 160 + offsetLoop, domicilio.ubicacion.provincia.nombre);
-                doc.text(150, 160 + offsetLoop, domicilio.ubicacion.localidad.nombre);
+                doc.text(40, 160 + offsetLoop, domicilio.ubicacion.provincia.nombre);
+                doc.text(90, 160 + offsetLoop, domicilio.ubicacion.localidad.nombre);
                 offsetLoop += 26;
             }
         });
@@ -257,7 +255,6 @@ export class PDFUtils {
     }
 
     public comprobanteTurnoRenovacion(turno: any): any {
-        console.log(turno);
         const fechaTurno = new Date(turno.fecha);
 
         const doc = new jsPDF('p', 'mm', 'a4');

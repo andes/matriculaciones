@@ -59,7 +59,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 } else {
                     revNumero = formacion.matriculacion.length;
                 }
-                console.log(formacion);
                 // this._numeracionesService.getOne({ codigoSisaEspecialidad: formacion.especialidad.codigo })
                 //     .subscribe((num) => {
 

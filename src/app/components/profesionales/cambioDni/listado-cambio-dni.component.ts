@@ -95,7 +95,6 @@ export class ListadoCambioDniComponent implements OnInit {
             } else {
                 profesional[0].documento = this.solicitudElegida.dniNuevo;
                 profesional[0].documentoViejo = this.solicitudElegida.dniActual;
-                console.log(profesional[0]);
                 this._profesionalService.putProfesional(profesional[0]).subscribe(newProf => {
                     this.solicitudElegida.atendida = true;
                     this._cambioDniService.saveCambio(this.solicitudElegida).subscribe();

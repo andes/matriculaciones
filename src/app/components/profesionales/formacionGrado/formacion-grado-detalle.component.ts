@@ -71,12 +71,10 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 } else {
                     revNumero = formacion.matriculacion.length;
                 }
-                console.log(formacion.profesion);
                 this._numeracionesService.getOne({ codigoSisa: formacion.profesion.codigo })
                     .subscribe((num) => {
 
                         num = num.data;
-                        console.log(num);
                         if (num.length === 0) {
                             this.plex.alert('No tiene ningun numero de matricula asignado');
                         } else {
@@ -129,7 +127,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
             nombreCompleto: this.auth.usuario.nombreCompleto
         };
         this.profesional.formacionGrado[this.index] = this.formacion;
-        console.log(this.auth);
         this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;

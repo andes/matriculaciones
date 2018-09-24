@@ -64,7 +64,6 @@ export class SupervisoresComponent implements OnInit {
         this.userSeleccionado = user;
         this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d._id === this.auth.organizacion._id);
         // tslint:disable-next-line:max-line-length
-        console.log(this.indexOrganizacion);
         if (this.indexOrganizacion === -1) {
             this.plex.alert('Este usuario no esta en la organizacion');
             this.userSeleccionado = null;

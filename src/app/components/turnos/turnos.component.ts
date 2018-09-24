@@ -33,7 +33,7 @@ export class TurnosComponent implements OnInit {
     public solicitudesDeCambio;
     public muestraAusente = false;
     offset = 0;
-    limit = 10;
+    limit = 30;
     turnosTotal = null;
     modalScrollDistance = 2;
     modalScrollThrottle = 10;
@@ -139,7 +139,6 @@ export class TurnosComponent implements OnInit {
     }
 
     onModalScrollDown() {
-        console.log('acaaaaa');
         this.limit = this.limit + 5;
         this.buscar();
         // this.modalTitle = 'updated on ' + (new Date()).toString();

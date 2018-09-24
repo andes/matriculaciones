@@ -24,8 +24,8 @@ export class ProvinciaService {
 //            .catch(this.handleError); //...errors if any*/
 //    }
 
-   get(params: any): Observable<IProvincia[]> {
-       return this.server.get(this.provinciaUrl);
+   get(params?: any): Observable<IProvincia[]> {
+       return this.server.get(this.provinciaUrl, {params});
    }
 
 //    getXPais(pais: String): Observable<IProvincia[]> {

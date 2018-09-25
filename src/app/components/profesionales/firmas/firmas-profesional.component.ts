@@ -29,6 +29,7 @@ import {
 import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../../../environments/environment';
 import { ProfesionalService } from '../../../services/profesional.service';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 @Component({
     selector: 'app-firmas-profesional',
     templateUrl: 'firmas-profesional.html'
@@ -48,8 +49,9 @@ export class FirmasProfesionalComponent implements OnInit {
     public base64textStringAdmin: String= '';
     public nombreAdministrativo = '';
     public firmaAdmin = null;
+    loading;
 
-    constructor(public sanitizer: DomSanitizer, private plex: Plex, private _profesionalService: ProfesionalService) {
+    constructor( private ng2ImgMax: Ng2ImgMaxService, public sanitizer: DomSanitizer, private plex: Plex, private _profesionalService: ProfesionalService) {
     }
 
     ngOnInit() {
@@ -118,6 +120,24 @@ export class FirmasProfesionalComponent implements OnInit {
          this.onFileUploadedFirmaAdmin.emit(administracion);
         this.tieneFirmaAdmin.emit(true);
         this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + firmaAdministracion);
+    }
+
+    onImageChange(event) {
+        const image = event.target.files[0];
+        if (image){
+            this.loading = true;
+        }
+
+        this.ng2ImgMax.resizeImage(image, 400, 300).subscribe(
+            result => {
+                this.loading = false;
+                const reader = new FileReader();
+                reader.onload = this._handleReaderLoaded.bind(this);
+                reader.readAsBinaryString(result);
+            },
+            error => {
+            }
+        );
     }
 
 }

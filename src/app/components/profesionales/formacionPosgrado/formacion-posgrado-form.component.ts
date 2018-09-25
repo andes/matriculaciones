@@ -142,7 +142,6 @@ export class FormacionPosgradoFormComponent implements OnInit {
     ultimaMatricula() {
         this._profesionalService.getUltimoPosgradoNro().subscribe(data => {
             this.ultimoNumeroMatricula = data;
-            console.log(this.profesionalP.matriculacion[0].matriculaNumero, data);
             if (this.profesionalP.matriculacion[0].matriculaNumero <= data) {
                 this.numeroMenor = true;
             } else {

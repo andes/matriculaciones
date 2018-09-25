@@ -23,7 +23,6 @@ import {
 import {
     IProfesional
 } from './../../../interfaces/IProfesional';
-import { ImageCompress } from 'ngx-image-compress';
 // AppSettings
 import {
     AppSettings

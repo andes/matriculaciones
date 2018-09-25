@@ -120,6 +120,7 @@ import { SupervisoresComponent } from './components/supervisor/listado-superviso
 import { TextFilterPipe } from './pipes/textFilter.pipe';
 import { UsuarioService } from './services/usuario.service';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
+import { Ng2ImgToolsModule } from 'ng2-img-tools';
 @NgModule({
   declarations: [
     AppComponent,
@@ -158,6 +159,7 @@ import { Ng2ImgMaxModule } from 'ng2-img-max';
     InfiniteScrollModule,
     Daterangepicker,
     Ng2ImgMaxModule,
+    Ng2ImgToolsModule,
     ImageUploadModule.forRoot(),
     WebcamModule
 

@@ -13,6 +13,7 @@ import { UsuarioService } from '../../services/usuario.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ProfesionalService } from '../../services/profesional.service';
 import { Auth } from '@andes/auth';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
     selector: 'app-supervisores',
@@ -34,12 +35,14 @@ export class SupervisoresComponent implements OnInit {
     public nombreAdministrativo = '';
     public firmaAdmin = null;
     public textoLibre;
+    public loading;
     constructor(
         private _profesionalService: ProfesionalService,
         private usuarioService: UsuarioService,
         public sanitizer: DomSanitizer,
         public auth: Auth,
         private plex: Plex,
+        private ng2ImgMax: Ng2ImgMaxService
     ) {
 
 
@@ -129,6 +132,8 @@ export class SupervisoresComponent implements OnInit {
     }
 
 
+
+
     // upload() {
     //     this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
     //     this.onFileUploaded.emit(this.base64textString);
@@ -153,6 +158,25 @@ export class SupervisoresComponent implements OnInit {
     //     this.tieneFirmaAdmin.emit(true);
     //     this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + firmaAdministracion);
     // }
+
+
+    onImageChange(event) {
+        const image = event.target.files[0];
+        if (image){
+            this.loading = true;
+        }
+
+        this.ng2ImgMax.resizeImage(image, 400, 300).subscribe(
+            result => {
+                this.loading = false;
+                const reader = new FileReader();
+                reader.onload = this._handleReaderLoadedFirmaAdmin.bind(this);
+                reader.readAsBinaryString(result);
+            },
+            error => {
+            }
+        );
+    }
 
 
 }

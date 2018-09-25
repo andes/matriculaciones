@@ -119,7 +119,7 @@ import { FechaPipe } from './pipes/fecha.pipe';
 import { SupervisoresComponent } from './components/supervisor/listado-supervisores.component';
 import { TextFilterPipe } from './pipes/textFilter.pipe';
 import { UsuarioService } from './services/usuario.service';
-
+import { Ng2ImgMaxModule } from 'ng2-img-max';
 @NgModule({
   declarations: [
     AppComponent,
@@ -157,6 +157,7 @@ import { UsuarioService } from './services/usuario.service';
     FileUploadModule,
     InfiniteScrollModule,
     Daterangepicker,
+    Ng2ImgMaxModule,
     ImageUploadModule.forRoot(),
     WebcamModule
 

@@ -23,7 +23,7 @@ import {
 import {
     IProfesional
 } from './../../../interfaces/IProfesional';
-
+import { ImageCompress } from 'ngx-image-compress';
 // AppSettings
 import {
     AppSettings
@@ -31,6 +31,7 @@ import {
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
+import { Ng2ImgMaxService } from 'ng2-img-max';
 
 @Component({
     selector: 'app-foto-profesional',
@@ -43,6 +44,7 @@ export class SubirFotoProfesionalComponent implements OnInit {
     public binaryString = null;
     public base64textString: String = '';
     public showWebcam = true;
+    public loading;
     public allowCameraSwitch = true;
     public multipleWebcamsAvailable = false;
     public deviceId: string;
@@ -62,7 +64,7 @@ export class SubirFotoProfesionalComponent implements OnInit {
     // switch to next / previous / specific webcam; true/false: forward/backwards, string: deviceId
     private nextWebcam: Subject<boolean | string> = new Subject<boolean | string>();
 
-    constructor(public sanitizer: DomSanitizer, private plex: Plex) {
+    constructor(public sanitizer: DomSanitizer, private plex: Plex, private ng2ImgMax: Ng2ImgMaxService) {
     }
 
 
@@ -136,6 +138,24 @@ export class SubirFotoProfesionalComponent implements OnInit {
     volverASacar() {
         this.sacarFoto = true;
         this.fotoPreview = null;
+    }
+
+    onImageChange(event) {
+        const image = event.target.files[0];
+        if (image){
+            this.loading = true;
+        }
+
+        this.ng2ImgMax.resizeImage(image, 400, 300).subscribe(
+            result => {
+                this.loading = false;
+                const reader = new FileReader();
+                reader.onload = this._handleReaderLoaded.bind(this);
+                reader.readAsBinaryString(result);
+            },
+            error => {
+            }
+        );
     }
 
 }

@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "build:prod": "ng build --env=prod --prod --aot=true"
+    "build:prod": "ng build --env=prod --prod --aot=true --base-href /matriculaciones/"
   },
   "dependencies": {
     "@andes/auth": "^0.3.0",

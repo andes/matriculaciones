@@ -37,7 +37,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   public documento;
   public nombre;
   public apellido;
-  public profEncontrado: any = null;
+  public profEncontrado: any = [];
 
   @Input() public profesional: IProfesional = {
     id: null,
@@ -130,7 +130,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     documentoViejo: null
   };
   public profElegido;
-
+  public noEncontrado = false;
 
 
   constructor(private _formBuilder: FormBuilder,
@@ -144,7 +144,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     private _entidadFormadoraService: EntidadFormadoraService,
     private _pdfUtils: PDFUtils,
     private plex: Plex,
-    private router: Router ) {
+    private router: Router) {
 
     this.tipoTurno = Enums.TipoTurno.renovacion;
 
@@ -187,31 +187,33 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
   saveSobreTurno() {
 
-        this._profesionalService.getProfesional({ id: this.id }).subscribe(
-    (profesional: any) => {
-      profesional[0].idRenovacion =  this.id;
-      profesional[0].id = null;
-      delete profesional[0]._id;
-    this._turnosService.saveTurnoSolicitados(profesional[0])
-      .subscribe((nuevoProfesional) => {
-        this.formTurno = this._formBuilder.group({
-          fecha: this._turnoSeleccionado,
-          tipo: this.tipoTurno,
-          profesional: nuevoProfesional._id
-        });
+    this._profesionalService.getProfesional({ id: this.id }).subscribe(
+      (profesional: any) => {
+        profesional[0].idRenovacion = this.id;
+        profesional[0].id = null;
+        delete profesional[0]._id;
+        this._turnosService.saveTurnoSolicitados(profesional[0])
+          .subscribe((nuevoProfesional) => {
+            this.formTurno = this._formBuilder.group({
+              fecha: this._turnoSeleccionado,
+              tipo: this.tipoTurno,
+              profesional: nuevoProfesional._id
+            });
 
-        this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value})
-          .subscribe(turno => {
+            this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value })
+              .subscribe(turno => {
+              });
           });
       });
-    });
   }
 
   buscar($event) {
     if ($event.formValid) {
       // tslint:disable-next-line:max-line-length
       this._profesionalService.getResumenProfesional({ documento: this.documento, nombre: this.nombre, apellido: this.apellido }).subscribe(resp => {
-
+        if (resp.length === 0) {
+          this.noEncontrado = true;
+        }
         this.profEncontrado = resp;
       });
     }

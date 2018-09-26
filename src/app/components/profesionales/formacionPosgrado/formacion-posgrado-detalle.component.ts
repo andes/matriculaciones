@@ -151,6 +151,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     // }
 
     papelesVerificados() {
+        this.profesional.supervisor = {
+            id: this.auth.usuario.id,
+            nombreCompleto: this.auth.usuario.nombreCompleto
+        };
         this.formacion.papelesVerificados = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;
         this.actualizar();

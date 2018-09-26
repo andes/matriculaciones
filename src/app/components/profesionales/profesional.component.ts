@@ -328,7 +328,7 @@ export class ProfesionalComponent implements OnInit {
   }
 
   loadLocalidadesLegal(provincia?) {
-    if (provincia.value) {
+    if (provincia && provincia.value) {
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesLegal = resp;
@@ -342,7 +342,7 @@ export class ProfesionalComponent implements OnInit {
 
 
               let localidadValor;
-              if (provincia.value) {
+              if (provincia && provincia.value) {
                 localidadValor = provincia.value._id;
               } else {
                 localidadValor = resp.codigo;
@@ -366,7 +366,7 @@ export class ProfesionalComponent implements OnInit {
 
   }
   loadLocalidadesReal(provincia?) {
-    if (provincia.value) {
+    if (provincia && provincia.value) {
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesReal = resp;
@@ -379,7 +379,7 @@ export class ProfesionalComponent implements OnInit {
             if (resp) {
 
               let localidadValor;
-              if (provincia.value) {
+              if (provincia && provincia.value) {
                 localidadValor = provincia.value._id;
               } else {
                 localidadValor = resp.codigo;
@@ -404,7 +404,7 @@ export class ProfesionalComponent implements OnInit {
   }
 
   loadLocalidadesProfesional(provincia?) {
-    if (provincia.value) {
+    if (provincia && provincia.value) {
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesProfesional = resp;
@@ -417,7 +417,7 @@ export class ProfesionalComponent implements OnInit {
             if (resp) {
 
               let localidadValor;
-              if (provincia.value) {
+              if (provincia && provincia.value) {
                 localidadValor = provincia.value._id;
               } else {
                 localidadValor = resp.codigo;
@@ -468,17 +468,19 @@ export class ProfesionalComponent implements OnInit {
   }
 
   completar() {
+    console.log(this.profesional.domicilios[0].ubicacion.localidad);
     this.profesional.domicilios[1].valor = this.profesional.domicilios[0].valor;
     this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;
     this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[1].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
     this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
-
+    this.loadLocalidadesLegal();
     this.profesional.domicilios[2].valor = this.profesional.domicilios[0].valor;
     this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;
     this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
     this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
+    this.loadLocalidadesProfesional();
   }
 
   actualizar() {

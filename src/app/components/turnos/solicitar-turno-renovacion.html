@@ -59,11 +59,11 @@
                             <div class="col-5">
                                 <span>Seleccione sus datos</span>
                                 <ul class="list-group hover">
-                                    <li *ngIf="profEncontrado !== null && profEncontrado.length === 0" class="alert alert-danger">
+                                    <li *ngIf="profEncontrado.length === 0 && noEncontrado" class="alert alert-danger">
                                         <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
                                     </li>
                                     <li class="list-group-item" *ngFor="let prof of profEncontrado; let i = index;" [ngClass]="{'active': isSelected()}" (click)="profesionalEncontrado(profEncontrado[i])">
-                                        <div *ngIf='profEncontrado !== undefined'> {{prof.select}}</div>
+                                        <div *ngIf='profEncontrado.length > 0'> {{prof.select}}</div>
                                     </li>
                                 </ul>
 
@@ -78,7 +78,7 @@
                             <p><span class="text-danger">*</span> ATENCION: si usted realizo un cambio de documento por favor comunicarse con administracion</p>
                         </div>
                         <div class="col-md-6 text-right">
-                            <plex-button type="success" label="Confirmar Datos" (click)="onProfesionalCompleto($event)" class="pull-right" validateForm="true"></plex-button>
+                            <plex-button *ngIf='profEncontrado.length > 0' type="success" label="Confirmar Datos" (click)="onProfesionalCompleto($event)" class="pull-right" validateForm="true"></plex-button>
                         </div>
                     </div>
 

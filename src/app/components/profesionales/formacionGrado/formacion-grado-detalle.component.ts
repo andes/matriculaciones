@@ -37,6 +37,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
     @Output() cerrarDetalle = new EventEmitter();
     public esSupervisor;
     public motivoBaja;
+    edit = false;
     private hoy = null;
     public tieneBajas = false;
     constructor(private _profesionalService: ProfesionalService,

@@ -20,14 +20,14 @@ export class PDFUtils {
             doc.text(/*'UNIV. NAC. DE CORDOBA'*/element, 15, textoEntidad);
             textoEntidad = textoEntidad + 3;
         });
-        doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 28, 28);
+        doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 24, 28);
         doc.addImage(firmaAdmin.firma, 'jpg', 38, 25, 30, 14);
         if (firmaAdmin.administracion === null) {
             doc.text('', 42, 41);
         } else {
             doc.text(firmaAdmin.administracion, 42, 41);
         }
-        doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 50, 48);
+        doc.text(/*'15/07/2010'*/ this.getDateStr(new Date()), 50, 48);
         doc.addPage();
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Tecnicatura') {
             doc.setFillColor(255, 0, 0);
@@ -47,7 +47,7 @@ export class PDFUtils {
         doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
         doc.text('DNI ' + profesional.documento, 43, 28);
         doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
-        doc.text(/*'15/07/2010'*/ this.getDateStr(ultimaRenovacion.inicio), 43, 40);
+        doc.text(/*'15/07/2010'*/ this.getDateStr(new Date()), 43, 40);
         doc.text(/*'29/01/2015'*/ this.getDateStr(ultimaRenovacion.fin), 66, 40);
         doc.addImage(firmaProfesional, 'jpg', 54, 41, 31, 10);
         doc.setFontSize(8);

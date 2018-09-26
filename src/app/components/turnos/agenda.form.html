@@ -27,7 +27,7 @@
                     <div class="col-md-2">
                             <label>&nbsp;</label>
                             
-                            <plex-button label="Agregar Fecha" [disabled]="feriadoNuevo === null" (click)="agregarFeriado()"></plex-button>
+                            <plex-button label="Agregar Fecha" *ngIf='feriadoNuevo' [disabled]="feriadoNuevo === null" (click)="agregarFeriado()"></plex-button>
                         </div>
                 </div>
                 <div class="row">

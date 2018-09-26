@@ -81,6 +81,7 @@ export class AgendaFormComponent implements OnInit {
 
     agregarFeriado() {
         this.feriados.push(this.feriadoNuevo);
+        this.feriadoNuevo = null;
     }
 
     eliminarFeriado(idx: number) {

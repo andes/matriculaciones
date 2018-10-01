@@ -41,8 +41,10 @@
                     <br> Verificados</div>
             </div>
             <div class="col-4" *ngIf='formacionPosgrado.matriculacion.length  > 0 && formacionPosgrado.revalida === false'>
-                <span *ngIf='formacionPosgrado.matriculado === false' class="badge badge-danger"> Matricula
-                    <br> suspendida</span>
+                    <span *ngIf='formacionPosgrado.matriculado === false && hoy <= formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin ' class="badge badge-danger"> Matricula
+                            <br> suspendida</span>
+                <span *ngIf='formacionPosgrado.matriculado === false && hoy >= formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin' class="badge badge-danger"> Matricula
+                    <br> Vencida</span>
                 <span *ngIf='formacionPosgrado.matriculado' class="badge badge-success"> Matriculado</span>
             </div>
             <div class="col-4" *ngIf='formacionPosgrado.matriculacion.length  > 0  && formacionPosgrado.revalida === true'>

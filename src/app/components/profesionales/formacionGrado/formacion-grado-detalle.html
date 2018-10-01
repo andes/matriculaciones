@@ -49,7 +49,6 @@
                             <strong>Título</strong>
                         </label>
                         <div>{{ formacion.titulo }}</div>
-                        <button class="btn btn-success" (click)='edit=true'>Edit</button>
                     </div>
                     <div class="form-group" *ngIf='edit'>
                         <plex-text label="Título" [(ngModel)]="formacion.titulo" name='titulo' [required]="true"></plex-text>
@@ -117,7 +116,7 @@
         <div class="col-12">
 
             <plex-accordion style="color:black !important" >
-                <plex-panel tituloPrincipal="Renovaciones" [active]="false">
+                <plex-panel tituloPrincipal="Gestion" [active]="false">
                     <div class="row">
                         <div class="col-12">
                             <table class="table">

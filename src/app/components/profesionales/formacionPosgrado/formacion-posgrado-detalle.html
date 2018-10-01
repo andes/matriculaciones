@@ -62,7 +62,15 @@
         </div>
         <div class="col-6 form-group">
             <label>Fecha de Egreso</label>
-            <div>{{ formacion.fechaEgreso| date: 'dd/MM/yyyy'}}</div>
+            <div>{{ formacion.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
+        </div>
+        <div *ngIf=' formacion.matriculacion[formacion.matriculacion.length - 1].libro' class="col-6 form-group">
+            <label>Libro</label>
+            <div>{{ formacion.matriculacion[formacion.matriculacion.length - 1].libro}}</div>
+        </div>
+        <div  *ngIf=' formacion.matriculacion[formacion.matriculacion.length - 1].folio' class="col-6 form-group">
+            <label>Folio</label>
+            <div>{{ formacion.matriculacion[formacion.matriculacion.length - 1].folio}}</div>
         </div>
     </div>
     <hr>
@@ -95,7 +103,7 @@
         <div class="col-12">
 
             <plex-accordion style="color:black !important">
-                <plex-panel tituloPrincipal="Renovaciones" [active]="false">
+                <plex-panel tituloPrincipal="Gestion" [active]="false">
                     <div class="row">
                         <div class="col-12">
                             <table class="table">

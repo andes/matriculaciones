@@ -26,11 +26,11 @@
                 </plex-text>
               </div>
               <div class="col-4">
-                <plex-text label="apellido" formControlName="apellido" placeholder="escriba apellido">
+                <plex-text label="apellido" formControlName="apellido" placeholder="escriba el apellido">
                 </plex-text>
               </div>
               <div class="col-4">
-                <plex-text label="nombre" formControlName="nombre" placeholder="escriba apellido">
+                <plex-text label="nombre" formControlName="nombre" placeholder="escriba el nombre">
                 </plex-text>
               </div>
               <div class="col-1">
@@ -122,15 +122,22 @@
                     <div *ngIf='profesional.habilitado === true'>
                       <div *ngIf='verBajas === false'>
                         <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
-                          <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null " class="badge badge-danger">
+                          <span *ngIf="profesionalGrado.matriculado === false  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  " class="badge badge-danger">
                             {{profesionalGrado.profesion.nombre}}: Matricula vencida
                           </span>
+                          <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo" class="badge badge-danger">
+                              {{profesionalGrado.profesion.nombre}}: Matricula suspendida
+                            </span>
                         </div>
                         <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
-                          <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null "
+                          <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
                             class="badge badge-warning">
-                            {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
+                            {{profesionalPosgrado.especialidad.nombre}}: Matricula suspendida
                           </span>
+                          <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy >= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin  "
+                              class="badge badge-warning">
+                              {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
+                            </span>
                         </div>
                       </div>
 

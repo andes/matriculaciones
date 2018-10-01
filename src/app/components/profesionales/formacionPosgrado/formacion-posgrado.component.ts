@@ -35,7 +35,7 @@ export class FormacionPosgradoComponent implements OnInit {
     @Input() profesional: IProfesional;
     @Output() formacionPosgradoSelected = new EventEmitter();
     @Output() updateProfesional = new EventEmitter();
-
+    public hoy;
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
         private _profesionalService: ProfesionalService,
@@ -53,7 +53,7 @@ export class FormacionPosgradoComponent implements OnInit {
     }
 
     ngOnInit() {
-
+        this.hoy = new Date();
     }
 
 

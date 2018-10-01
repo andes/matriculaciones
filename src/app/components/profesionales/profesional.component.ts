@@ -468,7 +468,6 @@ export class ProfesionalComponent implements OnInit {
   }
 
   completar() {
-    console.log(this.profesional.domicilios[0].ubicacion.localidad);
     this.profesional.domicilios[1].valor = this.profesional.domicilios[0].valor;
     this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;
     this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;

@@ -71,8 +71,8 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {
                     matriculaNumero: matriculaNumero,
-                    libro: '',
-                    folio: '',
+                    libro: this.formacion.matriculacion[formacion.matriculacion.length - 1].libro,
+                    folio: this.formacion.matriculacion[formacion.matriculacion.length - 1].folio,
                     inicio: new Date(),
                     notificacionVencimiento: false,
                     fin: new Date(new Date('01/01/2000').setFullYear(vencimientoAnio)),

@@ -20,6 +20,8 @@ import { ProfesionalService } from './../../../services/profesional.service';
 import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
 import { PDFUtils } from '../../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
+import { ProfesionService } from '../../../services/profesion.service';
+import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 
 @Component({
     selector: 'app-formacion-grado',
@@ -34,10 +36,12 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     @Input() tieneFirma = null;
     @Input() tieneFirmaAdmin = null;
     @Output() updateProfesional = new EventEmitter();
+    public edit = false;
+    public formacionSelected;
 
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils, public auth: Auth) { }
+        private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, ) { }
 
     ngOnInit() {
         this.hoy = new Date();
@@ -112,5 +116,19 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     //          }
     //      }
     // }
+
+    actualizar() {
+        const cambio = {
+            'op': 'updateEstadoGrado',
+            'data': this.profesional.formacionGrado
+        };
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+            this.edit = false;
+         });
+    }
+
+    loadEntidadesFormadoras(event) {
+        this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
+    }
 
 }

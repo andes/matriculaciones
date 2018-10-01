@@ -51,6 +51,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.compruebaBajas();
         this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
         // this.esSupervisor = true;
+
+
     }
 
     cerrar() {

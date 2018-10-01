@@ -21,11 +21,17 @@
                             <plex-select label="Institucion Formadora" [(ngModel)]="profesionalP.institucionFormadora" name="institucionFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
                         </div>
                         <div class="col-3">
-                            <plex-datetime type="date" label="Fecha de Ingreso" [(ngModel)]="profesionalP.fechaIngreso" name="fechaIngreso" [required]="true"></plex-datetime>
+                            <plex-datetime type="date" label="Fecha de Ingreso" [(ngModel)]="profesionalP.fechaIngreso" name="fechaIngreso"></plex-datetime>
                         </div>
                         <div class="col-3">
-                            <plex-datetime type="date" label="Fecha de Egreso" [(ngModel)]="profesionalP.fechaEgreso" name="fechaEgreso" [required]="true"></plex-datetime>
-                        </div>                    
+                            <plex-datetime type="date" label="Fecha de Egreso" [(ngModel)]="profesionalP.fechaEgreso" name="fechaEgreso" ></plex-datetime>
+                        </div>     
+                        <div class="col-3">
+                            <plex-text label="Libro" [(ngModel)]="profesionalP.matriculacion[0].libro" name="libro" [required]="true"></plex-text>
+                        </div>   
+                        <div class="col-3">
+                            <plex-text  label="Folio" [(ngModel)]="profesionalP.matriculacion[0].folio" name="folio" [required]="true"></plex-text>
+                        </div>                  
                     </div>
                     <hr>
                     <h4>Certificación</h4>

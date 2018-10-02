@@ -18,8 +18,13 @@
                             <plex-datetime label="Fecha del Título" type="date" [(ngModel)]="profesionalGrado.fechaTitulo" name='fechaTitulo' [required]="true"></plex-datetime>
                         </div>
                         <div class="col-6">
-                            <plex-select label="Institucion Formadora" [(ngModel)]="profesionalGrado.entidadFormadora" name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)"
-                                [required]="true"></plex-select>
+                            <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="profesionalGrado.entidadFormadora"
+                                name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
+                            <plex-text *ngIf="showOtraEntidadFormadora" name='entidad' label="Otra Entidad Formadora" [(ngModel)]="profesionalGrado.entidadFormadora.nombre"
+                                [required]="true"></plex-text>
+                        </div>
+                        <div class="col">
+                            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" name="noPoseDNI"></plex-bool>
                         </div>
                     </div>
 

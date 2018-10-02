@@ -2,47 +2,56 @@
     <plex-panel tituloPrincipal="Nuevo Posgrado" icon="plus-circle-outline" [active]="activeAcc">
         <div class="row">
             <div class="col">
-                <form #posgrado='ngForm' >
+                <form #posgrado='ngForm'>
                     <div class="row">
                         <div class="col-4">
                             <plex-select label="Profesion" [(ngModel)]="profesionalP.profesion" name="profesion" [data]="profesiones" [required]="true"></plex-select>
                         </div>
                         <div class="col-4">
-                            <plex-select label="Especialidad" [(ngModel)]="profesionalP.especialidad" name="especialidad" (getData)="loadEspecialidades($event)" [required]="true"></plex-select>
+                            <plex-select label="Especialidad" [(ngModel)]="profesionalP.especialidad" name="especialidad" (getData)="loadEspecialidades($event)"
+                                [required]="true"></plex-select>
                         </div>
                         <div class="col-4">
-                            <plex-int label="Matricula Nro" (change)='ultimaMatricula()' [(ngModel)]="profesionalP.matriculacion[0].matriculaNumero" name="matriculaNro" [required]="true"></plex-int>
+                            <plex-int label="Matricula Nro" (change)='ultimaMatricula()' [(ngModel)]="profesionalP.matriculacion[0].matriculaNumero"
+                                name="matriculaNro" [required]="true"></plex-int>
                             <!-- <span class="badge badge-info" *ngIf='profesionalP.matriculacion[0].matriculaNumero && !numeroMenor'>Ultimo Nro: {{ultimoNumeroMatricula}}</span> -->
-                            <span class="badge badge-danger" *ngIf='profesionalP.matriculacion[0].matriculaNumero && numeroMenor'>debe ingresar un numero mayor que  {{ultimoNumeroMatricula}} </span>
+                            <span class="badge badge-danger" *ngIf='profesionalP.matriculacion[0].matriculaNumero && numeroMenor'>debe ingresar un numero mayor que {{ultimoNumeroMatricula}} </span>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            <plex-select label="Institucion Formadora" [(ngModel)]="profesionalP.institucionFormadora" name="institucionFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
+                            <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="profesionalP.institucionFormadora"
+                                name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
+                            <plex-text *ngIf="showOtraEntidadFormadora" name='entidad' label="Otra Entidad Formadora" [(ngModel)]="profesionalP.institucionFormadora.nombre"
+                                [required]="true"></plex-text>
+                        </div>
+                        <div class="col">
+                            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" (change)='otraEntidad(profesionalP)'
+                                name="otra"></plex-bool>
                         </div>
                         <div class="col-3">
                             <plex-datetime type="date" label="Fecha de Ingreso" [(ngModel)]="profesionalP.fechaIngreso" name="fechaIngreso"></plex-datetime>
                         </div>
                         <div class="col-3">
-                            <plex-datetime type="date" label="Fecha de Egreso" [(ngModel)]="profesionalP.fechaEgreso" name="fechaEgreso" ></plex-datetime>
-                        </div>     
+                            <plex-datetime type="date" label="Fecha de Egreso" [(ngModel)]="profesionalP.fechaEgreso" name="fechaEgreso"></plex-datetime>
+                        </div>
                         <div class="col-3">
                             <plex-text label="Libro" [(ngModel)]="profesionalP.matriculacion[0].libro" name="libro" [required]="true"></plex-text>
-                        </div>   
+                        </div>
                         <div class="col-3">
-                            <plex-text  label="Folio" [(ngModel)]="profesionalP.matriculacion[0].folio" name="folio" [required]="true"></plex-text>
-                        </div>                  
+                            <plex-text label="Folio" [(ngModel)]="profesionalP.matriculacion[0].folio" name="folio" [required]="true"></plex-text>
+                        </div>
                     </div>
                     <hr>
                     <h4>Certificación</h4>
-                    <div >
+                    <div>
                         <div class="row">
                             <div class="col-4">
-                                <plex-select label="Modalidad" [(ngModel)]="profesionalP.certificacion.modalidad" name="modalidad"  (getData)="loadModalidadesCertificacion($event)" ></plex-select>
+                                <plex-select label="Modalidad" [(ngModel)]="profesionalP.certificacion.modalidad" name="modalidad" (getData)="loadModalidadesCertificacion($event)"></plex-select>
                             </div>
-                            <div class="col-4">
+                            <!-- <div class="col-4">
                                 <plex-select label="Establecimiento Certificador" [(ngModel)]="profesionalP.establecimiento" name="establecimiento" (getData)="loadEstablecimientosCertificadores($event)" ></plex-select>
-                            </div>
+                            </div> -->
                             <div class="col-4">
                                 <plex-datetime type="date" label="Fecha de Certificación" [(ngModel)]="profesionalP.fecha" name="fecha" [required]="true"></plex-datetime>
                             </div>
@@ -50,10 +59,10 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                                <plex-button label="Guardar" type="success" class="float-right" (click)="onSubmit($event,posgrado)" validateForm="true"></plex-button>                       
-                            
+                            <plex-button label="Guardar" type="success" class="float-right" (click)="onSubmit($event,posgrado)" validateForm="true"></plex-button>
+
                         </div>
-                    </div> 
+                    </div>
                 </form>
             </div>
         </div>

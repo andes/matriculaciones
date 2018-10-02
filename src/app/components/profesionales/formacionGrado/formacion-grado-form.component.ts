@@ -33,6 +33,7 @@ export class FormacionGradoFormComponent implements OnInit {
     @Input() profesional: IProfesional;
     activeAcc = false;
     profesiones: any[];
+    public showOtraEntidadFormadora = false;
     profesionalGrado: any = {
         exportadoSisa: false,
         profesion: {

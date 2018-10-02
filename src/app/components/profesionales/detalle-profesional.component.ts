@@ -400,6 +400,11 @@ export class DetalleProfesionalComponent implements OnInit {
         const res = this.profesional.formacionGrado.find(p => p.profesion.codigo === 1 || p.profesion.codigo === 2);
         return res;
     }
+
+    pdf(){
+        const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional);
+        pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+    }
     // generarCredencial() {
 
     //             // this._profesionalService.getCredencial(this.profesional.id)

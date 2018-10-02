@@ -55,8 +55,7 @@
                         <plex-int label="Nº de Documento" [(ngModel)]="profesional.documento" name="documento" [required]="true"></plex-int>
                     </div>
                     <div class="col-md-4">
-                        <plex-datetime type="date" label="Vencimiento del documento" [(ngModel)]="profesional.documentoVencimiento" name="documentoVencimiento"
-                            ></plex-datetime>
+                        <plex-datetime type="date" label="Vencimiento del documento" [(ngModel)]="profesional.documentoVencimiento" name="documentoVencimiento"></plex-datetime>
                     </div>
                 </div>
             </div>
@@ -126,11 +125,11 @@
                             (change)="loadLocalidadesReal($event)" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
-                        <plex-select label="Localidad" name="localidadReal" (change)='cp($event, 0)' [(ngModel)]="profesional.domicilios[0].ubicacion.localidad" (getData)="loadLocalidadesReal($event)"
-                            [data]="localidadesReal" [required]="true"></plex-select>
+                        <plex-select label="Localidad" name="localidadReal" (change)='cp($event, 0)' [(ngModel)]="profesional.domicilios[0].ubicacion.localidad"
+                            (getData)="loadLocalidadesReal($event)" [data]="localidadesReal" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-2">
-                        <plex-int label="Código Postal" name="codigoPostalReal"   [(ngModel)]="profesional.domicilios[0].codigoPostal" [required]="true"></plex-int>
+                        <plex-int label="Código Postal" name="codigoPostalReal" [(ngModel)]="profesional.domicilios[0].codigoPostal" [required]="true"></plex-int>
                     </div>
 
                 </div>
@@ -216,12 +215,15 @@
 
 
                     <div class="col-md-4">
-                        <plex-select label="Entidad Formadora" [(ngModel)]="profesional.formacionGrado[0].entidadFormadora" name='entidadFormadora'
-                            (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)" (getData)="loadEntidadesFormadoras($event)"
+                        <plex-select *ngIf="!showOtraEntidadFormadora" label="Entidad Formadora" [(ngModel)]="profesional.formacionGrado[0].entidadFormadora"
+                            name='entidadFormadora' (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)" (getData)="loadEntidadesFormadoras($event)"
                             [required]="true"></plex-select>
+                        <plex-text *ngIf="showOtraEntidadFormadora" name='otraEntidad' label="Otra Entidad Formadora" [(ngModel)]="profesional.formacionGrado[0].entidadFormadora.nombre"
+                            [required]="true"></plex-text>
                     </div>
-                    <div class="col-md-4" *ngIf="showOtraEntidadFormadora">
-                        <plex-text label="Otra Entidad Formadora" formControlName="otraEntidadFormadora" [required]="true"></plex-text>
+                    <div class="col">
+                        <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" (change)='otraEntidad(profesional.formacionGrado[0])'
+                            name="otra"></plex-bool>
                     </div>
                 </div>
             </div>

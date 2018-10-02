@@ -36,6 +36,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
     profesiones: any[] = [];
     numeroMenor = false;
     ultimoNumeroMatricula;
+    public showOtraEntidadFormadora = false;
     vencimientoAnio = (new Date()).getUTCFullYear() + 5;
     profesionalP: any = {
         exportadoSisa: false,
@@ -148,5 +149,12 @@ export class FormacionPosgradoFormComponent implements OnInit {
                 this.numeroMenor = false;
             }
         });
+    }
+
+    otraEntidad(f){
+        f.institucionFormadora = {
+            nombre: null,
+            codigo: null
+        };
     }
 }

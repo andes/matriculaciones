@@ -36,6 +36,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     @Input() tieneFirma = null;
     @Input() tieneFirmaAdmin = null;
     @Output() updateProfesional = new EventEmitter();
+    public showOtraEntidadFormadora = false; ;
     public edit = false;
     public formacionSelected;
 
@@ -129,6 +130,13 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     loadEntidadesFormadoras(event) {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
+    }
+
+    otraEntidad(f){
+        f.entidadFormadora = {
+            nombre: null,
+            codigo: null
+        };
     }
 
 }

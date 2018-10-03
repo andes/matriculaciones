@@ -11,8 +11,12 @@
                     <plex-button type="primary" icon="mdi mdi-plus" title="Agregar nueva matricula" *ngIf=' this.profesional.formacionGrado[index].matriculado === false'
                         (click)="matricularProfesional(formacion,false)"></plex-button>
                     <!--</plex-tooltip>-->
+
+                    <plex-button type="success" *ngIf='formacion.matriculacion && formacion.matriculado === true' icon="mdi mdi-calendar-check"
+                        (click)="renovarAntesVencimiento()"></plex-button>
                     <plex-button type="danger" *ngIf='formacion.matriculacion && formacion.matriculado === true' [disabled]="!motivoBaja" icon="mdi mdi-block-helper"
                         (click)="darDeBaja()"></plex-button>
+
                 </div>
                 <div class="btn-group float-right" *ngIf='formacion.matriculacion && !formacion.papelesVerificados && formacion.renovacion === true && esSupervisor '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
@@ -31,7 +35,7 @@
         <div class="col-12">
             <div class="row" *ngIf="formacion.matriculacion && formacion.matriculacion.length > 0">
                 <div class="col-12 text-center">
-                    <div class="form-group badge badge-info ">
+                    <div class="form-group badge badge-white ">
                         <label>
                             <strong>Ultima matrícula</strong>
                         </label>
@@ -52,7 +56,7 @@
                     </div>
                     <div class="form-group" *ngIf='edit'>
                         <plex-text label="Título" [(ngModel)]="formacion.titulo" name='titulo' [required]="true"></plex-text>
-                        <plex-button type="success"  icon="mdi mdi-check" (click)='actualizar();edit = false' ></plex-button>
+                        <plex-button type="success" icon="mdi mdi-check" (click)='actualizar();edit = false'></plex-button>
 
                     </div>
                 </div>
@@ -115,7 +119,7 @@
     <div class="row">
         <div class="col-12">
 
-            <plex-accordion style="color:black !important" >
+            <plex-accordion style="color:black !important">
                 <plex-panel tituloPrincipal="Gestion" [active]="false">
                     <div class="row">
                         <div class="col-12">
@@ -150,8 +154,8 @@
                                 <th>Motivo</th>
                                 <th>Fecha</th>
                             </thead>
-                            <tbody >
-                                <tr *ngFor="let matriculacion of formacion.matriculacion" >
+                            <tbody>
+                                <tr *ngFor="let matriculacion of formacion.matriculacion">
                                     <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.matriculaNumero }}</td>
                                     <td *ngIf='matriculacion.baja.motivo !== ""'> {{ matriculacion.baja?.motivo }}</td>
                                     <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja?.fecha | fecha }}</td>
@@ -163,6 +167,8 @@
             </plex-accordion>
         </div>
     </div>
-    <br><br><hr>
+    <br>
+    <br>
+    <hr>
     <plex-button class="float-right" type="danger" label='Cerrar' (click)="cerrar()"></plex-button>
 </plex-box>

@@ -4,7 +4,8 @@ import {
     Component,
     Input,
     Output,
-    EventEmitter } from '@angular/core';
+    EventEmitter
+} from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -37,13 +38,13 @@ export class FormacionGradoFormComponent implements OnInit {
     profesionalGrado: any = {
         exportadoSisa: false,
         profesion: {
-          nombre: null,
-          tipoDeFormacion: null,
-          codigo: null,
+            nombre: null,
+            tipoDeFormacion: null,
+            codigo: null,
         },
         entidadFormadora: {
-          nombre: null,
-          codigo: null,
+            nombre: null,
+            codigo: null,
         },
         titulo: null,
         fechaEgreso: null,
@@ -51,15 +52,15 @@ export class FormacionGradoFormComponent implements OnInit {
         renovacion: false,
         papelesVerificados: false,
         matriculacion: null,
-      };
-            // matriculacion: [{
-            //     matriculaNumero: null,
-            //     libro: null,
-            //     folio: null,
-            //     inicio: null,
-            //     fin: null,
-            //     revalidacionNumero: null,
-            // }],
+    };
+    // matriculacion: [{
+    //     matriculaNumero: null,
+    //     libro: null,
+    //     folio: null,
+    //     inicio: null,
+    //     fin: null,
+    //     revalidacionNumero: null,
+    // }],
 
 
     @Output() submitGrado = new EventEmitter();
@@ -69,7 +70,7 @@ export class FormacionGradoFormComponent implements OnInit {
         private _profSrv: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
         private plex: Plex,
-       private _profesionService: ProfesionService, private _profesionalService: ProfesionalService, ) {}
+        private _profesionService: ProfesionService, private _profesionalService: ProfesionalService, ) { }
 
     ngOnInit() {
         if (this.profesional) {
@@ -81,9 +82,9 @@ export class FormacionGradoFormComponent implements OnInit {
 
     onSubmit($event, form) {
         if ($event.formValid) {
-        this.submitGrado.emit(this.profesionalGrado);
-        this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
-        // form.reset();
+            this.submitGrado.emit(this.profesionalGrado);
+            this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
+            // form.reset();
         }
 
     }
@@ -95,5 +96,13 @@ export class FormacionGradoFormComponent implements OnInit {
 
     loadProfesiones(event) {
         this._profesionService.getProfesiones().subscribe(event.callback);
-      }
+    }
+
+
+    otraEntidad(f) {
+        f.entidadFormadora = {
+            nombre: null,
+            codigo: null
+        };
+    }
 }

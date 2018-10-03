@@ -12,7 +12,7 @@
               <div class="float-right">
                 <!-- <plex-button type="primary " icon="mdi mdi-account-plus" (click)="verNuevoProfesional(true)"></plex-button> -->
                 <plex-button type="primary" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>
-                <!-- <plex-button type="primary  " icon="mdi mdi-timetable" label='Sobre Turno' routerLink="/sobreTurnoMatriculacion"></plex-button> -->
+                <plex-button type="primary  " icon="mdi mdi-timetable" label='Nuevo Profesional' (click)='nuevoProfesional = true;confirmar = true'></plex-button>
               </div>
             </div>
 
@@ -300,8 +300,7 @@
     </div>
   </div>
 </section>
-<app-profesional *ngIf="nuevoProfesional === true" [confirmar]='confirmar'></app-profesional>
-
+<app-profesional *ngIf="nuevoProfesional === true" [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
 <footer>
   <plex-button *ngIf="nuevoProfesional === false" label="Volver" type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
   <plex-button *ngIf="nuevoProfesional === true" label="Volver" type="danger" (click)="verNuevoProfesional(false)" icon="arrow-left-bold"></plex-button>

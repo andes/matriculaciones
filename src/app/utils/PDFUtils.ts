@@ -3,7 +3,7 @@ const jsPDF = require('jspdf');
 
 export class PDFUtils {
 
-    public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin): any {
+    public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin, profesion): any {
         // tslint:disable-next-line:max-line-length
         const ultimaRenovacion = profesional.formacionGrado[grado].matriculacion[profesional.formacionGrado[grado].matriculacion.length - 1];
 
@@ -38,10 +38,10 @@ export class PDFUtils {
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Auxiliarato') {
             doc.setFillColor(62, 37, 215);
         }
-
+        const nombreProf =  profesion.nomenclador + ' ' + profesion.nombre;
         doc.rect(9, 9, 30, 30, 'F');
         doc.addImage(fotoProfesional, 10, 10, 28, 28);
-        doc.text(/*'BO TEC. EN LABORATORIO'*/profesional.formacionGrado[grado].profesion.nombre, 43, 13);
+        doc.text(/*'BO TEC. EN LABORATORIO'*/ nombreProf.toUpperCase() , 43, 13);
         doc.text(/*'PINO'*/profesional.apellido, 43, 18);
         doc.text(/*'JORGE PABLO'*/profesional.nombre, 43, 23);
         doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
@@ -173,17 +173,19 @@ export class PDFUtils {
         // Domicilios
         let offsetLoop = 0;
         turno.domicilios.forEach(domicilio => {
-            doc.setFontSize(14);
-            doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
-            doc.line(20, 143 + offsetLoop, 190, 143 + offsetLoop);
-            doc.setFontSize(12);
-            doc.text(20, 148 + offsetLoop, 'Calle:');
-            doc.text(20, 154 + offsetLoop, 'C.P.:');
-            doc.text(20, 160 + offsetLoop, 'Provincia:');
-            doc.text(70, 160 + offsetLoop, 'Localidad:');
-            doc.setLineWidth(0.5);
-            doc.line(20, 162 + offsetLoop, 190, 162 + offsetLoop);
-            offsetLoop += 26;
+            if (domicilio.valor && domicilio.ubicacion && domicilio.ubicacion.provincia && domicilio.ubicacion.localidad && domicilio.ubicacion.pais && domicilio.codigoPostal) {
+                doc.setFontSize(14);
+                doc.text(20, 141 + offsetLoop, 'Domicilio ' + domicilio.tipo);
+                doc.line(20, 143 + offsetLoop, 190, 143 + offsetLoop);
+                doc.setFontSize(12);
+                doc.text(20, 148 + offsetLoop, 'Calle:');
+                doc.text(20, 154 + offsetLoop, 'C.P.:');
+                doc.text(20, 160 + offsetLoop, 'Provincia:');
+                doc.text(70, 160 + offsetLoop, 'Localidad:');
+                doc.setLineWidth(0.5);
+                doc.line(20, 162 + offsetLoop, 190, 162 + offsetLoop);
+                offsetLoop += 26;
+            }
         });
 
         // Contacto
@@ -214,11 +216,10 @@ export class PDFUtils {
         doc.text(65, 89, turno.lugarNacimiento);
         doc.text(65, 95, turno.sexo);
         doc.text(65, 101, turno.nacionalidad.nombre);
-
         doc.text(65, 111, turno.formacionGrado[0].profesion.nombre);
         doc.text(65, 117, turno.formacionGrado[0].titulo);
         doc.text(65, 123, turno.formacionGrado[0].entidadFormadora.nombre);
-        doc.text(65, 129, this.getSimpleFormatedDate(turno.formacionGrado[0].fechaTitulo));
+        doc.text(65, 129, this.getSimpleFormatedDate(turno.formacionGrado[0].fechaEgreso));
 
         // completado domicilios
         offsetLoop = 0;
@@ -237,7 +238,7 @@ export class PDFUtils {
         // Completado contactos
         offsetLoop = 0;
         turno.contactos.forEach(contacto => {
-            doc.text(50, 225 + offsetLoop, contacto.valor);
+            doc.text(50, 225 + offsetLoop, contacto.valor.toString());
             offsetLoop += 6;
         });
 
@@ -363,7 +364,7 @@ export class PDFUtils {
         // Completado contactos
         offsetLoop = 0;
         turno.profesional.contactos.forEach(contacto => {
-            doc.text(50, 225 + offsetLoop, contacto.valor);
+            doc.text(50, 225 + offsetLoop, contacto.valor.toString());
             offsetLoop += 6;
         });
 

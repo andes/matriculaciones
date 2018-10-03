@@ -4,7 +4,8 @@ import {
     OnInit,
     Input,
     Output,
-    EventEmitter } from '@angular/core';
+    EventEmitter
+} from '@angular/core';
 import {
     FormBuilder,
     FormGroup,
@@ -51,7 +52,7 @@ export class FormacionPosgradoComponent implements OnInit {
         private _profesionalService: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
         private _modalidadesCertificacionService: ModalidadesCertificacionService,
-        private plex: Plex) {}
+        private plex: Plex) { }
 
     saveProfesional(formacionPosgradoEntrante: any) {
         if (this.profesional.formacionPosgrado) {
@@ -77,8 +78,8 @@ export class FormacionPosgradoComponent implements OnInit {
 
 
     borrarPosgrado(i) {
-         this.profesional.formacionPosgrado.splice(i, 1);
-         this.updateProfesional.emit(this.profesional);
+        this.profesional.formacionPosgrado.splice(i, 1);
+        this.updateProfesional.emit(this.profesional);
     }
 
 
@@ -94,23 +95,25 @@ export class FormacionPosgradoComponent implements OnInit {
     confirm(i) {
         this.plex.confirm('¿Desea eliminar?').then((resultado) => {
             if (resultado) {
-            this.borrarPosgrado(i);
+                this.borrarPosgrado(i);
             }
         });
     }
 
-    guardar(){
-        this.formacionSelected.certificacion = this.certificacion;
-        const cambio = {
-            'op': 'updateEstadoPosGrado',
-            'data': this.profesional.formacionPosgrado
-        };
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-            this.edit = false;
-         });
+    guardar(event) {
+        if (event.formValid) {
+            this.formacionSelected.certificacion = this.certificacion;
+            const cambio = {
+                'op': 'updateEstadoPosGrado',
+                'data': this.profesional.formacionPosgrado
+            };
+            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+                this.edit = false;
+            });
+        }
     }
 
-    otraEntidad(f){
+    otraEntidad(f) {
         f.institucionFormadora = {
             nombre: null,
             codigo: null

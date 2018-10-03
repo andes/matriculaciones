@@ -167,10 +167,20 @@
             </div>
             <br>
             <div class="col-md-12">
-                <h5>Domicilio {{profesional.domicilios[2].tipo}}</h5>
                 <div class="row">
+                    <div class="col-md-2">
+                        <h5 *ngIf='!noPoseedomicilioProfesional'>Domicilio {{profesional.domicilios[2].tipo}}</h5>
+
+                    </div>
+                    <div class="col-md-10" [ngClass]="{'text-right':noPoseedomicilioProfesional}">
+                        <plex-bool [(ngModel)]="noPoseedomicilioProfesional" (change)='limpiarDomProfesional()' label="no poseo domicilio profesional"
+                            name="noPoseDNI"></plex-bool>
+                    </div>
+
+                </div>
+                <div class="row" *ngIf='!noPoseedomicilioProfesional'>
                     <div class="col-md-12">
-                        <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor" [required]="true"></plex-text>
+                        <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor"></plex-text>
                     </div>
 
                     <!-- <div class="col-md-4">
@@ -179,14 +189,14 @@
                     </div> -->
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provincia" [(ngModel)]="profesional.domicilios[2].ubicacion.provincia" [data]="provincias"
-                            (change)="loadLocalidadesProfesional($event)" [required]="true"></plex-select>
+                            (change)="loadLocalidadesProfesional($event)"></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Localidad" name="localidad" [(ngModel)]="profesional.domicilios[2].ubicacion.localidad" [data]="localidadesProfesional"
-                            (getData)="loadLocalidadesProfesional($event)" (change)='cp($event, 2)' [required]="true"></plex-select>
+                            (getData)="loadLocalidadesProfesional($event)" (change)='cp($event, 2)'></plex-select>
                     </div>
                     <div class="col-md-2">
-                        <plex-int label="Código Postal" name="codigoPostal" [(ngModel)]="profesional.domicilios[2].codigoPostal" [required]="true"></plex-int>
+                        <plex-int label="Código Postal" name="codigoPostal" [(ngModel)]="profesional.domicilios[2].codigoPostal"></plex-int>
                     </div>
 
                 </div>

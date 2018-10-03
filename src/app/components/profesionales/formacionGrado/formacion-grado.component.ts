@@ -93,12 +93,8 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                                     firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
                                     administracion: this.auth.usuario.nombreCompleto
                                 };
-                                console.log(this.profesional.formacionGrado[grado].profesion.codigo);
                                 this._profesionService.getProfesiones().subscribe(datos => {
-
                                     const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
-                                    console.log(seleccionado);
-
                                     const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0]);
                                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
                                     // this.loading = false;
@@ -145,6 +141,16 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
             nombre: null,
             codigo: null
         };
+    }
+
+    editar(formacionGrado) {
+        this.edit = true;
+        this.formacionSelected = formacionGrado;
+        if (this.formacionSelected.entidadFormadora.codigo === null) {
+            this.showOtraEntidadFormadora = true;
+        } else {
+            this.showOtraEntidadFormadora = false;
+        }
     }
 
 }

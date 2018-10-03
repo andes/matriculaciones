@@ -80,7 +80,7 @@ export class ProfesionalComponent implements OnInit {
   @Output() editado = new EventEmitter();
   public noPoseedomicilioProfesional = false;
   // public estadosCiviles: any[];
-  public showOtraEntidadFormadora: Boolean = false;
+  @Input() showOtraEntidadFormadora: Boolean = false;
   @Input() public profesional: IProfesional = {
     id: null,
     habilitado: true,
@@ -253,6 +253,15 @@ export class ProfesionalComponent implements OnInit {
         ];
       }
     }
+console.log(this.profesional);
+    if (this.confirmar) {
+      if (this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
+        this.showOtraEntidadFormadora = true;
+      } else {
+        this.showOtraEntidadFormadora = false;
+      }
+    }
+
   }
 
 
@@ -513,8 +522,8 @@ export class ProfesionalComponent implements OnInit {
     };
   }
 
-  limpiarDomProfesional(){
-    this.profesional.domicilios[2] =  {
+  limpiarDomProfesional() {
+    this.profesional.domicilios[2] = {
       tipo: 'profesional',
       valor: null,
       codigoPostal: null,

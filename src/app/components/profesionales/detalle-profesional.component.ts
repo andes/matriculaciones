@@ -159,7 +159,7 @@ export class DetalleProfesionalComponent implements OnInit {
     @Output() onShowListado = new EventEmitter();
     @Output() showFormacion = new EventEmitter();
     @Output() showFoto = new EventEmitter();
-
+    public tieneOtraEntidad;
 
     constructor(private _profesionalService: ProfesionalService,
         private _turnoService: TurnoService,
@@ -195,6 +195,11 @@ export class DetalleProfesionalComponent implements OnInit {
                             ).subscribe(
                                 (profesionalTemporal: any) => {
                                     this.profesional = profesionalTemporal;
+                                    if (this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
+                                        this.tieneOtraEntidad = true;
+                                      } else {
+                                        this.tieneOtraEntidad = false;
+                                      }
                                 }
                             );
                     }

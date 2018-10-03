@@ -24,7 +24,7 @@
                                 [required]="true"></plex-text>
                         </div>
                         <div class="col">
-                            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" name="noPoseDNI"></plex-bool>
+                            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" (change)='otraEntidad(profesionalGrado)' name="noPoseDNI"></plex-bool>
                         </div>
                     </div>
 

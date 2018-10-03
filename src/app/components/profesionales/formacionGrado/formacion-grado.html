@@ -19,7 +19,7 @@
                             type="success" class="float-right btnGrado" icon="mdi mdi-credit-card" (click)="generarCredencial(i)"></plex-button>
                         <plex-button title="Generar certificado de etica" type="warning" *ngIf='formacionGrado.matriculacion && formacionGrado.matriculado'
                             class="float-right btnGrado" icon="mdi mdi-certificate" (click)="generarCertificadoEtica(i)"></plex-button>
-                        <plex-button title="editar" type="success" class="float-right btnGrado" icon="mdi mdi-pencil" (click)="edit=true;formacionSelected = formacionGrado"></plex-button>
+                        <plex-button title="editar" type="success" class="float-right btnGrado" icon="mdi mdi-pencil" (click)="editar(formacionGrado)"></plex-button>
                     </div>
                 </div>
             </div>

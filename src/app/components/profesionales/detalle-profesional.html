@@ -153,7 +153,7 @@
     </div>
 </section>
 <section *ngIf="flag == false">
-    <app-profesional [profesional]='profesional' [confirmar]='confirmar' (editado)="this.flag = true" [editable]='editable'></app-profesional>
+    <app-profesional [profesional]='profesional' [showOtraEntidadFormadora]='tieneOtraEntidad' [confirmar]='confirmar' (editado)="this.flag = true" [editable]='editable'></app-profesional>
 </section>
 
 <footer>

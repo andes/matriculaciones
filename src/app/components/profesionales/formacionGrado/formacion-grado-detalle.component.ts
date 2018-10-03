@@ -26,7 +26,8 @@ import { Auth } from '@andes/auth';
 
 @Component({
     selector: 'app-formacion-grado-detalle',
-    templateUrl: 'formacion-grado-detalle.html'
+    templateUrl: 'formacion-grado-detalle.html',
+    styleUrls: ['grado.scss']
 })
 export class FormacionGradoDetalleComponent implements OnInit {
 
@@ -161,6 +162,17 @@ export class FormacionGradoDetalleComponent implements OnInit {
         });
 
 
+    }
+
+    renovarAntesVencimiento(){
+        this.plex.confirm('¿Desea renovar antes de la fecha del vencimiento??').then((resultado) => {
+            if (resultado) {
+                this.formacion.papelesVerificados = false;
+                this.formacion.renovacion = true;
+                this.profesional.formacionGrado[this.index] = this.formacion;
+                this.actualizar();
+            }
+        });
     }
 
     actualizar() {

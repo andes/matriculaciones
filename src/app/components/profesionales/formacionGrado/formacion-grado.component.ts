@@ -42,6 +42,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
+        private _profesionService: ProfesionService,
         private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, ) { }
 
     ngOnInit() {
@@ -92,9 +93,12 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                                     firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
                                     administracion: this.auth.usuario.nombreCompleto
                                 };
-                                const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin);
-                                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                                // this.loading = false;
+                                this._profesionService.getProfesiones().subscribe(datos => {
+                                    const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
+                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0]);
+                                    pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+                                    // this.loading = false;
+                                });
                             });
                     });
             });
@@ -125,18 +129,28 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
             this.edit = false;
-         });
+        });
     }
 
     loadEntidadesFormadoras(event) {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
     }
 
-    otraEntidad(f){
+    otraEntidad(f) {
         f.entidadFormadora = {
             nombre: null,
             codigo: null
         };
+    }
+
+    editar(formacionGrado) {
+        this.edit = true;
+        this.formacionSelected = formacionGrado;
+        if (this.formacionSelected.entidadFormadora.codigo === null) {
+            this.showOtraEntidadFormadora = true;
+        } else {
+            this.showOtraEntidadFormadora = false;
+        }
     }
 
 }

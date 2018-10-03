@@ -20,7 +20,7 @@
                             </span>
 
                             <plex-button *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" type="primary" icon="information-outline" (click)="showPosgrado(i)"></plex-button>
-                            <plex-button title="editar" type="success" class="float-right btnGrado" icon="mdi mdi-pencil" (click)="edit=true;formacionSelected = formacionPosgrado;certificacion = formacionSelected.certificacion;"></plex-button>
+                            <plex-button title="editar" type="success" class="float-right btnGrado" icon="mdi mdi-pencil" (click)="editar(formacionPosgrado)" ></plex-button>
 
                         </div>
                     </div>
@@ -128,7 +128,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <plex-button label="Guardar" type="success" class="float-right" (click)="guardar()" validateForm="true"></plex-button>
+                        <plex-button label="Guardar" type="success" class="float-right" (click)="guardar($event)" validateForm="true"></plex-button>
                         <plex-button label="Cerrar" type="danger" class="float-right" (click)="edit = false" validateForm="true"></plex-button>
 
                     </div>

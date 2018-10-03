@@ -14,6 +14,8 @@
 
                     <plex-button type="danger" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && formacion.matriculado === true'
                         icon="mdi mdi-block-helper" (click)="darDeBaja()"></plex-button>
+                    <plex-button type="success" *ngIf='formacion.matriculacion && formacion.matriculado === true' icon="mdi mdi-calendar-check"
+                        (click)="renovarAntesVencimiento()"></plex-button>
                 </div>
                 <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && !formacion.papelesVerificados && formacion.revalida === true  && esSupervisor '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
@@ -21,7 +23,7 @@
                 <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length === 0 && !profesional.formacionPosgrado[index].papelesVerificados  && esSupervisor '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
                 </div>
-                <div  class="btn-group float-right" *ngIf='formacion.matriculacion.length > 0'>
+                <div class="btn-group float-right" *ngIf='formacion.matriculacion.length > 0'>
                     <plex-button type="success" *ngIf='formacion.matriculado === false && formacion.papelesVerificados === false && formacion.revalida === false'
                         label='Renovar' (click)="renovar()"></plex-button>
                 </div>
@@ -33,7 +35,7 @@
     <!--<fieldset>-->
     <div class="row" *ngIf="formacion.matriculacion.length > 0">
         <div class="col-12 text-center">
-            <div class="form-group badge badge-info ">
+            <div class="form-group badge badge-white ">
                 <label>
                     <strong>Ultima matrícula</strong>
                 </label>
@@ -68,7 +70,7 @@
             <label>Libro</label>
             <div>{{ formacion.matriculacion[formacion.matriculacion.length - 1].libro}}</div>
         </div>
-        <div  *ngIf=' formacion.matriculacion[formacion.matriculacion.length - 1].folio' class="col-6 form-group">
+        <div *ngIf=' formacion.matriculacion[formacion.matriculacion.length - 1].folio' class="col-6 form-group">
             <label>Folio</label>
             <div>{{ formacion.matriculacion[formacion.matriculacion.length - 1].folio}}</div>
         </div>

@@ -74,12 +74,13 @@ export class ProfesionalComponent implements OnInit {
   public tipoComunicacion: any[];
   public vacio = [];
   public ocultarBtn = false;
+  @Input() nuevoProf = false;
   @Input() confirmar = false;
   @Input() editable = false;
   @Output() editado = new EventEmitter();
-
+  public noPoseedomicilioProfesional = false;
   // public estadosCiviles: any[];
-  public showOtraEntidadFormadora: Boolean = false;
+  @Input() showOtraEntidadFormadora: Boolean = false;
   @Input() public profesional: IProfesional = {
     id: null,
     habilitado: true,
@@ -252,6 +253,15 @@ export class ProfesionalComponent implements OnInit {
         ];
       }
     }
+console.log(this.profesional);
+    if (this.confirmar) {
+      if (this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
+        this.showOtraEntidadFormadora = true;
+      } else {
+        this.showOtraEntidadFormadora = false;
+      }
+    }
+
   }
 
 
@@ -301,11 +311,15 @@ export class ProfesionalComponent implements OnInit {
           } else {
             this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
             this.editado.emit(true);
+            if (this.nuevoProf) {
+              this.router.navigate(['/profesional', nuevoProfesional._id]);
+            }
           }
 
         });
     }
   }
+
 
   // Filtrado de combos
   loadPaises() {
@@ -328,7 +342,7 @@ export class ProfesionalComponent implements OnInit {
   }
 
   loadLocalidadesLegal(provincia?) {
-    if ((provincia && provincia.query) || (provincia && provincia.value) ) {
+    if ((provincia && provincia.query) || (provincia && provincia.value)) {
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesLegal = resp;
@@ -366,7 +380,7 @@ export class ProfesionalComponent implements OnInit {
 
   }
   loadLocalidadesReal(provincia?) {
-    if ((provincia && provincia.query) || (provincia && provincia.value) ) {
+    if ((provincia && provincia.query) || (provincia && provincia.value)) {
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesReal = resp;
@@ -404,7 +418,7 @@ export class ProfesionalComponent implements OnInit {
   }
 
   loadLocalidadesProfesional(provincia?) {
-    if ((provincia && provincia.query) || (provincia && provincia.value) ) {
+    if ((provincia && provincia.query) || (provincia && provincia.value)) {
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesProfesional = resp;
@@ -501,10 +515,25 @@ export class ProfesionalComponent implements OnInit {
       });
   }
 
-  otraEntidad(f){
+  otraEntidad(f) {
     f.entidadFormadora = {
-        nombre: null,
-        codigo: null
+      nombre: null,
+      codigo: null
     };
-}
+  }
+
+  limpiarDomProfesional() {
+    this.profesional.domicilios[2] = {
+      tipo: 'profesional',
+      valor: null,
+      codigoPostal: null,
+      ubicacion: {
+        localidad: null,
+        provincia: null,
+        pais: null,
+      },
+      ultimaActualizacion: new Date(),
+      activo: true
+    };
+  }
 }

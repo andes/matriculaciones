@@ -23,7 +23,8 @@ import { Auth } from '@andes/auth';
 
 @Component({
     selector: 'app-formacion-posgrado-detalle',
-    templateUrl: 'formacion-posgrado-detalle.html'
+    templateUrl: 'formacion-posgrado-detalle.html',
+    styleUrls: ['posGrado.scss']
 })
 export class FormacionPosgradoDetalleComponent implements OnInit {
 
@@ -35,7 +36,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     @Output() cerrarDetalle = new EventEmitter();
     constructor(private _profesionalService: ProfesionalService,
         private plex: Plex,
-        private _numeracionesService: NumeracionMatriculasService, public auth: Auth ) {
+        private _numeracionesService: NumeracionMatriculasService, public auth: Auth) {
 
 
     }
@@ -176,6 +177,17 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.formacion.revalida = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;
         this.actualizar();
+    }
+
+    renovarAntesVencimiento() {
+        this.plex.confirm('¿Desea renovar antes de la fecha del vencimiento??').then((resultado) => {
+            if (resultado) {
+                this.formacion.papelesVerificados = false;
+                this.formacion.revalida = true;
+                this.profesional.formacionPosgrado[this.index] = this.formacion;
+                this.actualizar();
+            }
+        });
     }
 
 

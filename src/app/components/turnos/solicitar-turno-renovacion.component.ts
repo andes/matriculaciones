@@ -215,6 +215,8 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
           this.noEncontrado = true;
         }
         this.profEncontrado = resp;
+        this.profElegido = resp[0];
+        this.profesionalEncontrado(this.profElegido);
       });
     }
   }

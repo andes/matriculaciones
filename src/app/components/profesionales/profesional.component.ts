@@ -253,7 +253,6 @@ export class ProfesionalComponent implements OnInit {
         ];
       }
     }
-console.log(this.profesional);
     if (this.confirmar) {
       if (this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
         this.showOtraEntidadFormadora = true;

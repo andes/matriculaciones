@@ -406,10 +406,10 @@ export class DetalleProfesionalComponent implements OnInit {
         return res;
     }
 
-    pdf(){
-        const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional);
-        pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-    }
+    // pdf(){
+    //     const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional);
+    //     pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+    // }
     // generarCredencial() {
 
     //             // this._profesionalService.getCredencial(this.profesional.id)

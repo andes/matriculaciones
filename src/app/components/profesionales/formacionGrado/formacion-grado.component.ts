@@ -153,4 +153,9 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         }
     }
 
+    pdf(grado){
+        const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional, grado);
+        pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+    }
+
 }

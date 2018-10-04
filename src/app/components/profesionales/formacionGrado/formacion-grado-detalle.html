@@ -12,7 +12,7 @@
                         (click)="matricularProfesional(formacion,false)"></plex-button>
                     <!--</plex-tooltip>-->
 
-                    <plex-button type="success" *ngIf='formacion.matriculacion && formacion.matriculado === true' icon="mdi mdi-calendar-check"
+                    <plex-button  title="Renovar antes de la fecha del vencimiento" type="warning" *ngIf='formacion.matriculacion && formacion.matriculado === true' icon="mdi mdi-calendar-check"
                         (click)="renovarAntesVencimiento()"></plex-button>
                     <plex-button type="danger" *ngIf='formacion.matriculacion && formacion.matriculado === true' [disabled]="!motivoBaja" icon="mdi mdi-block-helper"
                         (click)="darDeBaja()"></plex-button>

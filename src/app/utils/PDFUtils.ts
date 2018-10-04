@@ -128,7 +128,7 @@ export class PDFUtils {
         return doc;
     }
 
-    public comprobanteTurnoDesdeProf(turno: any): any {
+    public comprobanteTurnoDesdeProf(turno: any, grado): any {
         const fechaTurno = new Date(turno.fecha);
 
         const doc = new jsPDF('p', 'mm', 'a4');
@@ -216,10 +216,10 @@ export class PDFUtils {
         doc.text(65, 89, turno.lugarNacimiento);
         doc.text(65, 95, turno.sexo);
         doc.text(65, 101, turno.nacionalidad.nombre);
-        doc.text(65, 111, turno.formacionGrado[0].profesion.nombre);
-        doc.text(65, 117, turno.formacionGrado[0].titulo);
-        doc.text(65, 123, turno.formacionGrado[0].entidadFormadora.nombre);
-        doc.text(65, 129, this.getSimpleFormatedDate(turno.formacionGrado[0].fechaEgreso));
+        doc.text(65, 111, turno.formacionGrado[grado].profesion.nombre);
+        doc.text(65, 117, turno.formacionGrado[grado].titulo);
+        doc.text(65, 123, turno.formacionGrado[grado].entidadFormadora.nombre);
+        doc.text(65, 129, this.getSimpleFormatedDate(turno.formacionGrado[grado].fechaEgreso));
 
         // completado domicilios
         offsetLoop = 0;

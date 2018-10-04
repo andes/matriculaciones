@@ -122,7 +122,24 @@ export class FormacionPosgradoComponent implements OnInit {
 
     editar(formacionPosgrado) {
         this.edit = true;
-        this.certificacion = formacionPosgrado.certificacion;
+
+        if (formacionPosgrado.certificacion) {
+            this.certificacion = formacionPosgrado.certificacion;
+
+        } else {
+            const certificacion = {
+                fecha: null,
+                modalidad: {
+                    nombre: null,
+                    codigo: null,
+                },
+                establecimiento: {
+                    nombre: null,
+                    codigo: null,
+                }
+            };
+            this.certificacion = certificacion;
+        };
         this.formacionSelected = formacionPosgrado;
         if (this.formacionSelected.institucionFormadora.codigo === null) {
             this.showOtraEntidadFormadora = true;

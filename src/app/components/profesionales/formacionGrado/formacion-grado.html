@@ -20,6 +20,7 @@
                         <plex-button title="Generar certificado de etica" type="warning" *ngIf='formacionGrado.matriculacion && formacionGrado.matriculado'
                             class="float-right btnGrado" icon="mdi mdi-certificate" (click)="generarCertificadoEtica(i)"></plex-button>
                         <plex-button title="editar" type="success" class="float-right btnGrado" icon="mdi mdi-pencil" (click)="editar(formacionGrado)"></plex-button>
+                        <plex-button class="float-right btnGrado" type="danger" title="imprimir datos del profesional"  (click)="pdf(i)" icon='mdi mdi-file-pdf-box'> </plex-button>
                     </div>
                 </div>
             </div>
@@ -126,13 +127,14 @@
                         <plex-datetime label="Fecha del Título" type="date" [(ngModel)]="formacionSelected.fechaTitulo" name='fechaTitulo' [required]="true"></plex-datetime>
                     </div>
                     <div class="col-6">
-                        <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="formacionSelected.entidadFormadora" name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)"
-                            [required]="true"></plex-select>
+                        <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="formacionSelected.entidadFormadora"
+                            name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
                         <plex-text *ngIf="showOtraEntidadFormadora" name='entidad' label="Otra Entidad Formadora" [(ngModel)]="formacionSelected.entidadFormadora.nombre"
                             [required]="true"></plex-text>
                     </div>
                     <div class="col">
-                        <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora"  (change)='otraEntidad(formacionSelected)' name="otra"></plex-bool>
+                        <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" (change)='otraEntidad(formacionSelected)'
+                            name="otra"></plex-bool>
                     </div>
                 </div>
 

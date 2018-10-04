@@ -157,6 +157,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             nombreCompleto: this.auth.usuario.nombreCompleto
         };
         this.formacion.papelesVerificados = true;
+        this.formacion.matri = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;
         this.actualizar();
     }
@@ -184,6 +185,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             if (resultado) {
                 this.formacion.papelesVerificados = false;
                 this.formacion.revalida = true;
+                this.profesional.formacionPosgrado[this.index].matriculado = false;
                 this.profesional.formacionPosgrado[this.index] = this.formacion;
                 this.actualizar();
             }

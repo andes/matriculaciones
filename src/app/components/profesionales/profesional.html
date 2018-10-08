@@ -172,10 +172,10 @@
                         <h5 *ngIf='!noPoseedomicilioProfesional'>Domicilio {{profesional.domicilios[2].tipo}}</h5>
 
                     </div>
-                    <div class="col-md-10" [ngClass]="{'text-right':noPoseedomicilioProfesional}">
+                    <!-- <div class="col-md-10" [ngClass]="{'text-right':noPoseedomicilioProfesional}">
                         <plex-bool [(ngModel)]="noPoseedomicilioProfesional" (change)='limpiarDomProfesional()' label="no poseo domicilio profesional"
                             name="noPoseDNI"></plex-bool>
-                    </div>
+                    </div> -->
 
                 </div>
                 <div class="row" *ngIf='!noPoseedomicilioProfesional'>

@@ -64,6 +64,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                 }
                 this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id })
                     .subscribe((respFirmaAdmin) => {
+                        console.log(respFirmaAdmin);
                         this.tieneFirmaAdmin = respFirmaAdmin;
                     });
             });

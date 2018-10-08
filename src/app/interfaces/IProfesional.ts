@@ -105,25 +105,26 @@ export interface IProfesional {
         };
         matriculacion?: [
             {
-            matriculaNumero: Number;
-            libro: String;
-            folio: String;
-            inicio: Date;
-            baja: {
-                motivo: '',
-                fecha: null
+                matriculaNumero: Number;
+                libro: String;
+                folio: String;
+                inicio: Date;
+                baja: {
+                    motivo: '',
+                    fecha: null
+                }
+                notificacionVencimiento: Boolean;
+                fin: Date;
+                revalidacionNumero: Number;
             }
-            notificacionVencimiento: Boolean;
-            fin: Date;
-            revalidacionNumero: Number;
-        }
-    ]
-    papelesVerificados: boolean;
-    matriculado: boolean;
-    revalida: boolean;
+        ];
+        fechasDeAltas?: [{ fecha: Date }]
+        papelesVerificados: boolean;
+        matriculado: boolean;
+        revalida: boolean;
     }];
     origen: String;
-    sanciones:  [{
+    sanciones: [{
         numero: Number;
         sancion: {
             id: Number;
@@ -134,7 +135,7 @@ export interface IProfesional {
         fecha: Date;
         vencimiento: Date;
     }];
-    OtrosDatos:  [{
+    OtrosDatos: [{
         matriculaProvincial: Number;
         folio: String;
         libro: String;

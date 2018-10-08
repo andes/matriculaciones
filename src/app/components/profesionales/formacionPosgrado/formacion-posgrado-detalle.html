@@ -14,8 +14,8 @@
 
                     <plex-button type="danger" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && formacion.matriculado === true'
                         icon="mdi mdi-block-helper" (click)="darDeBaja()"></plex-button>
-                    <plex-button title="Renovar antes de la fecha del vencimiento" type="warning" *ngIf='formacion.matriculacion && formacion.matriculado === true' icon="mdi mdi-calendar-check"
-                        (click)="renovarAntesVencimiento()"></plex-button>
+                    <plex-button title="Renovar antes de la fecha del vencimiento" type="warning" *ngIf='formacion.matriculacion && formacion.matriculado === true'
+                        icon="mdi mdi-calendar-check" (click)="renovarAntesVencimiento()"></plex-button>
                 </div>
                 <div class="btn-group float-right" *ngIf='profesional.formacionPosgrado[index].matriculacion.length > 0 && !formacion.papelesVerificados && formacion.revalida === true  && esSupervisor '>
                     <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
@@ -121,6 +121,36 @@
                                         <td>{{ matriculacion.matriculaNumero }}</td>
                                         <td>{{ matriculacion.inicio | date: 'yyyy'}}</td>
                                         <td>{{ matriculacion.fin | date: 'yyyy'}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </plex-panel>
+            </plex-accordion>
+        </div>
+    </div>
+
+    <hr>
+    <div class="row" *ngIf='formacion.fechasDeAltas && formacion.fechasDeAltas.length > 0'>
+        <div class="col-12">
+
+            <plex-accordion style="color:black !important">
+                <plex-panel tituloPrincipal="Fechas de alta" [active]="false">
+                    <div class="row">
+                        <div class="col-12">
+                            <table class="table">
+                                <!-- <thead>
+                                    <th>fecha</th>
+                                </thead> -->
+                                <tbody>
+                                    <tr *ngFor="let unaFecha of formacion.fechasDeAltas;let i = index">
+                                        <td >{{ unaFecha.fecha |  date: 'dd/MM/yyyy' }}</td>
+                                        <td>
+                                                <span *ngIf='i === (formacion.fechasDeAltas.length - 1)' class="badge badge-success"> Vigente</span>
+                                                <span *ngIf='i !== (formacion.fechasDeAltas.length - 1)' class="badge badge-danger">No Vigente</span>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>

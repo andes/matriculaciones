@@ -42,6 +42,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     ngOnInit() {
+        console.log(this.formacion);
         this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
         // this.esSupervisor = true;
     }
@@ -159,7 +160,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.formacion.papelesVerificados = true;
         this.formacion.matri = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;
-        this.actualizar();
+        // this.actualizar();
     }
 
     darDeBaja() {
@@ -174,10 +175,21 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     renovar() {
-        this.formacion.papelesVerificados = false;
-        this.formacion.revalida = true;
-        this.profesional.formacionPosgrado[this.index] = this.formacion;
-        this.actualizar();
+        if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) > new Date().getFullYear()) {
+            console.log('tiene año de gracia');
+            this.formacion.papelesVerificados = false;
+            this.formacion.revalida = true;
+            this.formacion.fechasDeAltas.push({fecha : new Date()});
+            this.profesional.formacionPosgrado[this.index] = this.formacion;
+            console.log(this.formacion);
+            this.actualizar();
+        } else {
+
+            this.formacion.papelesVerificados = false;
+            this.formacion.revalida = true;
+            this.profesional.formacionPosgrado[this.index] = this.formacion;
+            this.actualizar();
+        }
     }
 
     renovarAntesVencimiento() {

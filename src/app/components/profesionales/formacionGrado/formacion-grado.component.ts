@@ -38,6 +38,10 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     @Output() updateProfesional = new EventEmitter();
     public showOtraEntidadFormadora = false; ;
     public edit = false;
+    public supervisor = {
+        id: null,
+        nombreCompleto: null
+    };
     public formacionSelected;
 
     constructor(private _profesionalService: ProfesionalService,
@@ -51,10 +55,17 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         this._profesionalService.getProfesionalFirma({ id: this.profesional.id })
             .subscribe((respFirma) => {
                 this.tieneFirma = respFirma;
-            });
-        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.auth.usuario.id })
-            .subscribe((respFirmaAdmin) => {
-                this.tieneFirmaAdmin = respFirmaAdmin;
+                if (this.profesional.supervisor) {
+                    this.supervisor.id = this.profesional.supervisor.id;
+                    this.supervisor.nombreCompleto = this.profesional.supervisor.nombreCompleto;
+                }else{
+                    this.supervisor.id = this.auth.usuario.id;
+                    this.supervisor.nombreCompleto = this.auth.usuario.nombreCompleto;
+                }
+                this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id })
+                    .subscribe((respFirmaAdmin) => {
+                        this.tieneFirmaAdmin = respFirmaAdmin;
+                    });
             });
 
     }
@@ -86,12 +97,12 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                 const img = 'data:image/jpeg;base64,' + resp;
                 this._profesionalService.getProfesionalFirma({ id: this.profesional.id })
                     .subscribe((respFirma) => {
-                        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.auth.usuario.id })
+                        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id})
                             .subscribe((respFirmaAdmin) => {
                                 const firma = 'data:image/jpeg;base64,' + respFirma;
                                 const firmaAdmin = {
                                     firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
-                                    administracion: this.auth.usuario.nombreCompleto
+                                    administracion: this.supervisor.nombreCompleto
                                 };
                                 this._profesionService.getProfesiones().subscribe(datos => {
                                     const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
@@ -153,7 +164,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         }
     }
 
-    pdf(grado){
+    pdf(grado) {
         const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional, grado);
         pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
     }

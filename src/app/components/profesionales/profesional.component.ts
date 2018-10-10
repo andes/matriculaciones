@@ -535,4 +535,24 @@ export class ProfesionalComponent implements OnInit {
       activo: true
     };
   }
+
+
+  // guardarTurnoNuevoProf(profesional) {
+  //   profesional.idRenovacion = this.profesional.id;
+  //   profesional.id = null;
+  //   delete profesional._id;
+  //   this._turnosService.saveTurnoSolicitados(profesional)
+  //     .subscribe((nuevoProfesional) => {
+  //      const turnoObj = {
+  //         fecha: new Date(),
+  //         tipo: 'matriculacion',
+  //         profesional: nuevoProfesional._id
+  //       };
+
+  //       this._turnosService.saveTurnoMatriculacion({ turno: turnoObj })
+  //         .subscribe(turno => {
+  //           this.router.navigate(['/profesional', nuevoProfesional._id]);
+  //         });
+  //     });
+  // }
 }

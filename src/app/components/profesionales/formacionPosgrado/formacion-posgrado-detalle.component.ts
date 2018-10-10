@@ -15,6 +15,7 @@ import {
 import {
     IProfesional
 } from './../../../interfaces/IProfesional';
+import * as moment from 'moment';
 
 // Services
 import { ProfesionalService } from './../../../services/profesional.service';
@@ -34,6 +35,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
+    public showBtnSinVencimiento = false;
     constructor(private _profesionalService: ProfesionalService,
         private plex: Plex,
         private _numeracionesService: NumeracionMatriculasService, public auth: Auth) {
@@ -45,6 +47,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         console.log(this.formacion);
         this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
         // this.esSupervisor = true;
+
+        if (moment().diff(moment(this.profesional.fechaNacimiento, 'DD-MM-YYYY'), 'years') >= 65) {
+            this.showBtnSinVencimiento = true;
+        }
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -61,6 +67,8 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 } else {
                     revNumero = formacion.matriculacion.length;
                 }
+
+
                 // this._numeracionesService.getOne({ codigoSisaEspecialidad: formacion.especialidad.codigo })
                 //     .subscribe((num) => {
 
@@ -179,7 +187,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             console.log('tiene año de gracia');
             this.formacion.papelesVerificados = false;
             this.formacion.revalida = true;
-            this.formacion.fechasDeAltas.push({fecha : new Date()});
+            this.formacion.fechasDeAltas.push({ fecha: new Date() });
             this.profesional.formacionPosgrado[this.index] = this.formacion;
             console.log(this.formacion);
             this.actualizar();
@@ -220,5 +228,19 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             'data': this.profesional.formacionPosgrado
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+    }
+
+    sinVencimiento() {
+        this.plex.confirm('¿Desea desactivar el vencimiento de la matricula de esta especialidad?').then((resultado) => {
+            if (resultado) {
+                if (this.formacion.tieneVencimiento) {
+                    this.formacion.tieneVencimiento = false;
+                } else {
+                    this.formacion.tieneVencimiento = true;
+                }
+                this.profesional.formacionPosgrado[this.index] = this.formacion;
+                this.actualizar();
+            }
+        });
     }
 }

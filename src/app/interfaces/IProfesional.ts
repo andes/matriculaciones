@@ -74,7 +74,8 @@ export interface IProfesional {
             fin: Date;
             revalidacionNumero: Number;
         }];
-        matriculado: boolean
+        matriculado: boolean,
+        fechaDeInscripcion?: Date
     }];
     formacionPosgrado: [{
         profesion: {
@@ -119,9 +120,11 @@ export interface IProfesional {
             }
         ];
         fechasDeAltas?: [{ fecha: Date }]
+        tieneVencimiento?: boolean;
         papelesVerificados: boolean;
         matriculado: boolean;
         revalida: boolean;
+        notas: string;
     }];
     origen: String;
     sanciones: [{

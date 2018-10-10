@@ -32,8 +32,8 @@
                 <div>{{formacionGrado.titulo}}</div>
             </div>
             <div class="col-2">
-                <label>Fecha del Título</label>
-                <div>{{formacionGrado.fechaTitulo | date: 'dd/MM/yyyy'}}</div>
+                <label>Fecha de egreso </label>
+                <div>{{formacionGrado.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
             </div>
             <div class="col-3">
                 <label>Entidad Formadora</label>
@@ -117,15 +117,15 @@
                                 <plex-select label="Profesion" [(ngModel)]="formacionGrado.profesion" name="profesion" (getData)="loadProfesiones($event)"
                                     [required]="true"></plex-select>
                             </div> -->
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <plex-text label="Título" [(ngModel)]="formacionSelected.titulo" name='titulo' [required]="true"></plex-text>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <plex-datetime label="Fecha de egreso" type="date" [(ngModel)]="formacionSelected.fechaEgreso" name='fechaEgreso' [required]="true"></plex-datetime>
                     </div>
-                    <div class="col-md-4">
+                    <!-- <div class="col-md-4">
                         <plex-datetime label="Fecha del Título" type="date" [(ngModel)]="formacionSelected.fechaTitulo" name='fechaTitulo' [required]="true"></plex-datetime>
-                    </div>
+                    </div> -->
                     <div class="col-6">
                         <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="formacionSelected.entidadFormadora"
                             name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>

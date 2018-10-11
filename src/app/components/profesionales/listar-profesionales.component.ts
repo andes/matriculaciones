@@ -104,7 +104,9 @@ export class ListarProfesionalesComponent implements OnInit {
       estado: '',
       estadoEspecialidad: '',
       verBajas: false,
-      verDeshabilitado: false
+      verDeshabilitado: false,
+      numeroMatriculaGrado: '',
+      numeroMatriculaEspecialidad: ''
     });
 
     this.searchForm.valueChanges.debounceTime(900).subscribe(
@@ -153,6 +155,8 @@ export class ListarProfesionalesComponent implements OnInit {
       rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
       matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
       habilitado: this.value ? this.value.verDeshabilitado : false,
+      numeroMatriculaGrado : this.value ? this.value.numeroMatriculaGrado : '',
+      numeroMatriculaEspecialidad : this.value ? this.value.numeroMatriculaEspecialidad : '',
       matriculacion : true,
       limit: this.limit
 

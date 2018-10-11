@@ -76,7 +76,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
             inicio: new Date(),
             notificacionVencimiento: false,
             fin: new Date(new Date('01/01/2000').setFullYear(this.vencimientoAnio)),
-            revalidacionNumero: 0,
+            revalidacionNumero: 1,
         }],
         tieneVencimiento: true,
         fechasDeAltas: [{fecha: new Date()}]

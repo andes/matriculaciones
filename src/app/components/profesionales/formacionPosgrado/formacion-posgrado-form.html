@@ -41,22 +41,23 @@
                         <div class="col-3">
                             <plex-text label="Folio" [(ngModel)]="profesionalP.matriculacion[0].folio" name="folio" [required]="true"></plex-text>
                         </div>
-                    </div>
-                    <hr>
-                    <h4>Certificación</h4>
-                    <div>
-                        <div class="row">
-                            <div class="col-4">
-                                <plex-select label="Modalidad" [(ngModel)]="profesionalP.certificacion.modalidad" name="modalidad" (getData)="loadModalidadesCertificacion($event)"></plex-select>
-                            </div>
-                            <!-- <div class="col-4">
-                                <plex-select label="Establecimiento Certificador" [(ngModel)]="profesionalP.establecimiento" name="establecimiento" (getData)="loadEstablecimientosCertificadores($event)" ></plex-select>
-                            </div> -->
-                            <div class="col-4">
-                                <plex-datetime type="date" label="Fecha de Certificación" [(ngModel)]="profesionalP.fecha" name="fecha" [required]="true"></plex-datetime>
-                            </div>
+                        <div class="col-3">
+                            <plex-select label="Modalidad" [(ngModel)]="profesionalP.certificacion.modalidad" name="modalidad" (getData)="loadModalidadesCertificacion($event)"></plex-select>
                         </div>
                     </div>
+                    <hr>
+                    <!-- <h4>Certificación</h4>
+                    <div>
+                        <div class="row">
+
+                             <div class="col-4">
+                                <plex-select label="Establecimiento Certificador" [(ngModel)]="profesionalP.establecimiento" name="establecimiento" (getData)="loadEstablecimientosCertificadores($event)" ></plex-select>
+                            </div> -->
+                            <!-- <div class="col-4">
+                                <plex-datetime type="date" label="Fecha de Certificación" [(ngModel)]="profesionalP.fecha" name="fecha" [required]="true"></plex-datetime>
+                            </div> 
+                        </div>
+                    </div> -->
                     <div class="row">
                         <div class="col">
                             <plex-button label="Guardar" type="success" class="float-right" (click)="onSubmit($event,posgrado)" validateForm="true"></plex-button>

@@ -14,9 +14,9 @@
                         <div class="col-md-4">
                             <plex-datetime label="Fecha de egreso" type="date" [(ngModel)]="profesionalGrado.fechaEgreso" name='fechaEgreso' [required]="true"></plex-datetime>
                         </div>
-                        <div class="col-md-4">
+                        <!-- <div class="col-md-4">
                             <plex-datetime label="Fecha del Título" type="date" [(ngModel)]="profesionalGrado.fechaTitulo" name='fechaTitulo' [required]="true"></plex-datetime>
-                        </div>
+                        </div> -->
                         <div class="col-6">
                             <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="profesionalGrado.entidadFormadora"
                                 name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>

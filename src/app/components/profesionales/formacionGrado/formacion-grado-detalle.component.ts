@@ -86,6 +86,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
                             if (mantenerNumero === false) {
                                 matriculaNumero = num[0].proximoNumero;
                                 num[0].proximoNumero = matriculaNumero + 1;
+                                this.formacion.fechaDeInscripcion = new Date();
                             }
 
                             if (mantenerNumero) {
@@ -164,7 +165,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
     }
 
-    renovarAntesVencimiento(){
+    renovarAntesVencimiento() {
         this.plex.confirm('¿Desea renovar antes de la fecha del vencimiento??').then((resultado) => {
             if (resultado) {
                 this.formacion.papelesVerificados = false;

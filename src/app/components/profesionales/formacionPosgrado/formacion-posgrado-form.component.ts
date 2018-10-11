@@ -153,7 +153,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
         });
     }
 
-    otraEntidad(f){
+    otraEntidad(f) {
         f.institucionFormadora = {
             nombre: null,
             codigo: null

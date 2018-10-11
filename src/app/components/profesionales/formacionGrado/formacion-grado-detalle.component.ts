@@ -165,7 +165,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
     }
 
-    renovarAntesVencimiento(){
+    renovarAntesVencimiento() {
         this.plex.confirm('¿Desea renovar antes de la fecha del vencimiento??').then((resultado) => {
             if (resultado) {
                 this.formacion.papelesVerificados = false;

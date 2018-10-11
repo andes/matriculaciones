@@ -65,7 +65,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 if (formacion.matriculacion === null) {
                     revNumero = 0;
                 } else {
-                    revNumero = formacion.matriculacion.length;
+                    revNumero = formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero;
                 }
 
 
@@ -77,6 +77,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
                 if (mantenerNumero) {
                     matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
+                }
+                if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) < new Date().getFullYear()) {
+                    this.formacion.fechasDeAltas.push({ fecha: new Date() });
+                    this.profesional.formacionPosgrado[this.index] = this.formacion;
+                    revNumero = 0;
                 }
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {
@@ -91,7 +96,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
                 this.formacion.revalida = false;
                 this.formacion.matriculado = true;
-                this.profesional.formacionPosgrado[this.index] = this.formacion;
+
                 this.actualizar();
                 this.matriculacion.emit(oMatriculacion);
             }
@@ -183,21 +188,22 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     renovar() {
-        if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) > new Date().getFullYear()) {
+        // if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) === new Date().getFullYear()) {
             console.log('tiene año de gracia');
             this.formacion.papelesVerificados = false;
             this.formacion.revalida = true;
-            this.formacion.fechasDeAltas.push({ fecha: new Date() });
             this.profesional.formacionPosgrado[this.index] = this.formacion;
-            console.log(this.formacion);
             this.actualizar();
-        } else {
+        // } else {
 
-            this.formacion.papelesVerificados = false;
-            this.formacion.revalida = true;
-            this.profesional.formacionPosgrado[this.index] = this.formacion;
-            this.actualizar();
-        }
+        //     this.formacion.papelesVerificados = false;
+        //     this.formacion.revalida = true;
+        //     this.formacion.fechasDeAltas.push({ fecha: new Date() });
+        //     this.profesional.formacionPosgrado[this.index] = this.formacion;
+        //     console.log(this.formacion);
+        //     this.actualizar();
+
+        // }
     }
 
     renovarAntesVencimiento() {

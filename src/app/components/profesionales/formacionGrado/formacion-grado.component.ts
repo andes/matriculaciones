@@ -50,7 +50,6 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, ) { }
 
     ngOnInit() {
-        console.log(this.profesional);
         this.hoy = new Date();
         // this.verificaVencimiento();
         this._profesionalService.getProfesionalFirma({ id: this.profesional.id })
@@ -65,7 +64,6 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                 }
                 this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id })
                     .subscribe((respFirmaAdmin) => {
-                        console.log(respFirmaAdmin);
                         this.tieneFirmaAdmin = respFirmaAdmin;
                     });
             });
@@ -119,19 +117,18 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     generarCertificadoEtica(i) {
         const grado = this.profesional.formacionGrado[i];
-        if ( this.profesional.formacionPosgrado && this.profesional.formacionPosgrado.length > 0 ){
+        if ( this.profesional.formacionPosgrado && this.profesional.formacionPosgrado.length > 0 ) {
             const tienePosgrado = this.profesional.formacionPosgrado.findIndex(x => x.profesion.codigo === grado.profesion.codigo &&  x.matriculado === true);
-            console.log(tienePosgrado);
-            if (tienePosgrado !== -1){
+            if (tienePosgrado !== -1) {
                 const pdf = this._pdfUtils.certificadoDeEticaConEspecialidad(this.profesional, grado);
                 pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
 
-            }else{
+            }else {
                 const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
                 pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
 
             }
-        }else{
+        }else {
             const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
             pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
         }

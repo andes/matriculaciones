@@ -129,7 +129,6 @@ export class PDFUtils {
     }
 
     public certificadoDeEticaConEspecialidad(profesional, grado) {
-console.log(grado);
         const fecha = grado.matriculacion[grado.matriculacion.length - 1].inicio;
         const doc = new jsPDF('p', 'mm', 'a4');
         const hoy = new Date();
@@ -153,13 +152,13 @@ console.log(grado);
         let offsetLoop = 0;
 
         profesional.formacionPosgrado.forEach(formacion => {
-            if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado === true ){
+            if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado === true ) {
                 // doc.setFontSize(14);
                 doc.text(formacion.especialidad.nombre, 8, 91 + offsetLoop);
                 doc.text(formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero.toString(), 150, 91 + offsetLoop);
-                if (formacion.fechasDeAltas){
+                if (formacion.fechasDeAltas) {
                     doc.text('' + formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1].fecha.getFullYear() + '', 180, 91 + offsetLoop);
-                }else{
+                }else {
                     doc.text('', 180, 91 + offsetLoop);
 
                 }
@@ -167,7 +166,6 @@ console.log(grado);
             }
 
         });
-        console.log(offsetLoop);
         doc.text('A la fecha, no surge de nuestros registros presuntas infracciones emergentes del incumplimiento', 8, offsetLoop + 98);
         doc.text('de la Ley Nº 578, y su Decreto Reglamentario Nº 338/78, referidas al citado profesional.', 8, offsetLoop + 103);
         doc.setFontStyle('bold');

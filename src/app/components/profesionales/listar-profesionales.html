@@ -21,18 +21,23 @@
 
           <form [formGroup]="searchForm">
             <div class="row">
-              <div class="col-3">
+              <div class="col-2">
                 <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus" placeholder="escriba un documento">
                 </plex-text>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <plex-text label="apellido" formControlName="apellido" placeholder="escriba el apellido">
                 </plex-text>
               </div>
-              <div class="col-4">
+              <div class="col-3">
                 <plex-text label="nombre" formControlName="nombre" placeholder="escriba el nombre">
                 </plex-text>
               </div>
+              <div class="col-3">
+                <plex-int label="N° matricula grado" formControlName="numeroMatriculaGrado" placeholder="escriba el numero de la matricula">
+                </plex-int>
+              </div>
+
               <div class="col-1">
                 <button class="btn btn-primary  btnFiltro" (click)='mostrarFiltros()'>
                   <i *ngIf='muestraFiltro === false' class="mdi mdi-chevron-down"></i>
@@ -43,18 +48,23 @@
 
 
             <div class="row" *ngIf='muestraFiltro === true'>
+                <div class="col-3">
+                    <plex-int label="N° matricula esp" formControlName="numeroMatriculaEspecialidad" placeholder="escriba el numero de la matricula">
+                    </plex-int>
+                  </div>
               <div class="col-3">
                 <plex-select label="Matriculas de Profesiones" formControlName="estado" [data]="estadosMatriculas"></plex-select>
               </div>
               <div class="col-3">
                 <plex-select label="Matriculas de Especialidades" formControlName="estadoEspecialidad" [data]="estadosMatriculas"></plex-select>
               </div>
-                
-            <div class="col-2 btnSlide">
-              <plex-bool type="slide" label="Ver bajas de matriculas" formControlName="verBajas"  name="especialidad.activo"></plex-bool>
-              <plex-bool type="slide" label="Deshabilitado" formControlName="verDeshabilitado" name="especialidad.activo"></plex-bool>
 
-            </div> 
+              <div class="col-2 btnSlide">
+                <plex-bool type="slide" label="Ver bajas de matriculas" formControlName="verBajas" name="especialidad.activo"></plex-bool>
+                <plex-bool type="slide" label="Deshabilitado" formControlName="verDeshabilitado" name="especialidad.activo"></plex-bool>
+
+              </div>
+
             </div>
           </form>
           <br>
@@ -62,8 +72,8 @@
 
 
         <div class="row" style='max-height: 100%;
-        overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
-          [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+        overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
+          [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
           <div class="col">
             <!--Loader-->
             <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
@@ -72,8 +82,9 @@
               <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
             </div>
             <!--Tabla de resultados por SimpleQuery -->
-            <table *ngIf="profesionales && profesionales.length" class="table table-striped" infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
-              [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+            <table *ngIf="profesionales && profesionales.length" class="table table-striped" infinite-scroll
+              [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
+              [scrollWindow]="false" (scrolled)="onModalScrollDown()">
               <thead>
                 <tr>
                   <th></th>
@@ -87,7 +98,7 @@
                   <td *ngIf="profesional.habilitado === true">
                     <div>
                       <span *ngIf="profesional.rematriculado === 1" class="badge badge-danger">
-                       RM
+                        RM
                       </span>
                     </div>
                     <div>
@@ -122,12 +133,14 @@
                     <div *ngIf='profesional.habilitado === true'>
                       <div *ngIf='verBajas === false'>
                         <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
-                          <span *ngIf="profesionalGrado.matriculado === false  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  " class="badge badge-danger">
+                          <span *ngIf="profesionalGrado.matriculado === false  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
+                            class="badge badge-danger">
                             {{profesionalGrado.profesion.nombre}}: Matricula vencida
                           </span>
-                          <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo" class="badge badge-danger">
-                              {{profesionalGrado.profesion.nombre}}: Matricula suspendida
-                            </span>
+                          <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo"
+                            class="badge badge-danger">
+                            {{profesionalGrado.profesion.nombre}}: Matricula suspendida
+                          </span>
                         </div>
                         <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
                           <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
@@ -135,9 +148,9 @@
                             {{profesionalPosgrado.especialidad.nombre}}: Matricula suspendida
                           </span>
                           <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy >= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin  "
-                              class="badge badge-warning">
-                              {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
-                            </span>
+                            class="badge badge-warning">
+                            {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
+                          </span>
                         </div>
                       </div>
 

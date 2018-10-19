@@ -49,24 +49,42 @@ export class HomeComponent implements OnInit {
     this.redirect('/homeProfesionales');
   }
 
-  login(event) {
-    if (event.formValid) {
-      this.deshabilitar = true;
-      this.loading = true;
-      this.auth.login(this.usuario.toString(), this.password)
-        .subscribe((data) => {
-          this.plex.updateUserInfo({usuario: this.auth.usuario});
-          this.router.navigate(['selectOrganizacion']);
-          // this.resync();
-          // this.router.navigate(['turnos']);
+  // login(event) {
+  //   if (event.formValid) {
+  //     this.deshabilitar = true;
+  //     this.loading = true;
+  //     this.auth.login(this.usuario.toString(), this.password)
+  //       .subscribe((data) => {
+  //         this.plex.updateUserInfo({usuario: this.auth.usuario});
+  //         this.router.navigate(['selectOrganizacion']);
+  //         // this.resync();
+  //         // this.router.navigate(['turnos']);
 
-        }, (err) => {
-          this.plex.alert('Usuario o contraseña incorrectos');
-          this.loading = false;
-          this.deshabilitar = false;
-        });
+  //       }, (err) => {
+  //         console.log('errororoor');
+  //         this.plex.alert('Usuario o contraseña incorrectos');
+  //         this.loading = false;
+  //         this.deshabilitar = false;
+  //       });
+  //   }
+  // }
+
+
+    login(event) {
+        if (event.formValid) {
+            this.deshabilitar = true;
+            this.loading = true;
+            this.auth.login(this.usuario.toString(), this.password)
+                .subscribe((data) => {
+                    this.plex.updateUserInfo({ usuario: this.auth.usuario });
+                    this.router.navigate(['selectOrganizacion']);
+                }, (err) => {
+                    this.plex.info('danger', 'Usuario o contraseña incorrectos');
+                    this.loading = false;
+                    this.deshabilitar = false;
+                });
+        }
     }
-  }
 
 
   resync() {

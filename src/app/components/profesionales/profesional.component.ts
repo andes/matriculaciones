@@ -58,6 +58,7 @@ import {
 } from './../../interfaces/ISiisa';
 import { Auth } from '@andes/auth';
 import { Router } from '@angular/router';
+import { TurnoService } from '../../services/turno.service';
 
 @Component({
   selector: 'app-profesional',
@@ -197,6 +198,7 @@ export class ProfesionalComponent implements OnInit {
     private _profesionService: ProfesionService,
     private _profesionalService: ProfesionalService,
     private _entidadFormadoraService: EntidadFormadoraService,
+    private _turnosService: TurnoService,
     private plex: Plex,
     public auth: Auth,
     private router: Router) { }
@@ -311,7 +313,18 @@ export class ProfesionalComponent implements OnInit {
             this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
             this.editado.emit(true);
             if (this.nuevoProf) {
-              this.router.navigate(['/profesional', nuevoProfesional._id]);
+              this._turnosService.saveTurnoSolicitados(nuevoProfesional)
+                .subscribe((nuevoProfesional2) => {
+                  const turno = {
+                    fecha: new Date(),
+                    tipo: 'matriculacion',
+                    profesional: nuevoProfesional._id
+                  };
+                  this._turnosService.saveTurnoMatriculacion({turno: turno})
+                  .subscribe(turno => {
+                    this.router.navigate(['/profesional', nuevoProfesional._id]);
+                  });
+                });
             }
           }
 

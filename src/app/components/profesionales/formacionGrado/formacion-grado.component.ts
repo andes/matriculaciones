@@ -22,6 +22,7 @@ import { PDFUtils } from '../../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
 import { ProfesionService } from '../../../services/profesion.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-formacion-grado',
@@ -179,7 +180,23 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
 
     pdf(grado) {
-        const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional, grado);
+        console.log(grado);
+        let tipoMatricula;
+        if (this.profesional.formacionGrado[grado].matriculacion === null) {
+            console.log('matriculacion');
+            tipoMatricula = 'MATRICULACION';
+        }else{
+
+            console.log( moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') ) ;
+          console.log( moment().format('YYYY-MM-DD') );
+            // if (moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).startOf('day').toDate() === moment().startOf('day').toDate()){
+                 if ( moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') ===  moment().format('YYYY-MM-DD')){
+                    tipoMatricula = 'MATRICULACION';
+            }else{
+                tipoMatricula = 'RENOVACION( N° ' + this.profesional.formacionGrado[grado].matriculacion[this.profesional.formacionGrado[grado].matriculacion.length - 1].matriculaNumero + ' )';
+            }
+        }
+        const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional, grado, tipoMatricula);
         pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
     }
 

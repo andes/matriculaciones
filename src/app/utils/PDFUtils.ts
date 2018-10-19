@@ -183,7 +183,7 @@ export class PDFUtils {
     }
 
 
-    public comprobanteTurnoDesdeProf(turno: any, grado): any {
+    public comprobanteTurnoDesdeProf(turno: any, grado, tipoMatricula): any {
         const fechaTurno = new Date(turno.fecha);
 
         const doc = new jsPDF('p', 'mm', 'a4');
@@ -196,7 +196,7 @@ export class PDFUtils {
         doc.line(20, 40, 190, 40);
         doc.setFontSize(12);
         doc.text(20, 45, 'Planilla de Turno Otorgado');
-        doc.text(155, 45, '');
+        doc.text(155, 45, tipoMatricula);
         doc.line(20, 47, 190, 47);
         doc.setFontSize(10);
         doc.setLineWidth(0.5);

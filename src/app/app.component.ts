@@ -29,10 +29,10 @@ export class AppComponent {
     if (environment.APIStatusCheck) {
       setTimeout(() => {
         this.server.get('/core/status', {
-            params: null,
-            showError: false,
-            showLoader: false
-          })
+          params: null,
+          showError: false,
+          showLoader: false
+        })
           .finally(() => this.initStatusCheck())
           .subscribe(
             (data) => this.plex.updateAppStatus(data),
@@ -54,49 +54,56 @@ export class AppComponent {
     const accessList = [];
     this.menuList = [];
     if (this.auth.loggedIn()) {
-        this.auth.organizaciones().subscribe(data => {
+      this.auth.organizaciones().subscribe(data => {
 
-            if (data.length > 1) {
-                this.menuList = [{ label: 'Seleccionar organización', icon: 'home', route: '/selectOrganizacion' }, ...this.menuList];
-                this.plex.updateMenu(this.menuList);
-            }
-            accessList.push({
-              label: 'Home',
-              icon: 'mdi mdi-home',
-              route: '/homeAdministracion'
-            });
+        if (data.length > 1) {
+          this.menuList = [{ label: 'Seleccionar organización', icon: 'home', route: '/selectOrganizacion' }, ...this.menuList];
+          this.plex.updateMenu(this.menuList);
+        }
+        accessList.push({
+          label: 'Home',
+          icon: 'mdi mdi-home',
+          route: '/homeAdministracion'
+        });
+        if (this.auth.getPermissions('matriculaciones:agenda:?').length > 0) {
           accessList.push({
             label: 'Agenda',
             icon: 'mdi mdi-pencil-box-outline',
             route: '/agenda'
           });
+        }
+        if (this.auth.getPermissions('matriculaciones:turnos:?').length > 0) {
+
           accessList.push({
             label: 'Turnos',
             icon: 'mdi mdi-calendar',
             route: '/turnos'
           });
+        }
+        if (this.auth.getPermissions('matriculaciones:profesionales:?').length > 0) {
           accessList.push({
             label: 'Profesionales',
             icon: 'mdi mdi-account-multiple',
             route: '/listarProfesionales'
           });
-          accessList.push({
-            label: 'Supervisores',
-            icon: 'mdi mdi-account-multiple',
-            route: '/supervisores'
-          });
-          accessList.push({
-            divider: true
-          });
-          accessList.push({
-            label: 'Cerrar Sesión',
-            icon: 'logout',
-            route: '/home'
-          });
-          accessList.forEach((permiso) => {
-            this.menuList.push(permiso);
-          });
+        }
+        accessList.push({
+          label: 'Supervisores',
+          icon: 'mdi mdi-account-multiple',
+          route: '/supervisores'
         });
+        accessList.push({
+          divider: true
+        });
+        accessList.push({
+          label: 'Cerrar Sesión',
+          icon: 'logout',
+          route: '/home'
+        });
+        accessList.forEach((permiso) => {
+          this.menuList.push(permiso);
+        });
+      });
     } else {
       // Página pública
       this.menuList.push({
@@ -105,9 +112,9 @@ export class AppComponent {
         route: '/home'
       });
 
-       if (this.router.url !== '/home' ) {
-         this.redirect('/homeProfesionales');
-       }
+      if (this.router.url !== '/home') {
+        this.redirect('/homeProfesionales');
+      }
       // this.redirect('/homeProfesionales');
     }
 

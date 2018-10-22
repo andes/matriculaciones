@@ -9,8 +9,33 @@ import { AppComponent } from '../../app.component';
     templateUrl: 'homeAdministracion.html',
     styleUrls: ['homeAdministracion.scss']
 })
-export class HomeAdministracionComponent {
+export class HomeAdministracionComponent implements OnInit {
+    public permisosProfesional;
+    public permisosTurnos;
+    public permisosAgenda;
+    constructor(public plex: Plex, public auth: Auth) { }
 
+    ngOnInit() {
+        if (this.auth.getPermissions('matriculaciones:profesionales:?').length > 0) {
+            this.permisosProfesional = true;
+        }else{
+            this.permisosProfesional = false;
+        }
+        if (this.auth.getPermissions('matriculaciones:turnos:?').length > 0) {
+            this.permisosTurnos = true;
+        }else{
+            this.permisosTurnos = false;
+        }
+        if (this.auth.getPermissions('matriculaciones:agenda:?').length > 0) {
+            this.permisosAgenda = true;
+        }else{
+            this.permisosAgenda = false;
+        }
 
+        console.log('permisosProfesional', this.permisosProfesional);
+        console.log('permisosTurnos', this.permisosTurnos);
+        console.log('permisosAgenda', this.permisosAgenda);
+
+    }
 
 }

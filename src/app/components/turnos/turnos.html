@@ -64,7 +64,10 @@
                                         <h6 class="box-title-elemento badge " [ngClass]="{'badge-white': isSelected(turno), 'badge-info': !isSelected(turno)}">
                                             {{ turno.tipo }}
                                         </h6>
+                                        <span *ngIf='turno.sePresento === true;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-success">Presente</span>
+                                        <span *ngIf='turno.sePresento === false;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-danger">Ausente</span>
                                     </div>
+
 
                                 </div>
 

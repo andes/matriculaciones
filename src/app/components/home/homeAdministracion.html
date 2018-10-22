@@ -5,22 +5,22 @@
             <br><br>
         <div class="text-center">
             <div class="logo"></div>
-            <div class="row">
-                <div  class="col-4">
+            <div class="row" >
+                <div  class="col-4" *ngIf='permisosAgenda' >
                     <div class="boton color-celeste" routerLink="/agenda">
                         <i class="icono mdi mdi-pencil-box-outline"></i>
                         <div class="titulo">Agenda</div>
                         <div class="subtitulo">Configuración <br> de agendas</div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4" *ngIf='permisosTurnos'>
                     <div class="boton color-violeta" routerLink="/turnos">
                         <i class="icono mdi mdi-calendar"></i>
                         <div class="titulo">Turnos</div>
                         <div class="subtitulo">Listado de próximos<br> turnos</div>
                     </div>
                 </div>
-                <div  class="col-4">
+                <div  class="col-4" *ngIf='permisosProfesional'>
                     <div class="boton color-amarillo" routerLink="/listarProfesionales">
                         <i class="icono mdi mdi-account-multiple"></i>
                         <div class="titulo">Profesionales</div>

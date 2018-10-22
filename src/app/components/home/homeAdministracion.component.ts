@@ -13,6 +13,7 @@ export class HomeAdministracionComponent implements OnInit {
     public permisosProfesional;
     public permisosTurnos;
     public permisosAgenda;
+    public noTienePermisos;
     constructor(public plex: Plex, public auth: Auth) { }
 
     ngOnInit() {
@@ -32,9 +33,9 @@ export class HomeAdministracionComponent implements OnInit {
             this.permisosAgenda = false;
         }
 
-        console.log('permisosProfesional', this.permisosProfesional);
-        console.log('permisosTurnos', this.permisosTurnos);
-        console.log('permisosAgenda', this.permisosAgenda);
+        if (!this.permisosProfesional && !this.permisosAgenda && !this.permisosTurnos){
+            this.noTienePermisos = true;
+        }
 
     }
 

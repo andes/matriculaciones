@@ -187,8 +187,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
             tipoMatricula = 'MATRICULACION';
         }else{
 
-            console.log( moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') ) ;
-          console.log( moment().format('YYYY-MM-DD') );
+
             // if (moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).startOf('day').toDate() === moment().startOf('day').toDate()){
                  if ( moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') ===  moment().format('YYYY-MM-DD')){
                     tipoMatricula = 'MATRICULACION';

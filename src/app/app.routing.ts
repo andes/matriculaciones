@@ -33,6 +33,7 @@ import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
 import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
 import { SupervisoresComponent } from './components/supervisor/listado-supervisores.component';
+import { GuiaProfesionalComponent } from './components/guiaProfesional/guiaProfesional.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -41,22 +42,23 @@ const appRoutes: Routes = [
     { path: 'requisitosGenerales', component: RequisitosGeneralesComponent },
     { path: 'requisitosMatriculaUniversitaria', component: RequisitosMatriculaUniversitariaComponent },
     { path: 'requisitosMatriculaTecnicaAuxiliar', component: RequisitosMatriculaTecnicaAuxiliarComponent },
-    { path: 'agenda', component: AgendaComponent },
-    { path: 'nuevoProfesional', component: ProfesionalComponent },
+    { path: 'guiaProfesional', component: GuiaProfesionalComponent },
+    { path: 'agenda', component: AgendaComponent, canActivate: [RoutingGuard] },
+    { path: 'nuevoProfesional', component: ProfesionalComponent, canActivate: [RoutingGuard] },
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
     { path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent },
-    { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent },
+    { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent , canActivate: [RoutingGuard] },
     { path: 'cambioDni', component: CambioDniComponent },
     { path: 'listadoCambioDni', component: ListadoCambioDniComponent },
-    { path: 'turnos', component: TurnosComponent },
-    { path: 'profesional/:id', component: DetalleProfesionalComponent },
-    { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent },
-    { path: 'numeraciones', component: NumeracionMatriculasComponent },
-    { path: 'nuevoTurno', component: SolicitarTurnoComponent },
-    { path: 'listarProfesionales', component: ListarProfesionalesComponent },
-    { path: 'selectOrganizacion', component: SelectOrganizacionComponent },
+    { path: 'turnos', component: TurnosComponent, canActivate: [RoutingGuard] },
+    { path: 'profesional/:id', component: DetalleProfesionalComponent, canActivate: [RoutingGuard] },
+    { path: 'listadoNumeraciones', component: ListadoNumeracionMatriculasComponent, canActivate: [RoutingGuard] },
+    { path: 'numeraciones', component: NumeracionMatriculasComponent, canActivate: [RoutingGuard] },
+    { path: 'nuevoTurno', component: SolicitarTurnoComponent, canActivate: [RoutingGuard] },
+    { path: 'listarProfesionales', component: ListarProfesionalesComponent, canActivate: [RoutingGuard] },
+    { path: 'selectOrganizacion', component: SelectOrganizacionComponent, canActivate: [RoutingGuard] },
     { path: 'sobreTurnoMatriculacion', component: SolicitarSobreTurnoMatriculacionComponent },
-    { path: 'supervisores', component: SupervisoresComponent },
+    { path: 'supervisores', component: SupervisoresComponent, canActivate: [RoutingGuard] },
     { path: '**', redirectTo: 'homeProfesionales' }
 ];
 

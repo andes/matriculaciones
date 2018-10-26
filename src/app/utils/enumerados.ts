@@ -29,6 +29,10 @@ export enum EstadoCivil {
   'casado', 'separado', 'divorciado', 'viudo', 'soltero', 'otro'
 }
 
+export enum guiaProfesional {
+   'Documento', 'Profesion y N° de matricula'
+}
+
 export enum TipoContacto {
   fijo = <any>titleCase('fijo'),
   celular = <any>titleCase('celular'),
@@ -106,6 +110,20 @@ export function getObjEstadosMatriculas() {
 
   arrEstadoC = arrEstadoC.slice(arrEstadoC.length / 2);
   const salida = arrEstadoC.map((elem, index) => {
+      return {
+          'id': index,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+
+export function getObjGuiaProfesional() {
+  let array = Object.keys(guiaProfesional);
+
+  array = array.slice(array.length / 2);
+  const salida = array.map((elem, index) => {
       return {
           'id': index,
           'nombre': titleCase(elem)

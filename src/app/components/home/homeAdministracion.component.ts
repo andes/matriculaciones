@@ -19,21 +19,21 @@ export class HomeAdministracionComponent implements OnInit {
     ngOnInit() {
         if (this.auth.getPermissions('matriculaciones:profesionales:?').length > 0) {
             this.permisosProfesional = true;
-        }else{
+        }else {
             this.permisosProfesional = false;
         }
         if (this.auth.getPermissions('matriculaciones:turnos:?').length > 0) {
             this.permisosTurnos = true;
-        }else{
+        }else {
             this.permisosTurnos = false;
         }
         if (this.auth.getPermissions('matriculaciones:agenda:?').length > 0) {
             this.permisosAgenda = true;
-        }else{
+        }else {
             this.permisosAgenda = false;
         }
 
-        if (!this.permisosProfesional && !this.permisosAgenda && !this.permisosTurnos){
+        if (!this.permisosProfesional && !this.permisosAgenda && !this.permisosTurnos) {
             this.noTienePermisos = true;
         }
 

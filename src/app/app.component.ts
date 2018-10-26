@@ -112,9 +112,9 @@ export class AppComponent {
         route: '/home'
       });
 
-      if (this.router.url !== '/home') {
-        this.redirect('/homeProfesionales');
-      }
+      // if (this.router.url !== '/home') {
+      //   this.redirect('/homeProfesionales');
+      // }
       // this.redirect('/homeProfesionales');
     }
 

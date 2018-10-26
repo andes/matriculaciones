@@ -82,7 +82,7 @@ import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
 import { SolicitarSobreTurnoMatriculacionComponent } from './components/turnos/sobreTurnoMatriculacion.component';
 import {WebcamModule} from 'ngx-webcam';
-
+import { GuiaProfesionalComponent} from './components/guiaProfesional/guiaProfesional.component';
 import { TurnosComponent } from './components/turnos/turnos.component';
 
 
@@ -145,6 +145,7 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
     SelectOrganizacionComponent,
     COMPS_PROFESIONAL,
     RenovacionesProfesionalComponent,
+    GuiaProfesionalComponent,
     ScrollComponent,
     SupervisoresComponent
   ],

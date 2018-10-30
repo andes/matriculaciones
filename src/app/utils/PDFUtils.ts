@@ -400,7 +400,7 @@ export class PDFUtils {
         doc.text(65, 111, turno.profesional.formacionGrado[0].profesion.nombre);
         doc.text(65, 117, turno.profesional.formacionGrado[0].titulo);
         doc.text(65, 123, turno.profesional.formacionGrado[0].entidadFormadora.nombre);
-        doc.text(65, 129, this.getSimpleFormatedDate(turno.profesional.formacionGrado[0].fechaTitulo));
+        doc.text(65, 129, this.getSimpleFormatedDate(turno.profesional.formacionGrado[0].fechaEgreso));
 
         // completado domicilios
         offsetLoop = 0;

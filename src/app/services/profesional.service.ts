@@ -88,6 +88,10 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.profesionalesURL + 'guiaProfesional', { params: params, showError: true });
     }
 
+    getProfesionalesSisa(): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'exportSisa');
+    }
+
 }
 
 

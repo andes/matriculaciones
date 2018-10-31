@@ -155,9 +155,9 @@ export class ListarProfesionalesComponent implements OnInit {
       rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
       matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
       habilitado: this.value ? this.value.verDeshabilitado : false,
-      numeroMatriculaGrado : this.value ? this.value.numeroMatriculaGrado : '',
-      numeroMatriculaEspecialidad : this.value ? this.value.numeroMatriculaEspecialidad : '',
-      matriculacion : true,
+      numeroMatriculaGrado: this.value ? this.value.numeroMatriculaGrado : '',
+      numeroMatriculaEspecialidad: this.value ? this.value.numeroMatriculaEspecialidad : '',
+      matriculacion: true,
       limit: this.limit
 
     }).subscribe((data) => {
@@ -182,7 +182,6 @@ export class ListarProfesionalesComponent implements OnInit {
 
       }
 
-      // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
     });
 
 
@@ -456,6 +455,12 @@ export class ListarProfesionalesComponent implements OnInit {
     this.buscar();
   }
 
+  exportSisa() {
+    this._profesionalService.getProfesionalesSisa().subscribe((data) => {
+      console.log(data);
+      this.excelService.exportAsExcelFile(data,'profesionales')
+    });
+  }
 
 
 }

@@ -92,7 +92,6 @@ export class ListarProfesionalesComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public auth: Auth,
-    public plex: Plex,
     private formBuilder: FormBuilder
   ) { }
 

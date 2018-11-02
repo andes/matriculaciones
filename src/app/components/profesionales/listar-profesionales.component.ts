@@ -77,6 +77,7 @@ export class ListarProfesionalesComponent implements OnInit {
   public confirmar = false;
   public estadosMatriculas: any;
   public verBajas = false;
+  public verExportador = false;
   public estaRematriculado;
   public estaMatriculado;
   public mostrarRestablecer;
@@ -84,6 +85,10 @@ export class ListarProfesionalesComponent implements OnInit {
   modalScrollDistance = 2;
   modalScrollThrottle = 10;
   public limit = 50;
+  public exportSisa = {
+    fechaDesde: '',
+    fechaHasta: ''
+  };
   searchForm: FormGroup;
   value;
   constructor(
@@ -138,6 +143,7 @@ export class ListarProfesionalesComponent implements OnInit {
 
   seleccionar(profesional: any) {
     this.profesionalElegido = profesional;
+    this.verExportador = false;
   }
 
   buscar(event?: any) {
@@ -455,10 +461,13 @@ export class ListarProfesionalesComponent implements OnInit {
     this.buscar();
   }
 
-  exportSisa() {
-    this._profesionalService.getProfesionalesSisa().subscribe((data) => {
+  exportarSisa() {
+    this._profesionalService.getProfesionalesSisa(this.exportSisa).subscribe((data) => {
       console.log(data);
-      this.excelService.exportAsExcelFile(data,'profesionales')
+      this.excelService.exportAsExcelFile(data, 'profesionales');
+      this.plex.toast('success', 'se genero con exito el reporte!', 'informacion', 1000);
+
+
     });
   }
 

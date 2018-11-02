@@ -156,7 +156,7 @@
                         </div>
                         <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
                             <span *ngIf="profesionalPosgrado.matriculado === true && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
-                              class="badge badge-primary">
+                              class="badge-primary">
                               {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
                               {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
                               1].matriculaNumero}} 

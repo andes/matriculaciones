@@ -77,6 +77,7 @@ export class ListarProfesionalesComponent implements OnInit {
   public confirmar = false;
   public estadosMatriculas: any;
   public verBajas = false;
+  public verExportador = false;
   public estaRematriculado;
   public estaMatriculado;
   public mostrarRestablecer;
@@ -84,6 +85,10 @@ export class ListarProfesionalesComponent implements OnInit {
   modalScrollDistance = 2;
   modalScrollThrottle = 10;
   public limit = 50;
+  public exportSisa = {
+    fechaDesde: '',
+    fechaHasta: ''
+  };
   searchForm: FormGroup;
   value;
   constructor(
@@ -138,6 +143,7 @@ export class ListarProfesionalesComponent implements OnInit {
 
   seleccionar(profesional: any) {
     this.profesionalElegido = profesional;
+    this.verExportador = false;
   }
 
   buscar(event?: any) {
@@ -155,9 +161,9 @@ export class ListarProfesionalesComponent implements OnInit {
       rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
       matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
       habilitado: this.value ? this.value.verDeshabilitado : false,
-      numeroMatriculaGrado : this.value ? this.value.numeroMatriculaGrado : '',
-      numeroMatriculaEspecialidad : this.value ? this.value.numeroMatriculaEspecialidad : '',
-      matriculacion : true,
+      numeroMatriculaGrado: this.value ? this.value.numeroMatriculaGrado : '',
+      numeroMatriculaEspecialidad: this.value ? this.value.numeroMatriculaEspecialidad : '',
+      matriculacion: true,
       limit: this.limit
 
     }).subscribe((data) => {
@@ -182,7 +188,6 @@ export class ListarProfesionalesComponent implements OnInit {
 
       }
 
-      // this.excelService.exportAsExcelFile(this.profesionales,'profesionales')
     });
 
 
@@ -456,6 +461,15 @@ export class ListarProfesionalesComponent implements OnInit {
     this.buscar();
   }
 
+  // exportarSisa() {
+  //   this._profesionalService.getProfesionalesSisa(this.exportSisa).subscribe((data) => {
+  //     console.log(data);
+  //     this.excelService.exportAsExcelFile(data, 'profesionales');
+  //     this.plex.toast('success', 'se genero con exito el reporte!', 'informacion', 1000);
+
+
+  //   });
+  // }
 
 
 }

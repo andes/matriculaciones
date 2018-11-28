@@ -221,7 +221,7 @@ export class PDFUtils {
         doc.text(20, 111, 'Profesión:');
         doc.text(20, 117, 'Título:');
         doc.text(20, 123, 'Ent. Formadora:');
-        doc.text(20, 129, 'Fecha de Egreso:');
+        doc.text(20, 131, 'Fecha de Egreso:');
 
         doc.line(20, 135, 190, 135);
 
@@ -273,8 +273,15 @@ export class PDFUtils {
         doc.text(65, 101, turno.nacionalidad.nombre);
         doc.text(65, 111, turno.formacionGrado[grado].profesion.nombre);
         doc.text(65, 117, turno.formacionGrado[grado].titulo);
-        doc.text(65, 123, turno.formacionGrado[grado].entidadFormadora.nombre);
-        doc.text(65, 129, this.getSimpleFormatedDate(turno.formacionGrado[grado].fechaEgreso));
+        const splitTitle = doc.splitTextToSize(turno.formacionGrado[grado].entidadFormadora.nombre, 150);
+        let textoEntidad = 123;
+        splitTitle.forEach(element => {
+
+            doc.text(/*'UNIV. NAC. DE CORDOBA'*/element, 65, textoEntidad);
+            textoEntidad = textoEntidad + 4;
+        });
+        // doc.text(65, 123, turno.formacionGrado[grado].entidadFormadora.nombre);
+        doc.text(65, 131, this.getSimpleFormatedDate(turno.formacionGrado[grado].fechaEgreso));
 
         // completado domicilios
         offsetLoop = 0;

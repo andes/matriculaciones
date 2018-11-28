@@ -25,6 +25,7 @@ import {
   EstadoCivil,
   TipoContacto
 } from './../../utils/enumerados';
+import { Matching } from '@andes/match';
 
 // Services
 import {
@@ -67,6 +68,13 @@ import { TurnoService } from '../../services/turno.service';
 export class ProfesionalComponent implements OnInit {
   public formProfesionalComp: FormGroup;
   public sexos: any;
+  match = new Matching();
+  weights = {
+    identity: 0.55,
+    name: 0.10,
+    gender: 0.3,
+    birthDate: 0.05
+  };
   public provincias: any[];
   public localidades: any[];
   public paises: any[];
@@ -94,10 +102,7 @@ export class ProfesionalComponent implements OnInit {
     cuit: null,
     fechaNacimiento: null,
     lugarNacimiento: '',
-    nacionalidad: {
-      nombre: null,
-      codigo: null,
-    },
+    nacionalidad: null,
     sexo: undefined,
     contactos: [{
       tipo: 'celular',
@@ -156,15 +161,8 @@ export class ProfesionalComponent implements OnInit {
     firmas: null,
     formacionGrado: [{
       exportadoSisa: null,
-      profesion: {
-        nombre: null,
-        codigo: null,
-        tipoDeFormacion: null
-      },
-      entidadFormadora: {
-        nombre: null,
-        codigo: null,
-      },
+      profesion: null,
+      entidadFormadora: null,
       titulo: null,
       fechaEgreso: null,
       fechaTitulo: null,
@@ -186,7 +184,7 @@ export class ProfesionalComponent implements OnInit {
   localidadesReal: any[];
   localidadesLegal: any[];
   localidadesProfesional: any[];
-
+  matcheo = false;
 
   @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
@@ -256,7 +254,7 @@ export class ProfesionalComponent implements OnInit {
       }
     }
     if (this.confirmar) {
-      if (this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
+      if (this.profesional.formacionGrado[0].entidadFormadora && this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
         this.showOtraEntidadFormadora = true;
       } else {
         this.showOtraEntidadFormadora = false;
@@ -274,6 +272,8 @@ export class ProfesionalComponent implements OnInit {
 
   confirmarDatos($event) {
     if ($event.formValid) {
+      let matcheo = false;
+      console.log('aca');
       // tslint:disable-next-line:max-line-length
       // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
@@ -284,16 +284,58 @@ export class ProfesionalComponent implements OnInit {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
-      this.ocultarBtn = true;
-      this.onProfesionalCompleto.emit(this.profesional);
-      this.router.navigate(['requisitosGenerales']);
-      // this.onProfesionalCompleto.emit(this.profesional);
+      this.matching();
+
+
+      this._profesionalService.getProfesionalesMatching({ documento: this.profesional.documento })
+        .subscribe(
+          datos => {
+            if (datos.length > 0) {
+              datos.forEach(profCandidato => {
+                this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id);
+                const porcentajeMatching = this.match.matchPersonas(this.profesional, profCandidato, this.weights, 'Levenshtein');
+                const profesionalMatch = {
+                  matching: 0,
+                  paciente: null
+                };
+                if (porcentajeMatching) {
+                  profesionalMatch.matching = porcentajeMatching * 100;
+                  profesionalMatch.paciente = profCandidato;
+                }
+                if (profesionalMatch.matching >= 94) {
+                  matcheo = true;
+                }
+              });
+            }
+            if (matcheo) {
+              this.plex.alert('Ya existe un profesional registrados con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
+            } else {
+              this.ocultarBtn = true;
+              this.onProfesionalCompleto.emit(this.profesional);
+              this.router.navigate(['requisitosGenerales']);
+            }
+
+
+          });
+
+      // if (this.matcheo) {
+      //   console.log('la wea matcheo');
+      //   this.plex.alert('Ya existe un profesional registrados con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
+      // } else {
+      //   console.log("acaaaaaa entre la wea mala")
+      //   // this.ocultarBtn = true;
+      //   // this.onProfesionalCompleto.emit(this.profesional);
+      //   // this.router.navigate(['requisitosGenerales']);
+      //   // this.onProfesionalCompleto.emit(this.profesional);
+      // }
+
     }
 
   }
 
   confirmarDatosAdmin($event) {
     if ($event.formValid) {
+      let matcheo = false;
       this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
       this.profesional.formacionGrado[0].exportadoSisa = false;
       // tslint:disable-next-line:max-line-length
@@ -305,30 +347,59 @@ export class ProfesionalComponent implements OnInit {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
-      this._profesionalService.saveProfesional({ profesional: this.profesional })
-        .subscribe(nuevoProfesional => {
-          if (nuevoProfesional === null) {
-            this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
-          } else {
-            this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-            this.editado.emit(true);
-            if (this.nuevoProf) {
-              this._turnosService.saveTurnoSolicitados(nuevoProfesional)
-                .subscribe((nuevoProfesional2) => {
-                  const turno = {
-                    fecha: new Date(),
-                    tipo: 'matriculacion',
-                    profesional: nuevoProfesional._id
-                  };
-                  this._turnosService.saveTurnoMatriculacion({turno: turno})
-                  .subscribe(turno => {
-                    this.router.navigate(['/profesional', nuevoProfesional._id]);
-                  });
+
+      this._profesionalService.getProfesionalesMatching({ documento: this.profesional.documento })
+        .subscribe(
+          datos => {
+            if (datos.length > 0) {
+              datos.forEach(profCandidato => {
+                this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id);
+                const porcentajeMatching = this.match.matchPersonas(this.profesional, profCandidato, this.weights, 'Levenshtein');
+                const profesionalMatch = {
+                  matching: 0,
+                  paciente: null
+                };
+                if (porcentajeMatching) {
+                  profesionalMatch.matching = porcentajeMatching * 100;
+                  profesionalMatch.paciente = profCandidato;
+                }
+                if (profesionalMatch.matching >= 94) {
+                  matcheo = true;
+                }
+              });
+
+            }
+            if (matcheo) {
+              this.plex.alert('Ya existe un profesional registrados con estos datos');
+            } else {
+              this._profesionalService.saveProfesional({ profesional: this.profesional })
+                .subscribe(nuevoProfesional => {
+                  if (nuevoProfesional === null) {
+                    this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
+                  } else {
+                    this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+                    this.editado.emit(true);
+                    if (this.nuevoProf) {
+                      this._turnosService.saveTurnoSolicitados(nuevoProfesional)
+                        .subscribe((nuevoProfesional2) => {
+                          const turno = {
+                            fecha: new Date(),
+                            tipo: 'matriculacion',
+                            profesional: nuevoProfesional._id
+                          };
+                          this._turnosService.saveTurnoMatriculacion({ turno: turno })
+                            .subscribe(turno => {
+                              this.router.navigate(['/profesional', nuevoProfesional._id]);
+                            });
+                        });
+                    }
+                  }
+
                 });
             }
-          }
 
-        });
+          });
+
     }
   }
 
@@ -358,7 +429,7 @@ export class ProfesionalComponent implements OnInit {
       this._localidadService.getXProvincia(provincia.value.codigo)
         .subscribe(resp => {
           this.localidadesLegal = resp;
-          provincia.callback(resp);
+          // provincia.callback(resp);
         });
     } else {
       if (this.profesional.domicilios[1].ubicacion.provincia) {
@@ -377,14 +448,14 @@ export class ProfesionalComponent implements OnInit {
               this._localidadService.getXProvincia(localidadValor)
                 .subscribe(resp1 => {
                   this.localidadesLegal = resp1;
-                  provincia.callback(resp1);
+                  // provincia.callback(resp1);
                 });
             }
           });
       } else {
 
         this.localidadesLegal = [];
-        provincia.callback([]);
+        // provincia.callback([]);
 
       }
 
@@ -549,6 +620,33 @@ export class ProfesionalComponent implements OnInit {
     };
   }
 
+
+  matching() {
+    this._profesionalService.getProfesionalesMatching({ documento: this.profesional.documento })
+      .subscribe(
+        datos => {
+          if (datos.length > 0) {
+            datos.forEach(profCandidato => {
+              this.profesional.sexo = ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id);
+
+              const porcentajeMatching = this.match.matchPersonas(this.profesional, profCandidato, this.weights, 'Levenshtein');
+              const profesionalMatch = {
+                matching: 0,
+                paciente: null
+              };
+              if (porcentajeMatching) {
+                profesionalMatch.matching = porcentajeMatching * 100;
+                profesionalMatch.paciente = profCandidato;
+              }
+              console.log(profesionalMatch);
+              if (profesionalMatch.matching >= 94) {
+                this.matcheo = true;
+              }
+            });
+          }
+
+        });
+  }
 
   // guardarTurnoNuevoProf(profesional) {
   //   profesional.idRenovacion = this.profesional.id;

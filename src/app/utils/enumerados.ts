@@ -51,6 +51,11 @@ export enum TipoTurno {
 }
 
 
+export enum TipoCopiaCredencial{
+  'Duplicado', 'Triplicado'
+}
+
+
 // Private
 export function getEnumAsObjects(enumerado: any) {
   const keys = Object.keys(enumerado);
@@ -131,6 +136,19 @@ export function getObjGuiaProfesional() {
   });
   return salida;
 }
+export function getCopiasCredencial() {
+  let arrTipoCopiaCredencial = Object.keys(TipoCopiaCredencial);
+  arrTipoCopiaCredencial = arrTipoCopiaCredencial.slice(arrTipoCopiaCredencial.length / 2);
+  const salida = arrTipoCopiaCredencial.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+
 
 export function getObjSexos() {
   let arrSexo = Object.keys(Sexo);

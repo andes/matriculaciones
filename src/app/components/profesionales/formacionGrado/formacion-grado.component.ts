@@ -23,6 +23,7 @@ import { Auth } from '@andes/auth';
 import { ProfesionService } from '../../../services/profesion.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 import * as moment from 'moment';
+import * as enumerados from './../../../utils/enumerados';
 
 @Component({
     selector: 'app-formacion-grado',
@@ -43,14 +44,18 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         id: null,
         nombreCompleto: null
     };
+    public credencial = false;
     public formacionSelected;
-
+    public copia = false;
+    public copiasObj;
+    public copias;
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
         private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, ) { }
 
     ngOnInit() {
+        this.copiasObj = enumerados.getCopiasCredencial();
         this.hoy = new Date();
         // this.verificaVencimiento();
         this._profesionalService.getProfesionalFirma({ id: this.profesional.id })
@@ -92,6 +97,11 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     }
 
+    credencialAcciones(){
+        this.credencial = true;
+        this.edit = false;
+    }
+
     generarCredencial(grado) {
         this._profesionalService.getProfesionalFoto({ id: this.profesional.id })
             .subscribe((resp) => {
@@ -107,7 +117,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                                 };
                                 this._profesionService.getProfesiones().subscribe(datos => {
                                     const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
-                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0]);
+                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0], this.copias);
                                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
                                     // this.loading = false;
                                 });

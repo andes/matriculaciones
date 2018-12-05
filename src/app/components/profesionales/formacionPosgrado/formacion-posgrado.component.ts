@@ -47,6 +47,7 @@ export class FormacionPosgradoComponent implements OnInit {
     public hoy;
     public edit = false;
     public formacionSelected;
+    public proximaFechaDeAlta;
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
         private _profesionalService: ProfesionalService,
@@ -122,7 +123,7 @@ export class FormacionPosgradoComponent implements OnInit {
 
     editar(formacionPosgrado) {
         this.edit = true;
-
+        console.log(formacionPosgrado);
         if (formacionPosgrado.certificacion) {
             this.certificacion = formacionPosgrado.certificacion;
 
@@ -146,5 +147,9 @@ export class FormacionPosgradoComponent implements OnInit {
         } else {
             this.showOtraEntidadFormadora = false;
         }
+    }
+
+    pushFechasAlta(){
+        this.formacionSelected.fechasDeAltas.push({fecha: this.proximaFechaDeAlta});
     }
 }

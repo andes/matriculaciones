@@ -78,11 +78,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 if (mantenerNumero) {
                     matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
                 }
-                if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) < new Date().getFullYear()) {
-                    this.formacion.fechasDeAltas.push({ fecha: new Date() });
-                    this.profesional.formacionPosgrado[this.index] = this.formacion;
-                    revNumero = 0;
-                }
+                // if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) < new Date().getFullYear()) {
+                //     this.formacion.fechasDeAltas.push({ fecha: new Date() });
+                //     this.profesional.formacionPosgrado[this.index] = this.formacion;
+                //     revNumero = 0;
+                // }
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {
                     matriculaNumero: matriculaNumero,

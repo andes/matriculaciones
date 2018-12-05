@@ -107,4 +107,8 @@ export class TurnoService extends BaseService {
         return this._server.patch(this.turnosURL  + id, cambios);
     }
 
+    getTurnosPorDocumento(params){
+        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true } );
+    }
+
 }

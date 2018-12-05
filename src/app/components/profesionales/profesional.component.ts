@@ -286,7 +286,7 @@ export class ProfesionalComponent implements OnInit {
       });
       this.ocultarBtn = true;
       this.onProfesionalCompleto.emit(this.profesional);
-      this.router.navigate(['requisitosGenerales']);
+
       // this.onProfesionalCompleto.emit(this.profesional);
     }
 

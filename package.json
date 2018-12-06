@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@andes/auth": "^2.0.0",
-    "@andes/match": "^0.1.9",
+    "@andes/match": "^1.1.12",
     "@andes/plex": "^3.6.2",
     "@andes/shared": "^2.0.0",
     "@angular/animations": "^5.0.0",

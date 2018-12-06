@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
-import { Plex } from '@andes/plex/src/lib/core/service';
+import { Plex } from '@andes/plex';
 // import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 

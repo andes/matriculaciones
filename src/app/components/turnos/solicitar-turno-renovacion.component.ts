@@ -17,6 +17,7 @@ import { PDFUtils } from './../../utils/PDFUtils';
 import * as Enums from './../../utils/enumerados';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { Params, ActivatedRoute, Router } from '@angular/router';
+import * as moment from 'moment';
 
 const jsPDF = require('jspdf');
 
@@ -222,6 +223,14 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   }
 
   onProfesionalCompleto() {
+    const parametros = {
+      documento: this.profesional.documento,
+      tipoTurno: 'renovacion',
+      sexo: this.profesional.sexo
+    };
+    this._turnosService.getTurnosPorDocumento(parametros).subscribe((resultado: any) => {
+      console.log(resultado);
+      if (!resultado){
     this._turnosService.saveTurnoSolicitados(this.profesional)
       .subscribe((nuevoProfesional) => {
         if (nuevoProfesional == null) {
@@ -237,6 +246,12 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
           this.router.navigate(['requisitosGenerales']);
         }
       });
+      }else{
+        this.plex.alert('usted ya tiene un turno para el dia <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
+
+      }
+    });
+
   }
 
   profesionalEncontrado(profEncontrado) {
@@ -246,6 +261,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     this.profesional.apellido = profEncontrado.apellido;
     this.profesional.documento = profEncontrado.documento;
     this.profesional.fechaNacimiento = profEncontrado.fechaNacimiento;
+    this.profesional.sexo = profEncontrado.sexo;
   }
 
 

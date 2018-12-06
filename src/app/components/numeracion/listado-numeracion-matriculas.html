@@ -9,9 +9,9 @@
                         </header>
                 </div>
             </div>
-            <br>
-            <app-numeracion-form-matriculas (saveNumeracion)='buscar($event)'></app-numeracion-form-matriculas>
-            <br>
+            <!-- <br>
+             <app-numeracion-form-matriculas (saveNumeracion)='buscar($event)'></app-numeracion-form-matriculas> 
+            <br> -->
             <hr>
             <div >
                 <div class="row">
@@ -43,9 +43,9 @@
                                 <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
                                 </h4>
                             
-                                <button class="btn btn-primary" (click)="showNumeracion(numeracion)" >
+                                <!-- <button class="btn btn-primary" (click)="showNumeracion(numeracion)" >
                                     <span class="mdi mdi-chevron-right"></span>
-                                </button>
+                                </button> -->
 
                             </li>
                             <li class="list-group-item justify-content-between" *ngIf='numeracion.especialidad'>
@@ -54,9 +54,9 @@
                                 <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
                                 </h4>
                             
-                                <button class="btn btn-primary" (click)="showNumeracion(numeracion)" >
+                                <!-- <button class="btn btn-primary" (click)="showNumeracion(numeracion)" >
                                     <span class="mdi mdi-chevron-right"></span>
-                                </button>
+                                </button> -->
 
                             </li>
                         </ul>

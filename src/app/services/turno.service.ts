@@ -51,6 +51,10 @@ export class TurnoService extends BaseService {
     getTurnoSolicitados(dni: any): Observable<any> {
         return this._server.get(this.turnosSolicitados + 'traePDni/' + dni);
     }
+
+    getTurnoPorDni(params): Observable<any> {
+        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true } );
+    }
     getTurnos(url: string, searchParams: any): Observable<any> {
         const parametros: any = {
             anio: null,

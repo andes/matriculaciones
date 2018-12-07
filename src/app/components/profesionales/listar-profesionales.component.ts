@@ -461,15 +461,15 @@ export class ListarProfesionalesComponent implements OnInit {
     this.buscar();
   }
 
-  // exportarSisa() {
-  //   this._profesionalService.getProfesionalesSisa(this.exportSisa).subscribe((data) => {
-  //     console.log(data);
-  //     this.excelService.exportAsExcelFile(data, 'profesionales');
-  //     this.plex.toast('success', 'se genero con exito el reporte!', 'informacion', 1000);
+  exportarSisa() {
+    this._profesionalService.getProfesionalesSisa(this.exportSisa).subscribe((data) => {
+      console.log(data);
+      this.excelService.exportAsExcelFile(data, 'profesionales');
+      this.plex.toast('success', 'se genero con exito el reporte!', 'informacion', 1000);
 
 
-  //   });
-  // }
+    });
+  }
 
 
 }

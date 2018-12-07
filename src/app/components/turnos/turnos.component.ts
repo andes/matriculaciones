@@ -69,16 +69,16 @@ export class TurnosComponent implements OnInit {
          * 4) Cuando la "fechaSHoy" no coincida con el dia de hoy, se remueve lo que esta guardado en el localStorage y se filtra por fecha de hoy".
          */
 
-        let fechaSDesde: any = JSON.parse(localStorage.getItem("fechaDesde"));
-        let fechaSHoy: any = JSON.parse(localStorage.getItem("fechaHoy"));
+        const fechaSDesde: any = JSON.parse(localStorage.getItem('fechaDesde'));
+        const fechaSHoy: any = JSON.parse(localStorage.getItem('fechaHoy'));
 
         if (fechaSDesde) {
             if (moment(fechaSHoy.fechaHoy).format('MMM Do YY') === moment(this.hoy).format('MMM Do YY')) {
                 this.filtroBuscar.fecha = new Date(fechaSDesde.fecha);
             } else {
                 this.filtroBuscar.fecha = new Date();
-                localStorage.removeItem("fechaDesde");
-                localStorage.removeItem("fechaHoy");
+                localStorage.removeItem('fechaDesde');
+                localStorage.removeItem('fechaHoy');
             }
         } else {
             this.filtroBuscar.fecha = new Date();
@@ -135,8 +135,8 @@ export class TurnosComponent implements OnInit {
     }
 
     saveFecha() {
-        localStorage.setItem("fechaDesde", JSON.stringify({ fecha: this.filtroBuscar.fecha }));
-        localStorage.setItem("fechaHoy", JSON.stringify({ fechaHoy: this.filtroBuscar.fechaHoy }));
+        localStorage.setItem('fechaDesde', JSON.stringify({ fecha: this.filtroBuscar.fecha }));
+        localStorage.setItem('fechaHoy', JSON.stringify({ fechaHoy: this.filtroBuscar.fechaHoy }));
     }
 
     showProfesional(turno: any) {

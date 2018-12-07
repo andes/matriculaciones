@@ -30,7 +30,7 @@ export enum EstadoCivil {
 }
 
 export enum guiaProfesional {
-   'Documento', 'Profesion y N° de matricula'
+   'Documento', 'Profesion y N° de matricula', 'Nombre,apellido y N° de matricula'
 }
 
 export enum TipoContacto {

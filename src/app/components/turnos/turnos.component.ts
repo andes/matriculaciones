@@ -26,7 +26,6 @@ const jsPDF = require('jspdf');
 })
 export class TurnosComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
-    public formBuscarTurno: FormGroup;
     public turnos: any[] = [];
     public turnoElegido: any;
     public showListado: Boolean = true;
@@ -38,6 +37,16 @@ export class TurnosComponent implements OnInit {
     modalScrollDistance = 2;
     modalScrollThrottle = 10;
     public hoy = new Date();
+
+    public filtroBuscar = {
+        nombre: '',
+        apellido: '',
+        documento: '',
+        fecha: new Date(),
+        offset: 0,
+        size: 0,
+        fechaHoy: new Date()
+    };
 
     constructor(private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
@@ -52,14 +61,32 @@ export class TurnosComponent implements OnInit {
     }
 
     ngOnInit() {
-        this.formBuscarTurno = this._formBuilder.group({
-            nombre: '',
-            apellido: '',
-            fecha: new Date(),
-            documento: ''
-        });
+
+        /**
+         * 1) Cada vez que inicia fechaSDesde y fechaShoy(fechas ubicadas en el localStorage) se encuentran en null.
+         * 2) Cuando se hace un filtro en la fechaDesde (En "fechaSDesde" guarda dicha fecha filtrada y en "fechaSHoy" guarda la fecha de hoy).
+         * 3) Mientras que la "fechaSHoy" del localStorage siga siendo la misma que la fecha de hoy, se va a filtrar por la fecha "fechaSDesde".
+         * 4) Cuando la "fechaSHoy" no coincida con el dia de hoy, se remueve lo que esta guardado en el localStorage y se filtra por fecha de hoy".
+         */
+
+        const fechaSDesde: any = JSON.parse(localStorage.getItem('fechaDesde'));
+        const fechaSHoy: any = JSON.parse(localStorage.getItem('fechaHoy'));
+
+        if (fechaSDesde) {
+            if (moment(fechaSHoy.fechaHoy).format('MMM Do YY') === moment(this.hoy).format('MMM Do YY')) {
+                this.filtroBuscar.fecha = new Date(fechaSDesde.fecha);
+            } else {
+                this.filtroBuscar.fecha = new Date();
+                localStorage.removeItem('fechaDesde');
+                localStorage.removeItem('fechaHoy');
+            }
+        } else {
+            this.filtroBuscar.fecha = new Date();
+        }
+
         this.buscar();
         this.contadorDeCambiosDni();
+
         if (environment.production === true) {
             // this.avisoTurno();
         }
@@ -83,11 +110,11 @@ export class TurnosComponent implements OnInit {
         if (!event) {
             this.turnoElegido = null;
         }
-        const consulta = this.formBuscarTurno.value;
-        consulta.offset = event ? event.query.offset : this.offset;
-        consulta.size = event ? event.query.size : this.limit;
 
-        this._turnoService.getTurnosProximos(consulta)
+        this.filtroBuscar['offset'] = this.offset;
+        this.filtroBuscar['size'] = this.limit;
+
+        this._turnoService.getTurnosProximos(this.filtroBuscar)
             .subscribe((resp) => {
                 this.turnos = resp.data;
                 if (event) {
@@ -95,12 +122,7 @@ export class TurnosComponent implements OnInit {
                     event.callback(resp);
                 }
 
-
-                const consultaTotal = this.formBuscarTurno.value;
-                consultaTotal.offset = event ? event.query.offset : null;
-                consultaTotal.size = event ? event.query.size : null;
-
-                this._turnoService.getTurnosProximos(consultaTotal)
+                this._turnoService.getTurnosProximos(this.filtroBuscar)
                     .subscribe((res) => {
                         this.turnosTotal = res.data.length;
                         if (event) {
@@ -110,6 +132,11 @@ export class TurnosComponent implements OnInit {
                     });
             });
 
+    }
+
+    saveFecha() {
+        localStorage.setItem('fechaDesde', JSON.stringify({ fecha: this.filtroBuscar.fecha }));
+        localStorage.setItem('fechaHoy', JSON.stringify({ fechaHoy: this.filtroBuscar.fechaHoy }));
     }
 
     showProfesional(turno: any) {
@@ -143,7 +170,7 @@ export class TurnosComponent implements OnInit {
         this.buscar();
         // this.modalTitle = 'updated on ' + (new Date()).toString();
         // this.modalBody += modalText;
-      }
+    }
 
 
     contadorDeCambiosDni() {

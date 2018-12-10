@@ -9,7 +9,7 @@
                         <div class="col">
                             <div class="page-title">Turnos</div>
                         </div>
-                         <!--
+                        <!--
                         <div class="col">
                             <div class="float-right badge">
                                 <span class=" badge badge-info contadorBadge" *ngIf='solicitudesDeCambio > 0'>
@@ -21,7 +21,7 @@
                         </div>-->
                     </div>
                     <!-- SEARCH -->
-                    <div [formGroup]="formBuscarTurno">
+                    <!-- <div [formGroup]="formBuscarTurno">
                         <div class="row">
                             <div class="col-md-3">
                                 <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
@@ -33,39 +33,65 @@
                                 <plex-int label="Documento" formControlName="documento" (change)="buscar()"></plex-int>
                             </div>
                             <div class="col-md-3">
-                                <plex-datetime type="date" label="Fecha desde" formControlName="fecha" (change)="buscar()"></plex-datetime>
+
+                                <plex-datetime type="date" label="Fecha desde" formControlName="fecha" (change)="buscar();saveFecha()"></plex-datetime>
+                            </div>
+                        </div>
+                    </div> -->
+                    <div>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="buscar()"></plex-text>
+                            </div>
+                            <div class="col-md-3">
+                                <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="buscar()"></plex-text>
+                            </div>
+                            <div class="col-md-3">
+                                <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="buscar()"></plex-int>
+                            </div>
+                            <div class="col-md-3">
+                                <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
+                                    (change)="buscar();saveFecha()"></plex-datetime>
                             </div>
                         </div>
                     </div>
+
                     <br>
                 </header>
 
                 <!-- LIST -->
                 <div class="row" style='max-height: 100%;
-                overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false"
-                (scrolled)="onModalScrollDown()">
+                overflow-y: scroll;' infinite-scroll
+                    [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
+                    [scrollWindow]="false" (scrolled)="onModalScrollDown()">
                     <div class="col-12">
                         <div *ngIf="turnos.length === 0" class="alert alert-danger">
                             <i class="mdi mdi-account-alert"></i> No se encontró ningún turno
                         </div>
                         <ul class="list-group">
-                            <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)" [ngClass]="{'active': isSelected(turno)}">
+                            <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)"
+                                [ngClass]="{'active': isSelected(turno)}">
 
                                 <div class="row" style="width: 100%">
                                     <div class="col-10">
                                         <h6 class="box-title-elemento">
-                                            {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs
-                                            <br> {{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre
+                                            {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }}
+                                            hs
+                                            <br> {{ (turno.profesional ? turno.profesional.apellido + ', ' +
+                                            turno.profesional.nombre
                                             : '' ) }} |
-                                            <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documento : '') }}</small>
+                                            <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documento : '')
+                                                }}</small>
                                         </h6>
                                     </div>
                                     <div class="col-2">
                                         <h6 class="box-title-elemento badge " [ngClass]="{'badge-white': isSelected(turno), 'badge-info': !isSelected(turno)}">
                                             {{ turno.tipo }}
                                         </h6>
-                                        <span *ngIf='turno.sePresento === true;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-success">Presente</span>
-                                        <span *ngIf='turno.sePresento === false;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-danger">Ausente</span>
+                                        <span *ngIf='turno.sePresento === true;' [ngClass]="{'badge-white': isSelected(turno)}"
+                                            class="text-light  badge badge-success">Presente</span>
+                                        <span *ngIf='turno.sePresento === false;' [ngClass]="{'badge-white': isSelected(turno)}"
+                                            class="text-light  badge badge-danger">Ausente</span>
                                     </div>
 
 
@@ -101,11 +127,13 @@
                                 <label>Fecha y hora</label>
                                 <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
                                 <label>Tipo de turno</label>
-                                <h6 class="text-light  badge badge-info" >{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</h6>
+                                <h6 class="text-light  badge badge-info">{{ turnoElegido.tipo === 'matriculacion' ?
+                                    'Matriculación' : 'Renovación' }}</h6>
                                 <br>
                                 <span *ngIf='turnoElegido.sePresento === true;' class="text-light  badge badge-success">Presente</span>
                                 <span *ngIf='turnoElegido.sePresento === false;' class="text-light  badge badge-danger">Ausente</span>
-                                <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado()" *ngIf="turnoElegido.sePresento === false"></plex-button>
+                                <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado()"
+                                    *ngIf="turnoElegido.sePresento === false"></plex-button>
                             </div>
                         </div>
                         <hr>
@@ -129,8 +157,8 @@
                         </div>
                         <div class="row">
                             <div class="col-md-12">
-                                <plex-button type="primary" icon='mdi mdi-account' label="Ver Profesional" class="float-right" [disabled]="turnoElegido.sePresento === false"
-                                    (click)="showProfesional(turnoElegido)"></plex-button>
+                                <plex-button type="primary" icon='mdi mdi-account' label="Ver Profesional" class="float-right"
+                                    [disabled]="turnoElegido.sePresento === false" (click)="showProfesional(turnoElegido)"></plex-button>
                             </div>
                         </div>
                         <hr>

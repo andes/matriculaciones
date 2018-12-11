@@ -16,6 +16,7 @@ import { PDFUtils } from './../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
 import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
+import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
 
 const jsPDF = require('jspdf');
 
@@ -48,6 +49,8 @@ export class TurnosComponent implements OnInit {
         fechaHoy: new Date()
     };
 
+    public componentPrint = false;
+    turnosParaListado: any;
     constructor(private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
@@ -55,6 +58,7 @@ export class TurnosComponent implements OnInit {
         private router: Router,
         private _cambioDniService: CambioDniService,
         public auth: Auth,
+        public listadoPdf: ListadoTurnosPdfComponent,
         private _profesionalService: ProfesionalService) { }
 
     onScroll() {
@@ -183,6 +187,25 @@ export class TurnosComponent implements OnInit {
             }
             this.solicitudesDeCambio = contador;
         });
+    }
+
+    imprimir() {
+        let filtrosPdf = {
+            fecha: this.filtroBuscar.fecha,
+            limit: 40
+
+        };
+        this._turnoService.getTurnosProximos(filtrosPdf)
+            .subscribe((resp) => {
+                console.log(resp)
+                let totalTurnos = resp.data;
+                const nuevo = totalTurnos.filter(turno => { return (moment(this.filtroBuscar.fecha).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')) });
+                console.log('nuevo', nuevo);
+                this.componentPrint = true;
+                this.turnosParaListado = nuevo;
+                // this.listadoPdf.imprimir(nuevo);
+            });
+
     }
 
     // avisoTurno(event?: any) {

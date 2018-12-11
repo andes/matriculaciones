@@ -51,3 +51,44 @@
     border-color: #ffffff;
     color: #ffffff;
 }
+
+@media print {
+    @page {
+        size: portrait;
+    }
+    
+    nav,
+    footer,
+    .btn {
+        display: none !important;
+    }
+    
+    .userinfo {
+        display: none !important;
+    }
+    body {
+        padding-top: 0;
+    }
+    // table {
+    //     // page-break-after: always;
+    // }
+    th {
+        font-size: 1rem;
+    }
+    tr {
+        border-bottom: 2px solid rgba(0, 0, 0, .15);
+    }
+    small {
+        font-size: 0.7rem;
+    }
+    .content {
+        margin: 0 !important;
+    }
+    .plex-box>div {
+        padding: 0 !important;
+    }
+    .badge {
+        color: #333333;
+        border: 1px solid rgba(0, 0, 0, 0.69);
+    }
+}

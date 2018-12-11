@@ -16,6 +16,7 @@ import { PDFUtils } from './../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
 import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
+import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
 
 const jsPDF = require('jspdf');
 
@@ -38,7 +39,8 @@ export class TurnosComponent implements OnInit {
     modalScrollDistance = 2;
     modalScrollThrottle = 10;
     public hoy = new Date();
-
+    public componentPrint = false;
+    turnosParaListado: any;
     constructor(private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
@@ -46,6 +48,7 @@ export class TurnosComponent implements OnInit {
         private router: Router,
         private _cambioDniService: CambioDniService,
         public auth: Auth,
+        public listadoPdf: ListadoTurnosPdfComponent,
         private _profesionalService: ProfesionalService) { }
 
     onScroll() {
@@ -94,8 +97,6 @@ export class TurnosComponent implements OnInit {
 
                     event.callback(resp);
                 }
-
-
                 const consultaTotal = this.formBuscarTurno.value;
                 consultaTotal.offset = event ? event.query.offset : null;
                 consultaTotal.size = event ? event.query.size : null;
@@ -143,7 +144,7 @@ export class TurnosComponent implements OnInit {
         this.buscar();
         // this.modalTitle = 'updated on ' + (new Date()).toString();
         // this.modalBody += modalText;
-      }
+    }
 
 
     contadorDeCambiosDni() {
@@ -156,6 +157,15 @@ export class TurnosComponent implements OnInit {
             }
             this.solicitudesDeCambio = contador;
         });
+    }
+
+    imprimir() {
+        this.componentPrint = true;
+        const nuevo = this.turnos.filter(turno => { return (moment(this.hoy).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')) });
+        console.log('nuevo', nuevo);
+        this.turnosParaListado = nuevo;
+        // this.listadoPdf.imprimir(nuevo);
+
     }
 
     // avisoTurno(event?: any) {

@@ -1,6 +1,6 @@
 import { Routes, RouterModule } from '@angular/router';
 import { ModuleWithProviders } from '@angular/core';
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 
 
@@ -12,9 +12,11 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
 import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
-import { RequisitosGeneralesComponent,
+import {
+    RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
-    RequisitosMatriculaTecnicaAuxiliarComponent } from './components/requisitos/requisitos.component';
+    RequisitosMatriculaTecnicaAuxiliarComponent
+} from './components/requisitos/requisitos.component';
 import { AgendaComponent } from './components/turnos/agenda.component';
 import { SolicitarTurnoMatriculacionComponent } from './components/turnos/solicitar-turno-matriculacion.component';
 import { ProfesionalComponent } from './components/profesionales/profesional.component';
@@ -31,7 +33,7 @@ import { FotoGeneralComponent } from './components/profesionales/foto-general.co
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
-import {SolicitarSobreTurnoMatriculacionComponent} from './components/turnos/sobreTurnoMatriculacion.component';
+import { SolicitarSobreTurnoMatriculacionComponent } from './components/turnos/sobreTurnoMatriculacion.component';
 import { SupervisoresComponent } from './components/supervisor/listado-supervisores.component';
 import { GuiaProfesionalComponent } from './components/guiaProfesional/guiaProfesional.component';
 
@@ -47,7 +49,7 @@ const appRoutes: Routes = [
     { path: 'nuevoProfesional', component: ProfesionalComponent, canActivate: [RoutingGuard] },
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
     { path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent },
-    { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent , canActivate: [RoutingGuard] },
+    { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent, canActivate: [RoutingGuard] },
     { path: 'cambioDni', component: CambioDniComponent },
     { path: 'listadoCambioDni', component: ListadoCambioDniComponent },
     { path: 'turnos', component: TurnosComponent, canActivate: [RoutingGuard] },

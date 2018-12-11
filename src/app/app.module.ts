@@ -17,7 +17,7 @@ import { PDFUtils } from './utils/PDFUtils';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { ImageUploadModule } from 'angular2-image-upload';
 // import { Plex } from '@andes/plex';
- import { ScrollComponent } from './components/base/plex-scroll.component';
+import { ScrollComponent } from './components/base/plex-scroll.component';
 
 // Servicios
 import { AgendaService } from './services/agenda.service';
@@ -81,9 +81,10 @@ import { HomeAdministracionComponent } from './components/home/homeAdministracio
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
 import { ListadoCambioDniComponent } from './components/profesionales/cambioDni/listado-cambio-dni.component';
 import { SolicitarSobreTurnoMatriculacionComponent } from './components/turnos/sobreTurnoMatriculacion.component';
-import {WebcamModule} from 'ngx-webcam';
-import { GuiaProfesionalComponent} from './components/guiaProfesional/guiaProfesional.component';
+import { WebcamModule } from 'ngx-webcam';
+import { GuiaProfesionalComponent } from './components/guiaProfesional/guiaProfesional.component';
 import { TurnosComponent } from './components/turnos/turnos.component';
+import { ListadoTurnosPdfComponent } from './components/turnos/listado-turnos-pdf.component';
 
 
 // Locales
@@ -109,7 +110,7 @@ const COMPS_PROFESIONAL = [
   ListarProfesionalesComponent,
   OtroDatosComponent,
   CambioDniComponent,
-  ListadoCambioDniComponent
+  ListadoCambioDniComponent,
 ];
 
 // Pipes
@@ -147,7 +148,8 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
     RenovacionesProfesionalComponent,
     GuiaProfesionalComponent,
     ScrollComponent,
-    SupervisoresComponent
+    SupervisoresComponent,
+    ListadoTurnosPdfComponent
   ],
   imports: [
     BrowserModule,
@@ -186,7 +188,8 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
     appRoutingProviders,
     SIISAService,
     ModalidadesCertificacionService,
-    UsuarioService
+    UsuarioService,
+    ListadoTurnosPdfComponent
   ],
   bootstrap: [AppComponent]
 })

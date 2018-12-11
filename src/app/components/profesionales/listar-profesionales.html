@@ -135,7 +135,7 @@
                     <div *ngIf='profesional.habilitado === true'>
                       <div *ngIf='verBajas === false'>
                         <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
-                            <span *ngIf="profesionalGrado.matriculado === true  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
+                          <span *ngIf="profesionalGrado.matriculado === true  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
                             class="badge badge-info">
                             {{profesionalGrado.profesion.nombre}}: Matricula n°
                             {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
@@ -155,12 +155,12 @@
                           </span>
                         </div>
                         <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
-                            <span *ngIf="profesionalPosgrado.matriculado === true && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
-                              class="badge-primary">
-                              {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
-                              {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
-                              1].matriculaNumero}} 
-                            </span>
+                          <span *ngIf="profesionalPosgrado.matriculado === true && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
+                            class="badge-primary">
+                            {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
+                            {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
+                            1].matriculaNumero}}
+                          </span>
                           <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
                             class="badge badge-warning">
                             {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
@@ -324,9 +324,8 @@
               <plex-button label="Editar profesional" icon="pencil" type="primary" (click)="showProfesional(profesionalElegido)"></plex-button>
             </span>
 
-            <plex-button label="Dar sobreturno" icon="mdi mdi-timetable" type="primary" (click)="sobreTurno(profesionalElegido)"></plex-button>
-
-
+            <plex-button *ngIf="profesionalElegido.habilitado" label="Dar sobreturno" icon="mdi mdi-timetable" type="primary"
+              (click)="sobreTurno(profesionalElegido)"></plex-button>
           </h4>
         </div>
       </plex-box>
@@ -353,7 +352,7 @@
               <br>
               <div class="float-right">
 
-                <plex-button label="Exportar" type="success" (click)='exportarSisa()' ></plex-button>
+                <plex-button label="Exportar" type="success" (click)='exportarSisa()'></plex-button>
               </div>
             </div>
 

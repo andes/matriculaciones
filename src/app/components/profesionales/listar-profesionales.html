@@ -23,20 +23,16 @@
 
           <form [formGroup]="searchForm">
             <div class="row">
-              <div class="col-2">
-                <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus" placeholder="escriba un documento">
+              <div class="col-3">
+                <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus" placeholder="Ingrese documento">
                 </plex-text>
               </div>
-              <div class="col-3">
-                <plex-text label="apellido" formControlName="apellido" placeholder="escriba el apellido">
+              <div class="col-4">
+                <plex-text label="Nombre y apellido" formControlName="nombreyapellido" placeholder="Ingrese nombre y apellido">
                 </plex-text>
               </div>
-              <div class="col-3">
-                <plex-text label="nombre" formControlName="nombre" placeholder="escriba el nombre">
-                </plex-text>
-              </div>
-              <div class="col-3">
-                <plex-int label="N° matricula grado" formControlName="numeroMatriculaGrado" placeholder="escriba el numero de la matricula">
+              <div class="col-4">
+                <plex-int label="N° matrícula grado" formControlName="numeroMatriculaGrado" placeholder="Ingrese número de matricula">
                 </plex-int>
               </div>
 

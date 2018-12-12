@@ -102,8 +102,7 @@ export class ListarProfesionalesComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
-      apellido: [''],
-      nombre: [''],
+      nombreyapellido: [''],
       documento: [''],
       estado: '',
       estadoEspecialidad: '',
@@ -150,10 +149,11 @@ export class ListarProfesionalesComponent implements OnInit {
     this.profesionalElegido = null;
     const doc = this.dni ? this.dni : '';
     const apellidoProf = this.apellido ? this.apellido : '';
+
+
     this._profesionalService.getProfesional({
       documento: this.value ? this.value.documento : '',
-      apellido: this.value ? this.value.apellido : '',
-      nombre: this.value ? this.value.nombre : '',
+      nombreCompleto: this.value ? this.value.nombreyapellido : '',
       estado: this.value ? this.value.estado.nombre : '',
       estadoE: this.value ? this.value.estadoEspecialidad.nombre : '',
       bajaMatricula: this.value ? this.value.verBajas : false,
@@ -179,13 +179,7 @@ export class ListarProfesionalesComponent implements OnInit {
       }
       // this.totalProfesionalesRematriculados = totalR;
       // this.totalProfesionalesMatriculados = totalM;
-
-
-
-
     });
-
-
   }
   cerrarResumenProfesional() {
     this.profesionalElegido = null;

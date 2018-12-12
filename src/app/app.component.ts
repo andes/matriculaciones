@@ -136,6 +136,28 @@ export class AppComponent {
     this.initStatusCheck();
   }
 
+  public showRibbon() {
+    return environment.environmentName === 'local';
+  }
+
+  public ribbonLabel() {
+    return environment.environmentName.toUpperCase();
+  }
+
+  public ribbonType() {
+    switch (environment.environmentName) {
+      case 'produccion':
+        return 'info';
+      case 'demo':
+        return 'success';
+      case 'testing':
+        return 'warning';
+      case 'local':
+        return 'warning';
+
+    }
+  }
+
   redirect(pagina: string) {
     this.router.navigate(['./' + pagina]);
     return false;

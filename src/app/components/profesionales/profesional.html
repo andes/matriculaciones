@@ -122,7 +122,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <plex-text label="Dirección" name="direccionReal" [(ngModel)]="profesional.domicilios[0].valor"
-                            [required]="true"></plex-text>
+                        [required]="profesional.domicilios[0].tipo !== 'profesional'"></plex-text>
                     </div>
 
                     <!-- <div class="col-md-4">
@@ -131,15 +131,15 @@
                     </div> -->
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provinciaReal" [(ngModel)]="profesional.domicilios[0].ubicacion.provincia"
-                            [data]="provincias" (change)="loadLocalidadesReal($event)" [required]="true"></plex-select>
+                            [data]="provincias" (change)="loadLocalidadesReal($event)" [required]="profesional.domicilios[0].tipo !== 'profesional'"></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Localidad" name="localidadReal" (change)='cp($event, 0)' [(ngModel)]="profesional.domicilios[0].ubicacion.localidad"
-                            (getData)="loadLocalidadesReal($event)" [data]="localidadesReal" [required]="true"></plex-select>
+                            (getData)="loadLocalidadesReal($event)" [data]="localidadesReal" [required]="profesional.domicilios[0].tipo !== 'profesional'"></plex-select>
                     </div>
                     <div class="col-md-2">
                         <plex-int label="Código Postal" name="codigoPostalReal" [(ngModel)]="profesional.domicilios[0].codigoPostal"
-                            [required]="true"></plex-int>
+                        [required]="profesional.domicilios[0].tipo !== 'profesional'"></plex-int>
                     </div>
 
                 </div>
@@ -152,7 +152,7 @@
                 <div class="row">
                     <div class="col-md-12">
                         <plex-text label="Dirección" name="direccionLegal" [(ngModel)]="profesional.domicilios[1].valor"
-                            [required]="true"></plex-text>
+                            [required]="profesional.domicilios[1].tipo !== 'profesional'"></plex-text>
                     </div>
 
                     <!-- <div class="col-md-4">
@@ -162,16 +162,16 @@
                     </div> -->
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provinciaLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.provincia"
-                            [data]="provincias" (change)="loadLocalidadesLegal($event)" [required]="true"></plex-select>
+                            [data]="provincias" (change)="loadLocalidadesLegal($event)" [required]="profesional.domicilios[1].tipo !== 'profesional'"></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Localidad" name="localidadLegal" [(ngModel)]="profesional.domicilios[1].ubicacion.localidad"
                             (getData)="loadLocalidadesLegal($event)" [data]="localidadesLegal" (change)='cp($event, 1)'
-                            [required]="true"></plex-select>
+                            [required]="profesional.domicilios[1].tipo !== 'profesional'"></plex-select>
                     </div>
                     <div class="col-md-2">
                         <plex-int label="Código Postal" name="codigoPostalLegal" [(ngModel)]="profesional.domicilios[1].codigoPostal"
-                            [required]="true" [required]="true"></plex-int>
+                             [required]="profesional.domicilios[1].tipo !== 'profesional'"></plex-int>
                     </div>
 
 
@@ -192,7 +192,7 @@
                 </div>
                 <div class="row" *ngIf='!noPoseedomicilioProfesional'>
                     <div class="col-md-12">
-                        <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor"></plex-text>
+                        <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor"  [required]="profesional.domicilios[2].tipo !== 'profesional'"></plex-text>
                     </div>
 
                     <!-- <div class="col-md-4">
@@ -201,14 +201,14 @@
                     </div> -->
                     <div class="col-md-4">
                         <plex-select label="Provincia" name="provincia" [(ngModel)]="profesional.domicilios[2].ubicacion.provincia"
-                            [data]="provincias" (change)="loadLocalidadesProfesional($event)"></plex-select>
+                            [data]="provincias" (change)="loadLocalidadesProfesional($event)"  [required]="profesional.domicilios[2].tipo !== 'profesional'"></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Localidad" name="localidad" [(ngModel)]="profesional.domicilios[2].ubicacion.localidad"
-                            [data]="localidadesProfesional" (getData)="loadLocalidadesProfesional($event)" (change)='cp($event, 2)'></plex-select>
+                            [data]="localidadesProfesional" (getData)="loadLocalidadesProfesional($event)" (change)='cp($event, 2)'  [required]="profesional.domicilios[2].tipo !== 'profesional'"></plex-select>
                     </div>
                     <div class="col-md-2">
-                        <plex-int label="Código Postal" name="codigoPostal" [(ngModel)]="profesional.domicilios[2].codigoPostal"></plex-int>
+                        <plex-int label="Código Postal" name="codigoPostal" [(ngModel)]="profesional.domicilios[2].codigoPostal"  [required]="profesional.domicilios[2].tipo !== 'profesional'"></plex-int>
                     </div>
 
                 </div>

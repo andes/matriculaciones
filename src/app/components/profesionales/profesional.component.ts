@@ -212,7 +212,7 @@ export class ProfesionalComponent implements OnInit {
     };
     // this.loadLocalidades(cargaLocalidad);
     if (this.editable) {
-      this.profesional.sexo = (this.profesional.sexo as any ).toLowerCase();
+      this.profesional.sexo = (this.profesional.sexo as any).toLowerCase();
       if (this.profesional.domicilios.length === 0) {
         // para que no tire palos
         this.profesional.domicilios = [{
@@ -331,7 +331,9 @@ export class ProfesionalComponent implements OnInit {
       //   // this.onProfesionalCompleto.emit(this.profesional);
       // }
 
-    }
+    }else {
+      this.plex.toast('danger', 'Falta complatar algunos campos', 'informacion', 1000);
+     }
 
   }
 
@@ -402,6 +404,8 @@ export class ProfesionalComponent implements OnInit {
 
           });
 
+    } else {
+      this.plex.toast('danger', 'Falta complatar algunos campos', 'informacion', 1000);
     }
   }
 
@@ -600,6 +604,8 @@ export class ProfesionalComponent implements OnInit {
           this.plex.toast('success', 'Se modifico con exito!', 'informacion', 1000);
           this.editado.emit(true);
         });
+    } else {
+      this.plex.toast('danger', 'Falta complatar algunos campos', 'informacion', 1000);
     }
   }
 

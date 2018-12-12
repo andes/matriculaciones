@@ -167,6 +167,7 @@
                                             <span *ngIf='i !== (formacion.fechasDeAltas.length - 1)' class="badge badge-danger">No
                                                 Vigente</span>
                                         </td>
+                                        <td *ngIf='formacion.fechasDeAltas.length > 1'> <plex-button icon='window-close' type="danger"  (click)="borrarFechaAlta(formacion.fechasDeAltas,i)"></plex-button> </td>
                                     </tr>
                                 </tbody>
                             </table>

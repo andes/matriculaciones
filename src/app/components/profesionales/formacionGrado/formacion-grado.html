@@ -99,16 +99,18 @@
         </div>
         <div class="row" *ngIf='credencial'>
             <div class="container">
-                <div class="col-4">
-                    <plex-bool type="slide" label="¿es una copia?"  (change)='copias = null' [(ngModel)]="copia" name="Medicamento"></plex-bool>
+                <div class='row'>
+                    <div class="col-3">
+                        <plex-bool type="slide" label="¿es una copia?" (change)='copias = null' [(ngModel)]="copia"
+                            name="Medicamento"></plex-bool>
+                    </div>
+                    <div class="col-4" *ngIf="copia">
+                        <plex-select label="Seleccione una opcion" name="copias" [(ngModel)]="copias" [data]='copiasObj'></plex-select>
+                    </div>
+                    <div class="col-4"  [ngClass]="{'centrarBtn': copia}">
+                        <plex-button label="imprimir credencial" (click)='generarCredencial(i)' type="success"></plex-button>
+                    </div>
                 </div>
-                <div class="col-4" *ngIf="copia">
-                    <plex-select label="Seleccione una opcion" name="copias" [(ngModel)]="copias" [data]='copiasObj'></plex-select>
-                </div>
-                <div class="col-4">
-                    <plex-button label="imprimir credencial" (click)='generarCredencial(i)' type="success"></plex-button>
-                </div>
-
 
 
             </div>
@@ -116,8 +118,8 @@
 
     </plex-box>
 </div>
-<plex-box>
-    <div class="row" *ngIf='edit  && !credencial'>
+<plex-box *ngIf='edit  && !credencial'>
+    <div class="row" >
 
 
 

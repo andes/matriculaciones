@@ -74,6 +74,7 @@ export class FormacionPosgradoComponent implements OnInit {
 
 
     showPosgrado(posgrado: any) {
+        console.log(posgrado);
         this.formacionPosgradoSelected.emit(posgrado);
     }
 
@@ -110,6 +111,7 @@ export class FormacionPosgradoComponent implements OnInit {
             };
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
                 this.edit = false;
+                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
             });
         }
     }
@@ -121,7 +123,11 @@ export class FormacionPosgradoComponent implements OnInit {
         };
     }
 
-    editar(formacionPosgrado) {
+    editar(formacionPosgrado, index) {
+        // this.formacionPosgradoSelected.emit(index);
+        console.log(index);
+        this.formacionPosgradoSelected.emit(index);
+
         this.edit = true;
         console.log(formacionPosgrado);
         if (formacionPosgrado.certificacion) {
@@ -150,6 +156,17 @@ export class FormacionPosgradoComponent implements OnInit {
     }
 
     pushFechasAlta(){
-        this.formacionSelected.fechasDeAltas.push({fecha: this.proximaFechaDeAlta});
+        this.plex.confirm('¿Desea agregar esta nueva fecha de alta?').then((resultado) => {
+            if (resultado) {
+                this.formacionSelected.fechasDeAltas.push({fecha: this.proximaFechaDeAlta});
+                const cambio = {
+                    'op': 'updateEstadoPosGrado',
+                    'data': this.profesional.formacionPosgrado
+                };
+                this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+                });
+            }
+        });
+
     }
 }

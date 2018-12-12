@@ -65,7 +65,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 if (formacion.matriculacion === null) {
                     revNumero = 0;
                 } else {
-                    revNumero = formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero;
+                    if (formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero){
+                        revNumero = formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero;
+                    }else{
+                        revNumero = formacion.matriculacion.length;
+                    }
                 }
 
 
@@ -107,63 +111,15 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         });
     }
 
-    // matricularProfesional(formacion: any, mantenerNumero) {
-    //     let texto = '¿Desea agregar una nueva matricula?';
-    //     if (mantenerNumero) {
-    //         texto = '¿Desea mantener el numero de la matricula?';
-    //     }
-
-    //     this.plex.confirm(texto).then((resultado) => {
-    //         if (resultado) {
-    //             let revNumero = null;
-    //             if (formacion.matriculacion === null) {
-    //                 revNumero = 0;
-    //             } else {
-    //                 revNumero = formacion.matriculacion.length;
-    //             }
-    //             console.log(formacion);
-    //             // this._numeracionesService.getOne({ codigoSisaEspecialidad: formacion.especialidad.codigo })
-    //             //     .subscribe((num) => {
-    //                     console.log(num);
-    //                     num = num.data;
-    //                     if (num.length === 0) {
-    //                         this.plex.alert('No tiene ningun numero de matricula asignado');
-    //                     } else {
-    //                         let matriculaNumero;
-    //                         if (mantenerNumero === false) {
-    //                             matriculaNumero = num[0].proximoNumero;
-    //                             num[0].proximoNumero = matriculaNumero + 1;
-    //                         }
-
-    //                         if (mantenerNumero) {
-    //                             matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
-    //                         }
-    //                         const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-    //                         const oMatriculacion = {
-    //                             matriculaNumero: matriculaNumero,
-    //                             libro: '',
-    //                             folio: '',
-    //                             inicio: new Date(),
-    //                             notificacionVencimiento: false,
-    //                             fin: new Date(new Date('01/01/2000').setFullYear(vencimientoAnio)),
-    //                             revalidacionNumero: revNumero + 1
-    //                         };
-    //                         this._numeracionesService.putNumeracion(num[0])
-    //                             .subscribe(newNum => {
-    //                                 this.matriculacion.emit(oMatriculacion);
-    //                             });
-
-    //                         this.formacion.revalida = false;
-    //                         this.formacion.matriculado = true;
-    //                         this.profesional.formacionPosgrado[this.index] = this.formacion;
-    //                         this.actualizar();
-    //                     }
-    //                 // });
-
-    //             ;
-    //         }
-    //     });
-    // }
+    borrarFechaAlta(fechas, i) {
+        console.log(fechas);
+        this.plex.confirm('¿Desea eliminar la siguiente fecha de alta : <strong>' + moment(fechas[i].fecha).format('DD MMMM YYYY') + '</strong>').then((resultado) => {
+            if (resultado) {
+                fechas.splice(i, 1);
+                this.actualizar();
+            }
+        });
+    }
 
     papelesVerificados() {
         this.profesional.supervisor = {
@@ -189,11 +145,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     renovar() {
         // if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) === new Date().getFullYear()) {
-            console.log('tiene año de gracia');
-            this.formacion.papelesVerificados = false;
-            this.formacion.revalida = true;
-            this.profesional.formacionPosgrado[this.index] = this.formacion;
-            this.actualizar();
+        console.log('tiene año de gracia');
+        this.formacion.papelesVerificados = false;
+        this.formacion.revalida = true;
+        this.profesional.formacionPosgrado[this.index] = this.formacion;
+        this.actualizar();
         // } else {
 
         //     this.formacion.papelesVerificados = false;

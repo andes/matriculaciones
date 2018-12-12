@@ -28,7 +28,8 @@ import * as enumerados from './../../../utils/enumerados';
 @Component({
     selector: 'app-formacion-grado',
     templateUrl: 'formacion-grado.html',
-    styles: ['.btnGrado { margin-left: 5px }']
+    styleUrls: ['grado.scss']
+
 })
 export class FormacionGradoComponent implements OnInit, OnChanges {
 
@@ -180,6 +181,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
 
     editar(formacionGrado) {
+        this.credencial = false;
         this.edit = true;
         this.formacionSelected = formacionGrado;
         if (this.formacionSelected.entidadFormadora.codigo === null) {

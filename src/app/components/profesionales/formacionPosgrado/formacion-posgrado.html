@@ -24,7 +24,7 @@
                         <plex-button *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" type="primary" icon="information-outline"
                             (click)="showPosgrado(i)"></plex-button>
                         <plex-button title="editar" type="success" class="float-right btnGrado" icon="mdi mdi-pencil"
-                            (click)="editar(formacionPosgrado)"></plex-button>
+                            (click)="editar(formacionPosgrado,i)"></plex-button>
 
                     </div>
                 </div>
@@ -137,19 +137,19 @@
                     <div class="row">
 
                         <div class="col-6">
-                            <plex-datetime type="date" label="Fecha de alta" [(ngModel)]="formacionSelected.fechasDeAltas[formacionSelected.fechasDeAltas.length - 1].fecha"
+                            <plex-datetime type="date" label="ultima fecha de alta" [(ngModel)]="formacionSelected.fechasDeAltas[formacionSelected.fechasDeAltas.length - 1].fecha"
                                 name="fecha" [required]="true"></plex-datetime>
                         </div>
-
-                        <div class="col-4">
-                            <plex-datetime type="date" label="Fecha de alta" [(ngModel)]="proximaFechaDeAlta"
-                                name="fechas" [required]="true"></plex-datetime>
-                        </div>
-                        <div class="col-2">
-                            <plex-button label="Agregar" type="success" class="float-right" (click)="pushFechasAlta()"
-                                validateForm="true"></plex-button>
-                        </div>
-
+                        <ng-container *ngIf='formacionSelected.fechasDeAltas[formacionSelected.fechasDeAltas.length - 1].fecha'>
+                            <div class="col-4">
+                                <plex-datetime type="date" label="Agregar otra fecha de alta" [(ngModel)]="proximaFechaDeAlta"
+                                    name="fechas"></plex-datetime>
+                            </div>
+                            <div class="col-2">
+                                <plex-button label="Agregar" type="success" class="float-right" *ngIf='proximaFechaDeAlta'
+                                    (click)="pushFechasAlta()"></plex-button>
+                            </div>
+                        </ng-container>
                     </div>
                 </div>
                 <hr>

@@ -50,6 +50,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     public copia = false;
     public copiasObj;
     public copias;
+    public indexGrado;
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
@@ -98,12 +99,14 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     }
 
-    credencialAcciones() {
+    credencialAcciones(i) {
         this.credencial = true;
-        this.edit = false;
+        this.edit = true;
+        this.indexGrado = i;
     }
 
-    generarCredencial(grado) {
+    generarCredencial() {
+        const grado = this.indexGrado;
         this._profesionalService.getProfesionalFoto({ id: this.profesional.id })
             .subscribe((resp) => {
                 const img = 'data:image/jpeg;base64,' + resp;
@@ -175,6 +178,13 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     loadEntidadesFormadoras(event) {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
+    }
+
+    cerrarCredencial(){
+        this.edit = false;
+        this.credencial = false;
+        this.copias = null;
+        this.copia = false;
     }
 
     otraEntidad(f) {

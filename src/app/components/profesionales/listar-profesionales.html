@@ -5,16 +5,15 @@
       <plex-box>
         <header>
           <div class="row">
-            <div class="col-4">
+            <div class="col-6">
               <div class="page-title">Buscar un profesional</div>
             </div>
-            <div class="col-8">
+            <div class="col-6">
               <div class="float-right">
                 <!-- <plex-button type="primary " icon="mdi mdi-account-plus" (click)="verNuevoProfesional(true)"></plex-button> -->
                 <plex-button type="primary" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>
                 <plex-button type="primary  " icon="mdi mdi-timetable" label='Nuevo Profesional' (click)='nuevoProfesional = true;confirmar = true'></plex-button>
                 <!-- <plex-button type="primary  " icon="mdi mdi-file-excel" label='export sisa' (click)='verExportador = true;profesionalElegido = false;'></plex-button> -->
-
               </div>
             </div>
 
@@ -24,19 +23,19 @@
           <form [formGroup]="searchForm">
             <div class="row">
               <div class="col-2">
-                <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus" placeholder="escriba un documento">
+                <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus" placeholder="Ingrese documento">
                 </plex-text>
               </div>
               <div class="col-3">
-                <plex-text label="apellido" formControlName="apellido" placeholder="escriba el apellido">
+                <plex-text label="Apellido" formControlName="apellido" placeholder="Ingrese apellido">
                 </plex-text>
               </div>
               <div class="col-3">
-                <plex-text label="nombre" formControlName="nombre" placeholder="escriba el nombre">
+                <plex-text label="Nombre" formControlName="nombre" placeholder="Ingrese nombre">
                 </plex-text>
               </div>
               <div class="col-3">
-                <plex-int label="N° matricula grado" formControlName="numeroMatriculaGrado" placeholder="escriba el numero de la matricula">
+                <plex-int label="N° Matrícula grado" formControlName="numeroMatriculaGrado" placeholder="Ingrese N° de matrícula">
                 </plex-int>
               </div>
 
@@ -51,17 +50,17 @@
 
             <div class="row" *ngIf='muestraFiltro === true'>
               <div class="col-3">
-                <plex-int label="N° matricula esp" formControlName="numeroMatriculaEspecialidad" placeholder="escriba el numero de la matricula">
+                <plex-int label="N° Matrícula esp" formControlName="numeroMatriculaEspecialidad" placeholder="Ingrese N° de matrícula">
                 </plex-int>
               </div>
               <div class="col-3">
-                <plex-select label="Matriculas de Profesiones" formControlName="estado" [data]="estadosMatriculas"></plex-select>
+                <plex-select label="Matrículas de Profesiones" formControlName="estado" [data]="estadosMatriculas"></plex-select>
               </div>
               <div class="col-3">
-                <plex-select label="Matriculas de Especialidades" formControlName="estadoEspecialidad" [data]="estadosMatriculas"></plex-select>
+                <plex-select label="Matrículas de Especialidades" formControlName="estadoEspecialidad" [data]="estadosMatriculas"></plex-select>
               </div>
 
-              <div class="col-2 btnSlide">
+              <div class="col-3 btnSlide">
                 <plex-bool type="slide" label="Ver bajas de matriculas" formControlName="verBajas" name="especialidad.activo"></plex-bool>
                 <plex-bool type="slide" label="Deshabilitado" formControlName="verDeshabilitado" name="especialidad.activo"></plex-bool>
 
@@ -323,9 +322,9 @@
             <span>
               <plex-button label="Editar profesional" icon="pencil" type="primary" (click)="showProfesional(profesionalElegido)"></plex-button>
             </span>
-
             <plex-button *ngIf="profesionalElegido.habilitado" label="Dar sobreturno" icon="mdi mdi-timetable" type="primary"
               (click)="sobreTurno(profesionalElegido)"></plex-button>
+
           </h4>
         </div>
       </plex-box>

@@ -329,9 +329,9 @@ export class ProfesionalComponent implements OnInit {
       //   // this.onProfesionalCompleto.emit(this.profesional);
       // }
 
-    }else {
-      this.plex.toast('danger', 'Falta complatar algunos campos', 'informacion', 1000);
-     }
+    } else {
+      this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
+    }
 
   }
 
@@ -403,7 +403,7 @@ export class ProfesionalComponent implements OnInit {
           });
 
     } else {
-      this.plex.toast('danger', 'Falta complatar algunos campos', 'informacion', 1000);
+      this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
     }
   }
 
@@ -599,11 +599,11 @@ export class ProfesionalComponent implements OnInit {
       this._profesionalService.putProfesional(this.profesional)
         .subscribe(resp => {
           this.profesional = resp;
-          this.plex.toast('success', 'Se modifico con exito!', 'informacion', 1000);
+          this.plex.toast('success', 'Se modificó con éxito!', 'informacion', 1000);
           this.editado.emit(true);
         });
     } else {
-      this.plex.toast('danger', 'Falta complatar algunos campos', 'informacion', 1000);
+      this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
     }
   }
 

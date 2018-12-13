@@ -22,7 +22,7 @@
                         <plex-button title="Generar certificado de etica" type="warning" *ngIf='formacionGrado.matriculacion && formacionGrado.matriculado'
                             class="float-right btnGrado" icon="mdi mdi-certificate" (click)="generarCertificadoEtica(i)"></plex-button>
                         <plex-button title="editar" type="success" class="float-right btnGrado" icon="mdi mdi-pencil"
-                            (click)="editar(formacionGrado)"></plex-button>
+                            (click)="editar(formacionGrado,i)"></plex-button>
                         <plex-button class="float-right btnGrado" type="danger" title="imprimir datos del profesional"
                             (click)="pdf(i)" icon='mdi mdi-file-pdf-box'> </plex-button>
                     </div>
@@ -164,7 +164,7 @@
 
                 <div class="row">
                     <div class="col">
-                        <plex-button label="Guardar" type="success" class="float-right" (click)="actualizar()"
+                        <plex-button label="Guardar" type="success" class="float-right" (click)="actualizar($event)"
                             validateForm="true"></plex-button>
                         <plex-button label="Cerrar" type="danger" class="float-right" (click)="edit = false"
                             validateForm="true"></plex-button>

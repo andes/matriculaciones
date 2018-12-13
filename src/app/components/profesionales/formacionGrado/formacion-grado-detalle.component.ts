@@ -73,7 +73,11 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 if (formacion.matriculacion === null) {
                     revNumero = 0;
                 } else {
-                    revNumero = formacion.matriculacion.length;
+                    if (formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero){
+                        revNumero = formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero;
+                    }else{
+                        revNumero = formacion.matriculacion.length;
+                    }
                 }
                 this._numeracionesService.getOne({ codigoSisa: formacion.profesion.codigo })
                     .subscribe((num) => {

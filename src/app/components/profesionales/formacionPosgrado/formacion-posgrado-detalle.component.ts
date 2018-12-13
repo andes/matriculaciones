@@ -44,7 +44,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     ngOnInit() {
-        console.log(this.formacion);
         this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
         // this.esSupervisor = true;
 
@@ -112,7 +111,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     borrarFechaAlta(fechas, i) {
-        console.log(fechas);
         this.plex.confirm('¿Desea eliminar la siguiente fecha de alta : <strong>' + moment(fechas[i].fecha).format('DD MMMM YYYY') + '</strong>').then((resultado) => {
             if (resultado) {
                 fechas.splice(i, 1);
@@ -145,7 +143,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     renovar() {
         // if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) === new Date().getFullYear()) {
-        console.log('tiene año de gracia');
         this.formacion.papelesVerificados = false;
         this.formacion.revalida = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;

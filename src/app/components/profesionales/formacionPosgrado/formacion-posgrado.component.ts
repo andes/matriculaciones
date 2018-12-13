@@ -74,7 +74,6 @@ export class FormacionPosgradoComponent implements OnInit {
 
 
     showPosgrado(posgrado: any) {
-        console.log(posgrado);
         this.formacionPosgradoSelected.emit(posgrado);
     }
 
@@ -125,11 +124,9 @@ export class FormacionPosgradoComponent implements OnInit {
 
     editar(formacionPosgrado, index) {
         // this.formacionPosgradoSelected.emit(index);
-        console.log(index);
         this.formacionPosgradoSelected.emit(index);
 
         this.edit = true;
-        console.log(formacionPosgrado);
         if (formacionPosgrado.certificacion) {
             this.certificacion = formacionPosgrado.certificacion;
 

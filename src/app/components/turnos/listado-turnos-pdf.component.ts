@@ -15,9 +15,8 @@ export class ListadoTurnosPdfComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log('LLega', this.arrayTurnos);
     setTimeout(() => {
-      window.print()
+      window.print();
       this.volverATurnos.emit();
     }, 0);
   }

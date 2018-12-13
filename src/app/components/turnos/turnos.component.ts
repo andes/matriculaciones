@@ -197,10 +197,8 @@ export class TurnosComponent implements OnInit {
         };
         this._turnoService.getTurnosProximos(filtrosPdf)
             .subscribe((resp) => {
-                console.log(resp)
-                let totalTurnos = resp.data;
-                const nuevo = totalTurnos.filter(turno => { return (moment(this.filtroBuscar.fecha).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')) });
-                console.log('nuevo', nuevo);
+                const totalTurnos = resp.data;
+                const nuevo = totalTurnos.filter(turno => { return (moment(this.filtroBuscar.fecha).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')); });
                 this.componentPrint = true;
                 this.turnosParaListado = nuevo;
                 // this.listadoPdf.imprimir(nuevo);

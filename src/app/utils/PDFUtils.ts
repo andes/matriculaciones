@@ -41,7 +41,6 @@ export class PDFUtils {
         const nombreProf = profesion.nomenclador + ' ' + profesion.nombre;
         doc.rect(9, 9, 30, 30, 'F');
         doc.addImage(fotoProfesional, 10, 10, 28, 28);
-        console.log(copia);
         if (copia) {
             doc.text(copia.nombre, 18, 43, 0, 50);
         }

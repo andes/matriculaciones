@@ -274,7 +274,6 @@ export class ProfesionalComponent implements OnInit {
   confirmarDatos($event) {
     if ($event.formValid) {
       let matcheo = false;
-      console.log('aca');
       // tslint:disable-next-line:max-line-length
       // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
@@ -299,7 +298,6 @@ export class ProfesionalComponent implements OnInit {
                   matching: 0,
                   paciente: null
                 };
-                console.log(porcentajeMatching);
                 if (porcentajeMatching) {
                   profesionalMatch.matching = porcentajeMatching * 100;
                   profesionalMatch.paciente = profCandidato;
@@ -649,7 +647,6 @@ export class ProfesionalComponent implements OnInit {
                 profesionalMatch.matching = porcentajeMatching * 100;
                 profesionalMatch.paciente = profCandidato;
               }
-              console.log(profesionalMatch);
               if (profesionalMatch.matching >= 94) {
                 this.matcheo = true;
               }

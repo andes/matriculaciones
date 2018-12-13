@@ -74,9 +74,7 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
             tipoTurno: 'matriculacion',
             sexo: profesional.sexo
         };
-        console.log(profesional.sexo);
         this._turnosService.getTurnosPorDocumento(parametros).subscribe((resultado: any) => {
-            console.log(resultado);
             if (resultado.length === 0) {
                 this._turnosService.saveTurnoSolicitados(profesional)
                     .subscribe((nuevoProfesional) => {

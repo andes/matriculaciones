@@ -308,7 +308,7 @@ export class ProfesionalComponent implements OnInit {
               });
             }
             if (matcheo) {
-              this.plex.alert('Ya existe un profesional registrados con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
+              this.plex.alert('Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
             } else {
               // this.ocultarBtn = true;
               this.onProfesionalCompleto.emit(this.profesional);

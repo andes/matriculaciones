@@ -8,12 +8,12 @@
                             <div class="page-title">Consulta de estado</div>
                         </div>
                     </div>
-                    <form>
+                    <form #formNumeracion="ngForm">
 
                         <div class="row">
                             <div class="col-3">
-                                <plex-select label="Seleccione una opcion" (change)='limpiaFiltro()' [(ngModel)]="filtro" name="sexo" [data]="guiaProfesionalEnum"
-                                    [required]="true"></plex-select>
+                                <plex-select label="Seleccione una opción" (change)='limpiaFiltro()' [(ngModel)]="filtro"
+                                    name="seleccionOpcion" [data]="guiaProfesionalEnum" [required]="true"></plex-select>
                             </div>
                             <div class="col-9">
                                 <!-- <div class="row" *ngIf=' filtro && filtro.id === 0'>
@@ -28,57 +28,92 @@
                                 <div class="row" *ngIf=' filtro && filtro.id === 0'>
                                     <div class="col-md-6">
                                         <plex-text label="Documento" [(ngModel)]="busqueda.documento" name='documento'
-                                            placeholder="escriba un documento">
+                                            placeholder="Escriba un documento" [required]="true">
                                         </plex-text>
                                     </div>
                                 </div>
                                 <div class="row" *ngIf=' filtro && filtro.id === 1'>
                                     <div class="col-md-6">
-                                        <plex-select label="profesion" [(ngModel)]="busqueda.formacionGrado" name='formacionPosgrado'
-                                            (getData)="loadProfesiones($event)"></plex-select>
+                                        <plex-select label="profesion" [(ngModel)]="busqueda.formacionGrado" name='formacionGrado'
+                                            (getData)="loadProfesiones($event)" [required]="true"></plex-select>
                                     </div>
                                     <div class="col-md-6">
-                                        <plex-int label="Numero Matricula" name='numMatricula' [(ngModel)]="busqueda.numeroMatricula"
-                                            placeholder="escriba un documento">
+                                        <plex-int label="Número Matrícula" name='numMatricula' [(ngModel)]="busqueda.numeroMatricula"
+                                            placeholder="Escriba matrícula" [required]="true">
                                         </plex-int>
+                                    </div>
+                                </div>
+                                <div class="row" *ngIf=' filtro && filtro.id === 2'>
+                                    <div class="col-md-4">
+                                        <plex-text label="Nombre" [(ngModel)]="busqueda.nombre" name='nombre'></plex-text>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <plex-text label="Apellido" name='numMatricula' [(ngModel)]="busqueda.apellido"
+                                            placeholder="escriba un documento" [required]="true">
+                                        </plex-text>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <plex-select label="Profesion" [(ngModel)]="busqueda.formacionGrado" name='profesion'
+                                            (getData)="loadProfesiones($event)" [required]="true"></plex-select>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <plex-button *ngIf='filtro' type='success' class="float-right" (click)='buscar()' label='Buscar'></plex-button>
+                        <plex-button *ngIf='filtro' type='success' class="float-right" (click)='buscar($event,formNumeracion)'
+                            label='Buscar' validateForm="true"></plex-button>
                     </form>
 
                 </header>
-                <div *ngIf='!profEncontrado && mostrarInfo' class="alert alert-danger">
+                <div *ngIf='profEncontrado && profEncontrado.length === 0 && mostrarInfo' class="alert alert-danger">
                     <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
-                  </div>
-                <table class="table table-striped" *ngIf='profEncontrado'>
+                </div>
+                <table class="table table-striped" *ngIf='profEncontrado && profEncontrado.length > 0 '>
                     <thead>
                         <tr>
                             <th>Apellido y Nombre</th>
-                            <th>sexo</th>
+                            <th>Sexo</th>
                             <th>Documento</th>
                             <th>Nacionalidad</th>
-                            <th>profesion</th>
-                            <th>matricula</th>
+                            <th>Profesión</th>
+                            <th>Matrícula</th>
                             <th>Estado</th>
                         </tr>
                     </thead>
-                    <tbody *ngFor='let unProfesion of profEncontrado.profesiones'>
-                        <td>{{profEncontrado.apellido}} {{profEncontrado.nombre}}</td>
-                        <td>{{profEncontrado.sexo}}</td>
-                        <td>{{profEncontrado.documento}}</td>
-                        <td>{{profEncontrado.nacionalidad}}</td>
-                        <td> {{unProfesion.profesion.nombre}}</td>
-                        <td> {{unProfesion.matriculacion[unProfesion.matriculacion.length - 1].matriculaNumero}}</td>
-                        <td *ngIf='unProfesion.matriculado'>
-                            <span class="badge badge-success">Activa</span>
-                        </td>
-                        <td *ngIf='!unProfesion.matriculado'>
-                            <span class="badge badge-danger">vencida</span>
-                        </td>
+                    <ng-container *ngFor='let unProfesional of profEncontrado'>
+                        <tbody *ngFor='let unProfesion of unProfesional.profesiones'>
+                            <ng-container *ngIf=' (filtro && filtro.id === 2 || filtro.id === 1) && (unProfesion.profesion.codigo === busqueda.codigoProfesion)'>
+                                <td>{{unProfesional.apellido}} {{unProfesional.nombre}}</td>
+                                <td>{{unProfesional.sexo}}</td>
+                                <td>{{unProfesional.documento}}</td>
+                                <td>{{unProfesional.nacionalidad}}</td>
+                                <td> {{unProfesion.profesion.nombre}}</td>
+                                <td> {{unProfesion.matriculacion[unProfesion.matriculacion.length -
+                                    1].matriculaNumero}}</td>
+                                <td *ngIf='unProfesion.matriculado'>
+                                    <span class="badge badge-success">Activa</span>
+                                </td>
+                                <td *ngIf='!unProfesion.matriculado'>
+                                    <span class="badge badge-danger">vencida</span>
+                                </td>
+                            </ng-container>
+                            <ng-container *ngIf='(filtro && filtro.id === 0)'>
+                                    <td>{{unProfesional.apellido}} {{unProfesional.nombre}}</td>
+                                    <td>{{unProfesional.sexo}}</td>
+                                    <td>{{unProfesional.documento}}</td>
+                                    <td>{{unProfesional.nacionalidad}}</td>
+                                    <td> {{unProfesion.profesion.nombre}}</td>
+                                    <td> {{unProfesion.matriculacion[unProfesion.matriculacion.length -
+                                        1].matriculaNumero}}</td>
+                                    <td *ngIf='unProfesion.matriculado'>
+                                        <span class="badge badge-success">Activa</span>
+                                    </td>
+                                    <td *ngIf='!unProfesion.matriculado'>
+                                        <span class="badge badge-danger">vencida</span>
+                                    </td>
+                                </ng-container>
+                        </tbody>
+                    </ng-container>
 
-                    </tbody>
                 </table>
             </plex-box>
         </div>

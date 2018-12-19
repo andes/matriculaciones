@@ -19,8 +19,8 @@
       "mobile": false,
       "scripts": [],
       "styles": [
-        "styles.less",
-        "styles.scss"
+        "styles.scss",
+        "./bootstrap-datepicker3.standalone.css"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {

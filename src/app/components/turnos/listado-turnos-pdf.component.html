@@ -1,0 +1,21 @@
+<legend>LISTADO DE TURNOS - {{arrayTurnos[0].fecha | fecha}}</legend>
+<table class="table">
+
+  <thead>
+
+    <tr>
+      <th scope="col">Nombre</th>
+      <th scope="col">Dni</th>
+      <th scope="col">Horario</th>
+      <th scope="col">Tipo</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turno of arrayTurnos">
+      <td>{{turno.profesional.nombreCompleto}}</td>
+      <td>{{turno.profesional.documento}}</td>
+      <td>{{turno.fecha|date:"shortTime"}}</td>
+      <td><span class='badge badge-info'>{{turno.tipo | uppercase}}</span> </td>
+    </tr>
+  </tbody>
+</table>

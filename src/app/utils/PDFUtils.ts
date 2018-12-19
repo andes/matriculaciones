@@ -3,7 +3,7 @@ const jsPDF = require('jspdf');
 
 export class PDFUtils {
 
-    public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin, profesion): any {
+    public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin, profesion, copia): any {
         // tslint:disable-next-line:max-line-length
         const ultimaRenovacion = profesional.formacionGrado[grado].matriculacion[profesional.formacionGrado[grado].matriculacion.length - 1];
 
@@ -38,10 +38,13 @@ export class PDFUtils {
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Auxiliarato') {
             doc.setFillColor(62, 37, 215);
         }
-        const nombreProf =  profesion.nomenclador + ' ' + profesion.nombre;
+        const nombreProf = profesion.nomenclador + ' ' + profesion.nombre;
         doc.rect(9, 9, 30, 30, 'F');
         doc.addImage(fotoProfesional, 10, 10, 28, 28);
-        doc.text(/*'BO TEC. EN LABORATORIO'*/ nombreProf.toUpperCase() , 43, 13);
+        if (copia) {
+            doc.text(copia.nombre, 18, 43, 0, 50);
+        }
+        doc.text(/*'BO TEC. EN LABORATORIO'*/ nombreProf.toUpperCase(), 43, 13);
         doc.text(/*'PINO'*/profesional.apellido, 43, 18);
         doc.text(/*'JORGE PABLO'*/profesional.nombre, 43, 23);
         doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
@@ -111,7 +114,7 @@ export class PDFUtils {
         doc.text('CERTIFICA que ' + profesional.nombreCompleto.toUpperCase() + '  - DNI ' + profesional.documento + '', 8, 65);
         doc.text('se encuentra inscripto/a en el Registro Único de Profesionales de la Salud de la Provincia de Neuquén', 8, 70);
         // tslint:disable-next-line:max-line-length
-        doc.text('como ' + grado.profesion.nombre.toUpperCase() + ' bajo la matrícula Nº ' + grado.matriculacion[grado.matriculacion.length - 1].matriculaNumero + ' desde ' + this.getDateStr(grado.fechaDeInscripcion)  + '.', 8, 75);
+        doc.text('como ' + grado.profesion.nombre.toUpperCase() + ' bajo la matrícula Nº ' + grado.matriculacion[grado.matriculacion.length - 1].matriculaNumero + ' desde ' + this.getDateStr(grado.fechaDeInscripcion) + '.', 8, 75);
         doc.text('A la fecha, no surge de nuestros registros presuntas infracciones emergentes del incumplimiento', 8, 86);
         doc.text('de la Ley Nº 578, y su Decreto Reglamentario Nº 338/78, referidas al citado profesional.', 8, 91);
         doc.setFontStyle('bold');
@@ -144,7 +147,7 @@ export class PDFUtils {
         doc.text('CERTIFICA que ' + profesional.nombreCompleto.toUpperCase() + '  - DNI ' + profesional.documento + '', 8, 65);
         doc.text('se encuentra inscripto/a en el Registro Único de Profesionales de la Salud de la Provincia de Neuquén', 8, 70);
         // tslint:disable-next-line:max-line-length
-        doc.text('como ' + grado.profesion.nombre.toUpperCase() + ' bajo la matrícula Nº ' + grado.matriculacion[grado.matriculacion.length - 1].matriculaNumero + ' desde ' + this.getDateStr(grado.fechaDeInscripcion)  + '. Y como especialista en:', 8, 75);
+        doc.text('como ' + grado.profesion.nombre.toUpperCase() + ' bajo la matrícula Nº ' + grado.matriculacion[grado.matriculacion.length - 1].matriculaNumero + ' desde ' + this.getDateStr(grado.fechaDeInscripcion) + '. Y como especialista en:', 8, 75);
         doc.text('Especialidad', 8, 86);
         doc.text('Mat', 150, 86);
         doc.text('Desde', 180, 86);
@@ -152,13 +155,13 @@ export class PDFUtils {
         let offsetLoop = 0;
 
         profesional.formacionPosgrado.forEach(formacion => {
-            if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado === true ) {
+            if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado === true) {
                 // doc.setFontSize(14);
                 doc.text(formacion.especialidad.nombre, 8, 91 + offsetLoop);
                 doc.text(formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero.toString(), 150, 91 + offsetLoop);
                 if (formacion.fechasDeAltas) {
                     doc.text('' + formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1].fecha.getFullYear() + '', 180, 91 + offsetLoop);
-                }else {
+                } else {
                     doc.text('', 180, 91 + offsetLoop);
 
                 }
@@ -201,11 +204,14 @@ export class PDFUtils {
         doc.setFontSize(10);
         doc.setLineWidth(0.5);
         doc.line(20, 59, 190, 59);
-        doc.text(20, 52,
-            'Su turno ha sido tramitado el día ' +
+        doc.text(20, 55,
+            'Se presento el día ' +
             hoy.getDate() + '/' +
             (hoy.getMonth() + 1) + '/' +
-            hoy.getFullYear());
+            hoy.getFullYear() +
+            ' a las ' + hoy.getHours() +
+            (hoy.getMinutes() > 0 ? ':' + hoy.getMinutes() : '') +
+            ' hs. en Antártida Argentina y Colón, Edif. CAM 3, Fisc. Sanitaria.');
 
         doc.setFontSize(12);
         doc.text(20, 65, 'Apellido/s:');
@@ -221,7 +227,7 @@ export class PDFUtils {
         doc.text(20, 111, 'Profesión:');
         doc.text(20, 117, 'Título:');
         doc.text(20, 123, 'Ent. Formadora:');
-        doc.text(20, 129, 'Fecha de Egreso:');
+        doc.text(20, 131, 'Fecha de Egreso:');
 
         doc.line(20, 135, 190, 135);
 
@@ -273,8 +279,15 @@ export class PDFUtils {
         doc.text(65, 101, turno.nacionalidad.nombre);
         doc.text(65, 111, turno.formacionGrado[grado].profesion.nombre);
         doc.text(65, 117, turno.formacionGrado[grado].titulo);
-        doc.text(65, 123, turno.formacionGrado[grado].entidadFormadora.nombre);
-        doc.text(65, 129, this.getSimpleFormatedDate(turno.formacionGrado[grado].fechaEgreso));
+        const splitTitle = doc.splitTextToSize(turno.formacionGrado[grado].entidadFormadora.nombre, 150);
+        let textoEntidad = 123;
+        splitTitle.forEach(element => {
+
+            doc.text(/*'UNIV. NAC. DE CORDOBA'*/element, 65, textoEntidad);
+            textoEntidad = textoEntidad + 4;
+        });
+        // doc.text(65, 123, turno.formacionGrado[grado].entidadFormadora.nombre);
+        doc.text(65, 131, this.getSimpleFormatedDate(turno.formacionGrado[grado].fechaEgreso));
 
         // completado domicilios
         offsetLoop = 0;

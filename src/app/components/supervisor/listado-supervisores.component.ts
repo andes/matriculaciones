@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
-import { Plex } from '@andes/plex/src/lib/core/service';
+
 // import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
@@ -14,6 +14,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ProfesionalService } from '../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { Ng2ImgMaxService } from 'ng2-img-max';
+import { Plex } from '@andes/plex';
 
 @Component({
     selector: 'app-supervisores',

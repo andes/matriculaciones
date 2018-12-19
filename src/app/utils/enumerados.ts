@@ -30,7 +30,7 @@ export enum EstadoCivil {
 }
 
 export enum guiaProfesional {
-   'Documento', 'Profesion y N° de matricula'
+   'Documento', 'Profesion y N° de matricula', 'Nombre,apellido y N° de matricula'
 }
 
 export enum TipoContacto {
@@ -48,6 +48,11 @@ export enum TipoDomicilio {
 export enum TipoTurno {
   matriculacion = <any>'matriculacion',
   renovacion = <any>'renovacion'
+}
+
+
+export enum TipoCopiaCredencial{
+  'Duplicado', 'Triplicado'
 }
 
 
@@ -131,6 +136,19 @@ export function getObjGuiaProfesional() {
   });
   return salida;
 }
+export function getCopiasCredencial() {
+  let arrTipoCopiaCredencial = Object.keys(TipoCopiaCredencial);
+  arrTipoCopiaCredencial = arrTipoCopiaCredencial.slice(arrTipoCopiaCredencial.length / 2);
+  const salida = arrTipoCopiaCredencial.map(elem => {
+      return {
+          'id': elem,
+          'nombre': titleCase(elem)
+      };
+  });
+  return salida;
+}
+
+
 
 export function getObjSexos() {
   let arrSexo = Object.keys(Sexo);

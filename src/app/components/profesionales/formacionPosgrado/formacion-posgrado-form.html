@@ -19,7 +19,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <!-- <div class="col-6">
                             <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="profesionalP.institucionFormadora"
                                 name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
                             <plex-text *ngIf="showOtraEntidadFormadora" name='entidad' label="Otra Entidad Formadora" [(ngModel)]="profesionalP.institucionFormadora.nombre"
@@ -28,7 +28,7 @@
                         <div class="col">
                             <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" (change)='otraEntidad(profesionalP)'
                                 name="otra"></plex-bool>
-                        </div>
+                        </div> -->
                         <div class="col-3">
                             <plex-datetime type="date" label="Fecha de Ingreso" [(ngModel)]="profesionalP.fechaIngreso" name="fechaIngreso"></plex-datetime>
                         </div>
@@ -46,18 +46,14 @@
                         </div>
                     </div>
                     <hr>
-                    <!-- <h4>Certificación</h4>
                     <div>
                         <div class="row">
 
                              <div class="col-4">
-                                <plex-select label="Establecimiento Certificador" [(ngModel)]="profesionalP.establecimiento" name="establecimiento" (getData)="loadEstablecimientosCertificadores($event)" ></plex-select>
-                            </div> -->
-                            <!-- <div class="col-4">
-                                <plex-datetime type="date" label="Fecha de Certificación" [(ngModel)]="profesionalP.fecha" name="fecha" [required]="true"></plex-datetime>
+                                <plex-datetime type="date" label="Fecha de alta" [(ngModel)]="profesionalP.fechasDeAltas[0].fecha" name="fecha" [required]="true"></plex-datetime>
                             </div> 
                         </div>
-                    </div> -->
+                    </div>
                     <div class="row">
                         <div class="col">
                             <plex-button label="Guardar" type="success" class="float-right" (click)="onSubmit($event,posgrado)" validateForm="true"></plex-button>

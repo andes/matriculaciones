@@ -37,15 +37,8 @@ export class FormacionGradoFormComponent implements OnInit {
     public showOtraEntidadFormadora = false;
     profesionalGrado: any = {
         exportadoSisa: false,
-        profesion: {
-            nombre: null,
-            tipoDeFormacion: null,
-            codigo: null,
-        },
-        entidadFormadora: {
-            nombre: null,
-            codigo: null,
-        },
+        profesion: null,
+        entidadFormadora: null,
         titulo: null,
         fechaEgreso: null,
         fechaTitulo: null,

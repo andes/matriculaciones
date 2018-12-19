@@ -47,6 +47,7 @@ export class FormacionPosgradoComponent implements OnInit {
     public hoy;
     public edit = false;
     public formacionSelected;
+    public proximaFechaDeAlta;
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
         private _profesionalService: ProfesionalService,
@@ -109,6 +110,7 @@ export class FormacionPosgradoComponent implements OnInit {
             };
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
                 this.edit = false;
+                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
             });
         }
     }
@@ -120,9 +122,11 @@ export class FormacionPosgradoComponent implements OnInit {
         };
     }
 
-    editar(formacionPosgrado) {
-        this.edit = true;
+    editar(formacionPosgrado, index) {
+        // this.formacionPosgradoSelected.emit(index);
+        this.formacionPosgradoSelected.emit(index);
 
+        this.edit = true;
         if (formacionPosgrado.certificacion) {
             this.certificacion = formacionPosgrado.certificacion;
 
@@ -146,5 +150,20 @@ export class FormacionPosgradoComponent implements OnInit {
         } else {
             this.showOtraEntidadFormadora = false;
         }
+    }
+
+    pushFechasAlta(){
+        this.plex.confirm('¿Desea agregar esta nueva fecha de alta?').then((resultado) => {
+            if (resultado) {
+                this.formacionSelected.fechasDeAltas.push({fecha: this.proximaFechaDeAlta});
+                const cambio = {
+                    'op': 'updateEstadoPosGrado',
+                    'data': this.profesional.formacionPosgrado
+                };
+                this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+                });
+            }
+        });
+
     }
 }

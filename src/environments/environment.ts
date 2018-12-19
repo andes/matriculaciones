@@ -5,6 +5,7 @@
 
 export const environment = {
   production: false,
+  environmentName: 'local',
   API: '//localhost:3002/api',
   APIStatusCheck: false
 };

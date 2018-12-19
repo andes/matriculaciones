@@ -23,11 +23,13 @@ import { Auth } from '@andes/auth';
 import { ProfesionService } from '../../../services/profesion.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 import * as moment from 'moment';
+import * as enumerados from './../../../utils/enumerados';
 
 @Component({
     selector: 'app-formacion-grado',
     templateUrl: 'formacion-grado.html',
-    styles: ['.btnGrado { margin-left: 5px }']
+    styleUrls: ['grado.scss']
+
 })
 export class FormacionGradoComponent implements OnInit, OnChanges {
 
@@ -43,14 +45,19 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         id: null,
         nombreCompleto: null
     };
+    public credencial = false;
     public formacionSelected;
-
+    public copia = false;
+    public copiasObj;
+    public copias;
+    public indexGrado;
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
-        private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, ) { }
+        private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, private plex: Plex) { }
 
     ngOnInit() {
+        this.copiasObj = enumerados.getCopiasCredencial();
         this.hoy = new Date();
         // this.verificaVencimiento();
         this._profesionalService.getProfesionalFirma({ id: this.profesional.id })
@@ -59,7 +66,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                 if (this.profesional.supervisor) {
                     this.supervisor.id = this.profesional.supervisor.id;
                     this.supervisor.nombreCompleto = this.profesional.supervisor.nombreCompleto;
-                }else{
+                } else {
                     this.supervisor.id = this.auth.usuario.id;
                     this.supervisor.nombreCompleto = this.auth.usuario.nombreCompleto;
                 }
@@ -92,13 +99,20 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     }
 
-    generarCredencial(grado) {
+    credencialAcciones(i) {
+        this.credencial = true;
+        this.edit = true;
+        this.indexGrado = i;
+    }
+
+    generarCredencial() {
+        const grado = this.indexGrado;
         this._profesionalService.getProfesionalFoto({ id: this.profesional.id })
             .subscribe((resp) => {
                 const img = 'data:image/jpeg;base64,' + resp;
                 this._profesionalService.getProfesionalFirma({ id: this.profesional.id })
                     .subscribe((respFirma) => {
-                        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id})
+                        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id })
                             .subscribe((respFirmaAdmin) => {
                                 const firma = 'data:image/jpeg;base64,' + respFirma;
                                 const firmaAdmin = {
@@ -107,7 +121,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                                 };
                                 this._profesionService.getProfesiones().subscribe(datos => {
                                     const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
-                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0]);
+                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0], this.copias);
                                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
                                     // this.loading = false;
                                 });
@@ -118,18 +132,18 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
     generarCertificadoEtica(i) {
         const grado = this.profesional.formacionGrado[i];
-        if ( this.profesional.formacionPosgrado && this.profesional.formacionPosgrado.length > 0 ) {
-            const tienePosgrado = this.profesional.formacionPosgrado.findIndex(x => x.profesion.codigo === grado.profesion.codigo &&  x.matriculado === true);
+        if (this.profesional.formacionPosgrado && this.profesional.formacionPosgrado.length > 0) {
+            const tienePosgrado = this.profesional.formacionPosgrado.findIndex(x => x.profesion.codigo === grado.profesion.codigo && x.matriculado === true);
             if (tienePosgrado !== -1) {
                 const pdf = this._pdfUtils.certificadoDeEticaConEspecialidad(this.profesional, grado);
                 pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
 
-            }else {
+            } else {
                 const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
                 pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
 
             }
-        }else {
+        } else {
             const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
             pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
         }
@@ -148,18 +162,29 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     //      }
     // }
 
-    actualizar() {
-        const cambio = {
-            'op': 'updateEstadoGrado',
-            'data': this.profesional.formacionGrado
-        };
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-            this.edit = false;
-        });
+    actualizar($event) {
+        if ($event.formValid) {
+            const cambio = {
+                'op': 'updateEstadoGrado',
+                'data': this.profesional.formacionGrado
+            };
+            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+                this.edit = false;
+                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+
+            });
+        }
     }
 
     loadEntidadesFormadoras(event) {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
+    }
+
+    cerrarCredencial(){
+        this.edit = false;
+        this.credencial = false;
+        this.copias = null;
+        this.copia = false;
     }
 
     otraEntidad(f) {
@@ -169,7 +194,9 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         };
     }
 
-    editar(formacionGrado) {
+    editar(formacionGrado, i) {
+        this.formacionGradoSelected.emit(i);
+        this.credencial = false;
         this.edit = true;
         this.formacionSelected = formacionGrado;
         if (this.formacionSelected.entidadFormadora.codigo === null) {
@@ -180,18 +207,14 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
 
     pdf(grado) {
-        console.log(grado);
         let tipoMatricula;
         if (this.profesional.formacionGrado[grado].matriculacion === null) {
-            console.log('matriculacion');
             tipoMatricula = 'MATRICULACION';
-        }else{
-
-
+        } else {
             // if (moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).startOf('day').toDate() === moment().startOf('day').toDate()){
-                 if ( moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') ===  moment().format('YYYY-MM-DD')){
-                    tipoMatricula = 'MATRICULACION';
-            }else{
+            if (moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
+                tipoMatricula = 'MATRICULACION';
+            } else {
                 tipoMatricula = 'RENOVACION( N° ' + this.profesional.formacionGrado[grado].matriculacion[this.profesional.formacionGrado[grado].matriculacion.length - 1].matriculaNumero + ' )';
             }
         }

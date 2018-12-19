@@ -56,23 +56,26 @@ export class GuiaProfesionalComponent implements OnInit {
     }
 
 
-    buscar() {
-        // if ($event.formValid) {
+    buscar($event) {
+        if ($event.formValid) {
             if (this.busqueda.formacionGrado) {
                 this.busqueda['codigoProfesion'] = this.busqueda.formacionGrado.codigo;
             }
             this._profesionalService.getGuiaProfesional(this.busqueda).subscribe(x => {
+                console.log(x);
                 this.profEncontrado = x;
                 this.mostrarInfo = true;
             });
         }
-    // }
+    }
 
 
     limpiaFiltro() {
         this.busqueda.documento = null;
         this.busqueda.formacionGrado = null;
         this.busqueda.numeroMatricula = null;
+        this.busqueda.apellido = null,
+        this.busqueda.nombre = null;
     }
 
 }

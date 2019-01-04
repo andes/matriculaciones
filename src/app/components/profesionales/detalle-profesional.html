@@ -147,7 +147,7 @@
         </div>
         <div class="col-4" *ngIf="mostrarGrado">
             <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]" [index]="indexFormacionPosgradoSelected"
-                [profesional]="profesional" (matriculacion)="matricularProfesionalEspecialidad($event)" (cerrarDetalle)='cerrar(false)'></app-formacion-posgrado-detalle>
+                [profesional]="profesional" (matriculacion)="matricularProfesionalEspecialidad($event)"  (anioDeGraciaOutPut)="anioDeGracia($event)" (cerrarDetalle)='cerrar(false)'></app-formacion-posgrado-detalle>
         </div>
 
     </div>

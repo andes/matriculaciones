@@ -35,6 +35,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
+    @Output() anioDeGraciaOutPut = new EventEmitter();
+
+
+    hoy = new Date();
     public showBtnSinVencimiento = false;
     constructor(private _profesionalService: ProfesionalService,
         private plex: Plex,
@@ -50,6 +54,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         if (moment().diff(moment(this.profesional.fechaNacimiento, 'DD-MM-YYYY'), 'years') >= 65) {
             this.showBtnSinVencimiento = true;
         }
+
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -127,6 +132,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.formacion.papelesVerificados = true;
         this.formacion.matri = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;
+
         // this.actualizar();
     }
 
@@ -139,6 +145,20 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             }
         });
 
+    }
+
+    anioDeGracia(){
+        this.plex.confirm('¿Desea otorgarle un año de gracia a este profesional?').then((resultado) => {
+            if (resultado) {
+        this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.setFullYear(this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1);
+        this.formacion.papelesVerificados = true;
+        this.formacion.revalida = false;
+        this.formacion.matriculado = true;
+        this.profesional.formacionPosgrado[this.index] = this.formacion;
+        this.actualizar();
+        this.anioDeGraciaOutPut.emit(this.formacion.matriculacion);
+            }
+        });
     }
 
     renovar() {

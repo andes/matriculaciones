@@ -340,6 +340,12 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateProfesional();
     }
 
+    anioDeGracia(matriculacionEntrante){
+        console.log(matriculacionEntrante);
+        this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion = matriculacionEntrante;
+        this.updateProfesional();
+    }
+
     volver() {
         // this.router.navigate(['/turnos', { id: this.profesional.id }]);
         this.location.back();

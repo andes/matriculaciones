@@ -212,6 +212,7 @@ export class ProfesionalComponent implements OnInit {
     };
     // this.loadLocalidades(cargaLocalidad);
     if (this.editable) {
+      this.profesional.sexo = (this.profesional.sexo as any ).toLowerCase();
       if (this.profesional.domicilios.length === 0) {
         // para que no tire palos
         this.profesional.domicilios = [{
@@ -307,7 +308,7 @@ export class ProfesionalComponent implements OnInit {
                   matcheo = true;
                 }
               });
-            } 
+            }
             if (matcheo) {
               this.plex.alert('Ya existe un profesional registrados con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
             } else {
@@ -580,23 +581,26 @@ export class ProfesionalComponent implements OnInit {
     this.loadLocalidadesProfesional();
   }
 
-  actualizar() {
-    this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
-    // tslint:disable-next-line:max-line-length
-    // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
-    this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
-    // tslint:disable-next-line:max-line-length
-    this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
-    this.profesional.contactos.map(elem => {
-      elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
-      return elem;
-    });
-    this._profesionalService.putProfesional(this.profesional)
-      .subscribe(resp => {
-        this.profesional = resp;
-        this.plex.toast('success', 'Se modifico con exito!', 'informacion', 1000);
-        this.editado.emit(true);
+  actualizar($event) {
+    if ($event.formValid) {
+
+      this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
+      // tslint:disable-next-line:max-line-length
+      // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
+      this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
+      // tslint:disable-next-line:max-line-length
+      this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
+      this.profesional.contactos.map(elem => {
+        elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
+        return elem;
       });
+      this._profesionalService.putProfesional(this.profesional)
+        .subscribe(resp => {
+          this.profesional = resp;
+          this.plex.toast('success', 'Se modifico con exito!', 'informacion', 1000);
+          this.editado.emit(true);
+        });
+    }
   }
 
   otraEntidad(f) {

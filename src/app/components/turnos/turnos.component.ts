@@ -121,6 +121,7 @@ export class TurnosComponent implements OnInit {
         this._turnoService.getTurnosProximos(this.filtroBuscar)
             .subscribe((resp) => {
                 this.turnos = resp.data;
+                console.log(this.turnos);
                 if (event) {
 
                     event.callback(resp);
@@ -153,8 +154,9 @@ export class TurnosComponent implements OnInit {
 
     }
 
-    cambiarEstado() {
-        this.turnoElegido.sePresento = true;
+    cambiarEstado(presente) {
+        console.log(presente);
+        this.turnoElegido.sePresento = presente;
         this._turnoService.saveTurno(this.turnoElegido)
             .subscribe(resp => {
             });
@@ -190,7 +192,7 @@ export class TurnosComponent implements OnInit {
     }
 
     imprimir() {
-        let filtrosPdf = {
+        const filtrosPdf = {
             fecha: this.filtroBuscar.fecha,
             limit: 40
 

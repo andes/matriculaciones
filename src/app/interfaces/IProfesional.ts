@@ -67,8 +67,8 @@ export interface IProfesional {
             folio: String;
             inicio: Date;
             baja: {
-                motivo: '',
-                fecha: Date
+                motivo: String,
+                fecha: any
             },
             notificacionVencimiento: Boolean;
             fin: Date;
@@ -110,10 +110,6 @@ export interface IProfesional {
                 libro: String;
                 folio: String;
                 inicio: Date;
-                baja: {
-                    motivo: '',
-                    fecha: null
-                }
                 notificacionVencimiento: Boolean;
                 fin: Date;
                 revalidacionNumero: Number;

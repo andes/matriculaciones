@@ -3,7 +3,7 @@ const jsPDF = require('jspdf');
 
 export class PDFUtils {
 
-    public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin, profesion, copia): any {
+    public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin, profesion, copia, fechaImpresion): any {
         // tslint:disable-next-line:max-line-length
         const ultimaRenovacion = profesional.formacionGrado[grado].matriculacion[profesional.formacionGrado[grado].matriculacion.length - 1];
 
@@ -27,7 +27,7 @@ export class PDFUtils {
         } else {
             doc.text(firmaAdmin.administracion, 42, 41);
         }
-        doc.text(/*'15/07/2010'*/ this.getDateStr(new Date()), 50, 48);
+        doc.text(/*'15/07/2010'*/ this.getDateStr(fechaImpresion), 50, 48);
         doc.addPage();
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Tecnicatura') {
             doc.setFillColor(255, 0, 0);

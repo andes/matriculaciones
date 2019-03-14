@@ -327,7 +327,7 @@ export class DetalleProfesionalComponent implements OnInit {
         } else {
             this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
         }
-        this.updateProfesional();
+        // this.updateProfesional();
 
     }
 

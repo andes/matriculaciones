@@ -75,7 +75,7 @@ export class SupervisoresComponent implements OnInit {
 
 
             // tslint:disable-next-line:max-line-length
-            const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
+            const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar' || x === 'matriculaciones:*');
             // const p = organizaciones.permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
             if (permisoSupervisor) {
                 this.esSupervisor = true;

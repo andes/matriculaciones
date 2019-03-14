@@ -43,6 +43,10 @@
                 <label>Entidad Formadora</label>
                 <div>{{formacionGrado.entidadFormadora?.nombre}}</div>
             </div>
+            <div class="col-2">
+                <label>Fecha de primer matricula</label>
+                <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
+            </div>
             <div class="col-2" *ngIf='!formacionGrado.matriculacion && formacionGrado.renovacion === false'>
 
                 <div *ngIf='!formacionGrado.papelesVerificados' class="badge badge-warning">Papeles
@@ -105,13 +109,17 @@
     <div class="row" *ngIf='edit  &&  credencial'>
         <div class="container">
             <div class='row'>
-                <div class="col-3">
+                <div class="col-2">
                     <plex-bool type="slide" label="¿es una copia?" (change)='copias = null' [(ngModel)]="copia" name="Medicamento"></plex-bool>
                 </div>
-                <div class="col-4" *ngIf="copia">
+                <div class="col-3" *ngIf="copia">
                     <plex-select label="Seleccione una opcion" name="copias" [(ngModel)]="copias" [data]='copiasObj'></plex-select>
                 </div>
-                <div class="col-4" [ngClass]="{'centrarBtn': copia}">
+                <div class="col-5" >
+                    <plex-datetime label="Fecha de impresion" type="date" [(ngModel)]="fechaImpresion"
+                    name='fechaImpresion' [required]="true"></plex-datetime>
+                </div>
+                <div class="col-2 centrarBtn" >
                     <plex-button label="imprimir credencial" (click)='generarCredencial()' type="success"></plex-button>
                 </div>
             </div>

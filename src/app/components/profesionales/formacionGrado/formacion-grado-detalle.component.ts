@@ -50,7 +50,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
     ngOnInit() {
         this.hoy = new Date();
         this.compruebaBajas();
-        this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
+        this.esSupervisor = this.auth.check('matriculaciones:supervisor:aprobar');
         // this.esSupervisor = true;
 
 
@@ -73,9 +73,9 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 if (formacion.matriculacion === null) {
                     revNumero = 0;
                 } else {
-                    if (formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero){
+                    if (formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero) {
                         revNumero = formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero;
-                    }else{
+                    } else {
                         revNumero = formacion.matriculacion.length;
                     }
                 }
@@ -104,22 +104,30 @@ export class FormacionGradoDetalleComponent implements OnInit {
                                 inicio: new Date(),
                                 baja: {
                                     motivo: '',
-                                    fecha: null
+                                    fecha: ''
                                 },
                                 notificacionVencimiento: false,
                                 fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
                                 revalidacionNumero: revNumero + 1
                             };
+
+
+                            console.log(this.formacion, oMatriculacion);
                             this._numeracionesService.putNumeracion(num[0])
                                 .subscribe(newNum => {
-                                    this.matriculacion.emit(oMatriculacion);
+                                    this.formacion.renovacion = false;
+                                    this.formacion.matriculado = true;
+                                    this.profesional.formacionGrado[this.index] = this.formacion;
+                                    if (this.profesional.formacionGrado[this.index].matriculacion === null) {
+                                        this.profesional.formacionGrado[this.index].matriculacion = [oMatriculacion];
+                                    } else {
+                                        this.profesional.formacionGrado[this.index].matriculacion.push(oMatriculacion);
+                                    }
+                                    this.actualizar();
+
                                 });
                             // this.profesional.formacionGrado[this.index].renovacion = false;
                             // this.profesional.formacionGrado[this.index].matriculado = true;
-                            this.formacion.renovacion = false;
-                            this.formacion.matriculado = true;
-                            this.profesional.formacionGrado[this.index] = this.formacion;
-                            this.actualizar();
                         }
                     });
 
@@ -140,7 +148,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
             .subscribe(resp => {
                 this.profesional = resp;
             });
-        this.actualizar();
+        // this.actualizar();
 
     }
 
@@ -185,7 +193,10 @@ export class FormacionGradoDetalleComponent implements OnInit {
             'op': 'updateEstadoGrado',
             'data': this.profesional.formacionGrado
         };
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+            console.log(data);
+            this.profesional = data;
+         });
 
         // this._profesionalService.putProfesional(this.profesional)
         // .subscribe(resp => {

@@ -229,23 +229,23 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
       sexo: this.profesional.sexo
     };
     this._turnosService.getTurnosPorDocumento(parametros).subscribe((resultado: any) => {
-      if (!resultado){
-    this._turnosService.saveTurnoSolicitados(this.profesional)
-      .subscribe((nuevoProfesional) => {
-        if (nuevoProfesional == null) {
-          this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
-        } else {
+      if (!resultado) {
+        this._turnosService.saveTurnoSolicitados(this.profesional)
+          .subscribe((nuevoProfesional) => {
+            if (nuevoProfesional == null) {
+              this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
+            } else {
 
-          this._nuevoProfesional = nuevoProfesional;
-          this.turnoGuardado = true;
-          if (this._turnoSeleccionado && this._nuevoProfesional) {
-            this.saveTurno();
-          }
-          this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-          this.router.navigate(['requisitosGenerales']);
-        }
-      });
-      }else{
+              this._nuevoProfesional = nuevoProfesional;
+              this.turnoGuardado = true;
+              if (this._turnoSeleccionado && this._nuevoProfesional) {
+                this.saveTurno();
+              }
+              this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+              this.router.navigate(['requisitosGenerales']);
+            }
+          });
+      } else {
         this.plex.info('info', 'usted ya tiene un turno para el dia <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
 
       }
@@ -255,12 +255,14 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
 
   profesionalEncontrado(profEncontrado) {
     this.profElegido = profEncontrado;
-    this.profesional.idRenovacion = profEncontrado.idRenovacion;
-    this.profesional.nombre = profEncontrado.nombre;
-    this.profesional.apellido = profEncontrado.apellido;
-    this.profesional.documento = profEncontrado.documento;
-    this.profesional.fechaNacimiento = profEncontrado.fechaNacimiento;
-    this.profesional.sexo = profEncontrado.sexo;
+    if (profEncontrado) {
+      this.profesional.idRenovacion = profEncontrado.idRenovacion;
+      this.profesional.nombre = profEncontrado.nombre;
+      this.profesional.apellido = profEncontrado.apellido;
+      this.profesional.documento = profEncontrado.documento;
+      this.profesional.fechaNacimiento = profEncontrado.fechaNacimiento;
+      this.profesional.sexo = profEncontrado.sexo;
+    }
   }
 
 

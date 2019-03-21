@@ -44,17 +44,17 @@
                     <div>
                         <div class="row">
                             <div class="col-md-3">
-                                <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="buscar()"></plex-text>
+                                <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="mySubject.next()"></plex-text>
                             </div>
                             <div class="col-md-3">
-                                <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="buscar()"></plex-text>
+                                <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="mySubject.next()"></plex-text>
                             </div>
                             <div class="col-md-3">
-                                <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="buscar()"></plex-int>
+                                <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
                             </div>
                             <div class="col-md-3">
                                 <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
-                                    (change)="buscar();saveFecha()"></plex-datetime>
+                                    (change)="mySubject.next();saveFecha()"></plex-datetime>
                             </div>
                         </div>
                     </div>

@@ -17,6 +17,7 @@ import { Auth } from '@andes/auth';
 import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
 import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
+import { Subject } from 'rxjs/Rx';
 
 const jsPDF = require('jspdf');
 
@@ -38,6 +39,7 @@ export class TurnosComponent implements OnInit {
     modalScrollDistance = 2;
     modalScrollThrottle = 10;
     public hoy = new Date();
+    mySubject = new Subject();
 
     public filtroBuscar = {
         nombre: '',
@@ -59,7 +61,14 @@ export class TurnosComponent implements OnInit {
         private _cambioDniService: CambioDniService,
         public auth: Auth,
         public listadoPdf: ListadoTurnosPdfComponent,
-        private _profesionalService: ProfesionalService) { }
+        private _profesionalService: ProfesionalService) {
+
+            this.mySubject
+            .debounceTime(1000)
+            .subscribe(val => {
+                this.buscar()
+            });
+         }
 
     onScroll() {
     }
@@ -204,6 +213,14 @@ export class TurnosComponent implements OnInit {
                 // this.listadoPdf.imprimir(nuevo);
             });
 
+    }
+
+    anular() {
+        this.turnoElegido.anulado = true;
+        console.log( this.turnoElegido)
+        this._turnoService.saveTurno(this.turnoElegido)
+        .subscribe(resp => {
+        });
     }
 
     // avisoTurno(event?: any) {

@@ -40,7 +40,7 @@ export class BaseService {
     protected especialidadURL = '/core/tm/especialidades/';
     constructor(protected _http: Http) { }
 
-    protected get(url: string, searchQuery?: URLSearchParams): Observable<any[]> {
+    protected get(url: string, searchQuery?: URLSearchParams): Observable<any> {
         return this._http.get(url, { search: searchQuery}).map(this.extractData).catch(this.handleError);
     }
 

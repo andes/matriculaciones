@@ -75,7 +75,7 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
         this._turnosService.saveTurnoSolicitados(profesional)
             .subscribe((nuevoProfesional) => {
                 if (nuevoProfesional == null) {
-                    this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
+                    this.plex.info('info','El profesional que quiere agregar ya existe(verificar dni)');
                 }else {
 
                     this._nuevoProfesional = nuevoProfesional;

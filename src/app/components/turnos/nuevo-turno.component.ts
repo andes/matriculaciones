@@ -134,7 +134,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     private buildHorariosDisponibles() {
-        console.log('hola');
         this.sinTurnos = false;
         this.horariosDisponibles = [];
         let res = null;
@@ -209,7 +208,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
             n++;
 
         }
-        console.log(this.horariosDisponibles);
 
     }
 
@@ -249,8 +247,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                 const count = this.horariosDisponibles.filter((dia) => {
                     return dia.ocupado === true;
                 });
-                console.log(this.horariosDisponibles);
-                console.log(count.length);
                 if (count.length === this.horariosDisponibles.length){
                     this.sinTurnos = true;
                 }
@@ -318,7 +314,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
             const diasCompletos = countTurnosXDia.filter((dia) => {
                 return dia.count === this.horariosDisponibles.length;
             }).map((dia) => { return dia._id.fechaStr; });
-            console.log(diasCompletos);
             res = fechasExcluidas.concat(diasCompletos);
         }
 

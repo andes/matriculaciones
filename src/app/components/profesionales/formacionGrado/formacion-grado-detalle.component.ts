@@ -84,7 +84,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
                         num = num.data;
                         if (num.length === 0) {
-                            this.plex.alert('No tiene ningun numero de matricula asignado');
+                            this.plex.info('info', 'No tiene ningun numero de matricula asignado');
                         } else {
                             let matriculaNumero;
                             if (mantenerNumero === false) {
@@ -112,7 +112,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
                             };
 
 
-                            console.log(this.formacion, oMatriculacion);
                             this._numeracionesService.putNumeracion(num[0])
                                 .subscribe(newNum => {
                                     this.formacion.renovacion = false;
@@ -147,8 +146,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;
+                // this.actualizar();
             });
-        // this.actualizar();
 
     }
 
@@ -191,17 +190,13 @@ export class FormacionGradoDetalleComponent implements OnInit {
     actualizar() {
         const cambio = {
             'op': 'updateEstadoGrado',
-            'data': this.profesional.formacionGrado
+            'data': this.profesional.formacionGrado,
+            'agente': this.auth.usuario.nombreCompleto
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-            console.log(data);
             this.profesional = data;
          });
 
-        // this._profesionalService.putProfesional(this.profesional)
-        // .subscribe(resp => {
-        //     this.profesional = resp;
-        // });
     }
 
     compruebaBajas() {

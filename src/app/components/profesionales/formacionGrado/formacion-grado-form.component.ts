@@ -75,9 +75,7 @@ export class FormacionGradoFormComponent implements OnInit {
 
     onSubmit($event, form) {
         if ($event.formValid) {
-            console.log(this.profesionalGrado.profesion);
             const existeProfesion = this.profesional.formacionGrado.find(x => x.profesion.codigo === this.profesionalGrado.profesion.codigo);
-            console.log(existeProfesion);
             if (existeProfesion) {
                 this.plex.info('warning', 'El usuario ya posee esta profesion asignada');
             } else {

@@ -40,7 +40,7 @@ const jsPDF = require('jspdf');
 @Component({
     selector: 'app-detalle-profesional',
     templateUrl: 'detalle-profesional.html',
-    styles: ['.margenFoto { padding-left: 4%; padding-bottom: 1%; }']
+    styles: ['.margenFoto { padding-bottom: 1%; }']
 
 })
 export class DetalleProfesionalComponent implements OnInit {
@@ -340,8 +340,7 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateProfesional();
     }
 
-    anioDeGracia(matriculacionEntrante){
-        console.log(matriculacionEntrante);
+    anioDeGracia(matriculacionEntrante) {
         this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion = matriculacionEntrante;
         this.updateProfesional();
     }
@@ -361,8 +360,6 @@ export class DetalleProfesionalComponent implements OnInit {
         if (this.flag === false && this.editable) {
             this.flag = true;
         }
-
-
     }
 
 
@@ -370,10 +367,8 @@ export class DetalleProfesionalComponent implements OnInit {
         this.mostrar = true;
         this.mostrarGrado = false;
         this.indexFormacionGradoSelected = formacion;
-
         // if (this.mostrarGrado === true) {
         //     this.mostrarGrado = false;
-
         // } else {
         //     this.mostrarGrado = true;
         // }

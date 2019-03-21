@@ -39,6 +39,28 @@ export interface IProfesional {
         };
         ultimaActualizacion: Date;
         activo: boolean;
+    }, {
+        tipo: string;
+        valor: string;
+        codigoPostal: string;
+        ubicacion: {
+            localidad: any;
+            provincia: any;
+            pais: any
+        };
+        ultimaActualizacion: Date;
+        activo: boolean;
+    }, {
+        tipo: string;
+        valor: string;
+        codigoPostal: string;
+        ubicacion: {
+            localidad: any;
+            provincia: any;
+            pais: any
+        };
+        ultimaActualizacion: Date;
+        activo: boolean;
     }];
     fotoArchivo: string;
     firmas: [{

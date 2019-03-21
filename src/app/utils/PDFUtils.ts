@@ -7,7 +7,8 @@ export class PDFUtils {
         // tslint:disable-next-line:max-line-length
         const ultimaRenovacion = profesional.formacionGrado[grado].matriculacion[profesional.formacionGrado[grado].matriculacion.length - 1];
 
-        const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
+        // const doc = new jsPDF('p', 'mm', [217.5, 304.3]);
+        const doc = new jsPDF('p', 'mm', 'a4');
         doc.setFontSize(6);
         doc.setFontStyle('bold');
         doc.text(/*'Argentina'*/ profesional.nacionalidad.nombre, 14, 14);

@@ -215,13 +215,6 @@ export class TurnosComponent implements OnInit {
 
     }
 
-    anular() {
-        this.turnoElegido.anulado = true;
-        console.log( this.turnoElegido)
-        this._turnoService.saveTurno(this.turnoElegido)
-        .subscribe(resp => {
-        });
-    }
 
     // avisoTurno(event?: any) {
     //     const tieneCelular = false;

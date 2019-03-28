@@ -137,8 +137,10 @@
                                 <span *ngIf='turnoElegido.sePresento === false;' class="text-light  badge badge-danger">Ausente</span>
                                 <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado(true)"
                                     *ngIf="turnoElegido.sePresento === false"></plex-button>
-                                    <plex-button type="success" label="Ausente" class="float-right" (click)="cambiarEstado(false)"
+                                <plex-button type="success" label="Ausente" class="float-right" (click)="cambiarEstado(false)"
                                     *ngIf="turnoElegido.sePresento === true"></plex-button>
+                                <plex-button type="danger" label="Anular turno" class="float-right" (click)="anularTurno()"
+                                    *ngIf="turnoElegido.sePresento === false && !turnoElegido.anulado"></plex-button>
                             </div>
                         </div>
                         <hr>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
-import { Plex } from '@andes/plex/src/lib/core/service';
+import { Plex } from '@andes/plex';
 // import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -61,14 +61,15 @@ export class TurnosComponent implements OnInit {
         private _cambioDniService: CambioDniService,
         public auth: Auth,
         public listadoPdf: ListadoTurnosPdfComponent,
-        private _profesionalService: ProfesionalService) {
+        private _profesionalService: ProfesionalService,
+        private plex: Plex) {
 
-            this.mySubject
+        this.mySubject
             .debounceTime(1000)
             .subscribe(val => {
                 this.buscar()
             });
-         }
+    }
 
     onScroll() {
     }
@@ -213,6 +214,21 @@ export class TurnosComponent implements OnInit {
                 // this.listadoPdf.imprimir(nuevo);
             });
 
+    }
+
+    anularTurno() {
+
+        this.plex.confirm('¿Esta seguro que desea anular este turno?').then((resultado) => {
+            if (resultado) {
+                this.turnoElegido.anulado = true;
+                this._turnoService.saveTurno(this.turnoElegido)
+                    .subscribe(resp => {
+                        const index = this.turnos.findIndex(x => x.id === this.turnoElegido.id);
+                        this.turnos.splice(index, 1);
+                        this.turnoElegido = null;
+                    });
+            }
+        })
     }
 
 

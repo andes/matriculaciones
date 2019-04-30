@@ -254,8 +254,8 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   }
 
   profesionalEncontrado(profEncontrado) {
-    this.profElegido = profEncontrado;
     if (profEncontrado) {
+      this.profElegido = profEncontrado;
       this.profesional.idRenovacion = profEncontrado.idRenovacion;
       this.profesional.nombre = profEncontrado.nombre;
       this.profesional.apellido = profEncontrado.apellido;

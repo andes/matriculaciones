@@ -26,7 +26,7 @@ import { ProfesionalService } from '../../services/profesional.service';
 @Component({
     selector: 'app-foto-general',
     templateUrl: 'foto-general.html',
-    styles: ['.img-circle {  border-radius: 50%;  width: 128px;height: 128px;}']
+    styles: ['.img-circle {  border-radius: 50%;  width: 128px !important;height: 128px !important;}']
 
 })
 export class FotoGeneralComponent implements OnInit, OnChanges {

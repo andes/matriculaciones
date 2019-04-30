@@ -69,13 +69,13 @@ export class SupervisoresComponent implements OnInit {
         this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d._id === this.auth.organizacion._id);
         // tslint:disable-next-line:max-line-length
         if (this.indexOrganizacion === -1) {
-            this.plex.alert('Este usuario no esta en la organizacion');
+            this.plex.info('info','Este usuario no esta en la organizacion');
             this.userSeleccionado = null;
         } else {
 
 
             // tslint:disable-next-line:max-line-length
-            const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
+            const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar' || x === 'matriculaciones:*');
             // const p = organizaciones.permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
             if (permisoSupervisor) {
                 this.esSupervisor = true;

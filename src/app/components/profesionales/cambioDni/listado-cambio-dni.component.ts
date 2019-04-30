@@ -90,7 +90,7 @@ export class ListadoCambioDniComponent implements OnInit {
 
         this._profesionalService.getProfesional({ id: this.solicitudElegida.idProfesional }).subscribe(profesional => {
             if (profesional.length === 0) {
-                this.plex.alert('No existe ningun profesional con este DNI');
+                this.plex.info('info', 'No existe ningun profesional con este DNI');
                 this.Match = false;
             } else {
                 profesional[0].documento = this.solicitudElegida.dniNuevo;

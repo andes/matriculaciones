@@ -46,7 +46,7 @@ export class NumeracionMatriculasFormComponent implements OnInit {
             this._numeracionesService.saveNumeracion(this.numeracionMatricula)
                 .subscribe((resp) => {
                     if (!resp) {
-                        this.plex.alert('Ya existe esta profesion/especialidad con una numeracion asignada');
+                        this.plex.info('info', 'Ya existe esta profesion/especialidad con una numeracion asignada');
 
                     }else {
                         this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);

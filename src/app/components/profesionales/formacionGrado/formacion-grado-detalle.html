@@ -135,8 +135,8 @@
                                     
                                         <td>{{ matriculacion.revalidacionNumero }}</td>
                                         <td>{{ matriculacion.matriculaNumero }}</td>
-                                        <td *ngIf='i === 0'>{{ formacion.fechaDeInscripcion | date: 'yyyy'}}</td>
-                                        <td *ngIf='i !== 0'>{{ matriculacion.inicio  | date: 'yyyy'}}</td>
+                                        <td *ngIf='i === 0'>{{ formacion.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</td>
+                                        <td *ngIf='i !== 0'>{{ matriculacion.inicio  | date: 'dd/MM/yyyy'}}</td>
                                         <td>{{ matriculacion.fin | date: 'dd/MM/yyyy'}}</td>
                                     </tr>
                                 </tbody>

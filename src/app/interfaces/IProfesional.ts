@@ -39,6 +39,28 @@ export interface IProfesional {
         };
         ultimaActualizacion: Date;
         activo: boolean;
+    }, {
+        tipo: string;
+        valor: string;
+        codigoPostal: string;
+        ubicacion: {
+            localidad: any;
+            provincia: any;
+            pais: any
+        };
+        ultimaActualizacion: Date;
+        activo: boolean;
+    }, {
+        tipo: string;
+        valor: string;
+        codigoPostal: string;
+        ubicacion: {
+            localidad: any;
+            provincia: any;
+            pais: any
+        };
+        ultimaActualizacion: Date;
+        activo: boolean;
     }];
     fotoArchivo: string;
     firmas: [{
@@ -67,8 +89,8 @@ export interface IProfesional {
             folio: String;
             inicio: Date;
             baja: {
-                motivo: '',
-                fecha: Date
+                motivo: String,
+                fecha: any
             },
             notificacionVencimiento: Boolean;
             fin: Date;
@@ -110,10 +132,6 @@ export interface IProfesional {
                 libro: String;
                 folio: String;
                 inicio: Date;
-                baja: {
-                    motivo: '',
-                    fecha: null
-                }
                 notificacionVencimiento: Boolean;
                 fin: Date;
                 revalidacionNumero: Number;

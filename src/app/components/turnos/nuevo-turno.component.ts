@@ -55,6 +55,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     public horario = new Date();
     public fecha = new Date();
     public fechaComparacion: Date;
+    public sinTurnos = false;
     @Input() sobreTurno: any;
 
     @Output() onTurnoSeleccionado = new EventEmitter<Date>();
@@ -66,7 +67,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
         private _turnoService: TurnoService,
         private _agendaService: AgendaService,
         private plex: Plex,
-        private router: Router ) { }
+        private router: Router) { }
 
     /**
      * Lifecycle hooks
@@ -119,10 +120,10 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
 
             // if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
 
-                this._turnoService.getTurnosMatriculacion(hoy, {})
-                    .subscribe((countTurnosXDia) => {
-                        this.buildCalendar(countTurnosXDia);
-                    });
+            this._turnoService.getTurnosMatriculacion(hoy, {})
+                .subscribe((countTurnosXDia) => {
+                    this.buildCalendar(countTurnosXDia);
+                });
             // } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
             //     this._turnoService.getTurnosRenovacion(hoy, {})
             //         .subscribe((countTurnosXDia) => {
@@ -133,6 +134,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     private buildHorariosDisponibles() {
+        this.sinTurnos = false;
         this.horariosDisponibles = [];
         let res = null;
         let entradaU = false;
@@ -206,6 +208,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
             n++;
 
         }
+
     }
 
     private buildCalendar(countTurnosXDia: any[]) {
@@ -213,7 +216,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
         this.buildCalendarOptions(countTurnosXDia);
         // Inicio el calendario.
         this.$div.datepicker(this.options);
-
+        this.sinTurnos = false;
         // Setteo el evento changeDate del calendario.
         this.$div.on('changeDate', (event) => {
             const fecha = new Date(event.date);
@@ -226,21 +229,28 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
             });
             // Obtengo los horarios ocupados del día
             // if (this.tipoTurno === Enums.TipoTurno.matriculacion) {
-                this._turnoService.getTurnosMatriculacion(fecha, {
-                    anio: fecha.getFullYear(),
-                    mes: fecha.getMonth() + 1,
-                    dia: fecha.getDate()
-                }).subscribe((datos) => {
-                    // Deshabilito los horarios ocupados.
-                    datos.forEach(item => {
-                        const turnoOcupado = item._id;
-                        this.horariosDisponibles.forEach(horario => {
-                            if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
-                                horario.ocupado = true;
-                            }
-                        });
+            this._turnoService.getTurnosMatriculacion(fecha, {
+                anio: fecha.getFullYear(),
+                mes: fecha.getMonth() + 1,
+                dia: fecha.getDate()
+            }).subscribe((datos) => {
+                // Deshabilito los horarios ocupados.
+                datos.forEach(item => {
+                    const turnoOcupado = item._id;
+                    this.horariosDisponibles.forEach(horario => {
+                        if (horario.hora === turnoOcupado.hora && horario.minutos === turnoOcupado.minutos) {
+                            horario.ocupado = true;
+                        }
                     });
+
                 });
+                const count = this.horariosDisponibles.filter((dia) => {
+                    return dia.ocupado === true;
+                });
+                if (count.length === this.horariosDisponibles.length){
+                    this.sinTurnos = true;
+                }
+            });
             // } else if (this.tipoTurno === Enums.TipoTurno.renovacion) {
             //     this._turnoService.getTurnosRenovacion(fecha, {
             //         anio: fecha.getFullYear(),
@@ -275,6 +285,7 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
                      });
              });*/
 
+
             this.writeValue(fecha);
         });
     }
@@ -303,7 +314,6 @@ export class NuevoTurnoComponent implements OnInit, AfterViewInit, OnChanges {
             const diasCompletos = countTurnosXDia.filter((dia) => {
                 return dia.count === this.horariosDisponibles.length;
             }).map((dia) => { return dia._id.fechaStr; });
-
             res = fechasExcluidas.concat(diasCompletos);
         }
 

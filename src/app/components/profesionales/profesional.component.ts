@@ -213,7 +213,7 @@ export class ProfesionalComponent implements OnInit {
     // this.loadLocalidades(cargaLocalidad);
     if (this.editable) {
       this.profesional.sexo = (this.profesional.sexo as any).toLowerCase();
-      if (this.profesional.domicilios.length === 0) {
+      if ((this.profesional.domicilios as any).length === 0) {
         // para que no tire palos
         this.profesional.domicilios = [{
           tipo: 'real',
@@ -308,7 +308,7 @@ export class ProfesionalComponent implements OnInit {
               });
             }
             if (matcheo) {
-              this.plex.alert('Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
+              this.plex.info('info', 'Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
             } else {
               // this.ocultarBtn = true;
               this.onProfesionalCompleto.emit(this.profesional);
@@ -372,12 +372,12 @@ export class ProfesionalComponent implements OnInit {
 
             }
             if (matcheo) {
-              this.plex.alert('Ya existe un profesional registrados con estos datos');
+              this.plex.info('info', 'Ya existe un profesional registrados con estos datos');
             } else {
               this._profesionalService.saveProfesional({ profesional: this.profesional })
                 .subscribe(nuevoProfesional => {
                   if (nuevoProfesional === null) {
-                    this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
+                    this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
                   } else {
                     this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
                     this.editado.emit(true);

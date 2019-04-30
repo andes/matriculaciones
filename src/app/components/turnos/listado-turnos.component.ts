@@ -58,7 +58,6 @@ export class ListadoTurnosComponent implements OnInit {
             .subscribe((resp) => {
 
                 this.turnos = resp.data;
-
                 if (event) {
                     event.callback(resp);
                 }

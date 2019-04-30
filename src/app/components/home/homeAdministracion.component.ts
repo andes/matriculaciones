@@ -32,7 +32,6 @@ export class HomeAdministracionComponent implements OnInit {
         }else {
             this.permisosAgenda = false;
         }
-
         if (!this.permisosProfesional && !this.permisosAgenda && !this.permisosTurnos) {
             this.noTienePermisos = true;
         }

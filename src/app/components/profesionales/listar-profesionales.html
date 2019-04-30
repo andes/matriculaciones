@@ -362,7 +362,13 @@
     </div>
   </div>
 </section>
-<app-profesional *ngIf="nuevoProfesional === true" [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
+<form class="plex-layout" *ngIf="nuevoProfesional === true">
+  <section >
+    <plex-box>
+      <app-profesional  [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
+    </plex-box>
+  </section>
+</form>
 <footer>
   <plex-button *ngIf="nuevoProfesional === false" label="Volver" type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
   <plex-button *ngIf="nuevoProfesional === true" label="Volver" type="danger" (click)="verNuevoProfesional(false)" icon="arrow-left-bold"></plex-button>

@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
-import { Plex } from '@andes/plex/src/lib/core/service';
+import { Plex } from '@andes/plex';
 // import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
@@ -17,6 +17,7 @@ import { Auth } from '@andes/auth';
 import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
 import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
+import { Subject } from 'rxjs/Rx';
 
 const jsPDF = require('jspdf');
 
@@ -38,6 +39,7 @@ export class TurnosComponent implements OnInit {
     modalScrollDistance = 2;
     modalScrollThrottle = 10;
     public hoy = new Date();
+    mySubject = new Subject();
 
     public filtroBuscar = {
         nombre: '',
@@ -59,7 +61,15 @@ export class TurnosComponent implements OnInit {
         private _cambioDniService: CambioDniService,
         public auth: Auth,
         public listadoPdf: ListadoTurnosPdfComponent,
-        private _profesionalService: ProfesionalService) { }
+        private _profesionalService: ProfesionalService,
+        private plex: Plex) {
+
+        this.mySubject
+            .debounceTime(1000)
+            .subscribe(val => {
+                this.buscar()
+            });
+    }
 
     onScroll() {
     }
@@ -153,8 +163,8 @@ export class TurnosComponent implements OnInit {
 
     }
 
-    cambiarEstado() {
-        this.turnoElegido.sePresento = true;
+    cambiarEstado(presente) {
+        this.turnoElegido.sePresento = presente;
         this._turnoService.saveTurno(this.turnoElegido)
             .subscribe(resp => {
             });
@@ -190,7 +200,7 @@ export class TurnosComponent implements OnInit {
     }
 
     imprimir() {
-        let filtrosPdf = {
+        const filtrosPdf = {
             fecha: this.filtroBuscar.fecha,
             limit: 40
 
@@ -205,6 +215,22 @@ export class TurnosComponent implements OnInit {
             });
 
     }
+
+    anularTurno() {
+
+        this.plex.confirm('¿Esta seguro que desea anular este turno?').then((resultado) => {
+            if (resultado) {
+                this.turnoElegido.anulado = true;
+                this._turnoService.saveTurno(this.turnoElegido)
+                    .subscribe(resp => {
+                        const index = this.turnos.findIndex(x => x.id === this.turnoElegido.id);
+                        this.turnos.splice(index, 1);
+                        this.turnoElegido = null;
+                    });
+            }
+        })
+    }
+
 
     // avisoTurno(event?: any) {
     //     const tieneCelular = false;

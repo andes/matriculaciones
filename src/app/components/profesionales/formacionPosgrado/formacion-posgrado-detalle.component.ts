@@ -104,9 +104,13 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
                 this.formacion.revalida = false;
                 this.formacion.matriculado = true;
-
+                if (this.profesional.formacionPosgrado[this.index].matriculacion === null) {
+                    this.profesional.formacionPosgrado[this.index].matriculacion = [oMatriculacion];
+                } else {
+                    this.profesional.formacionPosgrado[this.index].matriculacion.push(oMatriculacion);
+                }
                 this.actualizar();
-                this.matriculacion.emit(oMatriculacion);
+                // this.matriculacion.emit(oMatriculacion);
             }
             // });
 

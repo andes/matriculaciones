@@ -1,80 +1,87 @@
-<plex-box>
-    <div class="row">
-        <div class="col">
-            <plex-box type="primary">
-                <header>
-                    <h3>Administración de Supervisores</h3>
-                </header>
+<form class="plex-layout" #form="ngForm">
+    <section>
+        <plex-box>
+            <div class="row">
+                <div class="col">
+                    <plex-box type="primary">
+                        <header>
+                            <h3>Administración de Supervisores</h3>
+                        </header>
 
-                <plex-text [(ngModel)]="textoLibre" (change)="loadUsuarios()" prefix="<i class='mdi mdi-account-search'></i>" placeholder="Buscar por DNI, nombre o apellido">
-                </plex-text>
-                <!--Loader-->
-                <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
-                <div *ngIf="users && !users.length" class="alert alert-danger">
-                    <i class="mdi mdi-account-alert"></i> El usuario no se ha encontrado
+                        <plex-text [(ngModel)]="textoLibre" name='busqueda' (change)="loadUsuarios()" prefix="<i class='mdi mdi-account-search'></i>"
+                            placeholder="Buscar por DNI, nombre o apellido">
+                        </plex-text>
+                        <!--Loader-->
+                        <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
+                        <div *ngIf="users && !users.length" class="alert alert-danger">
+                            <i class="mdi mdi-account-alert"></i> El usuario no se ha encontrado
+                        </div>
+                        <!--Tabla de resultados por SimpleQuery -->
+                        <table *ngIf="users && users.length" class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Apellido</th>
+                                    <th>Nombre</th>
+                                    <th>Seleccionar</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover" *ngFor="let user of users  | textFilter:textoLibre ; let i=index">
+                                    <td>{{user.usuario}}</td>
+                                    <td *ngIf="user.apellido; else sinDatos">
+                                        {{user.apellido}}
+                                    </td>
+                                    <td *ngIf="user.nombre; else sinDatos">
+                                        {{user.nombre}}
+                                    </td>
+                                    <ng-template #sinDatos>
+                                        <td> SIN DATOS</td>
+                                    </ng-template>
+
+                                    <td>
+                                        <plex-button title="Seleccionar Usuario" icon="check-circle-outline" type="link"
+                                            (click)="selectUser(user)"></plex-button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </plex-box>
                 </div>
-                <!--Tabla de resultados por SimpleQuery -->
-                <table *ngIf="users && users.length" class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>Usuario</th>
-                            <th>Apellido</th>
-                            <th>Nombre</th>
-                            <th>Seleccionar</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr class="hover" *ngFor="let user of users  | textFilter:textoLibre ; let i=index">
-                            <td>{{user.usuario}}</td>
-                            <td *ngIf="user.apellido; else sinDatos">
-                                {{user.apellido}}
-                            </td>
-                            <td *ngIf="user.nombre; else sinDatos">
-                                {{user.nombre}}
-                            </td>
-                            <ng-template #sinDatos>
-                                <td> SIN DATOS</td>
-                            </ng-template>
+                <div class="col-4" *ngIf='userSeleccionado'>
+                    <plex-box type="primary">
+                        <header>
+                            <h3>{{userSeleccionado.nombre}} {{userSeleccionado.apellido}}</h3>
+                        </header>
+                        <plex-bool type="slide" [(ngModel)]="esSupervisor" (change)='modificarPermiso()' label='Es Supervisor?'
+                            name="especialidad"></plex-bool>
+                        <div class="col-12">
+                            <div class="page-title">Firma</div>
+                            <img *ngIf='urlFirmaAdmin' [src]="urlFirmaAdmin" style="width: 300px" />
+                            <div class="form-group">
+                                <div>
+                                    <div>
+                                        <label for="filePicker">Seleccione una foto:</label>
+                                        <br>
+                                        <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
 
-                            <td>
-                                <plex-button title="Seleccionar Usuario" icon="check-circle-outline" type="link" (click)="selectUser(user)"></plex-button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </plex-box>
-        </div>
-        <div class="col-4" *ngIf='userSeleccionado'>
-            <plex-box type="primary">
-                <header>
-                    <h3>{{userSeleccionado.nombre}} {{userSeleccionado.apellido}}</h3>
-                </header>
-                <plex-bool type="slide" [(ngModel)]="esSupervisor" (change)='modificarPermiso()' label='Es Supervisor?' name="especialidad"></plex-bool>
-                <div class="col-12">
-                    <div class="page-title">Firma</div>
-                    <img *ngIf='urlFirmaAdmin' [src]="urlFirmaAdmin" style="width: 300px" />
-                    <div class="form-group">
-                        <div>
-                            <div>
-                                <label for="filePicker">Seleccione una foto:</label>
+                                        <!-- <input type="file" id="filePicker"   accept="image/jpeg"  (change)="handleFileSelectFirmaAdmin($event)"> -->
+                                        <input type="file" (change)="onImageChange($event)" accept="image/jpeg">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
                                 <br>
-                                <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
-
-                                <!-- <input type="file" id="filePicker"   accept="image/jpeg"  (change)="handleFileSelectFirmaAdmin($event)"> -->
-                                <input type="file" (change)="onImageChange($event)" accept="image/jpeg">
-
+                                <plex-button *ngIf='base64textStringAdmin' label="Guardar" type="success" (click)="guardarFirmaAdminGrid()"></plex-button>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <br>
-                        <plex-button *ngIf='base64textStringAdmin' label="Guardar" type="success" (click)="guardarFirmaAdminGrid()"></plex-button>
-                    </div>
+                    </plex-box>
                 </div>
-            </plex-box>
-        </div>
-    </div>
+            </div>
 
 
 
-</plex-box>
+        </plex-box>
+    </section>
+</form>

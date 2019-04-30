@@ -8,55 +8,7 @@
                    </header>
                </div>
     <app-agenda-form (emitAgenda)='insertar($event)'></app-agenda-form>
-<!-- <form #formAgenda="ngForm">
 
-            <div class="row">
-                </div>
-                <br>
-                <br>
-            <div class="row">
-                    <div class="col-md-12">                
-                        <plex-select label="Días Habilitados" [(ngModel)]="currentAgenda.diasHabilitados" name="diasHabilitados" [data]="dias" [multiple]="true" [required]="true"></plex-select>                
-                    </div>
-                </div>
-        <div class="row">
-            <div class="col-md-6">                
-                <plex-datetime label="Horario de inicio de los turnos" type="time" [(ngModel)]="currentAgenda.horarioInicioTurnos" name="horarioInicioTurnos"  [required]="true"></plex-datetime>                
-            </div>
-            <div class="col-md-6">                
-                <plex-datetime label="Horario de fin de los  turnos" type="time" [(ngModel)]="currentAgenda.horarioFinTurnos" name="horarioFinTurnos" [required]="true"></plex-datetime>                
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <plex-int label="Duración de los Turnos (En minutos)" [(ngModel)]="currentAgenda.duracionTurno" name="duracionTurno" [required]="true" max="60"></plex-int>
-            </div>
-            <div class="col-md-4">                
-                <plex-datetime label="Agregar Feriados" type="date" [(ngModel)]="currentAgenda.fechasExcluidas" name="fechasExcluidas" [required]="false"></plex-datetime>
-            </div>
-            <div class="col-md-2">
-                    <label>&nbsp;</label>
-                    
-                    <plex-button label="Agregar Fecha" [disabled]="currentAgenda.fechasExcluidas == null" (click)="agregarFeriado()"></plex-button>
-                </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <label class="control-label">Feriados</label>
-                <ul class="horizontal-list" style="margin-bottom: 20px; margin-left: -40px;">
-                    <li *ngFor="let fecha of feriados; let idx = index">{{ fecha | date:"dd/MM/yyyy" }}
-                        <plex-button icon="delete" type="xs" (click)="eliminarFeriado(idx)"></plex-button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <plex-button (click)="guardarConfiguracion($event,formAgenda)" label="Guardar" type="primary" validateForm="true"></plex-button>
-            </div>
-        </div>
-
-</form> -->
 <br>
 <div class="page-title">Agenda actual</div>
     <table  class="table table-striped">

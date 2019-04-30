@@ -233,7 +233,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
         this._turnosService.saveTurnoSolicitados(this.profesional)
           .subscribe((nuevoProfesional) => {
             if (nuevoProfesional == null) {
-              this.plex.alert('El profesional que quiere agregar ya existe(verificar dni)');
+              this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
             } else {
 
               this._nuevoProfesional = nuevoProfesional;
@@ -246,7 +246,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             }
           });
       } else {
-        this.plex.alert('usted ya tiene un turno para el dia <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
+        this.plex.info('info', 'usted ya tiene un turno para el dia <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
 
       }
     });

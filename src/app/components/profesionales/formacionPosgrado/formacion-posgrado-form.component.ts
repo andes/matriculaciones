@@ -103,7 +103,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
     }
 
     onSubmit($event, form) {
-        if ($event.formValid && !this.numeroMenor) {
+        if ($event.formValid) {
             this.profesionalP.matriculacion.revalidacionNumero++;
             this.submitPosgrado.emit(this.profesionalP);
             this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);

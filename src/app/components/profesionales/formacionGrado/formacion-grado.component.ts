@@ -39,7 +39,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     @Input() tieneFirma = null;
     @Input() tieneFirmaAdmin = null;
     @Output() updateProfesional = new EventEmitter();
-    public showOtraEntidadFormadora = false; ;
+    public showOtraEntidadFormadora = false;;
     public edit = false;
     public supervisor = {
         id: null,
@@ -51,6 +51,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     public copiasObj;
     public copias;
     public indexGrado;
+    public fechaImpresion = new Date();
     constructor(private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
         private _profesionService: ProfesionService,
@@ -121,7 +122,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                                 };
                                 this._profesionService.getProfesiones().subscribe(datos => {
                                     const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
-                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0], this.copias);
+                                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0], this.copias, this.fechaImpresion);
                                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
                                     // this.loading = false;
                                 });
@@ -180,7 +181,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
     }
 
-    cerrarCredencial(){
+    cerrarCredencial() {
         this.edit = false;
         this.credencial = false;
         this.copias = null;

@@ -25,6 +25,8 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
 
+  private menuList = [];
+
   private initStatusCheck() {
     if (environment.APIStatusCheck) {
       setTimeout(() => {
@@ -40,15 +42,13 @@ export class AppComponent {
               API: 'Error'
             })
           );
-      }, 2000);
+      }, 100000);
     } else {
       this.plex.updateAppStatus({
         API: 'OK'
       });
     }
   }
-
-  private menuList = [];
 
   public checkPermissions(): any {
     const accessList = [];

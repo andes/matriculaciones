@@ -11,14 +11,14 @@ export class ExcelService {
   constructor() { }
 
   public exportAsExcelFile(json: any[], excelFileName: string): void {
-    type ColInfo = {
+    interface ColInfo {
       /* visibility */
       hidden?: true
-    };
+    }
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };
 
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'buffer' });
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     this.saveAsExcelFile(excelBuffer, excelFileName);
   }
 

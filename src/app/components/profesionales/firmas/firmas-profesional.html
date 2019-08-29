@@ -1,27 +1,27 @@
 <plex-box>
-    <div class="row">
-        <div class="col-6">
-            <div class="page-title">Firma Profesional</div>
-            <img *ngIf='urlFirma' [src]="urlFirma" style="width: 300px" />
-            <div class="form-group">
-                <div>
-                    <div>
-                        <label for="filePicker">Seleccione una foto:</label>
-                        <br>
-                        <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
+  <div class="row">
+    <div class="col-6">
+      <div class="page-title">Firma Profesional</div>
+      <img *ngIf='urlFirma' [src]="urlFirma" style="width: 300px" />
+      <div class="form-group">
+        <div>
+          <div *ngIf="profesional.habilitado">
+            <label for="filePicker">Seleccione una foto</label>
+            <br>
+            <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
 
-                        <input type="file" (change)="onImageChange($event)" accept="image/*">
+            <input type="file" (change)="onImageChange($event)" accept="image/*">
 
-                        <!-- <input type="file" id="filePicker" accept="image/jpeg" (change)="handleFileSelect($event)"> -->
-                    </div>
-                </div>
-            </div>
-            <div class="col-12">
-                <br>
-                <plex-button *ngIf='base64textString' label="Guardar" type="success" (click)="upload()" [disabled]='!binaryString'></plex-button>
-            </div>
+            <!-- <input type="file" id="filePicker" accept="image/jpeg" (change)="handleFileSelect($event)"> -->
+          </div>
         </div>
-        <!-- <div class="col-6">
+      </div>
+      <div class="col-12">
+        <br>
+        <plex-button *ngIf='base64textString' label="Guardar" type="success" (click)="upload()" [disabled]='!binaryString'></plex-button>
+      </div>
+    </div>
+    <!-- <div class="col-6">
             <div class="page-title">Firma administracion</div>
             <img *ngIf='firmaAdmin' [src]="urlFirmaAdmin" style="width: 300px" />
             <plex-text label="Nombre completo" [(ngModel)]="nombreAdministrativo" name="nombreAdministrativo">
@@ -40,8 +40,8 @@
                 <plex-button label="Guardar" type="success" (click)="uploadFirmaAdmin()"></plex-button>
             </div>
         </div> -->
-    </div>
-    <div class="row">
+  </div>
+  <div class="row">
 
-    </div>
+  </div>
 </plex-box>

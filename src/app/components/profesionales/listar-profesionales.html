@@ -88,6 +88,7 @@
                   <th>Documento</th>
                   <th>Apellido y Nombre</th>
                   <th>Fecha de Nacimiento</th>
+                  <th>Fecha del Último Trámite</th>
                 </tr>
               </thead>
               <tbody infinite-scroll [scrollWindow]="false" (scrolled)="onModalScrollDown()">
@@ -125,7 +126,9 @@
                       Sin fecha de nacimiento
                     </span>
                   </td>
-
+                  <td>
+                    {{ getFechaUltimoTramite(profesional) | fecha}}
+                  </td>
                   <td>
                     <div *ngIf='profesional.habilitado === true'>
                       <div *ngIf='verBajas === false'>

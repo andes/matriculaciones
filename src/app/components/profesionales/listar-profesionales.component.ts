@@ -2,32 +2,19 @@
 import {
   Component,
   OnInit,
-  Output,
-  Input,
-  EventEmitter,
   HostBinding
 } from '@angular/core';
-import {
-  Plex
-} from '@andes/plex/src/lib/core/service';
 import * as Enums from './../../utils/enumerados';
-import * as moment from 'moment';
-import { environment } from './../../../environments/environment';
 import {
   FormBuilder,
-  FormGroup,
-  Validators,
-  FormArray
+  FormGroup
 } from '@angular/forms';
 import {
   Router,
-  ActivatedRoute,
-  Params
+  ActivatedRoute
 } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-import {
-  Observable
-} from 'rxjs/Observable';
+
 // Interfaces
 import {
   IProfesional
@@ -299,5 +286,10 @@ export class ListarProfesionalesComponent implements OnInit {
     } else {
       this.expSisa = false;
     }
+  }
+
+  getFechaUltimoTramite(profesional: IProfesional) {
+    const fechasEgreso = profesional.formacionGrado.map(grado => grado.fechaEgreso);
+    return Math.max.apply(null, fechasEgreso);
   }
 }

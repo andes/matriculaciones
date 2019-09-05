@@ -85,7 +85,7 @@ import { WebcamModule } from 'ngx-webcam';
 import { GuiaProfesionalComponent } from './components/guiaProfesional/guiaProfesional.component';
 import { TurnosComponent } from './components/turnos/turnos.component';
 import { ListadoTurnosPdfComponent } from './components/turnos/listado-turnos-pdf.component';
-
+import { ReportesComponent } from './components/reportes/reportes.component';
 
 // Locales
 import { AppComponent } from './app.component';
@@ -149,7 +149,8 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
     GuiaProfesionalComponent,
     ScrollComponent,
     SupervisoresComponent,
-    ListadoTurnosPdfComponent
+    ListadoTurnosPdfComponent,
+    ReportesComponent
   ],
   imports: [
     BrowserModule,

@@ -87,6 +87,13 @@ export class AppComponent {
             route: '/listarProfesionales'
           });
         }
+        if (this.auth.check('matriculaciones:reportes')) {
+          accessList.push({
+            label: 'Reportes',
+            icon: 'mdi mdi-file-chart',
+            route: '/reportes'
+          });
+        }
         accessList.push({
           label: 'Supervisores',
           icon: 'mdi mdi-account-multiple',

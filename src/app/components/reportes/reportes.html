@@ -68,9 +68,9 @@
             </tr>
           </thead>
           <tbody>
-            <tr class="hover" *ngFor="let profesional of profesionales" (click)="seleccionProf(profesional)">
+            <tr class="hover" *ngFor="let profesional of profesionales">
               <td>
-                {{ profesional.apellido }}
+                {{ profesional.documento }}
               </td>
               <td>
                 {{ profesional | profesional }}

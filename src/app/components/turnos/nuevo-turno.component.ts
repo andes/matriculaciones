@@ -87,6 +87,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
             .subscribe((turnosMes) => {
                 jQuery(this.div.nativeElement).datepicker('setDatesDisabled', this.diasDeshabilitados(turnosMes, fecha));
             });
+        this.fechaElegida = undefined;
     }
     /**
      * Config. Agenda Methods
@@ -227,10 +228,13 @@ export class NuevoTurnoComponent implements AfterViewInit {
             startDate: startDate,
             defaultViewDate: startDate,
             language: 'es',
-            todayHighlight: true // Resaltar la fecha de hoy.
+            todayHighlight: true
         };
         this.$div.datepicker(this.options);
+        this.$div.datepicker('setDate', startDate);
+
         this.sinTurnos = false;
+        this.onChangeFecha({ date: startDate })
     }
     private getPrimerDia(fecha?) {
         let hayTurnos = false;
@@ -243,12 +247,12 @@ export class NuevoTurnoComponent implements AfterViewInit {
             inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
             finMes = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
         }
-        let diasDeshabilitados = this.getDaysOfWeekDisabled();
+        const diasDeshabilitados = this.getDaysOfWeekDisabled();
         this._turnoService.getTurnosMes({ fecha: inicioMes })
             .subscribe((turnosMes) => {
                 let date = (new Date(inicioMes) > new Date()) ? new Date(inicioMes) : new Date();
                 while (date <= finMes && !hayTurnos) {
-                    let indexDia = date.getDay().toString();
+                    const indexDia = date.getDay().toString();
                     if (diasDeshabilitados.indexOf(date.getDay().toString()) < 0) {
                         // console.log(countTurnosXDia)
                         const resultado = turnosMes.filter((dia) => {
@@ -272,7 +276,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
     private diasDeshabilitados(countTurnosXDia: any[], fecha?) {
         if (!this.agendaConfig.fechasExcluidas) { this.agendaConfig.fechasExcluidas = []; }
         // Fechas excluidas en la configuración de la agenda.
-        let fechasExcluidas = this.agendaConfig.fechasExcluidas.map((item) => {
+        const fechasExcluidas = this.agendaConfig.fechasExcluidas.map((item) => {
             return moment(item).format(this.format);
         });
         let inicioMes;
@@ -286,7 +290,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
         }
         let date = new Date(inicioMes)
         while (date <= finMes) {
-            let resultado = countTurnosXDia.filter((dia) => {
+            const resultado = countTurnosXDia.filter((dia) => {
                 return moment(date).isSame(moment(dia.fecha), 'day')
             })
             if (resultado.length > this.cupoDiario) {
@@ -298,7 +302,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
     }
 
     private addDays(date, days) {
-        let result = new Date(date);
+        const result = new Date(date);
         result.setDate(result.getDate() + days);
         return result;
     }

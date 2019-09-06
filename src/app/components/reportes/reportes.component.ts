@@ -24,6 +24,7 @@ export class ReportesComponent implements OnInit {
     public matriculasVencidas = false;
     public loader = false;
     public profesionales: IProfesional[];
+    public deshabilitarExportar = false;
 
     constructor(private auth: Auth, private router: Router, private siisaService: SIISAService,
         private profesionalService: ProfesionalService, private excelService: ExcelService) { }
@@ -39,6 +40,7 @@ export class ReportesComponent implements OnInit {
 
     public generarReporte(exportarPlantilla: boolean) {
         this.loader = true;
+        this.deshabilitarExportar = exportarPlantilla;
         this.profesionalService.getProfesional(
             {
                 estado: this.matriculasVencidas ? 'Suspendidas' : '',

@@ -147,7 +147,8 @@
     </div>
   </plex-layout-main>
   <plex-layout-footer>
-    <plex-button label="Exportar" type="warning" position="right" (click)="generarReporte(true)"></plex-button>
+    <plex-button *ngIf="deshabilitarExportar" label="Exportar" type="warning" position="right" (click)="generarReporte(true)" disabled="true"></plex-button>
+    <plex-button *ngIf="!deshabilitarExportar" label="Exportar" type="warning" position="right" (click)="generarReporte(true)"></plex-button>
     <plex-button label="Generar reporte" type="success" position="right" (click)="generarReporte(false)"></plex-button>
   </plex-layout-footer>
 </plex-layout>

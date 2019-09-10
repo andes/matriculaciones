@@ -92,17 +92,17 @@
                       <div *ngIf='profesional.habilitado'>
                         <div *ngIf='!matriculasBaja'>
                           <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
-                            <span *ngIf="profesionalGrado.matriculado === true  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  " class="badge badge-info">
+                            <span *ngIf="profesionalGrado.matriculado === true  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja?.motivo  " class="badge badge-info">
                               {{profesionalGrado.profesion.nombre}}: Matrícula n°
                               {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                                     1].matriculaNumero}}
                             </span>
-                            <span *ngIf="profesionalGrado.matriculado === false  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  " class="badge badge-danger">
+                            <span *ngIf="profesionalGrado.matriculado === false  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja?.motivo  " class="badge badge-danger">
                               {{profesionalGrado.profesion.nombre}}: Matrícula n°
                               {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                                     1].matriculaNumero}} vencida
                             </span>
-                            <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo" class="badge badge-danger">
+                            <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja?.motivo" class="badge badge-danger">
                               {{profesionalGrado.profesion.nombre}}: Matrícula n°
                               {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                                     1].matriculaNumero}} suspendida

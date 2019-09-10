@@ -1,62 +1,20 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  Input,
-  EventEmitter
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormArray
-} from '@angular/forms';
-// import { Plex } from '@andes/plex/src/lib/core/service';
-// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
-import {
-  Plex
-} from '@andes/plex';
-
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Plex } from '@andes/plex';
 // Enums
 import * as enumerados from './../../utils/enumerados';
-import {
-  getEnumAsObjects,
-  Sexo,
-  EstadoCivil,
-  TipoContacto
-} from './../../utils/enumerados';
 import { Matching } from '@andes/match';
-
 // Services
-import {
-  PaisService
-} from './../../services/pais.service';
-import {
-  ProvinciaService
-} from './../../services/provincia.service';
-import {
-  LocalidadService
-} from './../../services/localidad.service';
-import {
-  ProfesionService
-} from './../../services/profesion.service';
-import {
-  ProfesionalService
-} from './../../services/profesional.service';
-import {
-  EntidadFormadoraService
-} from './../../services/entidadFormadora.service';
-import {
-  SexoService
-} from './../../services/sexo.service';
+import { PaisService } from './../../services/pais.service';
+import { ProvinciaService } from './../../services/provincia.service';
+import { LocalidadService } from './../../services/localidad.service';
+import { ProfesionService } from './../../services/profesion.service';
+import { ProfesionalService } from './../../services/profesional.service';
+import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
+import { SexoService } from './../../services/sexo.service';
 
 // Interfaces
-import {
-  IProfesional
-} from './../../interfaces/IProfesional';
-import {
-  ISiisa
-} from './../../interfaces/ISiisa';
+import { IProfesional } from './../../interfaces/IProfesional';
 import { Auth } from '@andes/auth';
 import { Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
@@ -200,6 +158,9 @@ export class ProfesionalComponent implements OnInit {
     private plex: Plex,
     public auth: Auth,
     private router: Router) { }
+
+  //  <legend * ngIf='!editable' > Registro de Profesional < /legend>
+  //     < legend * ngIf='editable' > Editar Profesional < /legend>
 
   ngOnInit() {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
@@ -390,7 +351,7 @@ export class ProfesionalComponent implements OnInit {
                             profesional: nuevoProfesional._id
                           };
                           this._turnosService.saveTurnoMatriculacion({ turno: turno })
-                            .subscribe(_turno => {
+                            .subscribe(turno => {
                               this.router.navigate(['/profesional', nuevoProfesional._id]);
                             });
                         });

@@ -1,28 +1,13 @@
 // General
-import {
-  Component,
-  OnInit,
-  HostBinding
-} from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import * as Enums from './../../utils/enumerados';
-import {
-  FormBuilder,
-  FormGroup
-} from '@angular/forms';
-import {
-  Router,
-  ActivatedRoute
-} from '@angular/router';
+import { FormBuilder, FormGroup, } from '@angular/forms';
+import { Router, ActivatedRoute, } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-
 // Interfaces
-import {
-  IProfesional
-} from '../../interfaces/IProfesional';
+import { IProfesional } from '../../interfaces/IProfesional';
 // Services
-import {
-  ProfesionalService
-} from './../../services/profesional.service';
+import { ProfesionalService } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
 import { Subject } from 'rxjs/Subject';
@@ -34,8 +19,6 @@ import { Subject } from 'rxjs/Subject';
 
 })
 export class ListarProfesionalesComponent implements OnInit {
-  @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
-
   private profesionales: IProfesional[] = [];
   private profesionalElegido: IProfesional;
   private showListado: Boolean = true;
@@ -183,7 +166,6 @@ export class ListarProfesionalesComponent implements OnInit {
     this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
 
-
   matriculadoGrado() {
     if (this.estado == null) {
       this.estadoSeleccionadoG = null;
@@ -251,17 +233,6 @@ export class ListarProfesionalesComponent implements OnInit {
 
   }
 
-
-  verNuevoProfesional(valor) {
-    if (valor === true) {
-      this.nuevoProfesional = true;
-      this.confirmar = true;
-    } else {
-      this.nuevoProfesional = false;
-
-    }
-
-  }
 
   onModalScrollDown() {
     this.limit = this.limit + 15;

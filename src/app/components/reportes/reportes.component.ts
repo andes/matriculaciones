@@ -19,8 +19,8 @@ export class ReportesComponent implements OnInit {
     public fechaMatriculacionHasta: Date;
     public mostrarMasOpciones = false;
     public profesiones: ISiisa[];
-    public profesion: ISiisa;
-    public especialidad: ISiisa;
+    public profesion: any;
+    public especialidad: any;
     public matriculasBaja = false;
     public matriculasVencidas = false;
     public loader = false;
@@ -65,9 +65,8 @@ export class ReportesComponent implements OnInit {
                 estadoE: this.matriculasVencidas ? 'Suspendidas' : '',
                 bajaMatricula: this.matriculasBaja,
                 bajaMatriculaE: this.matriculasBaja,
-                especialidadCodigo: this.especialidad ? this.especialidad.codigoSISA : '',
-                profesionCodigo: this.profesion ? this.profesion.codigoSISA : '',
-                profesionCodigoE: this.profesion ? this.profesion.codigoSISA : '',
+                especialidadCodigo: this.especialidad ? this.especialidad.codigo : '',
+                profesionCodigo: this.profesion ? this.profesion.codigo : '',
                 matriculasPorVencer: this.busquedaMatriculasProxAVencer,
                 fechaDesde: this.fechaMatriculacionDesde,
                 fechaHasta: this.fechaMatriculacionHasta,

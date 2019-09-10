@@ -64,7 +64,6 @@ export class ReportesComponent implements OnInit {
                 estado: this.matriculasVencidas ? 'Suspendidas' : '',
                 estadoE: this.matriculasVencidas ? 'Suspendidas' : '',
                 bajaMatricula: this.matriculasBaja,
-                bajaMatriculaE: this.matriculasBaja,
                 especialidadCodigo: this.especialidad ? this.especialidad.codigo : '',
                 profesionCodigo: this.profesion ? this.profesion.codigo : '',
                 matriculasPorVencer: this.busquedaMatriculasProxAVencer,

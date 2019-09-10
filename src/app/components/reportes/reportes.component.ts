@@ -7,6 +7,7 @@ import { ProfesionalService } from '../../services/profesional.service';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { ExcelService } from '../../services/excel.service';
 
+const limit = 50;
 @Component({
     selector: 'app-reportes',
     templateUrl: 'reportes.html'
@@ -26,6 +27,11 @@ export class ReportesComponent implements OnInit {
     public profesionales: IProfesional[];
     public deshabilitarExportar = false;
 
+    private skip = 0;
+    private tengoDatos = true;
+    public finScroll = false;
+    public resultado = [];
+
     constructor(private auth: Auth, private router: Router, private siisaService: SIISAService,
         private profesionalService: ProfesionalService, private excelService: ExcelService) { }
 
@@ -41,6 +47,18 @@ export class ReportesComponent implements OnInit {
     public generarReporte(exportarPlantilla: boolean) {
         this.loader = true;
         this.deshabilitarExportar = exportarPlantilla;
+        this.loadDatos(exportarPlantilla);
+    }
+
+    public nextPage() {
+        if (this.tengoDatos) {
+            this.skip += limit;
+            this.loadDatos(true);
+            this.loader = true;
+        }
+    }
+
+    private loadDatos(exportarPlantilla: boolean, concatenar = false) {
         this.profesionalService.getProfesional(
             {
                 estado: this.matriculasVencidas ? 'Suspendidas' : '',
@@ -56,10 +74,23 @@ export class ReportesComponent implements OnInit {
                 // rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
                 // matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
                 matriculacion: true,
-                exportarPlanillaCalculo: exportarPlantilla
+                exportarPlanillaCalculo: exportarPlantilla,
+                skip: this.skip,
+                limit: limit
             }).subscribe(res => {
                 this.loader = false;
                 if (!exportarPlantilla) {
+                    if (concatenar) {
+                        if (res.length > 0) {
+                            this.resultado = this.resultado.concat(res);
+                        } else {
+                            this.finScroll = true;
+                            this.tengoDatos = false;
+                        }
+                    } else {
+                        this.resultado = res;
+                        this.finScroll = false;
+                    }
                     this.profesionales = res;
                 } else {
                     this.excelService.exportAsExcelFile(res, 'Reporte profesionales');

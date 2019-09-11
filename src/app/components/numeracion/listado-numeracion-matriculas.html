@@ -1,109 +1,91 @@
-<section>
-<div class="row">
-    <div class="col">
-        <plex-box type="primary">
-            <div class="row">
-                <div class="col-12 text-center">
-                        <header>
-                            <div class="page-title">Numeraciones</div>
-                        </header>
-                </div>
-            </div>
-            <!-- <br>
-             <app-numeracion-form-matriculas (saveNumeracion)='buscar($event)'></app-numeracion-form-matriculas> 
-            <br> -->
-            <hr>
-            <div >
-                <div class="row">
-                    <div class="col-6">
-                        <plex-select label="Profesión"  name="Profesión" [(ngModel)]="consulta.profesion" (getData)="loadProfesiones($event)" (change)="buscar()"></plex-select> 
-                        <br>                 
-                    </div>
-                    <!-- <div class="col-6">
-                        <plex-select label="Especialidad" name="Especialidad" [(ngModel)]="consulta.especialidad" (getData)="loadEspecialidades($event)" (change)="buscar()"></plex-select> 
-                        <br>                 
-                    </div> -->
-                    
-                </div>
-            </div>
-            <div infinite-scroll
-                [infiniteScrollDistance]="1"
-                [infiniteScrollThrottle]="2"
-                (scroll)="onScroll($event)"
-                [scrollWindow]="false">
-            
+<plex-layout main="12">
+  <plex-layout-main>
+    <header>
+      <plex-title titulo="Numeraciones" size="md">
+        <plex-button label="Volver" type="danger" routerLink="/listarProfesionales" position="left">
+        </plex-button>
+      </plex-title>
 
-
-                <div class="row" *ngFor="let numeracion of numeraciones" >
-                    <div class="col-md-12">
-                            <ul class="list-group">
-                            <li class="list-group-item justify-content-between" *ngIf='numeracion.profesion'>
-                                <h4 class="box-title-elemento">{{ numeracion.profesion.nombre }}
-                                <br>
-                                <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
-                                </h4>
-                            
-                                <!-- <button class="btn btn-primary" (click)="showNumeracion(numeracion)" >
-                                    <span class="mdi mdi-chevron-right"></span>
-                                </button> -->
-
-                            </li>
-                            <li class="list-group-item justify-content-between" *ngIf='numeracion.especialidad'>
-                                <h4 class="box-title-elemento">{{ numeracion.especialidad.nombre }}
-                                <br>
-                                <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
-                                </h4>
-                            
-                                <!-- <button class="btn btn-primary" (click)="showNumeracion(numeracion)" >
-                                    <span class="mdi mdi-chevron-right"></span>
-                                </button> -->
-
-                            </li>
-                        </ul>
-                        
-                    </div>
-                </div>
-            </div>
-        </plex-box>
-    </div>
-
-
-    <div class="col-4" *ngIf="numeracionElegida && showListado">
-        <plex-box title="Detalle de Numeración" *ngIf="numeracionElegida">
-                <button  class="float-right btn btn-danger" (click)="cerrar()"><i class="mdi mdi-window-close"></i></button>
-            <div class="row">
-                <div class="col-sm-12" *ngIf='numeracionElegida.profesion'>
-                    <label>Profesión: &nbsp;</label>{{numeracionElegida.profesion.nombre}}<br />
-                    <label>Próximo Nº: &nbsp;</label>{{numeracionElegida.proximoNumero}}
-                    <hr>
-                    <plex-button label="Editar" type="primary" class="pull-right" (click)="toggleListado(false)"></plex-button>
-                    <plex-button label="Generar Matricula" type="danger" class="pull-left" (click)="generarMatricula()"></plex-button>
-                </div>
-                <div class="col-sm-12" *ngIf='numeracionElegida.especialidad'>
-                    <label>Profesión: &nbsp;</label>{{numeracionElegida.especialidad.nombre}}<br />
-                    <label>Próximo Nº: &nbsp;</label>{{numeracionElegida.proximoNumero}}
-                    <hr>
-                    <plex-button label="Editar" type="primary" class="pull-right" (click)="toggleListado(false)"></plex-button>
-                    <plex-button label="Generar Matricula" type="danger" class="pull-left" (click)="generarMatricula()"></plex-button>
-                </div>
-               
-            </div>
-        </plex-box>
-    </div>
+    </header>
     <div class="row">
-        <div class="col-sm-12">
-            <app-numeracion-matriculas [numeracion]="numeracionElegida" [numeracion2]="numeracion" (cambio)="buscar($event)" (onShowListado)="toggleListado($event,true)" *ngIf="numeracionElegida && !showListado" ></app-numeracion-matriculas>
+      <div class="col">
+        <plex-select label="Profesión" name="Profesión" [(ngModel)]="consulta.profesion"
+                     (getData)="loadProfesiones($event)" (change)="buscar()"></plex-select>
+        <br>
+      </div>
+      <div class="col" *ngIf="false">
+        <plex-select label="Especialidad" name="Especialidad" [(ngModel)]="consulta.especialidad"
+                     (getData)="loadEspecialidades($event)" (change)="buscar()"></plex-select>
+        <br>
+      </div>
+    </div>
+    <div infinite-scroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="2" (scroll)="onScroll($event)"
+         [scrollWindow]="false">
+      <div class="row" *ngFor="let numeracion of numeraciones">
+        <div class="col-md-12">
+          <ul class="list-group">
+            <li class="list-group-item justify-content-between" *ngIf='numeracion.profesion'
+                (click)='showNumeracion(numeracion)'>
+              <h4 class="box-title-elemento">{{ numeracion.profesion.nombre }}
+                <br>
+                <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
+              </h4>
+            </li>
+            <li class="list-group-item justify-content-between" *ngIf='numeracion.especialidad'
+                (click)='showNumeracion(numeracion)'>
+              <h4 class="box-title-elemento">{{ numeracion.especialidad.nombre }}
+                <br>
+                <small><strong>Próximo:</strong> {{ numeracion.proximoNumero }}</small>
+              </h4>
+            </li>
+          </ul>
 
         </div>
+      </div>
     </div>
-</div>
 
-<div class="row">
-    <div class="col-8">
+
+
+  </plex-layout-main>
+  <plex-layout-sidebar>
+    <header>
+      <plex-title titulo="Detalle de numeración" size="md">
+      </plex-title>
+
+    </header>
+    <div *ngIf="!numeracionElegida && !showListado" class="alert alert-default">
+      <i class="mdi mdi-emoticon-sad"></i> No se ha seleccionado una numeración
     </div>
-</div>
-</section>
-<footer>
-        <plex-button label="Volver"  type="danger" routerLink="/listarProfesionales" icon="arrow-left-bold"></plex-button>
-    </footer>
-    
+    <fieldset *ngIf="numeracionElegida && showListado">
+      <div class="row">
+        <div class="col-md">
+          <label>Profesión</label>
+          <span *ngIf='numeracionElegida.especialidad'>{{numeracionElegida.especialidad.nombre}}</span>
+          <span *ngIf='numeracionElegida.profesion'>{{numeracionElegida.profesion.nombre}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md">
+          <label>Próximo N°</label>
+          <span>{{numeracionElegida.proximoNumero}}</span>
+        </div>
+      </div>
+      <hr>
+      <div class="row mt-1">
+        <div class="col-md">
+          <plex-button label="Generar Matricula" size="sm" type="info" class="pull-left" (click)="generarMatricula()">
+          </plex-button>
+          <plex-button label="Guardar" size="sm" type="success" class="pull-right" (click)="toggleListado(false)">
+          </plex-button>
+        </div>
+      </div>
+    </fieldset>
+    <div class="row">
+      <div class="col-sm-12">
+        <app-numeracion-matriculas [numeracion]="numeracionElegida" [numeracion2]="numeracion" (cambio)="buscar($event)"
+                                   (onShowListado)="toggleListado($event,true)"
+                                   *ngIf="numeracionElegida && !showListado"></app-numeracion-matriculas>
+      </div>
+    </div>
+  </plex-layout-sidebar>
+</plex-layout>

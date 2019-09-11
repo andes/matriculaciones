@@ -14,7 +14,6 @@ import {
     Plex
 } from '@andes/plex';
 
-
 // Interfaces
 import {
     IProfesional
@@ -31,9 +30,9 @@ import { ProfesionalService } from '../../services/profesional.service';
 })
 export class FotoGeneralComponent implements OnInit, OnChanges {
     @Input() profesional: IProfesional;
-    @Input() img64 = null;
+    @Input() img64;
     @Input() idProfesional;
-    public foto: any ;
+    public foto: any;
     public tieneFoto = false;
     constructor(public sanitizer: DomSanitizer, private plex: Plex,
         private _profesionalService: ProfesionalService) {
@@ -44,47 +43,15 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
             this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
             this.tieneFoto = true;
         });
-
     }
 
-    // ngOnChanges() {
-    //     if (this.img64 !== undefined && this.img64 !== null) {
-    //         this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).subscribe(resp => {
-    //             this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
-    //             if (this.img64 !== undefined && this.img64 !== null) {
-    //                 this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
-    //             }
-    //         });
-
-    //     }
-
-
-
-
-    // }
-    ngOnChanges () {
+    ngOnChanges() {
         if (this.img64) {
             this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
         } else if (this.idProfesional) {
-        this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
-         this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
-        });
+            this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).subscribe(resp => {
+                this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
+            });
         }
-
-        // if (this.profesional.id) {
-        //     console.log('llegue');
-        // this._profesionalService.getProfesionalFoto({id: this.profesional.id}).subscribe(resp => {
-        //     console.log('respuesta base64');
-        //  this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
-        //  if (this.img64 !== undefined &&  this.img64 !== null) {
-        //     this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
-        //     }
-        // });
-        }
-
-
-
-    mostrarFoto(foto) {
     }
-
 }

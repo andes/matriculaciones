@@ -64,6 +64,7 @@ export class ListarProfesionalesComponent implements OnInit {
   };
   searchForm: FormGroup;
   value;
+  mainLayoutWidth = 9
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -118,6 +119,7 @@ export class ListarProfesionalesComponent implements OnInit {
   seleccionar(profesional: any) {
     this.profesionalElegido = profesional;
     this.verExportador = false;
+    this.mainLayoutWidth = 8
   }
 
   buscar(event?: any) {
@@ -155,11 +157,11 @@ export class ListarProfesionalesComponent implements OnInit {
       // this.totalProfesionalesRematriculados = totalR;
       // this.totalProfesionalesMatriculados = totalM;
     });
-
-
   }
+
   cerrarResumenProfesional() {
     this.profesionalElegido = null;
+    this.mainLayoutWidth = 9;
   }
 
   sobreTurno(profesional: any) {

@@ -1,4 +1,4 @@
-<plex-layout main="8">
+<plex-layout main="{{mainLayoutWidth}}">
   <plex-layout-main>
     <header>
       <div class="row">
@@ -40,14 +40,14 @@
 
           <div class="col-1">
             <button class="btn btn-primary  btnFiltro" (click)='mostrarFiltros()'>
-              <i *ngIf='muestraFiltro === false' class="mdi mdi-chevron-down"></i>
-              <i *ngIf='muestraFiltro === true' class="mdi mdi-chevron-up"></i>
+              <i *ngIf='!muestraFiltro' class="mdi mdi-chevron-down"></i>
+              <i *ngIf='muestraFiltro' class="mdi mdi-chevron-up"></i>
             </button>
           </div>
         </div>
 
 
-        <div class="row" *ngIf='muestraFiltro === true'>
+        <div class="row" *ngIf='muestraFiltro'>
           <div class="col-3">
             <plex-int label="N° Matrícula esp" formControlName="numeroMatriculaEspecialidad"
                       placeholder="Ingrese N° de matrícula">
@@ -98,7 +98,7 @@
           <tbody infinite-scroll [scrollWindow]="false" (scrolled)="onModalScrollDown()">
             <tr class="hover" *ngFor="let profesional of profesionales; let i = index"
                 (click)="seleccionar(profesional)">
-              <td *ngIf="profesional.habilitado === true">
+              <td *ngIf="profesional.habilitado">
                 <div>
                   <span *ngIf="profesional.rematriculado === 1" class="badge badge-danger">
                     RM
@@ -110,7 +110,7 @@
                   </span>
                 </div>
               </td>
-              <td *ngIf="profesional.habilitado === false">
+              <td *ngIf="!profesional.habilitado">
                 <div>
                   <span class="badge badge-warning">
                     Deshabilitado
@@ -133,22 +133,22 @@
               </td>
 
               <td>
-                <div *ngIf='profesional.habilitado === true'>
-                  <div *ngIf='verBajas === false'>
+                <div *ngIf='profesional.habilitado'>
+                  <div *ngIf='!verBajas'>
                     <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
-                      <span *ngIf="profesionalGrado.matriculado === true  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
+                      <span *ngIf="profesionalGrado.matriculado  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
                             class="badge badge-info">
                         {{profesionalGrado.profesion.nombre}}: Matricula n°
                         {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                             1].matriculaNumero}}
                       </span>
-                      <span *ngIf="profesionalGrado.matriculado === false  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
+                      <span *ngIf="!profesionalGrado.matriculado  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
                             class="badge badge-danger">
                         {{profesionalGrado.profesion.nombre}}: Matricula n°
                         {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                             1].matriculaNumero}} vencida
                       </span>
-                      <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo"
+                      <span *ngIf="!profesionalGrado.matriculado && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo"
                             class="badge badge-danger">
                         {{profesionalGrado.profesion.nombre}}: Matricula n°
                         {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
@@ -156,26 +156,26 @@
                       </span>
                     </div>
                     <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
-                      <span *ngIf="profesionalPosgrado.matriculado === true && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
+                      <span *ngIf="profesionalPosgrado.matriculado && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
                             class="badge-primary">
                         {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
                         {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
                             1].matriculaNumero}}
                       </span>
-                      <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
+                      <span *ngIf="!profesionalPosgrado.matriculado && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
                             class="badge badge-warning">
                         {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
                         {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
                             1].matriculaNumero}} suspendida
                       </span>
-                      <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy >= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin  "
+                      <span *ngIf="!profesionalPosgrado.matriculado && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy >= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin  "
                             class="badge badge-warning">
                         {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
                       </span>
                     </div>
                   </div>
 
-                  <div *ngIf='verBajas === true'>
+                  <div *ngIf='verBajas'>
                     <div class="row">
                       <div *ngFor="let profesionalGrado of profesional.formacionGrado">
                         <div *ngIf='profesionalGrado.matriculacion && profesionalGrado.matriculacion.length > 0'>
@@ -207,7 +207,6 @@
       <fieldset>
         <legend> Estadísticas</legend>
         <div class="row text-center">
-
           <div class="col-12">
             <div class="h3 badge badge-info hover">
               <div class="row">
@@ -221,7 +220,6 @@
             </div>
             <h6 class="text-info">Total Profesionales</h6>
           </div>
-
           <div class="col-12">
             <br>
             <div class="h3 badge badge-danger hover" (click)='filtrarRematriculados()'>
@@ -230,7 +228,6 @@
                   <i class="mdi mdi-account mdi-36px"></i>
                 </div>
                 <div class="col-8">
-                  <!-- <span class="h3" *ngIf='!profesionalesRematriculados'>0</span> -->
                   <span class="h3">{{totalProfesionalesRematriculados}}</span>
                 </div>
               </div>
@@ -252,22 +249,21 @@
             <h6 class="text-success">Profesionales Matriculados</h6>
           </div>
         </div>
-        <div class="row" *ngIf='mostrarRestablecer === true'>
+        <div class="row" *ngIf='mostrarRestablecer'>
           <div class="col-12 text-center" style="margin-top:30px">
             <plex-button type="primary" label='Restablecer' (click)='filtrarTodos()'></plex-button>
-
           </div>
         </div>
       </fieldset>
     </span>
-
     <span *ngIf='profesionalElegido'>
-      <header>
-        <button class="float-right btn btn-danger" (click)="cerrarResumenProfesional()">
-          <i class="mdi mdi-window-close"></i>
-        </button>
-        <div class="page-title">Resumen profesional</div>
-      </header>
+      <fieldset>
+        <legend>Resumen profesional
+          <button class="float-right btn btn-danger" (click)="cerrarResumenProfesional()">
+            <i class="mdi mdi-window-close"></i>
+          </button>
+        </legend>
+      </fieldset>
       <div class="row">
         <div class="col-md-12">
           <div class="row mb-1">

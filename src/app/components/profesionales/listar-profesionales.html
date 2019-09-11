@@ -5,20 +5,16 @@
       <plex-box>
         <header>
           <div class="row">
-            <div class="col-6">
-              <div class="page-title">Buscar un profesional</div>
+            <div class="col-4">
+              <div class="page-title">Buscar profesional</div>
             </div>
-            <div class="col-6">
-              <div class="float-right">
-                <!-- <plex-button type="primary " icon="mdi mdi-account-plus" (click)="verNuevoProfesional(true)"></plex-button> -->
-                <plex-button type="primary" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>
-                <plex-button type="primary  " icon="mdi mdi-timetable" label='Nuevo Profesional' (click)='nuevoProfesional = true;confirmar = true'></plex-button>
-                <!-- <plex-button type="primary  " icon="mdi mdi-file-excel" label='export sisa' (click)='verExportador = true;profesionalElegido = false;'></plex-button> -->
-              </div>
+            <div class="col-8 d-flex justify-content-end">
+              <!-- <plex-button type="primary " icon="mdi mdi-account-plus" (click)="verNuevoProfesional(true)"></plex-button> -->
+              <plex-button type="primary" icon="mdi mdi-format-list-numbers" label='Numeraciones' routerLink="/listadoNumeraciones"></plex-button>
+              <plex-button type="primary" icon="mdi mdi-timetable" label='Nuevo Profesional' (click)='nuevoProfesional = true;confirmar = true'></plex-button>
+              <plex-button type="primary" icon="mdi mdi-file-excel" *ngIf="tienePermisos" label='export sisa' (click)='verExportador = true;profesionalElegido = false;'></plex-button>
             </div>
-
           </div>
-
 
           <form [formGroup]="searchForm">
             <div class="row">
@@ -74,7 +70,7 @@
 
         <div class="row" style='max-height: 100%;
         overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
-          [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+             [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
           <div class="col">
             <!--Loader-->
             <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
@@ -84,8 +80,8 @@
             </div>
             <!--Tabla de resultados por SimpleQuery -->
             <table *ngIf="profesionales && profesionales.length" class="table table-striped" infinite-scroll
-              [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
-              [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+                   [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
+                   [scrollWindow]="false" (scrolled)="onModalScrollDown()">
               <thead>
                 <tr>
                   <th></th>
@@ -135,19 +131,19 @@
                       <div *ngIf='verBajas === false'>
                         <div *ngFor="let profesionalGrado of profesional.formacionGrado" class="text-danger">
                           <span *ngIf="profesionalGrado.matriculado === true  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
-                            class="badge badge-info">
+                                class="badge badge-info">
                             {{profesionalGrado.profesion.nombre}}: Matricula n°
                             {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                             1].matriculaNumero}}
                           </span>
                           <span *ngIf="profesionalGrado.matriculado === false  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
-                            class="badge badge-danger">
+                                class="badge badge-danger">
                             {{profesionalGrado.profesion.nombre}}: Matricula n°
                             {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                             1].matriculaNumero}} vencida
                           </span>
                           <span *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo"
-                            class="badge badge-danger">
+                                class="badge badge-danger">
                             {{profesionalGrado.profesion.nombre}}: Matricula n°
                             {{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                             1].matriculaNumero}} suspendida
@@ -155,19 +151,19 @@
                         </div>
                         <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado" class="text-danger">
                           <span *ngIf="profesionalPosgrado.matriculado === true && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
-                            class="badge-primary">
+                                class="badge-primary">
                             {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
                             {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
                             1].matriculaNumero}}
                           </span>
                           <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
-                            class="badge badge-warning">
+                                class="badge badge-warning">
                             {{profesionalPosgrado.especialidad.nombre}}: Matricula n°
                             {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
                             1].matriculaNumero}} suspendida
                           </span>
                           <span *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy >= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin  "
-                            class="badge badge-warning">
+                                class="badge badge-warning">
                             {{profesionalPosgrado.especialidad.nombre}}: Matricula vencida
                           </span>
                         </div>
@@ -323,7 +319,7 @@
               <plex-button label="Editar profesional" icon="pencil" type="primary" (click)="showProfesional(profesionalElegido)"></plex-button>
             </span>
             <plex-button *ngIf="profesionalElegido.habilitado" label="Dar sobreturno" icon="mdi mdi-timetable" type="primary"
-              (click)="sobreTurno(profesionalElegido)"></plex-button>
+                         (click)="sobreTurno(profesionalElegido)"></plex-button>
 
           </h4>
         </div>
@@ -341,17 +337,17 @@
         <div class="container">
           <div class="row">
             <div class="col-6">
-              <plex-datetime label="Fecha desde" type="date" [(ngModel)]="exportSisa.fechaDesde" name='fechaDesde'></plex-datetime>
+              <plex-datetime label="Fecha desde" type="date" [(ngModel)]="exportSisa.fechaDesde" (change)="checkExpSisa()"
+                             name='fechaDesde'></plex-datetime>
             </div>
             <div class="col-6">
-              <plex-datetime label="Fecha hasta" type="date" [(ngModel)]="exportSisa.fechaHasta" name='fechaDesde'></plex-datetime>
+              <plex-datetime label="Fecha hasta" type="date" [(ngModel)]="exportSisa.fechaHasta" (change)="checkExpSisa()"
+                             name='fechaDesde'></plex-datetime>
             </div>
-
             <div class="col-12">
               <br>
               <div class="float-right">
-
-                <plex-button label="Exportar" type="success" (click)='exportarSisa()'></plex-button>
+                <plex-button [disabled]="!expSisa" label="Exportar" type="success" (click)='exportarSisa()'></plex-button>
               </div>
             </div>
 
@@ -363,9 +359,9 @@
   </div>
 </section>
 <form class="plex-layout" *ngIf="nuevoProfesional === true">
-  <section >
+  <section>
     <plex-box>
-      <app-profesional  [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
+      <app-profesional [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
     </plex-box>
   </section>
 </form>

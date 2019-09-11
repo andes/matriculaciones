@@ -48,12 +48,14 @@ import { Subject } from 'rxjs/Subject';
 })
 export class ListarProfesionalesComponent implements OnInit {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+
   private profesionales: IProfesional[] = [];
   private profesionalElegido: IProfesional;
   private showListado: Boolean = true;
   public dni: string = null;
   public estadoSeleccionadoG;
   public estadoSeleccionadoE;
+  public tienePermisos;
   public apellido: string = null;
   public nombre: string = null;
   public vieneDeListado = null;
@@ -82,6 +84,7 @@ export class ListarProfesionalesComponent implements OnInit {
   public estaMatriculado;
   public mostrarRestablecer;
   public verDeshabilitado;
+  public expSisa = false;
   modalScrollDistance = 2;
   modalScrollThrottle = 10;
   public limit = 50;
@@ -134,6 +137,8 @@ export class ListarProfesionalesComponent implements OnInit {
       this.totalProfesionalesMatriculados = data.totalMatriculados;
       this.totalProfesionalesRematriculados = data.totalRematriculados;
     });
+
+    this.tienePermisos = this.auth.check('matriculaciones:profesionales:getProfesional');
   }
 
   showProfesional(profesional: any) {
@@ -179,10 +184,6 @@ export class ListarProfesionalesComponent implements OnInit {
       }
       // this.totalProfesionalesRematriculados = totalR;
       // this.totalProfesionalesMatriculados = totalM;
-
-
-
-
     });
 
 
@@ -194,8 +195,6 @@ export class ListarProfesionalesComponent implements OnInit {
   sobreTurno(profesional: any) {
     this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
-
-
 
 
   matriculadoGrado() {
@@ -282,15 +281,23 @@ export class ListarProfesionalesComponent implements OnInit {
     this.buscar();
   }
 
-  // exportarSisa() {
-  //   this._profesionalService.getProfesionalesSisa(this.exportSisa).subscribe((data) => {
-  //     console.log(data);
-  //     this.excelService.exportAsExcelFile(data, 'profesionales');
-  //     this.plex.toast('success', 'se genero con exito el reporte!', 'informacion', 1000);
+  exportarSisa() {
+    this.expSisa = false;
+    this._profesionalService.getProfesionalesSisa(this.exportSisa).subscribe((data) => {
+      this.excelService.exportAsExcelFile(data, 'profesionales');
+      this.expSisa = true;
+    });
+  }
 
-
-  //   });
-  // }
-
-
+  checkExpSisa() {
+    if (this.exportSisa.fechaDesde && this.exportSisa.fechaHasta) {
+      if (this.exportSisa.fechaDesde <= this.exportSisa.fechaHasta) {
+        this.expSisa = true;
+      } else {
+        this.expSisa = false;
+      }
+    } else {
+      this.expSisa = false;
+    }
+  }
 }

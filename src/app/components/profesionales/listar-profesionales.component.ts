@@ -19,8 +19,8 @@ import { Subject } from 'rxjs/Subject';
 
 })
 export class ListarProfesionalesComponent implements OnInit {
-  private profesionales: IProfesional[] = [];
-  private profesionalElegido: IProfesional;
+  public profesionales: IProfesional[] = [];
+  public profesionalElegido: IProfesional;
   private showListado: Boolean = true;
   public dni: string = null;
   public estadoSeleccionadoG;
@@ -64,7 +64,7 @@ export class ListarProfesionalesComponent implements OnInit {
   };
   searchForm: FormGroup;
   value;
-  mainLayoutWidth = 9
+  mainLayoutWidth = 9;
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -119,7 +119,7 @@ export class ListarProfesionalesComponent implements OnInit {
   seleccionar(profesional: any) {
     this.profesionalElegido = profesional;
     this.verExportador = false;
-    this.mainLayoutWidth = 8
+    this.mainLayoutWidth = 8;
   }
 
   buscar(event?: any) {

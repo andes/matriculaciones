@@ -16,11 +16,10 @@
           </div>
         </div>
       </div>
-
       <form [formGroup]="searchForm">
         <div class="row">
           <div class="col-2">
-            <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus"
+            <plex-text label="Documento" formControlName="documento" [autoFocus]="true"
                        placeholder="Ingrese documento">
             </plex-text>
           </div>
@@ -45,8 +44,6 @@
             </button>
           </div>
         </div>
-
-
         <div class="row" *ngIf='muestraFiltro'>
           <div class="col-3">
             <plex-int label="N° Matrícula esp" formControlName="numeroMatriculaEspecialidad"
@@ -61,15 +58,12 @@
             <plex-select label="Matrículas de Especialidades" formControlName="estadoEspecialidad"
                          [data]="estadosMatriculas"></plex-select>
           </div>
-
           <div class="col-3 btnSlide">
             <plex-bool type="slide" label="Ver bajas de matriculas" formControlName="verBajas"
                        name="especialidad.activo"></plex-bool>
             <plex-bool type="slide" label="Deshabilitado" formControlName="verDeshabilitado" name="especialidad.activo">
             </plex-bool>
-
           </div>
-
         </div>
       </form>
       <br>
@@ -78,11 +72,9 @@
         overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
          [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
       <div class="col">
-        <!--Alerta si no se encontró ningun profesional-->
         <div *ngIf="profesionales && !profesionales.length" class="alert alert-danger">
           <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
         </div>
-        <!--Tabla de resultados por SimpleQuery -->
         <table *ngIf="profesionales && profesionales.length" class="table table-striped" infinite-scroll
                [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle"
                [scrollWindow]="false" (scrolled)="onModalScrollDown()">
@@ -131,7 +123,6 @@
                   Sin fecha de nacimiento
                 </span>
               </td>
-
               <td>
                 <div *ngIf='profesional.habilitado'>
                   <div *ngIf='!verBajas'>
@@ -174,7 +165,6 @@
                       </span>
                     </div>
                   </div>
-
                   <div *ngIf='verBajas'>
                     <div class="row">
                       <div *ngFor="let profesionalGrado of profesional.formacionGrado">
@@ -319,7 +309,6 @@
         </h4>
       </div>
     </span>
-
     <span *ngIf='verExportador'>
       <header>
         <button class="float-right btn btn-danger" (click)="verExportador = false;">
@@ -327,26 +316,22 @@
         </button>
         <div class="page-title">Exportar a sisa</div>
       </header>
-      <div class="container">
-        <div class="row">
-          <div class="col-6">
-            <plex-datetime label="Fecha desde" type="date" [(ngModel)]="exportSisa.fechaDesde" name='fechaDesde'>
-            </plex-datetime>
+      <div class="row">
+        <div class="col-md-12 col-6">
+          <plex-datetime label="Fecha desde" type="date" [(ngModel)]="exportSisa.fechaDesde" name='fechaDesde'>
+          </plex-datetime>
+        </div>
+        <div class="col-md-12 col-6">
+          <plex-datetime label="Fecha hasta" type="date" [(ngModel)]="exportSisa.fechaHasta" name='fechaDesde'>
+          </plex-datetime>
+        </div>
+        <div class="col-12">
+          <br>
+          <div class="float-right">
+            <plex-button label="Exportar" type="success" (click)='exportarSisa()'></plex-button>
           </div>
-          <div class="col-6">
-            <plex-datetime label="Fecha hasta" type="date" [(ngModel)]="exportSisa.fechaHasta" name='fechaDesde'>
-            </plex-datetime>
-          </div>
-          <div class="col-12">
-            <br>
-            <div class="float-right">
-              <plex-button label="Exportar" type="success" (click)='exportarSisa()'></plex-button>
-            </div>
-          </div>
-
         </div>
       </div>
-
     </span>
   </plex-layout-sidebar>
   <plex-layout-footer>

@@ -1,6 +1,6 @@
 <plex-layout>
     <plex-layout-main>
-        <fieldset>
+        <plex-box>
             <div class="row">
                 <div class="col-2">
                     <app-foto-general (showFoto)="mostrarFoto($event)" [profesional]="profesional" [img64]="img64">
@@ -15,8 +15,6 @@
                     </button>
                 </div>
             </div>
-        </fieldset>
-        <fieldset>
             <div id="wrapper">
                 <plex-tabs *ngIf='profesional.habilitado'>
                     <plex-tab label="Contacto y Domicilios">
@@ -78,7 +76,7 @@
                 <app-profesional [profesional]='profesional' [showOtraEntidadFormadora]='tieneOtraEntidad' [confirmar]='confirmar'
                                  (editado)="this.flag = true" [editable]='editable'></app-profesional>
             </section>
-        </fieldset>
+        </plex-box>
     </plex-layout-main>
     <plex-layout-footer>
         <plex-button type="danger" *ngIf="!flag" label="volver" (click)="volverProfesional()" icon="arrow-left-bold"

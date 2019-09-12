@@ -1,43 +1,44 @@
 <div class="row">
-    <div class="col-12" style="padding-bottom: 10px;">
-        <div style="display: inline-block;">
-            <!-- <img   [src]="urlFoto" class="img-circle"> -->
+  <div class="col-12" style="padding-bottom: 10px;">
+    <div style="display: inline-block;">
+      <!-- <img   [src]="urlFoto" class="img-circle"> -->
 
-        </div>
-        <div style=" display: inline-block; vertical-align: middle">
-            <div class="nombre-profesional">
-                <span style="font-weight: bold">{{profesional.apellido + ', '}}</span>{{profesional.nombre}}
-
-            </div>
-            <span class="datos-profesional">
-                <span *ngIf='profesional.fechaNacimiento'>{{profesional | edad}} |</span>             
-                <span *ngIf='profesional.tipoDocumento'>{{profesional.tipoDocumento}}</span>
-                <span *ngIf='!profesional.tipoDocumento'>DNI</span> {{ profesional.documento }}
-                <span *ngIf='profesional.documentoViejo' class="text-danger hover" title="Cambio el documento(ver otros)">*</span> | {{'CUIT ' + profesional?.cuit }}
-                <br /> {{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }} | {{profesional.contactos[0]?.valor
-                }} | {{profesional.nacionalidad?.nombre}}
-                <br>
-            </span>
-
-            <span *ngIf='profesional.habilitado === true' class="badge badge-success" style="font-size: 70%;">Habilitado</span>
-            <span *ngIf='profesional.habilitado === false' class="badge badge-warning" style="font-size: 70%;">Deshabilitado</span>
-            <plex-bool type="slide" [(ngModel)]="habilitado" (change)='habilitar()' name="especialidad.activo"></plex-bool>
-        </div>
-        <div class="float-right">
-            <ul>
-                <li class=" badge badge-info">
-                    <span class="font-weight-bold">Agente matriculador</span>
-                    <br>
-                    <span *ngIf='profesional.agenteMatriculador'>{{profesional.agenteMatriculador}}</span>
-                    <span *ngIf='!profesional.agenteMatriculador'>{{agenteMatriculador}}</span>
-                </li>
-                <li class=" badge badge-info">
-                    <span class="font-weight-bold">Supervisor</span>
-                    <br>
-                    <span *ngIf='profesional.supervisor?.nombreCompleto'>{{profesional.supervisor.nombreCompleto}}</span>
-                    <span *ngIf='!profesional.supervisor'>No tiene supervisor</span>
-                </li>
-            </ul>
-        </div>
     </div>
+    <div style=" display: inline-block; vertical-align: middle">
+      <div class="nombre-profesional">
+        <span style="font-weight: bold">{{profesional.apellido + ', '}}</span>{{profesional.nombre}}
+
+      </div>
+      <span class="datos-profesional">
+        <span *ngIf='profesional.fechaNacimiento'>{{profesional | edad}} |</span>
+        <span *ngIf='profesional.tipoDocumento'>{{profesional.tipoDocumento}}</span>
+        <span *ngIf='!profesional.tipoDocumento'>DNI</span> {{ profesional.documento }}
+        <span *ngIf='profesional.documentoViejo' class="text-danger hover" title="Cambio el documento(ver otros)">*</span> | {{'CUIT ' + profesional?.cuit }}
+        <br /> {{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }} | {{profesional.contactos[0]?.valor
+                }} | {{profesional.nacionalidad?.nombre}}
+        <br>
+      </span>
+
+      <span *ngIf='profesional.habilitado === true' class="badge badge-success" style="font-size: 70%;">Habilitado</span>
+      <span *ngIf='profesional.habilitado === false' class="badge badge-warning" style="font-size: 70%;">Deshabilitado</span>
+      <plex-bool type="slide" [(ngModel)]="habilitado" (change)='habilitar()' name="especialidad.activo"></plex-bool>
+    </div>
+    <div class="float-right">
+      <ul>
+        <span *ngIf='profesional.habilitado === false' class="badge badge-danger">Matrícula de baja</span>
+        <li class=" badge badge-info">
+          <span class="font-weight-bold">Agente matriculador</span>
+          <br>
+          <span *ngIf='profesional.agenteMatriculador'>{{profesional.agenteMatriculador}}</span>
+          <span *ngIf='!profesional.agenteMatriculador'>{{agenteMatriculador}}</span>
+        </li>
+        <li class=" badge badge-info">
+          <span class="font-weight-bold">Supervisor</span>
+          <br>
+          <span *ngIf='profesional.supervisor?.nombreCompleto'>{{profesional.supervisor.nombreCompleto}}</span>
+          <span *ngIf='!profesional.supervisor'>No tiene supervisor</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </div>

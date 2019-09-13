@@ -1,7 +1,7 @@
 <section *ngIf="nuevoProfesional === false">
   <div class="row">
     <!--Panel central-->
-    <div class="col">
+    <div class="{{ profesionalElegido || verExportador ? 'col-8' : 'col' }}">
       <plex-box>
         <header>
           <div class="row">

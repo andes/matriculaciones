@@ -1,4 +1,4 @@
-<plex-layout>
+<plex-layout *ngIf="flag">
     <plex-layout-main>
         <plex-box>
             <div class="row">
@@ -10,13 +10,13 @@
                     <app-header-profesional [profesional]="profesional"></app-header-profesional>
                 </div>
                 <div class="col-1 ">
-                    <button class="float-right btn btn-primary" (click)="editar()">
+                    <button *ngIf="profesional.habilitado" class="float-right btn btn-primary" (click)="editar()">
                         <i class="mdi mdi-pencil"></i>
                     </button>
                 </div>
             </div>
             <div id="wrapper">
-                <plex-tabs *ngIf='profesional.habilitado'>
+                <plex-tabs>
                     <plex-tab label="Contacto y Domicilios">
                         <app-contacto-domicilios-profesional [profesional]="profesional">
                         </app-contacto-domicilios-profesional>

@@ -127,7 +127,7 @@
                             {{profesional.ultimaMatricula.matriculaNumero}}
                           </span>
                           <span
-                            *ngIf="!profesional?.formacionGrado?.matriculado  && profesional.formacionGrado?.profesion?.nombre  && !ultimaMatricula.baja?.motivo"
+                            *ngIf="!profesional?.formacionGrado?.matriculado  && profesional.formacionGrado?.profesion?.nombre  && !ultimaMatricula?.baja?.motivo"
                             class="badge badge-danger">
                             {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
                             {{profesional.ultimaMatricula.matriculaNumero}} vencida

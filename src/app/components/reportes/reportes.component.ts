@@ -79,7 +79,6 @@ export class ReportesComponent implements OnInit {
         this.lastRequest = this.profesionalService.getMatriculas(
             {
                 estado: this.matriculasVencidas ? 'Suspendidas' : '',
-                estadoE: this.matriculasVencidas ? 'Suspendidas' : '',
                 bajaMatricula: this.matriculasBaja,
                 especialidadCodigo: this.especialidad ? this.especialidad.codigo : '',
                 profesionCodigo: this.profesion ? this.profesion.codigo : '',

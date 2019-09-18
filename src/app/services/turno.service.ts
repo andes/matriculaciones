@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { URLSearchParams, RequestOptionsArgs , Response, Http } from '@angular/http';
+import { URLSearchParams, RequestOptionsArgs, Response, Http } from '@angular/http';
 import { BaseService } from './base.service';
 import { Observable } from 'rxjs/Rx';
 
@@ -53,7 +53,7 @@ export class TurnoService extends BaseService {
     }
 
     getTurnoPorDni(params): Observable<any> {
-        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true } );
+        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true });
     }
     getTurnos(url: string, searchParams: any): Observable<any> {
         const parametros: any = {
@@ -73,7 +73,7 @@ export class TurnoService extends BaseService {
         }
 
         if (searchParams.mes) {
-            parametros.mes =  searchParams.mes;
+            parametros.mes = searchParams.mes;
         }
 
         if (searchParams.dia) {
@@ -85,7 +85,7 @@ export class TurnoService extends BaseService {
         }
 
         if (searchParams.size) {
-            parametros.size = searchParams.size ;
+            parametros.size = searchParams.size;
         }
 
         if (searchParams.nombre) {
@@ -104,15 +104,20 @@ export class TurnoService extends BaseService {
             parametros.documento = searchParams.documento;
         }
 
-        return this._server.get(url, {params : parametros});
+        return this._server.get(url, { params: parametros });
     }
 
     patchTurnos(id: string, cambios): Observable<any> {
-        return this._server.patch(this.turnosURL  + id, cambios);
+        return this._server.patch(this.turnosURL + id, cambios);
     }
 
-    getTurnosPorDocumento(params){
-        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true } );
+    getTurnosPorDocumento(params) {
+        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true });
+    }
+
+    getTurnosMes(params) {
+        console.log(params)
+        return this._server.get(this.turnosURL + 'matriculaciones', { params: params, showError: true });
     }
 
 }

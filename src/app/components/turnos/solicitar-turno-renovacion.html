@@ -1,58 +1,33 @@
-<!-- <div class="row">
-    <div class="col-md-9">
-        <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-9" *ngIf="turnoSeleccionado">
-        <app-profesional  (onProfesionalCompleto)="onProfesionalCompleto($event)"></app-profesional>
-    </div>
-</div> -->
-
 <section>
     <div class="row">
         <div class="col-12">
             <plex-box type="primary">
 
-                <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)" [sobreTurno]="id"></app-nuevo-turno>
+                <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"
+                                 [sobreTurno]="id"></app-nuevo-turno>
                 <form #formNuevoProf='ngForm' *ngIf="turnoSeleccionado && !id">
                     <fieldset>
                         <legend>Datos para la renovacion</legend>
-                        <!-- <div class="col-md-12"> -->
-                        <!-- contacto -->
-
-                        <!-- <div class="row">
-                                <div class="col-md-6">
-                                    <plex-text label="apellido" [(ngModel)]="profesional.apellido" name="apellido" [required]="true"></plex-text>
-                                </div>
-                                <div class="col-md-6">
-                                    <plex-text label="Nombre" [(ngModel)]="profesional.nombre" name="nombre" [required]="true"></plex-text>
-                                </div>
-                            </div> -->
-                        <!-- <div class="row">
-
-                                <div class="col-md-4">
-                                    <plex-datetime type="date" label="Fecha de Nacimiento" [(ngModel)]="profesional.fechaNacimiento" name="fechaNacimiento" [required]="true"></plex-datetime>
-                                </div>
-
-                                <div class="col-md-4">
-                                    <plex-int label="Nº de Documento" [(ngModel)]="profesional.documento" name="documento" [required]="true"></plex-int>
-                                </div> -->
                         <div class="row">
                             <div class="col-6">
                                 <div class="row">
                                     <div class="col-6">
-                                        <plex-text label="Nombre" [(ngModel)]="nombre" name="nombre" [required]="true"></plex-text>
+                                        <plex-text label="Nombre" [(ngModel)]="nombre" name="nombre" [required]="true">
+                                        </plex-text>
                                     </div>
                                     <div class="col-6">
-                                        <plex-text label="Apellido" [(ngModel)]="apellido" name="apellido" [required]="true"></plex-text>
+                                        <plex-text label="Apellido" [(ngModel)]="apellido" name="apellido"
+                                                   [required]="true"></plex-text>
                                     </div>
                                     <div class="col-12">
-                                        <plex-int label="Nº de Documento" [(ngModel)]="documento" name="documento" [required]="true"></plex-int>
+                                        <plex-int label="Nº de Documento" [(ngModel)]="documento" name="documento"
+                                                  [required]="true"></plex-int>
                                     </div>
                                     <div class="col-12 ">
                                         <br>
-                                        <plex-button type="success" class="float-right" label="Buscar" (click)="buscar($event,formNuevoProf)" validateForm="true"></plex-button>
+                                        <plex-button type="success" class="float-right" label="Buscar"
+                                                     (click)="buscar($event,formNuevoProf)" validateForm="true">
+                                        </plex-button>
                                     </div>
                                 </div>
                             </div>
@@ -62,23 +37,26 @@
                                     <li *ngIf="profEncontrado.length === 0 && noEncontrado" class="alert alert-danger">
                                         <i class="mdi mdi-account-alert"></i> No se encontró ningún profesional
                                     </li>
-                                    <li class="list-group-item" *ngFor="let prof of profEncontrado; let i = index;" [ngClass]="{'active': isSelected()}" (click)="profesionalEncontrado(profEncontrado[i])">
+                                    <li class="list-group-item" *ngFor="let prof of profEncontrado; let i = index;"
+                                        [ngClass]="{'active': isSelected()}"
+                                        (click)="profesionalEncontrado(profEncontrado[i])">
                                         <div *ngIf='profEncontrado.length > 0'> {{prof.select}}</div>
                                     </li>
                                 </ul>
 
                             </div>
                         </div>
-                        <!-- </div> -->
-                        <!-- </div> -->
                     </fieldset>
                     <br>
                     <div class="row">
                         <div class="col-md-6">
-                            <p><span class="text-danger">*</span> ATENCION: si usted realizo un cambio de documento por favor comunicarse con administracion</p>
+                            <p><span class="text-danger">*</span> ATENCION: si usted realizo un cambio de documento por
+                                favor comunicarse con administracion</p>
                         </div>
                         <div class="col-md-6 text-right">
-                            <plex-button *ngIf='profElegido' type="success" label="Confirmar Datos" (click)="onProfesionalCompleto($event)" class="pull-right" validateForm="true"></plex-button>
+                            <plex-button *ngIf='profElegido' type="success" label="Confirmar Datos"
+                                         (click)="onProfesionalCompleto($event)" class="pull-right" validateForm="true">
+                            </plex-button>
                         </div>
                     </div>
 
@@ -89,6 +67,8 @@
     </div>
 </section>
 <footer>
-    <plex-button label="Volver" *ngIf='!id' type="danger" routerLink="/requisitosGenerales" icon="arrow-left-bold"></plex-button>
-    <plex-button label="Volver" *ngIf='id' type="danger" routerLink="/listarProfesionales" icon="arrow-left-bold"></plex-button>
+    <plex-button label="Volver" *ngIf='!id' type="danger" routerLink="/requisitosGenerales" icon="arrow-left-bold">
+    </plex-button>
+    <plex-button label="Volver" *ngIf='id' type="danger" routerLink="/listarProfesionales" icon="arrow-left-bold">
+    </plex-button>
 </footer>

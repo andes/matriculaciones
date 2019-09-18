@@ -1,9 +1,12 @@
-.btn-primary:active, .btn-primary.active, .show > .btn-primary.dropdown-toggle {
-    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5) !important;
-    background-color: #115065;
+.btn-primary:active,
+.btn-primary.active,
+.show>.btn-primary.dropdown-toggle {
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5) !important;
+  background-color: #115065;
 }
 
-.btn-primary.disabled, .btn-primary:disabled {
-    background-color: #9bc4d2;
-    border-color: #bcbdbd;
+.btn-primary.disabled,
+.btn-primary:disabled {
+  background-color: #9bc4d2;
+  border-color: #bcbdbd;
 }

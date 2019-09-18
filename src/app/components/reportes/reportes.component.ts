@@ -6,8 +6,10 @@ import { ISiisa } from '../../interfaces/ISiisa';
 import { ProfesionalService } from '../../services/profesional.service';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { ExcelService } from '../../services/excel.service';
+import * as enumerados from '../../utils/enumerados';
+import { ISubscription } from 'rxjs/Subscription';
 
-const limit = 50;
+const limit = 20;
 @Component({
     selector: 'app-reportes',
     templateUrl: 'reportes.html'
@@ -24,13 +26,17 @@ export class ReportesComponent implements OnInit {
     public matriculasBaja = false;
     public matriculasVencidas = false;
     public loader = false;
-    public profesionales: IProfesional[];
+    public profesionales: any[];
     public deshabilitarExportar = false;
-
+    public selectData = enumerados.getTiposMatricula();
+    public select = this.selectData[0];
     private skip = 0;
     private tengoDatos = true;
     public finScroll = false;
     public resultado = [];
+    modalScrollDistance = 2;
+    modalScrollThrottle = 50;
+    private lastRequest: ISubscription;
 
     constructor(private auth: Auth, private router: Router, private siisaService: SIISAService,
         private profesionalService: ProfesionalService, private excelService: ExcelService) { }
@@ -47,19 +53,30 @@ export class ReportesComponent implements OnInit {
     public generarReporte(exportarPlantilla: boolean) {
         this.loader = true;
         this.deshabilitarExportar = exportarPlantilla;
-        this.loadDatos(exportarPlantilla);
+        this.loadDatos(exportarPlantilla, false);
     }
 
     public nextPage() {
         if (this.tengoDatos) {
             this.skip += limit;
-            this.loadDatos(true);
+            this.loadDatos(false, true);
             this.loader = true;
         }
+        console.log('NEXT PAGE SKIP: ', this.skip);
     }
 
     private loadDatos(exportarPlantilla: boolean, concatenar = false) {
-        this.profesionalService.getProfesional(
+        if (this.lastRequest) {
+            this.lastRequest.unsubscribe();
+            if (this.skip > 0) {
+                this.skip -= limit;
+            }
+        }
+        if (!concatenar) {
+            this.profesionales = [];
+            this.skip = 0;
+        }
+        this.lastRequest = this.profesionalService.getMatriculas(
             {
                 estado: this.matriculasVencidas ? 'Suspendidas' : '',
                 estadoE: this.matriculasVencidas ? 'Suspendidas' : '',
@@ -69,8 +86,7 @@ export class ReportesComponent implements OnInit {
                 matriculasPorVencer: this.busquedaMatriculasProxAVencer,
                 fechaDesde: this.fechaMatriculacionDesde,
                 fechaHasta: this.fechaMatriculacionHasta,
-                // rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
-                // matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
+                tipoMatricula: this.select.id,
                 matriculacion: true,
                 exportarPlanillaCalculo: exportarPlantilla,
                 skip: this.skip,
@@ -89,9 +105,16 @@ export class ReportesComponent implements OnInit {
                         this.resultado = res;
                         this.finScroll = false;
                     }
-                    this.profesionales = res;
+                    console.log('Finscroll ', this.finScroll, ' -  TengoDatos  ', this.tengoDatos, '  length  ', this.resultado.length);
+                    this.profesionales = this.resultado;
                 } else {
-                    this.excelService.exportAsExcelFile(res, 'Reporte profesionales');
+                    let nombreArchivo = '';
+                    if (this.select.id === 'posgrado') {
+                        nombreArchivo = 'Reporte Matrículas de Posgrado'
+                    } else {
+                        nombreArchivo = 'Reporte Matrículas de Grado'
+                    }
+                    this.excelService.exportAsExcelFile(res, nombreArchivo);
                 }
             });
     }

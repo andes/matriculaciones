@@ -19,8 +19,11 @@ export class ReportesComponent implements OnInit {
     public busquedaMatriculasProxAVencer = false;
     public fechaMatriculacionDesde: Date;
     public fechaMatriculacionHasta: Date;
+    public fechaVencimientoDesde: Date;
+    public fechaVencimientoHasta: Date;
     public mostrarMasOpciones = false;
     public profesiones: ISiisa[];
+    public especialidades: ISiisa[];
     public profesion: any;
     public especialidad: any;
     public matriculasBaja = false;
@@ -34,8 +37,6 @@ export class ReportesComponent implements OnInit {
     private tengoDatos = true;
     public finScroll = false;
     public resultado = [];
-    modalScrollDistance = 2;
-    modalScrollThrottle = 50;
     private lastRequest: ISubscription;
 
     constructor(private auth: Auth, private router: Router, private siisaService: SIISAService,
@@ -47,7 +48,31 @@ export class ReportesComponent implements OnInit {
         }
         this.siisaService.getProfesiones().subscribe(res => {
             this.profesiones = res;
+
         })
+
+        this.siisaService.getEspecialidades(null).subscribe(res => {
+            this.especialidades = res;
+
+        })
+    }
+
+    public onChange(event) {
+        if (event.value) {
+            this.fechaMatriculacionDesde = null;
+            this.fechaMatriculacionHasta = null;
+        } else {
+            this.fechaVencimientoDesde = null;
+            this.fechaVencimientoHasta = null;
+        }
+    }
+    public onChangeVencidas(event) {
+        this.fechaVencimientoDesde = null;
+        this.fechaVencimientoHasta = null;
+    }
+    public onChangeBaja(event) {
+        this.fechaVencimientoDesde = null;
+        this.fechaVencimientoHasta = null;
     }
 
     public generarReporte(exportarPlantilla: boolean) {
@@ -57,20 +82,16 @@ export class ReportesComponent implements OnInit {
     }
 
     public nextPage() {
-        if (this.tengoDatos) {
+        if (this.tengoDatos && !this.loader) {
+            this.loader = true;
             this.skip += limit;
             this.loadDatos(false, true);
-            this.loader = true;
         }
-        console.log('NEXT PAGE SKIP: ', this.skip);
     }
 
     private loadDatos(exportarPlantilla: boolean, concatenar = false) {
         if (this.lastRequest) {
             this.lastRequest.unsubscribe();
-            if (this.skip > 0) {
-                this.skip -= limit;
-            }
         }
         if (!concatenar) {
             this.profesionales = [];
@@ -78,13 +99,15 @@ export class ReportesComponent implements OnInit {
         }
         this.lastRequest = this.profesionalService.getMatriculas(
             {
-                estado: this.matriculasVencidas ? 'Suspendidas' : '',
+                vencidas: this.matriculasVencidas,
                 bajaMatricula: this.matriculasBaja,
-                especialidadCodigo: this.especialidad ? this.especialidad.codigo : '',
-                profesionCodigo: this.profesion ? this.profesion.codigo : '',
+                especialidadCodigo: this.especialidad ? this.especialidad.codigo.sisa : null,
+                profesionCodigo: this.profesion ? this.profesion.codigo : null,
                 matriculasPorVencer: this.busquedaMatriculasProxAVencer,
-                fechaDesde: this.fechaMatriculacionDesde,
-                fechaHasta: this.fechaMatriculacionHasta,
+                fechaDesde: (!this.busquedaMatriculasProxAVencer && !this.matriculasBaja) ?
+                    (this.busquedaMatriculasProxAVencer ? this.fechaVencimientoDesde : this.fechaMatriculacionDesde) : null,
+                fechaHasta: (!this.busquedaMatriculasProxAVencer && !this.matriculasBaja) ?
+                    (this.busquedaMatriculasProxAVencer ? this.fechaVencimientoHasta : this.fechaMatriculacionHasta) : null,
                 tipoMatricula: this.select.id,
                 matriculacion: true,
                 exportarPlanillaCalculo: exportarPlantilla,
@@ -102,9 +125,9 @@ export class ReportesComponent implements OnInit {
                         }
                     } else {
                         this.resultado = res;
+                        this.tengoDatos = true;
                         this.finScroll = false;
                     }
-                    console.log('Finscroll ', this.finScroll, ' -  TengoDatos  ', this.tengoDatos, '  length  ', this.resultado.length);
                     this.profesionales = this.resultado;
                 } else {
                     let nombreArchivo = '';
@@ -115,7 +138,14 @@ export class ReportesComponent implements OnInit {
                     }
                     this.excelService.exportAsExcelFile(res, nombreArchivo);
                 }
-            });
+            },
+                err => {
+                    this.loader = false;
+                });
     }
 
+    isVencida(fecha) {
+        let fechaVencimiento = new Date(fecha);
+        return (new Date() > fechaVencimiento)
+    }
 }

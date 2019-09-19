@@ -11,7 +11,7 @@ export class SIISAService {
 
     constructor(private server: Server) { }
 
-    getEspecialidades(id: String): Observable<ISiisa> {
+    getEspecialidades(id: String): Observable<ISiisa[]> {
         // TODO: buscar Por id
         return this.server.get(this.siisaUrl + '/especialidad', null);
     }
@@ -30,4 +30,5 @@ export class SIISAService {
     getProfesiones(): Observable<ISiisa[]> {
         return this.server.get(this.siisaUrl + '/profesion', null);
     }
+   
 }

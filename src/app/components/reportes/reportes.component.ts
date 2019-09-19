@@ -65,10 +65,12 @@ export class ReportesComponent implements OnInit {
             this.fechaVencimientoDesde = null;
             this.fechaVencimientoHasta = null;
         }
+        this.matriculasVencidas = false;
     }
     public onChangeVencidas(event) {
         this.fechaVencimientoDesde = null;
         this.fechaVencimientoHasta = null;
+        this.busquedaMatriculasProxAVencer = false;
     }
     public onChangeBaja(event) {
         this.fechaVencimientoDesde = null;

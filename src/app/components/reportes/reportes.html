@@ -1,23 +1,24 @@
-<form class="plex-layout">
-  <section>
-    <div class="row">
-      <div class="col h-100">
-        <plex-box>
-          <header>
-            <div class="clearfix">
-              <div class="page-title float-left">Reportes de Matrículas</div>
-            </div>
-            <!-- Filtros -->
+<plex-layout>
+  <plex-layout-main>
+      <header>
+        <legend>Reportes de Matrículas</legend>
+        <!-- <div class="clearfix">
+                        <div class="page-title float-left">Reportes de Matrículas</div>
+                      </div> -->
+        <!-- Filtros -->
+        <div class="row">
+          <div class="col">
+
             <div class="row">
               <div class="col-md-2">
-                <plex-datetime [disabled]="busquedaMatriculasProxAVencer" type="date"
-                  [(ngModel)]="fechaMatriculacionDesde" name="fechaMatriculacionDesde"
+                <plex-datetime [disabled]="busquedaMatriculasProxAVencer "
+                  type="date" [(ngModel)]="fechaMatriculacionDesde" name="fechaMatriculacionDesde"
                   label="Fecha Matriculación Desde">
                 </plex-datetime>
               </div>
               <div class="col-md-2">
-                <plex-datetime [disabled]="busquedaMatriculasProxAVencer" type="date"
-                  [(ngModel)]="fechaMatriculacionHasta" name="fechaMatriculacionHasta"
+                <plex-datetime [disabled]="busquedaMatriculasProxAVencer "
+                  type="date" [(ngModel)]="fechaMatriculacionHasta" name="fechaMatriculacionHasta"
                   label="Fecha Matriculación Hasta">
                 </plex-datetime>
               </div>
@@ -36,19 +37,19 @@
             <span *ngIf="mostrarMasOpciones">
               <div class="row mt-2 mb-2">
                 <div class="col-4 mt-4">
-                  <plex-bool type="slide" [(ngModel)]="busquedaMatriculasProxAVencer"
+                  <plex-bool type="slide" [(ngModel)]="busquedaMatriculasProxAVencer" (change)="onChange($event)"
                     name="busquedaMatriculasProxAVencer" label="Buscar Matrículas Próximas a Vencer">
                   </plex-bool>
                 </div>
                 <div class="col">
-                  <plex-datetime [disabled]="!busquedaMatriculasProxAVencer" type="date"
-                    [(ngModel)]="fechaMatriculacionDesde" name="fechaMatriculacionDesde"
+                  <plex-datetime [disabled]="!busquedaMatriculasProxAVencer || matriculasVencidas || matriculasBaja"
+                    type="date" [(ngModel)]="fechaVencimientoDesde" name="fechaVencimientoDesde"
                     label="Fecha Vencimiento Matrícula Desde">
                   </plex-datetime>
                 </div>
                 <div class="col">
-                  <plex-datetime [disabled]="!busquedaMatriculasProxAVencer" type="date"
-                    [(ngModel)]="fechaMatriculacionHasta" name="fechaMatriculacionHasta"
+                  <plex-datetime [disabled]="!busquedaMatriculasProxAVencer || matriculasVencidas || matriculasBaja"
+                    type="date" [(ngModel)]="fechaVencimientoHasta" name="fechaVencimientoHasta"
                     label="Fecha Vencimiento Matrícula Hasta">
                   </plex-datetime>
                 </div>
@@ -59,142 +60,159 @@
                   </plex-select>
                 </div>
                 <div class="col-md-4">
-                  <plex-select [(ngModel)]="especialidad" name="especialidad" label="Especialidad" [data]="profesiones">
+                  <plex-select [(ngModel)]="especialidad" name="especialidad" label="Especialidad"
+                    [data]="especialidades">
                   </plex-select>
                 </div>
                 <div class="col-md-4">
                   <div class="row">
                     <div class="col">
                       <plex-bool type="slide" [(ngModel)]="matriculasBaja" name="matriculasBaja"
-                        label="Matrículas dadas de baja">
+                        (change)="onChangeBaja($event)" label="Matrículas dadas de baja">
                       </plex-bool>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col">
                       <plex-bool type="slide" [(ngModel)]="matriculasVencidas" name="matriculasVencidas"
-                        label="Matrículas Vencidas">
+                        (change)="onChangeVencidas($event)" label="Matrículas Vencidas">
                       </plex-bool>
                     </div>
                   </div>
                 </div>
               </div>
             </span>
-          </header>
-          <!-- Resultados -->
-          <div class="row" style='max-height: 100%;
-          overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
-            [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="nextPage()">
-            <!-- <div infinite-scroll [infiniteScrollDistance]="1" [infiniteScrollThrottle]="2" (scroll)="nextPage()"
-              [scrollWindow]="false"> -->
-              <div class="col">
-                <!-- <plex-scroll (on-scroll)="nextPage()" distancia="3"></plex-scroll> -->
-                <plex-loader *ngIf="loader" type="ball-beat" class=""></plex-loader>
-                <div *ngIf="!profesionales?.length && !loader" class="alert alert-default">
-                  <i class="mdi mdi-emoticon-sad"></i> No hay resultados que coincidan con los filtros de búsqueda
-                </div>
-                <table *ngIf="profesionales?.length" class="table table-striped table-hover">
-                  <thead>
-                    <tr>
-                      <th>Documento</th>
-                      <th>Apellido y Nombre</th>
-                      <th>Fecha de Nacimiento</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="hover" *ngFor="let profesional of profesionales">
-                      <td>
-                        {{ profesional.documento }}
-                      </td>
-                      <td>
-                        {{ profesional | profesional }}
-                      </td>
-                      <td>
-                        <span *ngIf="profesional.fechaNacimiento">
-                          {{profesional.fechaNacimiento | fecha}}
-                          <br> {{profesional | edad}}
-                        </span>
-                        <span *ngIf="!profesional.fechaNacimiento" class="text-danger">
-                          Sin fecha de nacimiento
-                        </span>
-                      </td>
-                      <td>
-                        <div *ngIf='!matriculasBaja'>
-                          <span
-                            *ngIf="profesional?.formacionGrado?.matriculado  && profesional.ultimaMatricula?.matriculaNumero && profesional.formacionGrado?.profesion?.nombre && !profesional.ultimaMatricula?.baja?.motivo"
-                            class="badge badge-info">
-                            {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
-                            {{profesional.ultimaMatricula.matriculaNumero}}
-                          </span>
-                          <span
-                            *ngIf="!profesional?.formacionGrado?.matriculado  && profesional.formacionGrado?.profesion?.nombre  && !ultimaMatricula?.baja?.motivo"
-                            class="badge badge-danger">
-                            {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
-                            {{profesional.ultimaMatricula.matriculaNumero}} vencida
-                          </span>
-                          <span
-                            *ngIf="!profesional.formacionGrado?.matriculado && profesional.formacionGrado?.profesion?.nombre && profesional.ultimaMatricula?.baja?.motivo"
-                            class="badge badge-danger">
-                            {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
-                            {{profesional.ultimaMatricula.matriculaNumero}} suspendida
-                          </span>
+          </div>
+          <div class="col-2 ml-2">
+            <div class="row mb-4">
 
-                          <span
-                            *ngIf="profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (hoy <= profesional.ultimaMatriculaPosgrado?.fin) "
-                            class="badge-primary">
-                            {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
-                            {{profesional.ultimaMatriculaPosgrado.matriculaNumero}}
-                          </span>
-                          <span
-                            *ngIf="!profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (hoy <= profesional.ultimaMatriculaPosgrado?.fin) "
-                            class="badge badge-warning">
-                            {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
-                            {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} suspendida
-                          </span>
-                          <span *ngIf="!profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado 
-                            && profesional.formacionPosgrado?.especialidad?.nombre 
-                            && (hoy >= profesional.ultimaMatriculaPosgrado?.fin)  " class="badge badge-warning">
-                            {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
-                            {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} vencida
-                          </span>
+              <plex-button label="Generar reporte" type="success" position="right" 
+                (click)="generarReporte(false)">
+              </plex-button>
+            </div>
+            <div class="row">
 
-                          <div *ngIf='matriculasBaja'>
-                            <div class="row">
-                              <div
-                                *ngIf='profesional.formacionGrado?.matriculacion && profesional.formacionGrado.matriculacion.length > 0'>
+              <plex-button *ngIf="deshabilitarExportar" label="Exportar" type="warning" position="right"
+                 (click)="generarReporte(true)" disabled="true"></plex-button>
+              <plex-button *ngIf="!deshabilitarExportar" label="Exportar" type="warning" position="right"
+                 (click)="generarReporte(true)"></plex-button>
+            </div>
+          </div>
+        </div>
+      </header>
+      <!-- <fieldset> -->
+      <!-- Resultados -->
+      
+      <plex-loader *ngIf="loader" type="ball-beat" class=""></plex-loader>
+      <div *ngIf="!profesionales?.length && !loader" class="alert alert-default">
+        <i class="mdi mdi-emoticon-sad"></i> No hay resultados que coincidan con los filtros de búsqueda
+      </div>
+      <!-- <div class="row" *ngIf="profesionales?.length"> -->
+          <div class="row" *ngIf="profesionales?.length" style='max-height: 100%; overflow-y: scroll;' 
+          infinite-scroll [scrollWindow]="false" [infiniteScrollDistance]="2"  [infiniteScrollThrottle]="50" (scrolled)="nextPage()">
+        <div class="col-12">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th>Documento</th>
+                <th>Apellido y Nombre</th>
+                <th>Fecha de Nacimiento</th>
+                <th>Fecha de Matriculación</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="hover" *ngFor="let profesional of profesionales">
+                <td>
+                  {{ profesional.documento }}
+                </td>
+                <td>
+                  {{ profesional | profesional }}
+                </td>
+                <td>
+                  <span *ngIf="profesional.fechaNacimiento">
+                    {{profesional.fechaNacimiento | fecha}}
+                    <br> {{profesional | edad}}
+                  </span>
+                  <span *ngIf="!profesional.fechaNacimiento" class="text-danger">
+                    Sin fecha de nacimiento
+                  </span>
+                </td>
+                <td>
+                  <span *ngIf="profesional.ultimaMatricula?.inicio">
+                        {{profesional.ultimaMatricula.inicio | fecha}}
+                  </span>
+                  <span *ngIf="profesional.ultimaMatriculaPosgrado?.inicio">
+                        {{profesional.ultimaMatriculaPosgrado.inicio | fecha}}
+                  </span>
+                </td>
+                <td>
+                  <div *ngIf='!matriculasBaja'>
+                    <span
+                      *ngIf="profesional?.formacionGrado?.matriculado  && profesional.ultimaMatricula?.matriculaNumero && profesional.formacionGrado?.profesion?.nombre && !profesional.ultimaMatricula?.baja?.motivo"
+                      class="badge badge-info">
+                      {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
+                      {{profesional.ultimaMatricula.matriculaNumero}}
+                    </span>
+                    <span
+                      *ngIf="!profesional?.formacionGrado?.matriculado  && profesional.formacionGrado?.profesion?.nombre  && !ultimaMatricula?.baja?.motivo"
+                      class="badge badge-danger">
+                      {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
+                      {{profesional.ultimaMatricula.matriculaNumero}} vencida
+                    </span>
+                    <span
+                      *ngIf="!profesional.formacionGrado?.matriculado && profesional.formacionGrado?.profesion?.nombre && profesional.ultimaMatricula?.baja?.motivo"
+                      class="badge badge-danger">
+                      {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
+                      {{profesional.ultimaMatricula.matriculaNumero}} suspendida
+                    </span>
 
-                                <div
-                                  *ngIf='profesional.ultimaMatricula?.baja && profesional.ultimaMatricula?.baja?.motivo && profesional.ultimaMatricula?.baja?.fecha'>
-                                  <div class="badge-danger ">
-                                    {{profesional.formacionGrado.profesion.nombre}} : N°
-                                    {{profesional.ultimaMatricula.matriculaNumero}}
-                                    <br> {{profesional.ultimaMatricula.baja.motivo }}
-                                    <br>{{profesional.ultimaMatricula.baja.fecha | fecha }}
-                                  </div>
-                                </div>
-                              </div>
+                    <span
+                      *ngIf="profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (!profesional.formacionPosgrado.tieneVencimiento || !isVencida(profesional.ultimaMatriculaPosgrado?.fin)) "
+                      class="badge-info">
+                      {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
+                      {{profesional.ultimaMatriculaPosgrado.matriculaNumero}}
+                    </span>
+                    <span
+                      *ngIf="!profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (profesional.formacionPosgrado.tieneVencimiento && !isVencida(profesional.ultimaMatriculaPosgrado?.fin)) "
+                      class="badge badge-warning">
+                      {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
+                      {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} suspendida
+                    </span>
+                    <span
+                      *ngIf="profesional.ultimaMatriculaPosgrado 
+                                        && profesional.formacionPosgrado?.especialidad?.nombre 
+                                        && profesional.formacionPosgrado.tieneVencimiento && isVencida(profesional.ultimaMatriculaPosgrado?.fin)  "
+                      class="badge badge-warning">
+                      {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
+                      {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} vencida
+                    </span>
+
+                    <div *ngIf='matriculasBaja'>
+                      <div class="row">
+                        <div
+                          *ngIf='profesional.formacionGrado?.matriculacion && profesional.formacionGrado.matriculacion.length > 0'>
+
+                          <div
+                            *ngIf='profesional.ultimaMatricula?.baja && profesional.ultimaMatricula?.baja?.motivo && profesional.ultimaMatricula?.baja?.fecha'>
+                            <div class="badge-danger ">
+                              {{profesional.formacionGrado.profesion.nombre}} : N°
+                              {{profesional.ultimaMatricula.matriculaNumero}}
+                              <br> {{profesional.ultimaMatricula.baja.motivo }}
+                              <br>{{profesional.ultimaMatricula.baja.fecha | fecha }}
                             </div>
                           </div>
                         </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            <!-- </div> -->
-          </div>
-        </plex-box>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  </section>
-  <footer>
-    <div class="float-right">
-      <plex-button *ngIf="deshabilitarExportar" label="Exportar" type="warning" position="right"
-        (click)="generarReporte(true)" disabled="true"></plex-button>
-      <plex-button *ngIf="!deshabilitarExportar" label="Exportar" type="warning" position="right"
-        (click)="generarReporte(true)"></plex-button>
-      <plex-button label="Generar reporte" type="success" position="right" (click)="generarReporte(false)">
-      </plex-button>
-    </div>
-  </footer>
-</form>
+      <!-- </fieldset> -->
+
+  </plex-layout-main>
+
+</plex-layout>

@@ -8,6 +8,7 @@ import { IProfesional } from '../../interfaces/IProfesional';
 import { ExcelService } from '../../services/excel.service';
 import * as enumerados from '../../utils/enumerados';
 import { ISubscription } from 'rxjs/Subscription';
+import { Plex } from '@andes/plex';
 
 const limit = 20;
 @Component({
@@ -40,7 +41,8 @@ export class ReportesComponent implements OnInit {
     private lastRequest: ISubscription;
 
     constructor(private auth: Auth, private router: Router, private siisaService: SIISAService,
-        private profesionalService: ProfesionalService, private excelService: ExcelService) { }
+        private profesionalService: ProfesionalService, private excelService: ExcelService,
+        private _plex: Plex) { }
 
     ngOnInit() {
         if (!this.auth.check('matriculaciones:reportes')) {
@@ -92,6 +94,11 @@ export class ReportesComponent implements OnInit {
     }
 
     private loadDatos(exportarPlantilla: boolean, concatenar = false) {
+        if (!this.select) {
+            this.loader = false;
+            this._plex.info('info', 'Seleccione un tipo de matrícula', 'Tipo de matrícula requerido');
+            return;
+        }
         if (this.lastRequest) {
             this.lastRequest.unsubscribe();
         }

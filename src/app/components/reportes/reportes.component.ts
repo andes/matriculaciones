@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { SIISAService } from '../../services/siisa.service';
 import { ISiisa } from '../../interfaces/ISiisa';
 import { ProfesionalService } from '../../services/profesional.service';
-import { IProfesional } from '../../interfaces/IProfesional';
 import { ExcelService } from '../../services/excel.service';
 import * as enumerados from '../../utils/enumerados';
 import { ISubscription } from 'rxjs/Subscription';
@@ -40,9 +39,14 @@ export class ReportesComponent implements OnInit {
     public resultado = [];
     private lastRequest: ISubscription;
 
-    constructor(private auth: Auth, private router: Router, private siisaService: SIISAService,
-        private profesionalService: ProfesionalService, private excelService: ExcelService,
-        private _plex: Plex) { }
+    constructor(
+        private auth: Auth,
+        private router: Router,
+        private siisaService: SIISAService,
+        private profesionalService: ProfesionalService,
+        private excelService: ExcelService,
+        private _plex: Plex
+    ) { }
 
     ngOnInit() {
         if (!this.auth.check('matriculaciones:reportes')) {
@@ -99,12 +103,12 @@ export class ReportesComponent implements OnInit {
             this._plex.info('info', 'Seleccione un tipo de matrícula', 'Tipo de matrícula requerido');
             return;
         }
-        if (this.lastRequest) {
-            this.lastRequest.unsubscribe();
-        }
         if (!concatenar) {
             this.profesionales = [];
             this.skip = 0;
+        }
+        if (this.lastRequest) {
+            this.lastRequest.unsubscribe();
         }
         this.lastRequest = this.profesionalService.getMatriculas(
             {
@@ -122,39 +126,42 @@ export class ReportesComponent implements OnInit {
                 exportarPlanillaCalculo: exportarPlantilla,
                 skip: this.skip,
                 limit: limit
-            }).subscribe(res => {
-                this.loader = false;
-                if (!exportarPlantilla) {
-                    if (concatenar) {
-                        if (res.length > 0) {
-                            this.resultado = this.resultado.concat(res);
-                        } else {
-                            this.finScroll = true;
-                            this.tengoDatos = false;
-                        }
-                    } else {
-                        this.resultado = res;
-                        this.tengoDatos = true;
-                        this.finScroll = false;
-                    }
-                    this.profesionales = this.resultado;
-                } else {
-                    let nombreArchivo = '';
-                    if (this.select.id === 'posgrado') {
-                        nombreArchivo = 'Reporte Matrículas de Posgrado'
-                    } else {
-                        nombreArchivo = 'Reporte Matrículas de Grado'
-                    }
-                    this.excelService.exportAsExcelFile(res, nombreArchivo);
-                }
-            },
-                err => {
+            })
+            .subscribe(
+                res => {
                     this.loader = false;
-                });
+                    if (!exportarPlantilla) {
+                        if (concatenar) {
+                            if (res.length > 0) {
+                                this.resultado = this.resultado.concat(res);
+                            } else {
+                                this.finScroll = true;
+                                this.tengoDatos = false;
+                            }
+                        } else {
+                            this.resultado = res;
+                            this.tengoDatos = true;
+                            this.finScroll = false;
+                        }
+                        this.profesionales = this.resultado;
+                    } else {
+                        let nombreArchivo = '';
+                        if (this.select.id === 'posgrado') {
+                            nombreArchivo = 'Reporte Matrículas de Posgrado'
+                        } else {
+                            nombreArchivo = 'Reporte Matrículas de Grado'
+                        }
+                        this.excelService.exportAsExcelFile(res, nombreArchivo);
+                    }
+                },
+                () => {
+                    this.loader = false;
+                }
+            );
     }
 
     isVencida(fecha) {
-        let fechaVencimiento = new Date(fecha);
+        const fechaVencimiento = new Date(fecha);
         return (new Date() > fechaVencimiento)
     }
 }

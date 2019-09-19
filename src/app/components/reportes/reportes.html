@@ -2,12 +2,6 @@
   <plex-layout-main>
     <header>
       <legend>Reportes de Matrículas</legend>
-      <!-- <div class="clearfix">
-                        <div class="page-title float-left">Reportes de Matrículas</div>
-                      </div> -->
-      <!-- Filtros -->
-
-
       <div class="row">
         <div class="col-md-2">
           <plex-datetime [disabled]="busquedaMatriculasProxAVencer " type="date" [(ngModel)]="fechaMatriculacionDesde"
@@ -86,29 +80,11 @@
         </div>
       </span>
 
-      <!-- <div class="col-2 ml-2">
-            <div class="row mb-4">
-
-              <plex-button label="Generar reporte" type="success" position="right" 
-                (click)="generarReporte(false)">
-              </plex-button>
-            </div>
-            <div class="row">
-
-              <plex-button *ngIf="deshabilitarExportar" label="Exportar" type="warning" position="right"
-                 (click)="generarReporte(true)" disabled="true"></plex-button>
-              <plex-button *ngIf="!deshabilitarExportar" label="Exportar" type="warning" position="right"
-                 (click)="generarReporte(true)"></plex-button>
-            </div>-->
     </header>
-    <!-- <fieldset> -->
-    <!-- Resultados -->
-
     <plex-loader *ngIf="loader" type="ball-beat" class=""></plex-loader>
     <div *ngIf="!profesionales?.length && !loader" class="alert alert-default">
       <i class="mdi mdi-emoticon-sad"></i> No hay resultados que coincidan con los filtros de búsqueda
     </div>
-    <!-- <div class="row" *ngIf="profesionales?.length"> -->
     <div class="row" *ngIf="profesionales?.length" style='max-height: 100%; overflow-y: scroll;' infinite-scroll
       [scrollWindow]="false" [infiniteScrollDistance]="2" [infiniteScrollThrottle]="50" (scrolled)="nextPage()">
       <div class="col-12">
@@ -212,8 +188,6 @@
         </table>
       </div>
     </div>
-    <!-- </fieldset> -->
-
   </plex-layout-main>
 
 </plex-layout>

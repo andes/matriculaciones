@@ -4,14 +4,20 @@
       <legend>Reportes de Matrículas</legend>
       <div class="row">
         <div class="col-md-2">
-          <plex-datetime [disabled]="busquedaMatriculasProxAVencer " type="date" [(ngModel)]="fechaMatriculacionDesde"
-            name="fechaMatriculacionDesde" label="Fecha Matriculación Desde">
+          <plex-datetime *ngIf="!busquedaMatriculasProxAVencer; else elseFechaMatDesde" type="date"
+            [(ngModel)]="fechaMatriculacionDesde" name="fechaMatriculacionDesde" label="Fecha Matriculación Desde">
           </plex-datetime>
+          <ng-template #elseFechaMatDesde>
+            <label class=" mt-4"> <b>Filtro no disponible</b></label>
+          </ng-template>
         </div>
         <div class="col-md-2">
-          <plex-datetime [disabled]="busquedaMatriculasProxAVencer " type="date" [(ngModel)]="fechaMatriculacionHasta"
+          <plex-datetime *ngIf="!busquedaMatriculasProxAVencer ; else elseFechaMatHasta " type="date" [(ngModel)]="fechaMatriculacionHasta"
             name="fechaMatriculacionHasta" label="Fecha Matriculación Hasta">
           </plex-datetime>
+          <ng-template #elseFechaMatHasta>
+            <label class=" mt-4"> <b>Filtro no disponible</b></label>
+          </ng-template>
         </div>
         <div class="col-md-4">
           <plex-select label="Tipo de Matrícula" [required]="true" name="selectMatriculas" [data]="selectData"
@@ -42,14 +48,17 @@
             </plex-bool>
           </div>
           <div class="col">
-            <plex-datetime [disabled]="!busquedaMatriculasProxAVencer || matriculasVencidas || matriculasBaja"
-              type="date" [(ngModel)]="fechaVencimientoDesde" name="fechaVencimientoDesde"
+            <plex-datetime *ngIf="(busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja) ; else fechaVen" type="date"
+              [(ngModel)]="fechaVencimientoDesde" name="fechaVencimientoDesde"
               label="Fecha Vencimiento Matrícula Desde">
             </plex-datetime>
+            <ng-template #fechaVen>
+                <label class=" mt-4"> <b>Habilite el filtro de fechas de vencimiento para visualizar los calendarios</b></label>
+              </ng-template>
           </div>
           <div class="col">
-            <plex-datetime [disabled]="!busquedaMatriculasProxAVencer || matriculasVencidas || matriculasBaja"
-              type="date" [(ngModel)]="fechaVencimientoHasta" name="fechaVencimientoHasta"
+            <plex-datetime *ngIf="busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja" type="date"
+              [(ngModel)]="fechaVencimientoHasta" name="fechaVencimientoHasta"
               label="Fecha Vencimiento Matrícula Hasta">
             </plex-datetime>
           </div>
@@ -156,9 +165,8 @@
                     {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} suspendida
                   </span>
                   <span
-                    *ngIf="profesional.ultimaMatriculaPosgrado 
-                                        && profesional.formacionPosgrado?.especialidad?.nombre 
-                                        && profesional.formacionPosgrado.tieneVencimiento && isVencida(profesional.ultimaMatriculaPosgrado?.fin)  "
+                    *ngIf="profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre 
+                        && profesional.formacionPosgrado.tieneVencimiento && isVencida(profesional.ultimaMatriculaPosgrado?.fin)  "
                     class="badge badge-danger">
                     {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
                     {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} vencida

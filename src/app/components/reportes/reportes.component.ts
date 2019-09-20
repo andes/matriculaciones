@@ -114,10 +114,8 @@ export class ReportesComponent implements OnInit {
                 especialidadCodigo: this.especialidad ? this.especialidad.codigo.sisa : null,
                 profesionCodigo: this.profesion ? this.profesion.codigo : null,
                 matriculasPorVencer: this.busquedaMatriculasProxAVencer,
-                fechaDesde: (!this.busquedaMatriculasProxAVencer && !this.matriculasBaja) ?
-                    (this.busquedaMatriculasProxAVencer ? this.fechaVencimientoDesde : this.fechaMatriculacionDesde) : null,
-                fechaHasta: (!this.busquedaMatriculasProxAVencer && !this.matriculasBaja) ?
-                    (this.busquedaMatriculasProxAVencer ? this.fechaVencimientoHasta : this.fechaMatriculacionHasta) : null,
+                fechaDesde: this.busquedaMatriculasProxAVencer ? this.fechaVencimientoDesde : this.fechaMatriculacionDesde,
+                fechaHasta: this.busquedaMatriculasProxAVencer ? this.fechaVencimientoHasta : this.fechaMatriculacionHasta,
                 tipoMatricula: this.select.id,
                 matriculacion: true,
                 exportarPlanillaCalculo: exportarPlantilla,

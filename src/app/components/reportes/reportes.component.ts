@@ -54,12 +54,9 @@ export class ReportesComponent implements OnInit {
         }
         this.siisaService.getProfesiones().subscribe(res => {
             this.profesiones = res;
-
         })
-
         this.siisaService.getEspecialidades(null).subscribe(res => {
             this.especialidades = res;
-
         })
     }
 

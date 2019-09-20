@@ -151,7 +151,7 @@
                   </span>
                   <span
                     *ngIf="!profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (profesional.formacionPosgrado.tieneVencimiento && !isVencida(profesional.ultimaMatriculaPosgrado?.fin)) "
-                    class="badge badge-warning">
+                    class="badge badge-danger">
                     {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
                     {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} suspendida
                   </span>
@@ -159,7 +159,7 @@
                     *ngIf="profesional.ultimaMatriculaPosgrado 
                                         && profesional.formacionPosgrado?.especialidad?.nombre 
                                         && profesional.formacionPosgrado.tieneVencimiento && isVencida(profesional.ultimaMatriculaPosgrado?.fin)  "
-                    class="badge badge-warning">
+                    class="badge badge-danger">
                     {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
                     {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} vencida
                   </span>

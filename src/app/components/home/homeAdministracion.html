@@ -1,34 +1,41 @@
-<form class="plex-layout" >
-    <section>
-        <plex-box>
-            <br>
-            <h1 class="display-4 margin-bottom text-center">Bienvenido <br> a <br> Matriculaciones de Salud</h1>
-            <br><br>
-            <div class="text-center">
-                <div class="logo"></div>
-                <div class="row">
-                    <div class="col-4" *ngIf='permisosAgenda'>
-                        <div class="boton color-celeste" routerLink="/agenda">
-                            <i class="icono mdi mdi-pencil-box-outline"></i>
-                            <div class="titulo">Agenda</div>
-                            <div class="subtitulo">Configuración <br> de agendas</div>
-                        </div>
-                    </div>
-                    <div class="col-4" *ngIf='permisosTurnos'>
-                        <div class="boton color-violeta" routerLink="/turnos">
-                            <i class="icono mdi mdi-calendar"></i>
-                            <div class="titulo">Turnos</div>
-                            <div class="subtitulo">Listado de próximos<br> turnos</div>
-                        </div>
-                    </div>
-                    <div class="col-4" *ngIf='permisosProfesional'>
-                        <div class="boton color-amarillo" routerLink="/listarProfesionales">
-                            <i class="icono mdi mdi-account-multiple"></i>
-                            <div class="titulo">Profesionales</div>
-                            <div class="subtitulo">Gestión de <br> profesionales</div>
-                        </div>
-                    </div>
-                    <!-- <div class="col-4">
+<form class="plex-layout">
+  <section>
+    <plex-box>
+      <br>
+      <h1 class="display-4 margin-bottom text-center">Bienvenido <br> a <br> Matriculaciones de Salud</h1>
+      <br><br>
+      <div class="text-center">
+        <div class="logo"></div>
+        <div class="row">
+          <div class="col-3" *ngIf='permisosAgenda'>
+            <div class="boton color-celeste" routerLink="/agenda">
+              <i class="icono mdi mdi-pencil-box-outline"></i>
+              <div class="titulo">Agenda</div>
+              <div class="subtitulo">Configuración <br> de agendas</div>
+            </div>
+          </div>
+          <div class="col-3" *ngIf='permisosTurnos'>
+            <div class="boton color-violeta" routerLink="/turnos">
+              <i class="icono mdi mdi-calendar"></i>
+              <div class="titulo">Turnos</div>
+              <div class="subtitulo">Listado de próximos<br> turnos</div>
+            </div>
+          </div>
+          <div class="col-3" *ngIf='permisosProfesional'>
+            <div class="boton color-amarillo" routerLink="/listarProfesionales">
+              <i class="icono mdi mdi-account-multiple"></i>
+              <div class="titulo">Profesionales</div>
+              <div class="subtitulo">Gestión de <br> profesionales</div>
+            </div>
+          </div>
+          <div class="col-3" *ngIf='permisosReportes'>
+            <div class="boton color-rosa" routerLink="/reportes">
+              <i class="icono mdi mdi-file-chart"></i>
+              <div class="titulo">Reportes</div>
+              <div class="subtitulo">Información de <br> profesionales</div>
+            </div>
+          </div>
+          <!-- <div class="col-4">
                     <div class="boton color-rosa" routerLink="/rup">
                         <i class="icono mdi mdi-contacts"></i>
                         <div class="titulo">HUDS</div>
@@ -36,19 +43,19 @@
                         <div class="detalle">Registro universal<br>de prestaciones de pacientes</div>
                     </div>
                 </div> -->
-                </div>
-                <div class="row" *ngIf='noTienePermisos'>
-                    <div class="col">
-                        <div class="boton color-amarillo">
-                            <i class="icono mdi mdi-alert"></i>
-                            <div class="titulo">ATENCIÓN</div>
-                            <div class="subtitulo">PERMISOS DE APLICACIONES</div>
-                            <div class="detalle">Ud. no posee permisos para Matriculaciones</div>
-                        </div>
-                    </div>
-                </div>
+        </div>
+        <div class="row" *ngIf='noTienePermisos'>
+          <div class="col">
+            <div class="boton color-amarillo">
+              <i class="icono mdi mdi-alert"></i>
+              <div class="titulo">ATENCIÓN</div>
+              <div class="subtitulo">PERMISOS DE APLICACIONES</div>
+              <div class="detalle">Ud. no posee permisos para Matriculaciones</div>
             </div>
-            <br><br>
-        </plex-box>
-    </section>
+          </div>
+        </div>
+      </div>
+      <br><br>
+    </plex-box>
+  </section>
 </form>

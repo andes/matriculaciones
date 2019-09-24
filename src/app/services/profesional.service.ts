@@ -15,7 +15,9 @@ export class ProfesionalService extends BaseService {
     constructor(_http: Http, private server: Server) {
         super(_http);
     }
-
+    getMatriculas(params: any): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'matriculas', { params: params, showError: true });
+    }
     getProfesional(params: any): Observable<any> {
         return this.server.get(this.profesionalesURL, { params: params, showError: true });
     }

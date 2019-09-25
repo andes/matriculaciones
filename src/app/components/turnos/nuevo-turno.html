@@ -37,15 +37,17 @@
             <label>Hora</label>
 
             <div class="row">
-                <span *ngIf='horariosDisponibles.length === 0' class="alert alert-danger">No hay mas turnos para la
-                    fecha seleccionada</span>
-                <span *ngIf='sinTurnos && horariosDisponibles.length > 0' class="alert alert-danger">No hay mas turnos para la
+                <!-- <span *ngIf='horariosDisponibles.length === 0' class="alert alert-danger">No hay mas turnos para la
+                    fecha seleccionada</span> -->
+                <span *ngIf='(sinTurnos && horariosDisponibles.length > 0) || horariosDisponibles.length === 0'
+                      class="alert alert-danger">No hay mas turnos para la
                     fecha seleccionada</span>
                 <ng-container *ngIf='!sinTurnos'>
                     <div *ngFor="let turno of horariosDisponibles; let idx = index">
                         <div class="col-md-6" style=" margin-bottom: 6px;">
-                            <button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado" class="btn btn-primary"
-                                (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'active':isActive(horariosDisponibles[idx]) == true}">
+                            <button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado"
+                                    class="btn btn-primary" (click)="buildFechaTurno(horariosDisponibles[idx]) "
+                                    [ngClass]="{'active':isActive(horariosDisponibles[idx]) == true}">
                                 {{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos == 0) ? '00' :
                                 horariosDisponibles[idx].minutos }} hs
                             </button>
@@ -59,12 +61,13 @@
 </div>
 <br>
 <div class="col-sm-12 text-center" *ngIf="sobreTurno">
-    <button class="btn btn-success pull-right" style="margin-right: 8px; margin-top: 8px" (click)="confirmSobreTurno()">Confirmar</button>
+    <button class="btn btn-success pull-right" style="margin-right: 8px; margin-top: 8px"
+            (click)="confirmSobreTurno()">Confirmar</button>
 </div>
 <div class="row" *ngIf="!turnoElegido " style="margin-bottom: 15px">
     <div class="col-sm-12 text-center" *ngIf="!sobreTurno">
-        <button [disabled]="horarioSi == false" class="btn btn-success pull-right" style="margin-right: 8px; margin-top: 8px"
-            (click)="confirmTurno()">Confirmar Turno</button>
+        <button [disabled]="horarioSi == false" class="btn btn-success pull-right"
+                style="margin-right: 8px; margin-top: 8px" (click)="confirmTurno()">Confirmar Turno</button>
     </div>
 
 </div>

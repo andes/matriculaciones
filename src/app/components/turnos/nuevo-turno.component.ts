@@ -107,7 +107,6 @@ export class NuevoTurnoComponent implements AfterViewInit {
     }
 
     private buildHorariosDisponibles() {
-        this.sinTurnos = false;
         this.horariosDisponibles = [];
         let res = null;
         let entradaU = false;
@@ -200,6 +199,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
             dia: fecha.getDate()
         }).subscribe((datos) => {
             // Deshabilito los horarios ocupados.
+
             datos.forEach(item => {
                 const turnoOcupado = item._id;
                 this.horariosDisponibles.forEach(horario => {
@@ -208,9 +208,11 @@ export class NuevoTurnoComponent implements AfterViewInit {
                     }
                 });
             });
+
             const count = this.horariosDisponibles.filter((dia) => {
                 return dia.ocupado === true;
             });
+            this.sinTurnos = false;
             if (count.length === this.horariosDisponibles.length) {
                 this.sinTurnos = true;
             }
@@ -233,7 +235,6 @@ export class NuevoTurnoComponent implements AfterViewInit {
         this.$div.datepicker(this.options);
         this.$div.datepicker('setDate', startDate);
 
-        this.sinTurnos = false;
         this.onChangeFecha({ date: startDate })
     }
     private getPrimerDia(fecha?) {
@@ -254,10 +255,8 @@ export class NuevoTurnoComponent implements AfterViewInit {
                 while (date <= finMes && !hayTurnos) {
                     const indexDia = date.getDay().toString();
                     if (diasDeshabilitados.indexOf(date.getDay().toString()) < 0) {
-                        // console.log(countTurnosXDia)
                         const resultado = turnosMes.filter((dia) => {
                             return moment(date).isSame(moment(dia.fecha), 'day')
-                            // new Date(dia.fecha).getTime() === date.getTime()
                         })
                         if (resultado.length <= this.cupoDiario) {
                             hayTurnos = true;
@@ -290,10 +289,23 @@ export class NuevoTurnoComponent implements AfterViewInit {
         }
         let date = new Date(inicioMes)
         while (date <= finMes) {
+
             const resultado = countTurnosXDia.filter((dia) => {
                 return moment(date).isSame(moment(dia.fecha), 'day')
             })
+
+
+            if (resultado && resultado.length >= countTurnosXDia.length) {
+                fechasExcluidas.push(date);
+            }
+            const inicioAgenda = new Date(this.agendaConfig.horarioInicioTurnos).getHours();
+            const finAgenda = new Date(this.agendaConfig.horarioFinTurnos).getHours();
+            const disponibles = Math.round((Math.abs(inicioAgenda - finAgenda) * 60) / this.agendaConfig.duracionTurno);
+
             if (resultado.length > this.cupoDiario) {
+                fechasExcluidas.push(date);
+            }
+            if (resultado.length > disponibles) {
                 fechasExcluidas.push(date);
             }
             date = this.addDays(date, 1);

@@ -62,7 +62,6 @@ export class GuiaProfesionalComponent implements OnInit {
                 this.busqueda['codigoProfesion'] = this.busqueda.formacionGrado.codigo;
             }
             this._profesionalService.getGuiaProfesional(this.busqueda).subscribe(x => {
-                console.log(x);
                 this.profEncontrado = x;
                 this.mostrarInfo = true;
             });
@@ -75,7 +74,7 @@ export class GuiaProfesionalComponent implements OnInit {
         this.busqueda.formacionGrado = null;
         this.busqueda.numeroMatricula = null;
         this.busqueda.apellido = null,
-        this.busqueda.nombre = null;
+            this.busqueda.nombre = null;
     }
 
 }

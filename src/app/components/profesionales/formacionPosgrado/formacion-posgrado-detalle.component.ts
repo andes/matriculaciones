@@ -69,9 +69,9 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 if (formacion.matriculacion === null) {
                     revNumero = 0;
                 } else {
-                    if (formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero){
+                    if (formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero) {
                         revNumero = formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero;
-                    }else{
+                    } else {
                         revNumero = formacion.matriculacion.length;
                     }
                 }
@@ -114,7 +114,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             }
             // });
 
-            ;
+
 
         });
     }
@@ -151,16 +151,16 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     }
 
-    anioDeGracia(){
+    anioDeGracia() {
         this.plex.confirm('¿Desea otorgarle un año de gracia a este profesional?').then((resultado) => {
             if (resultado) {
-        this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.setFullYear(this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1);
-        this.formacion.papelesVerificados = true;
-        this.formacion.revalida = false;
-        this.formacion.matriculado = true;
-        this.profesional.formacionPosgrado[this.index] = this.formacion;
-        this.actualizar();
-        this.anioDeGraciaOutPut.emit(this.formacion.matriculacion);
+                this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.setFullYear(this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1);
+                this.formacion.papelesVerificados = true;
+                this.formacion.revalida = false;
+                this.formacion.matriculado = true;
+                this.profesional.formacionPosgrado[this.index] = this.formacion;
+                this.actualizar();
+                this.anioDeGraciaOutPut.emit(this.formacion.matriculacion);
             }
         });
     }

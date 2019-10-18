@@ -31,7 +31,7 @@ export class HomeComponent implements OnInit {
   public deshabilitar = false;
   public autoFocus = 1;
 
-  constructor(private plex: Plex, public auth: Auth, private router: Router, public appComponent: AppComponent) {};
+  constructor(private plex: Plex, public auth: Auth, private router: Router, public appComponent: AppComponent) { }
 
 
   ngOnInit() {
@@ -70,21 +70,21 @@ export class HomeComponent implements OnInit {
   // }
 
 
-    login(event) {
-        if (event.formValid) {
-            this.deshabilitar = true;
-            this.loading = true;
-            this.auth.login(this.usuario.toString(), this.password)
-                .subscribe((data) => {
-                    this.plex.updateUserInfo({ usuario: this.auth.usuario });
-                    this.router.navigate(['selectOrganizacion']);
-                }, (err) => {
-                    this.plex.info('danger', 'Usuario o contraseña incorrectos');
-                    this.loading = false;
-                    this.deshabilitar = false;
-                });
-        }
+  login(event) {
+    if (event.formValid) {
+      this.deshabilitar = true;
+      this.loading = true;
+      this.auth.login(this.usuario.toString(), this.password)
+        .subscribe((data) => {
+          this.plex.updateUserInfo({ usuario: this.auth.usuario });
+          this.router.navigate(['selectOrganizacion']);
+        }, (err) => {
+          this.plex.info('danger', 'Usuario o contraseña incorrectos');
+          this.loading = false;
+          this.deshabilitar = false;
+        });
     }
+  }
 
 
   resync() {

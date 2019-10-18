@@ -30,7 +30,7 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
     public turnoGuardado: boolean;
     private _turnoSeleccionado: Date;
     public _nuevoProfesional: any;
-    public id =  true;
+    public id = true;
 
     constructor(private _formBuilder: FormBuilder,
         private _turnosService: TurnoService,
@@ -43,9 +43,9 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
         private _pdfUtils: PDFUtils,
         private plex: Plex) {
 
-            this.tipoTurno = Enums.TipoTurno.matriculacion;
+        this.tipoTurno = Enums.TipoTurno.matriculacion;
 
-         }
+    }
 
     ngOnInit() {
 
@@ -64,7 +64,7 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
             profesional: this._nuevoProfesional._id
         });
 
-        this._turnosService.saveTurnoMatriculacion({turno: this.formTurno.value})
+        this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value })
             .subscribe(turno => {
                 const pdf = this._pdfUtils.comprobanteTurno(turno);
                 pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
@@ -75,8 +75,8 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
         this._turnosService.saveTurnoSolicitados(profesional)
             .subscribe((nuevoProfesional) => {
                 if (nuevoProfesional == null) {
-                    this.plex.info('info','El profesional que quiere agregar ya existe(verificar dni)');
-                }else {
+                    this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
+                } else {
 
                     this._nuevoProfesional = nuevoProfesional;
                     this.turnoGuardado = true;
@@ -85,6 +85,6 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
                     }
                     this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
                 }
-        });
+            });
     }
 }

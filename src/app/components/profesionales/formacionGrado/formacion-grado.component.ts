@@ -39,7 +39,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     @Input() tieneFirma = null;
     @Input() tieneFirmaAdmin = null;
     @Output() updateProfesional = new EventEmitter();
-    public showOtraEntidadFormadora = false;;
+    public showOtraEntidadFormadora = false;
     public edit = false;
     public supervisor = {
         id: null,

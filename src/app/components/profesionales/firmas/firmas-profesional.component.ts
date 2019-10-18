@@ -5,7 +5,8 @@ import {
     Input,
     Output,
     OnChanges,
-    OnInit } from '@angular/core';
+    OnInit
+} from '@angular/core';
 
 // Plex
 import {
@@ -43,22 +44,22 @@ export class FirmasProfesionalComponent implements OnInit {
     public binaryString = null;
     public firmas = null;
     public urlFirma = null;
-    public base64textString: String= '';
+    public base64textString: String = '';
     public binaryStringAdmin = null;
     public urlFirmaAdmin = null;
-    public base64textStringAdmin: String= '';
+    public base64textStringAdmin: String = '';
     public nombreAdministrativo = '';
     public firmaAdmin = null;
     loading;
 
-    constructor( private ng2ImgMax: Ng2ImgMaxService, public sanitizer: DomSanitizer, private plex: Plex, private _profesionalService: ProfesionalService) {
+    constructor(private ng2ImgMax: Ng2ImgMaxService, public sanitizer: DomSanitizer, private plex: Plex, private _profesionalService: ProfesionalService) {
     }
 
     ngOnInit() {
-        this._profesionalService.getProfesionalFirma({id: this.profesional.id}).subscribe(resp => {
+        this._profesionalService.getProfesionalFirma({ id: this.profesional.id }).subscribe(resp => {
             this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
-                    });
-        this._profesionalService.getProfesionalFirma({firmaAdmin: this.profesional.id}).subscribe(resp => {
+        });
+        this._profesionalService.getProfesionalFirma({ firmaAdmin: this.profesional.id }).subscribe(resp => {
             this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp.firma);
             this.firmaAdmin = resp.firma;
             this.nombreAdministrativo = resp.administracion;
@@ -68,33 +69,33 @@ export class FirmasProfesionalComponent implements OnInit {
     handleFileSelect(evt) {
         const files = evt.target.files;
         const file = files[0];
-      if (files && file) {
-          const reader = new FileReader();
-          reader.onload = this._handleReaderLoaded.bind(this);
-          reader.readAsBinaryString(file);
-      }
+        if (files && file) {
+            const reader = new FileReader();
+            reader.onload = this._handleReaderLoaded.bind(this);
+            reader.readAsBinaryString(file);
+        }
     }
     _handleReaderLoaded(readerEvt) {
         this.binaryString = readerEvt.target.result;
         this.base64textString = btoa(this.binaryString);
         this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
-      }
+    }
 
-      handleFileSelectFirmaAdmin(evt) {
+    handleFileSelectFirmaAdmin(evt) {
         const files = evt.target.files;
         const file = files[0];
-      if (files && file) {
-          const reader = new FileReader();
-          reader.onload = this._handleReaderLoadedFirmaAdmin.bind(this);
-          reader.readAsBinaryString(file);
-      }
+        if (files && file) {
+            const reader = new FileReader();
+            reader.onload = this._handleReaderLoadedFirmaAdmin.bind(this);
+            reader.readAsBinaryString(file);
+        }
     }
     _handleReaderLoadedFirmaAdmin(readerEvt) {
         this.binaryStringAdmin = readerEvt.target.result;
         this.base64textStringAdmin = btoa(this.binaryStringAdmin);
         this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textStringAdmin);
         this.firmaAdmin = true;
-      }
+    }
 
 
     upload() {
@@ -114,10 +115,10 @@ export class FirmasProfesionalComponent implements OnInit {
 
         const administracion = {
             firma: firmaAdministracion,
-            nombreCompleto : this.nombreAdministrativo
+            nombreCompleto: this.nombreAdministrativo
         };
-         this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
-         this.onFileUploadedFirmaAdmin.emit(administracion);
+        this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
+        this.onFileUploadedFirmaAdmin.emit(administracion);
         this.tieneFirmaAdmin.emit(true);
         this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + firmaAdministracion);
     }

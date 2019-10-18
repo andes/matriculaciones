@@ -116,7 +116,6 @@ export class TurnoService extends BaseService {
     }
 
     getTurnosMes(params) {
-        console.log(params)
         return this._server.get(this.turnosURL + 'matriculaciones', { params: params, showError: true });
     }
 

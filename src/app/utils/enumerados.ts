@@ -66,7 +66,7 @@ export function getEnumAsObjects(enumerado: any) {
     return arrNombres.map((obj) => {
         return { id: obj, nombre: titleCase(obj) };
     });
-};
+}
 
 
 function titleCase(str) {

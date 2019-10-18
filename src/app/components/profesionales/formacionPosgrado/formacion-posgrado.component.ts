@@ -143,7 +143,7 @@ export class FormacionPosgradoComponent implements OnInit {
                 }
             };
             this.certificacion = certificacion;
-        };
+        }
         this.formacionSelected = formacionPosgrado;
         if (this.formacionSelected.institucionFormadora.codigo === null) {
             this.showOtraEntidadFormadora = true;
@@ -152,10 +152,10 @@ export class FormacionPosgradoComponent implements OnInit {
         }
     }
 
-    pushFechasAlta(){
+    pushFechasAlta() {
         this.plex.confirm('¿Desea agregar esta nueva fecha de alta?').then((resultado) => {
             if (resultado) {
-                this.formacionSelected.fechasDeAltas.push({fecha: this.proximaFechaDeAlta});
+                this.formacionSelected.fechasDeAltas.push({ fecha: this.proximaFechaDeAlta });
                 const cambio = {
                     'op': 'updateEstadoPosGrado',
                     'data': this.profesional.formacionPosgrado

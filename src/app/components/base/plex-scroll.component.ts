@@ -35,14 +35,13 @@ export class ScrollComponent implements OnInit {
 
     constructor() {
 
-            this.distance = 1;
-            this.throttle = 50;
-            this.pageSize = 100;
-            this.data = [];
+        this.distance = 1;
+        this.throttle = 50;
+        this.pageSize = 100;
+        this.data = [];
     }
 
     ngOnInit() {
-        console.log('init listado base');
         this.updateListado();
     }
 
@@ -53,15 +52,15 @@ export class ScrollComponent implements OnInit {
     }
 
 
-/*    setPagina(page: number) {
-        if (page < 1 || page > this.lastPage) {
-            return;
-        }
+    /*    setPagina(page: number) {
+            if (page < 1 || page > this.lastPage) {
+                return;
+            }
 
-        this.currentPage = page;
-        this.updateListado();
-    }
-*/
+            this.currentPage = page;
+            this.updateListado();
+        }
+    */
     /*showInfo(selected: any) {
         this.selectedItem = selected;
     }

@@ -234,7 +234,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
         this.$div.datepicker('setDate', startDate);
 
         this.sinTurnos = false;
-        this.onChangeFecha({ date: startDate })
+        this.onChangeFecha({ date: startDate });
     }
     private getPrimerDia(fecha?) {
         let hayTurnos = false;
@@ -256,9 +256,9 @@ export class NuevoTurnoComponent implements AfterViewInit {
                     if (diasDeshabilitados.indexOf(date.getDay().toString()) < 0) {
                         // console.log(countTurnosXDia)
                         const resultado = turnosMes.filter((dia) => {
-                            return moment(date).isSame(moment(dia.fecha), 'day')
+                            return moment(date).isSame(moment(dia.fecha), 'day');
                             // new Date(dia.fecha).getTime() === date.getTime()
-                        })
+                        });
                         if (resultado.length <= this.cupoDiario) {
                             hayTurnos = true;
                         }
@@ -288,11 +288,11 @@ export class NuevoTurnoComponent implements AfterViewInit {
             inicioMes = new Date(new Date().getFullYear(), new Date().getMonth(), 1);
             finMes = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
         }
-        let date = new Date(inicioMes)
+        let date = new Date(inicioMes);
         while (date <= finMes) {
             const resultado = countTurnosXDia.filter((dia) => {
-                return moment(date).isSame(moment(dia.fecha), 'day')
-            })
+                return moment(date).isSame(moment(dia.fecha), 'day');
+            });
             if (resultado.length > this.cupoDiario) {
                 fechasExcluidas.push(date);
             }

@@ -57,7 +57,7 @@ export class CambioDniComponent implements OnInit {
 
         this.sexos = enumerados.getObjSexos();
 
-    };
+    }
 
     loadPaises(event) {
         this._paisService.getPaises().subscribe(event.callback);
@@ -66,13 +66,13 @@ export class CambioDniComponent implements OnInit {
 
     save($event, form) {
         if ($event.formValid) {
-         this.cambioDNI.dniActual = this.profElegido.documento;
-         this.cambioDNI.nombre = this.profElegido.nombre;
-         this.cambioDNI.apellido = this.profElegido.apellido;
-         this.cambioDNI.idProfesional = this.profElegido.idRenovacion;
-         this.cambioDNI.nacionalidad = this.profElegido.nacionalidad;
+            this.cambioDNI.dniActual = this.profElegido.documento;
+            this.cambioDNI.nombre = this.profElegido.nombre;
+            this.cambioDNI.apellido = this.profElegido.apellido;
+            this.cambioDNI.idProfesional = this.profElegido.idRenovacion;
+            this.cambioDNI.nacionalidad = this.profElegido.nacionalidad;
             // tslint:disable-next-line:max-line-length
-           // this.cambioDNI.sexo = this.cambioDNI.sexo ? ((typeof this.cambioDNI.sexo === 'string')) ? this.cambioDNI.sexo : (Object(this.cambioDNI.sexo).id) : null;
+            // this.cambioDNI.sexo = this.cambioDNI.sexo ? ((typeof this.cambioDNI.sexo === 'string')) ? this.cambioDNI.sexo : (Object(this.cambioDNI.sexo).id) : null;
             this._cambioDniService.saveCambio(this.cambioDNI).subscribe(res => {
                 this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
             });
@@ -90,7 +90,7 @@ export class CambioDniComponent implements OnInit {
     profesionalEncontrado(profEncontrado) {
         this.profElegido = profEncontrado;
         this.cambioDNI.dniActual = profEncontrado.documento;
-      }
+    }
 
     isSelected() {
         return this.profElegido;

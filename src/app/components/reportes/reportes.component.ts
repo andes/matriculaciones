@@ -54,10 +54,10 @@ export class ReportesComponent implements OnInit {
         }
         this.siisaService.getProfesiones().subscribe(res => {
             this.profesiones = res;
-        })
+        });
         this.siisaService.getEspecialidades(null).subscribe(res => {
             this.especialidades = res;
-        })
+        });
     }
 
     public onChange(event) {
@@ -142,9 +142,9 @@ export class ReportesComponent implements OnInit {
                     } else {
                         let nombreArchivo = '';
                         if (this.select.id === 'posgrado') {
-                            nombreArchivo = 'Reporte Matrículas de Posgrado'
+                            nombreArchivo = 'Reporte Matrículas de Posgrado';
                         } else {
-                            nombreArchivo = 'Reporte Matrículas de Grado'
+                            nombreArchivo = 'Reporte Matrículas de Grado';
                         }
                         this.excelService.exportAsExcelFile(res, nombreArchivo);
                     }
@@ -157,6 +157,6 @@ export class ReportesComponent implements OnInit {
 
     isVencida(fecha) {
         const fechaVencimiento = new Date(fecha);
-        return (new Date() > fechaVencimiento)
+        return (new Date() > fechaVencimiento);
     }
 }

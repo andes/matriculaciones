@@ -67,7 +67,7 @@ export class TurnosComponent implements OnInit {
         this.mySubject
             .debounceTime(1000)
             .subscribe(val => {
-                this.buscar()
+                this.buscar();
             });
     }
 
@@ -228,7 +228,7 @@ export class TurnosComponent implements OnInit {
                         this.turnoElegido = null;
                     });
             }
-        })
+        });
     }
 
 

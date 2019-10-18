@@ -30,5 +30,5 @@ export class SIISAService {
     getProfesiones(): Observable<ISiisa[]> {
         return this.server.get(this.siisaUrl + '/profesion', null);
     }
-   
+
 }

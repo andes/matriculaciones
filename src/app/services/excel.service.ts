@@ -13,7 +13,7 @@ export class ExcelService {
   public exportAsExcelFile(json: any[], excelFileName: string): void {
     interface ColInfo {
       /* visibility */
-      hidden?: true
+      hidden?: true;
     }
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(json);
     const workbook: XLSX.WorkBook = { Sheets: { 'data': worksheet }, SheetNames: ['data'] };

@@ -62,12 +62,11 @@ export class ListadoComponent implements OnInit {
         private _formBuilder: FormBuilder,
         private _router: Router) {
 
-            this.pageSize = 10;
-            this.data = [];
+        this.pageSize = 10;
+        this.data = [];
     }
 
     ngOnInit() {
-        console.log('init listado base');
         this.updateListado();
     }
 

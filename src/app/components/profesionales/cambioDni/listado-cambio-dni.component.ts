@@ -56,7 +56,7 @@ export class ListadoCambioDniComponent implements OnInit {
         this.sexos = enumerados.getObjSexos();
         this.traeListado();
 
-    };
+    }
 
     loadPaises(event) {
         this._paisService.getPaises().subscribe(event.callback);

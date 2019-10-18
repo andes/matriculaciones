@@ -63,7 +63,7 @@ export class HeaderProfesionalComponent implements OnInit {
 
                 this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
 
-            }else {
+            } else {
                 this.habilitado = this.profesional.habilitado;
             }
         });

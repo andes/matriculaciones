@@ -19,7 +19,7 @@
                                     <strong class="contador">{{solicitudesDeCambio}}</strong>
                                 </span>
 
-                                <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button> 
+                                <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button>
                             </div>
                         </div>-->
           </div>
@@ -53,8 +53,7 @@
                 <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
               </div>
               <div class="col-md-3">
-                <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
-                  (change)="mySubject.next();saveFecha()"></plex-datetime>
+                <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha" (change)="mySubject.next();saveFecha()"></plex-datetime>
               </div>
             </div>
           </div>
@@ -64,15 +63,13 @@
 
         <!-- LIST -->
         <div class="row" style='max-height: 100%;
-                overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
-          [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+                overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
           <div class="col-12" *ngIf="turnos.length === 0" class="alert alert-danger">
             <i class="mdi mdi-account-alert"></i> No se encontró ningún turno
           </div>
           <div class="col-12">
             <ul class="list-group">
-              <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)"
-                [ngClass]="{'active': isSelected(turno)}">
+              <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)" [ngClass]="{'active': isSelected(turno)}">
 
                 <div class="row" style="width: 100%">
                   <div class="col-4">
@@ -97,22 +94,18 @@
                   </div>
                   <div class="col-3">
                     <div *ngFor="let grado of turno.profesional.formacionGrado" class="text-danger">
-                      <span *ngIf="grado.profesion?.nombre" class="badge badge-info">
+                      <h6 *ngIf="grado.profesion?.nombre" [ngClass]="{'badge-white': isSelected(turno)}" class="badge badge-info">
                         {{grado.profesion.nombre}}
-                      </span>
-                      <span *ngIf="grado.matriculacion?.length" class="badge badge-info">
+                      </h6>
+                      <h6 *ngIf="grado.matriculacion?.length" [ngClass]="{'badge-white': isSelected(turno)}" class="badge badge-info">
                         Matricula n°
                         {{grado.matriculacion[grado.matriculacion.length -
                             1].matriculaNumero}}
-                      </span>
-                      <span
-                        *ngIf="grado.matriculacion?.length && !grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo"
-                        class="badge badge-danger">
+                      </h6>
+                      <span *ngIf="grado.matriculacion?.length && !grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo" class="badge badge-danger" [ngClass]="{'badge-white': isSelected(turno)}">
                         VENCIDA
                       </span>
-                      <span
-                        *ngIf="grado.matriculacion?.length && grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo"
-                        class="badge badge-danger">
+                      <span *ngIf="grado.matriculacion?.length && grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo" class="badge badge-danger" [ngClass]="{'badge-white': isSelected(turno)}">
                         SUSPENDIDA
                       </span>
                     </div>
@@ -125,26 +118,21 @@
                         {{posgrado.matriculacion[posgrado.matriculacion.length -
                             1].matriculaNumero}}
                       </span>
-                      <span *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre && 
-                        hoy >= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin"
-                        class="badge badge-danger">
+                      <span *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
+                        hoy >= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="badge badge-danger">
                         VENCIDA
                       </span>
-                      <span *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre && 
-                        hoy <= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin"
-                        class="badge badge-danger">SUSPENDIDA
+                      <span *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
+                        hoy <= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="badge badge-danger">SUSPENDIDA
                       </span>
                     </div>
                   </div>
                   <div class="col-2">
-                    <h6 class="box-title-elemento badge "
-                      [ngClass]="{'badge-white': isSelected(turno), 'badge-info': !isSelected(turno)}">
+                    <h6 class="box-title-elemento badge " [ngClass]="{'badge-white': isSelected(turno), 'badge-info': !isSelected(turno)}">
                       {{ turno.tipo }}
                     </h6>
-                    <span *ngIf='turno.sePresento === true;' [ngClass]="{'badge-white': isSelected(turno)}"
-                      class="text-light  badge badge-success">Presente</span>
-                    <span *ngIf='turno.sePresento === false;' [ngClass]="{'badge-white': isSelected(turno)}"
-                      class="text-light  badge badge-danger">Ausente</span>
+                    <span *ngIf='turno.sePresento === true;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-success">Presente</span>
+                    <span *ngIf='turno.sePresento === false;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-danger">Ausente</span>
                   </div>
 
 
@@ -185,12 +173,9 @@
                 <br>
                 <span *ngIf='turnoElegido.sePresento === true;' class="text-light  badge badge-success">Presente</span>
                 <span *ngIf='turnoElegido.sePresento === false;' class="text-light  badge badge-danger">Ausente</span>
-                <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado(true)"
-                  *ngIf="turnoElegido.sePresento === false"></plex-button>
-                <plex-button type="success" label="Ausente" class="float-right" (click)="cambiarEstado(false)"
-                  *ngIf="turnoElegido.sePresento === true"></plex-button>
-                <plex-button type="danger" label="Anular turno" class="float-right" (click)="anularTurno()"
-                  *ngIf="turnoElegido.sePresento === false && !turnoElegido.anulado"></plex-button>
+                <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado(true)" *ngIf="turnoElegido.sePresento === false"></plex-button>
+                <plex-button type="success" label="Ausente" class="float-right" (click)="cambiarEstado(false)" *ngIf="turnoElegido.sePresento === true"></plex-button>
+                <plex-button type="danger" label="Anular turno" class="float-right" (click)="anularTurno()" *ngIf="turnoElegido.sePresento === false && !turnoElegido.anulado"></plex-button>
               </div>
             </div>
             <hr>
@@ -214,8 +199,7 @@
             </div>
             <div class="row">
               <div class="col-md-12">
-                <plex-button type="primary" icon='mdi mdi-account' label="Ver Profesional" class="float-right"
-                  [disabled]="turnoElegido.sePresento === false" (click)="showProfesional(turnoElegido)"></plex-button>
+                <plex-button type="primary" icon='mdi mdi-account' label="Ver Profesional" class="float-right" [disabled]="turnoElegido.sePresento === false" (click)="showProfesional(turnoElegido)"></plex-button>
               </div>
             </div>
             <hr>

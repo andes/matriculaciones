@@ -262,6 +262,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
       this.profesional.documento = profEncontrado.documento;
       this.profesional.fechaNacimiento = profEncontrado.fechaNacimiento;
       this.profesional.sexo = profEncontrado.sexo;
+      this.profesional.formacionGrado = profEncontrado.formacionGrado;
     }
   }
 

@@ -7,7 +7,7 @@ import { DropdownItem } from '@andes/plex';
     templateUrl: 'requisitosGenerales.html'
 })
 
-export class RequisitosGeneralesComponent {
+export class RequisitosGeneralesComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
 
     public items: DropdownItem[];

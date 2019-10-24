@@ -1,5 +1,6 @@
-import { Component, HostBinding } from '@angular/core';
+import { Component, HostBinding, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { DropdownItem } from '@andes/plex';
 
 @Component({
     selector: 'app-requisitos-generales',
@@ -8,6 +9,15 @@ import { Router } from '@angular/router';
 
 export class RequisitosGeneralesComponent {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+
+    public items: DropdownItem[];
+
+    ngOnInit() {
+        this.items = [
+            { label: 'MATRÍCULA UNIVERSITARIA', route: '/requisitosMatriculaUniversitaria' },
+            { label: 'MATRÍCULA TÉCNICA O AUXILIAR', route: '/requisitosMatriculaTecnicaAuxiliar' }
+        ];
+    }
 }
 
 @Component({

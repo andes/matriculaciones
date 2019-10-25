@@ -19,6 +19,9 @@ import { IProfesional } from '../../interfaces/IProfesional';
 import { Params, ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 
+const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
+const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+
 const jsPDF = require('jspdf');
 
 @Component({
@@ -39,6 +42,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   public nombre;
   public apellido;
   public profEncontrado: any = [];
+  lblTurno: string;
 
   @Input() public profesional: IProfesional = {
     id: null,
@@ -162,6 +166,18 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   onTurnoSeleccionado(turno: Date) {
     this._turnoSeleccionado = turno;
     this.turnoSeleccionado = true;
+    this.lblTurno = moment(this._turnoSeleccionado).format('llll');
+    this.lblTurno = diasSemana[this._turnoSeleccionado.getDay()] + ' '
+      + this._turnoSeleccionado.getDate().toString() + ' de '
+      + meses[this._turnoSeleccionado.getMonth()] + ' de '
+      + this._turnoSeleccionado.getFullYear() + ', '
+      + this._turnoSeleccionado.getHours();
+
+    if (this._turnoSeleccionado.getMinutes() > 0) {
+      this.lblTurno += ':' + this._turnoSeleccionado.getMinutes();
+    }
+
+    this.lblTurno += ' hs';
     if (this.id) {
       this.saveSobreTurno();
     }

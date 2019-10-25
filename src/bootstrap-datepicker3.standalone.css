@@ -143,9 +143,6 @@
 .datepicker table tr td.disabled,
 .datepicker table tr td.disabled:hover {
   color: rgba(0, 0, 0, 0.87) !important;
-  background-color: #e26c6c !important;
-  background: content-box;
-  padding: 2px 2px 2px 2px;
 
   /* content: 'This date is disabled'; */
 }

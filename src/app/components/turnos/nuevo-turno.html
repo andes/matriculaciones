@@ -25,11 +25,15 @@
     </div>
     <div class="col-md-5">
       <label>Seleccione fecha</label>
-      <span *ngIf='horariosDisponibles.length === 0' class="alert alert-danger">No hay mas turnos para la
-        fecha seleccionada</span>
-      <span *ngIf='sinTurnos && horariosDisponibles.length > 0' class="alert alert-danger">No hay mas turnos para la
-        fecha seleccionada</span>
-      <div class="row mt-3" justify>
+      <div class="row mt-3" justify="left">
+        <div class="col">
+          <plex-badge *ngIf='sinTurnos && horariosDisponibles.length > 0' type="danger">No hay mas turnos para la
+            fecha seleccionada</plex-badge>
+          <plex-badge *ngIf='horariosDisponibles.length === 0' type="danger">No hay mas turnos para la
+            fecha seleccionada</plex-badge>
+        </div>
+      </div>
+      <div class="row mt-3" justify="left">
         <div class="col-sm-3" *ngFor="let turno of horariosDisponibles; let idx = index">
           <plex-button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado" size="block" type="info" (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'active':isActive(horariosDisponibles[idx]) == true}">
             {{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos == 0) ? '00' :

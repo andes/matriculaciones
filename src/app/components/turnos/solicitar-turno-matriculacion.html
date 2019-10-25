@@ -1,20 +1,19 @@
-<section>
+<plex-layout>
+  <plex-layout-main>
+    <header justify>
+      <plex-title *ngIf="!turnoSeleccionado" titulo="Solicitud de turno para matriculación" size="md"></plex-title>
+      <plex-title *ngIf="turnoSeleccionado" titulo="Registro de profesional" size="md"></plex-title>
+      <plex-button label="Volver" type="danger" routerLink="/requisitosMatriculaUniversitaria"></plex-button>
+    </header>
     <div class="row">
-        <div class="col-12">
-            <plex-box type="primary">
-                <header>
-                    <app-nuevo-turno [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
-                </header>
+      <div class="col-12">
+        <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
+        <app-profesional *ngIf="turnoSeleccionado" (onProfesionalCompleto)="onProfesionalCompleto($event)"></app-profesional>
 
-                <app-profesional (onProfesionalCompleto)="onProfesionalCompleto($event)" *ngIf="turnoSeleccionado"></app-profesional>
-            </plex-box>
-        </div>
+      </div>
     </div>
-</section>
-<footer>
-        <plex-button label="Volver"  type="danger" routerLink="/requisitosMatriculaUniversitaria" icon="arrow-left-bold"></plex-button>
-</footer>
-
+  </plex-layout-main>
+</plex-layout>
 
 <!--
 <div class="row">

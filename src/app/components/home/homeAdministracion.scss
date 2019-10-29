@@ -6,19 +6,19 @@ $color-rosa: #002B3A;
 $color-amarillo: #666600;
 //
 // Clases
-
 .boton {
     padding: .5em;
     color: white;
     cursor: pointer;
     transition: all .5s;
+    height: 12rem;
     // Contenido
     .icono {
         font-size: 3em;
     }
     .titulo {
-        text-transform: uppercase;
-        font-size: 2em;
+        text-transform: uppercase; 
+        font-size: 1.5em;
         font-weight: 100;
         line-height: .8em;
         padding-bottom: 1em;

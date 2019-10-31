@@ -12,13 +12,8 @@
   border-radius: 0px !important;
 }
 
-.btn-horario .btn-info:active {
-  background-color: #204d74 !important;
-  border-color: #204d74 !important;
-  box-shadow: 0 0 0 0;
-}
 
-.btn-horario .btn-info:focus {
+.turno-activo .btn-info {
   background-color: #204d74 !important;
   border-color: #204d74 !important;
   box-shadow: 0 0 0 0;

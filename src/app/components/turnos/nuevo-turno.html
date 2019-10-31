@@ -35,15 +35,14 @@
       </div>
       <div class="row mt-3" justify="left">
         <div class="col-sm-3" *ngFor="let turno of horariosDisponibles; let idx = index">
-          <plex-button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado" size="block" type="info" (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'active' : isActive(horariosDisponibles[idx]),'mt-2' : true,'btn-horario' : true}">
-            {{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos == 0) ? '00' :
-                                                  horariosDisponibles[idx].minutos }} hs
+          <plex-button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado" size="block" type="info" (click)="buildFechaTurno(horariosDisponibles[idx]) " [ngClass]="{'turno-activo' : isActive(horariosDisponibles[idx]),'mt-2' : true,'btn-horario' : true}">
+            {{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos < 10 ? '0' : '') + horariosDisponibles[idx].minutos }} hs
           </plex-button>
         </div>
       </div>
       <div class="row mt-3">
         <div class="col" justify>
-          <plex-button [disabled]="horarioSi == false" type="success" (click)="confirmTurno()">Continuar</plex-button>
+          <plex-button id="#btn-continue" [disabled]="!horarioSi" type="success" (click)="confirmTurno()">Continuar</plex-button>
         </div>
       </div>
     </div>

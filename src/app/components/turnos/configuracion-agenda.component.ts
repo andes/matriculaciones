@@ -18,6 +18,8 @@ import * as enumerados from './../../utils/enumerados';
 })
 
 export class ConfiguracionAgendaComponent implements OnInit {
+
+
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
         id: null,
@@ -33,10 +35,11 @@ export class ConfiguracionAgendaComponent implements OnInit {
     agendas: any;
     agendasDiasHabilitados: any;
     agendaSelect: any;
+    agendaActual = true;
     mostrar = false;
-    constructor( private agendaService: AgendaService, private plex: Plex) {
-            this.feriados  = [];
-         }
+    constructor(private agendaService: AgendaService, private plex: Plex) {
+        this.feriados = [];
+    }
 
     ngOnInit() {
 
@@ -77,11 +80,11 @@ export class ConfiguracionAgendaComponent implements OnInit {
             if (this.currentAgenda.fechasExcluidas === null) {
                 this.currentAgenda.fechasExcluidas = [];
             }
-            this.currentAgenda.fechasExcluidas =  this.feriados;
+            this.currentAgenda.fechasExcluidas = this.feriados;
             let agendaOperation: Observable<IAgendaMatriculaciones>;
 
             agendaOperation = this.agendaService.save(this.currentAgenda);
-              agendaOperation.subscribe(resultado => {
+            agendaOperation.subscribe(resultado => {
                 this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
             });
             form.resetForm();
@@ -110,5 +113,9 @@ export class ConfiguracionAgendaComponent implements OnInit {
     }
 
 
+    mostrarAgendaActual() {
+        this.agendaActual = !this.agendaActual;
     }
+
+}
 

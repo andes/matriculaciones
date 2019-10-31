@@ -1,61 +1,47 @@
-
 <section>
-<plex-box title="Agenda" type="{{boxType}}">
-    <div  *ngIf='!mostrar'>
-            <div class="col-12 text-center">
-                    <header>
-                           <div class="page-title">Agenda</div>
-                   </header>
-               </div>
-    <app-agenda-form (emitAgenda)='insertar($event)'></app-agenda-form>
-
-<br>
-<div class="page-title">Agenda actual</div>
-    <table  class="table table-striped">
-        <thead>
-          <tr>
-            <th>Dias</th>
-            <th>hora inicio</th>
-            <th>hora fin</th>
-            <th>duracion turno</th>
-            <th>fechas excluidas</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr class="hover" *ngFor="let agenda of agendas,let i = index" (click)="showEditar(agenda)" >
-               
-            <td>
-                <div *ngFor="let dias of agenda.diasHabilitados,let n = index">  {{dias.nombre}}</div>
-            </td>
-            <td>{{agenda.horarioInicioTurnos | date: 'HH:mm'}}</td>
-            <td>{{agenda.horarioFinTurnos | date: 'HH:mm'}}</td>
-            <td>{{agenda.duracionTurno }}</td>
-            <td>
-                <span *ngIf='agendasFeriados === null'>No hay fechas excluidas</span>
-                <div class="row">
-                 <div class="col-2"  *ngFor="let feriados of agenda.fechasExcluidas,let m = index">
-                    <div >
-                        {{feriados | date: 'dd/MM/yyyy'}}
-                    </div>
-                </div>
-               </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-  
+  <plex-title justify titulo="Agenda" class="w-100">
+    <plex-button *ngIf='!mostrar && agendaActual' label="Volver" type="danger" routerLink="/homeAdministracion">
+    </plex-button>
+    <plex-button *ngIf="!agendaActual && !mostrar" type="danger" label="Volver" (click)="mostrarAgendaActual()">
+    </plex-button>
+    <plex-button *ngIf='mostrar' label="Volver" type="danger" (click)="showListar()">
+    </plex-button>
+    <plex-button *ngIf="agendaActual" type="primary" label="Agendas" (click)="mostrarAgendaActual()">
+    </plex-button>
+  </plex-title>
+  <div *ngIf='!mostrar'>
+    <div *ngIf="agendaActual">
+      <app-agenda-form (emitAgenda)='insertar($event)'></app-agenda-form>
     </div>
-    <div *ngIf='mostrar'>
-            <div class="col-12 text-center">
-                    <header>
-                           <div class="page-title">Modificar agenda</div>
-                   </header>
-               </div>
-            <app-agenda-form  [agendaAmodificar]='agendaSelect'></app-agenda-form>
+    <div *ngIf="!agendaActual">
+      <plex-title justify titulo="Agenda actual" size="sm">
+      </plex-title>
+      <ul *ngFor="let agenda of agendas,let i = index">
+        <ng-container>
+          <li justify class="flex-wrap">
+            <div class="mt-4">
+              <h3 class="d-inline mr-4 mt-4 flex-wrap" *ngFor="let dias of agenda.diasHabilitados,let n = index">
+                {{dias.nombre}}</h3>
+              <br>
+              <p>{{agenda.horarioInicioTurnos | date: 'HH:mm'}} | {{agenda.horarioFinTurnos | date: 'HH:mm'}} |
+                {{agenda.duracionTurno}} minutos</p>
+            </div>
+            <div>
+              <plex-badge *ngIf='agendasFeriados === null' type="info">No hay fechas excluidas</plex-badge>
+              <plex-badge class="mr-2" *ngFor="let feriados of agenda.fechasExcluidas,let m = index" type="warning">
+                {{feriados | date: 'dd/MM/yyyy'}}</plex-badge>
+            </div>
+            <div>
+              <plex-button type="warning" size="sm" icon="pencil" (click)="showEditar(agenda)"></plex-button>
+            </div>
+          </li>
+          <hr>
+        </ng-container>
+      </ul>
     </div>
-    </plex-box>
+  </div>
+  <div *ngIf='mostrar'>
+    <plex-title titulo="Modificar agenda" size="sm"></plex-title>
+    <app-agenda-form [agendaAmodificar]='agendaSelect'></app-agenda-form>
+  </div>
 </section>
-<footer>
-    <plex-button *ngIf='mostrar' label="Volver"  type="danger" (click)="showListar()" icon="arrow-left-bold"></plex-button>        
-    <plex-button *ngIf='!mostrar' label="Volver"  type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
-</footer>

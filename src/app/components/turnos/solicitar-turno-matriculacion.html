@@ -3,13 +3,22 @@
     <header justify>
       <plex-title *ngIf="!turnoSeleccionado" titulo="Solicitud de turno para matriculación" size="md"></plex-title>
       <plex-title *ngIf="turnoSeleccionado" titulo="Registro de profesional" size="md"></plex-title>
-      <plex-button label="Volver" type="danger" routerLink="/requisitosMatriculaUniversitaria"></plex-button>
+      <div>
+        <plex-badge *ngIf="turnoSeleccionado" type="success mr-2">
+          Fecha y hora: {{ lblTurno }}.
+        </plex-badge>
+        <plex-button label="Volver" type="danger" routerLink="/requisitosMatriculaUniversitaria"></plex-button>
+      </div>
     </header>
     <div class="row">
       <div class="col-12">
+        <div class="row">
+          <div class="col-lg-12" *ngIf="turnoSeleccionado">
+
+          </div>
+        </div>
         <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
         <app-profesional *ngIf="turnoSeleccionado" (onProfesionalCompleto)="onProfesionalCompleto($event)"></app-profesional>
-
       </div>
     </div>
   </plex-layout-main>

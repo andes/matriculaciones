@@ -1,6 +1,12 @@
 
-.list-group-item{
-    cursor:pointer
+.list-group-item {
+    cursor: pointer;
+    &.active {
+        border: solid 2px #00A8E0 !important;
+        background-color: aliceblue !important;
+        box-sizing: border-box;
+        color: black;
+    }
 }
 
 .btn-primary.disabled, .btn-primary:disabled {
@@ -11,26 +17,6 @@
     position: relative;
     top: 3px;
     left: 1px;
-    // -webkit-animation: jumpInc 1s infinite;
-    // -moz-animation: jumpInc 1s infinite;
-    //   -o-animation: jumpInc 1s infinite;
-    //      animation: jumpInc 1s infinite;
-}
-
-// @-webkit-keyframes jumpInc {
-//     0%   {
-//       margin-left: 0%;
-//       opacity: 0;
-//     }
-//     50%  {
-//       margin-left: 0%;
-//       opacity: 1;
-//     }
-//     100% {
-//       margin-left: 0%;
-//       opacity: 0;
-//     }
-//   }
   
 .contadorBadge{
     padding: 6px;
@@ -87,8 +73,5 @@
     .plex-box>div {
         padding: 0 !important;
     }
-    // .badge {
-    //     color: #333333;
-    //     border: 1px solid rgba(0, 0, 0, 0.69);
-    // }
+    }
 }

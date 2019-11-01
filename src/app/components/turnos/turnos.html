@@ -1,231 +1,187 @@
-<!--<div class="plex-layout">
-    <header>Header</header>-->
-<section *ngIf='!componentPrint'>
-  <div class="row">
-    <div class="col">
-      <plex-box>
-        <header>
-          <div class="row">
-            <div class="col">
-              <div class="page-title">Turnos</div>
-            </div>
-            <div class="col-6 text-right">
-              <plex-button type="primary" label="imprimir turnos" (click)="imprimir()" icon='file-pdf'></plex-button>
-            </div>
-            <!--
-                        <div class="col">
-                            <div class="float-right badge">
-                                <span class=" badge badge-info contadorBadge" *ngIf='solicitudesDeCambio > 0'>
-                                    <strong class="contador">{{solicitudesDeCambio}}</strong>
-                                </span>
+<plex-layout main="{{ main }}">
+  <plex-layout-main *ngIf='!componentPrint'>
+    <plex-title titulo="Turnos">
+      <plex-button type="primary" (click)="imprimir()" icon='file-pdf'></plex-button>
+      <plex-button class="ml-2" label="Volver" type="danger" routerLink="/homeAdministracion">
+      </plex-button>
+    </plex-title>
+    <div class="row">
+      <div class="col-md-3">
+        <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="mySubject.next()"></plex-text>
+      </div>
+      <div class="col-md-3">
+        <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="mySubject.next()"></plex-text>
+      </div>
+      <div class="col-md-3">
+        <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
+      </div>
+      <div class="col-md-3">
+        <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
+                       (change)="mySubject.next();saveFecha()"></plex-datetime>
+      </div>
+    </div>
+    <hr>
+    <!--
+          <div class="col">
+              <div class="float-right badge">
+                  <span class=" badge badge-info contadorBadge" *ngIf='solicitudesDeCambio > 0'>
+                      <strong class="contador">{{solicitudesDeCambio}}</strong>
+                  </span>
 
-                                <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button>
-                            </div>
-                        </div>-->
-          </div>
-          <!-- SEARCH -->
-          <!-- <div [formGroup]="formBuscarTurno">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
-                            </div>
-                            <div class="col-md-3">
-                                <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
-                            </div>
-                            <div class="col-md-3">
-                                <plex-int label="Documento" formControlName="documento" (change)="buscar()"></plex-int>
-                            </div>
-                            <div class="col-md-3">
-
-                                <plex-datetime type="date" label="Fecha desde" formControlName="fecha" (change)="buscar();saveFecha()"></plex-datetime>
-                            </div>
-                        </div>
-                    </div> -->
-          <div>
+                  <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button> 
+              </div>
+          </div>-->
+    <!-- SEARCH -->
+    <!-- <div [formGroup]="formBuscarTurno">
             <div class="row">
-              <div class="col-md-3">
-                <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="mySubject.next()"></plex-text>
-              </div>
-              <div class="col-md-3">
-                <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="mySubject.next()"></plex-text>
-              </div>
-              <div class="col-md-3">
-                <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
-              </div>
-              <div class="col-md-3">
-                <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha" (change)="mySubject.next();saveFecha()"></plex-datetime>
-              </div>
-            </div>
-          </div>
-
-          <br>
-        </header>
-
-        <!-- LIST -->
-        <div class="row" style='max-height: 100%;
-                overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance" [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
-          <div class="col-12" *ngIf="turnos.length === 0" class="alert alert-danger">
-            <i class="mdi mdi-account-alert"></i> No se encontró ningún turno
-          </div>
-          <div class="col-12">
-            <ul class="list-group">
-              <li class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)" [ngClass]="{'active': isSelected(turno)}">
-
-                <div class="row" style="width: 100%">
-                  <div class="col-4">
-                    <h6 class="box-title-elemento">
-                      {{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }}
-                      hs
-                      <br> {{ (turno.profesional ? turno.profesional.apellido + ', ' +
-                                            turno.profesional.nombre
-                                            : '' ) }} |
-                      <small>{{ (turno.profesional ? 'DNI ' + turno.profesional.documento : '')
-                                                }}</small>
-                    </h6>
-                  </div>
-                  <div class="col-3">
-                    <span *ngIf="turno.profesional.fechaNacimiento">
-                      {{turno.profesional.fechaNacimiento | fecha}}
-                      <br> {{turno.profesional | edad}}
-                    </span>
-                    <span *ngIf="!turno.profesional.fechaNacimiento" class="text-danger">
-                      Sin fecha de nacimiento
-                    </span>
-                  </div>
-                  <div class="col-3">
-                    <div *ngFor="let grado of turno.profesional.formacionGrado" class="text-danger">
-                      <h6 *ngIf="grado.profesion?.nombre" [ngClass]="{'badge-white': isSelected(turno)}" class="badge badge-info">
-                        {{grado.profesion.nombre}}
-                      </h6>
-                      <h6 *ngIf="grado.matriculacion?.length" [ngClass]="{'badge-white': isSelected(turno)}" class="badge badge-info">
-                        Matricula n°
-                        {{grado.matriculacion[grado.matriculacion.length -
-                            1].matriculaNumero}}
-                      </h6>
-                      <span *ngIf="grado.matriculacion?.length && !grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo" class="badge badge-danger" [ngClass]="{'badge-white': isSelected(turno)}">
-                        VENCIDA
-                      </span>
-                      <span *ngIf="grado.matriculacion?.length && grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo" class="badge badge-danger" [ngClass]="{'badge-white': isSelected(turno)}">
-                        SUSPENDIDA
-                      </span>
-                    </div>
-                    <div *ngFor="let posgrado of turno.profesional.formacionPosgrado" class="text-danger">
-                      <span *ngIf="posgrado.especialidad?.nombre" class="badge badge-info">
-                        {{posgrado.especialidad.nombre}}
-                      </span>
-                      <span *ngIf="posgrado.matriculacion?.length" class="badge badge-info">
-                        Matricula n°
-                        {{posgrado.matriculacion[posgrado.matriculacion.length -
-                            1].matriculaNumero}}
-                      </span>
-                      <span *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
-                        hoy >= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="badge badge-danger">
-                        VENCIDA
-                      </span>
-                      <span *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
-                        hoy <= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="badge badge-danger">SUSPENDIDA
-                      </span>
-                    </div>
-                  </div>
-                  <div class="col-2">
-                    <h6 class="box-title-elemento badge " [ngClass]="{'badge-white': isSelected(turno), 'badge-info': !isSelected(turno)}">
-                      {{ turno.tipo }}
-                    </h6>
-                    <span *ngIf='turno.sePresento === true;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-success">Presente</span>
-                    <span *ngIf='turno.sePresento === false;' [ngClass]="{'badge-white': isSelected(turno)}" class="text-light  badge badge-danger">Ausente</span>
-                  </div>
-
-
+                <div class="col-md-3">
+                    <plex-text label="Apellido" formControlName="apellido" (change)="buscar()"></plex-text>
                 </div>
+                <div class="col-md-3">
+                    <plex-text label="Nombre" formControlName="nombre" (change)="buscar()"></plex-text>
+                </div>
+                <div class="col-md-3">
+                    <plex-int label="Documento" formControlName="documento" (change)="buscar()"></plex-int>
+                </div>
+                <div class="col-md-3">
 
-              </li>
-            </ul>
-            <!-- <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button" (click)="nextPage()">
-                            <p class="text-center"> Ver más </p>
-                        </div> -->
-          </div>
-        </div>
-
-
-      </plex-box>
+                    <plex-datetime type="date" label="Fecha desde" formControlName="fecha" (change)="buscar();saveFecha()"></plex-datetime>
+                </div>
+            </div>
+        </div> -->
+    <!-- LIST -->
+    <div class="row" style='max-height: 100%;
+                overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
+         [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
+      <div class="col-12" *ngIf="turnos.length === 0" class="alert alert-danger">
+        <i class="mdi mdi-account-alert"></i> No se encontró ningún turno
+      </div>
+      <div class="col-12">
+        <ul class="list-group w-100">
+          <li justify class="list-group-item" *ngFor="let turno of turnos; let i = index;" (click)="showTurno(turno)"
+              [ngClass]="{'active': isSelected(turno)}">
+            <div>
+              <h5 class="mb-0">
+                <b>{{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre : '' ) }}</b>
+              </h5>
+              <p class="text-secondary mb-0">{{ (turno.profesional ? 'DNI ' + turno.profesional.documento : '') }}
+                <span *ngIf="turno.profesional.fechaNacimiento">
+                  {{ turno.profesional.fechaNacimiento | fecha}} {{turno.profesional | edad }}
+                </span>
+                <span *ngIf="!turno.profesional.fechaNacimiento" class="text-danger">
+                  Sin fecha de nacimiento
+                </span>
+              </p>
+              <p class="text-primary">{{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha | date:'hh:mm' }} hs</p>
+            </div>
+            <div *ngFor="let grado of turno.profesional.formacionGrado">
+              <plex-badge *ngIf="grado.profesion?.nombre" class="ml-2" type="info">
+                {{grado.profesion.nombre}}
+              </plex-badge>
+              <plex-badge *ngIf="grado.matriculacion?.length" class="ml-2" type="info">
+                Matricula n°
+                {{grado.matriculacion[grado.matriculacion.length -
+                              1].matriculaNumero}}
+              </plex-badge>
+              <plex-badge *ngIf="grado.matriculacion?.length && !grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo"
+                          class="ml-2" type="danger">
+                VENCIDA
+              </plex-badge>
+              <plex-badge *ngIf="grado.matriculacion?.length && grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo"
+                          class="ml-2" type="danger">
+                SUSPENDIDA
+              </plex-badge>
+              <ng-container *ngFor="let posgrado of turno.profesional.formacionPosgrado">
+                <plex-badge *ngIf="posgrado.especialidad?.nombre" class="ml-2" type="info">
+                  {{posgrado.especialidad.nombre}}
+                </plex-badge>
+                <plex-badge *ngIf="posgrado.matriculacion?.length" class="ml-2" type="info">
+                  Matricula n°
+                  {{posgrado.matriculacion[posgrado.matriculacion.length -
+                        1].matriculaNumero}}
+                </plex-badge>
+                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre && 
+                      hoy >= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="ml-2"
+                            type="danger">
+                  VENCIDA
+                </plex-badge>
+                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre && 
+                    hoy <= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="ml-2" type="danger">
+                  SUSPENDIDA
+                </plex-badge>
+              </ng-container>
+              <plex-badge class="ml-2" type="info">{{ turno.tipo }}</plex-badge>
+              <plex-badge *ngIf='turno.sePresento === true;' class="ml-2" type="success">Presente</plex-badge>
+              <plex-badge *ngIf='turno.sePresento === false;' class="ml-2" type="warning">Ausente</plex-badge>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
-
-    <div class="col-4" *ngIf="turnoElegido">
-      <plex-box>
-        <header>
-          <button class="float-right btn btn-danger" (click)="cerrarDetalleTurno()">
-            <i class="mdi mdi-window-close"></i>
-          </button>
-          <legend>Detalle del Turno</legend>
-
-        </header>
-
+    <!-- <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button" (click)="nextPage()">
+            <p class="text-center"> Ver más </p>
+        </div> -->
+    <section *ngIf='componentPrint'>
+      <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
+      </app-listado-turnos-pdf>
+    </section>
+  </plex-layout-main>
+  <plex-layout-sidebar *ngIf="turnoElegido">
+    <plex-title titulo="Detalle del Turno" size="sm">
+      <plex-button type="danger" icon="close" (click)="cerrarDetalleTurno()">
+      </plex-button>
+    </plex-title>
+    <div class="row">
+      <div class="col-12">
         <div class="row">
-          <div class="col-sm-12">
-
-            <div class="row">
-              <div class="col-md-12">
-                <label>Fecha y hora</label>
-                <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
-                <label>Tipo de turno</label>
-                <h6 class="text-light  badge badge-info">{{ turnoElegido.tipo === 'matriculacion' ?
-                                    'Matriculación' : 'Renovación' }}</h6>
-                <br>
-                <span *ngIf='turnoElegido.sePresento === true;' class="text-light  badge badge-success">Presente</span>
-                <span *ngIf='turnoElegido.sePresento === false;' class="text-light  badge badge-danger">Ausente</span>
-                <plex-button type="success" label="Se presentó" class="float-right" (click)="cambiarEstado(true)" *ngIf="turnoElegido.sePresento === false"></plex-button>
-                <plex-button type="success" label="Ausente" class="float-right" (click)="cambiarEstado(false)" *ngIf="turnoElegido.sePresento === true"></plex-button>
-                <plex-button type="danger" label="Anular turno" class="float-right" (click)="anularTurno()" *ngIf="turnoElegido.sePresento === false && !turnoElegido.anulado"></plex-button>
-              </div>
+          <div justify class="col-md-12 flex-wrap">
+            <div>
+              <label>Apellido y nombre</label>
+              <h5 class="mt-2"><b>{{turnoElegido.profesional.apellido + ', '}} </b>{{turnoElegido.profesional.nombre}}
+              </h5>
+              <p class="text-secondary"> {{'DNI ' + turnoElegido.profesional.documento }}</p>
             </div>
-            <hr>
-            <div class="row">
-              <div class="col-md-12 ">
-                <label>Apellido y nombre</label>
-                <h5>
-                  <strong>{{turnoElegido.profesional.apellido + ', '}} </strong>{{turnoElegido.profesional.nombre}}</h5>
-                <h6 class="text-light"> {{'DNI ' + turnoElegido.profesional.documento }}</h6>
-                <!--<div class="nombre-profesional">
-                                        <span style="font-weight: bold">{{turnoElegido.profesional.apellido + ', '}}</span>{{turnoElegido.profesional.nombre}}
-                                    </div>
-                                    <div class="datos-profesional">
-                                        {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documento }}<br />
-                                    </div>-->
-                <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.formacionGrado.matriculacion.matriculaNumero">
-                                        <span style="margin-left: 5px;">Renovación Vencida</span>
-                                    </span> -->
-                <!--<a href="/profesional" class="btn btn-primary">Ver Profesional</a>-->
+            <!--<div class="nombre-profesional">
+                  <span style="font-weight: bold">{{turnoElegido.profesional.apellido + ', '}}</span>{{turnoElegido.profesional.nombre}}
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-12">
-                <plex-button type="primary" icon='mdi mdi-account' label="Ver Profesional" class="float-right" [disabled]="turnoElegido.sePresento === false" (click)="showProfesional(turnoElegido)"></plex-button>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-md-12">
-                <!-- <plex-button type="primary" label="Generar Comprobante de Turno" class="pull-right" [disabled]="turnoElegido.sePresento"
-                                    (click)="generarComprobante(turnoElegido)"></plex-button> -->
-              </div>
-            </div>
-
-
+              <div class="datos-profesional">
+                  {{turnoElegido.profesional.edad + ' años'}} | {{'DNI ' + turnoElegido.profesional.documento }}<br />
+              </div>-->
+            <!-- <span class="mdi mdi-big mdi-danger mdi-alert text-danger" *ngIf="turnoElegido.profesional.formacionGrado.matriculacion.matriculaNumero">
+                                            <span style="margin-left: 5px;">Renovación Vencida</span>
+                                        </span> -->
+            <!--<a href="/profesional" class="btn btn-primary">Ver Profesional</a>-->
+            <plex-button type="primary" icon='eye' [disabled]="turnoElegido.sePresento === false"
+                         (click)="showProfesional(turnoElegido)">
+            </plex-button>
           </div>
         </div>
-
-      </plex-box>
+        <hr>
+        <div justify class="flex-wrap">
+          <div>
+            <label>Fecha y hora</label>
+            <h5>{{ turnoElegido.fecha | date: 'dd/MM/yyyy hh:mm'}} hs</h5>
+          </div>
+          <div>
+            <label>Tipo de turno</label>
+            <plex-badge type="info">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}
+            </plex-badge>
+            <plex-badge *ngIf='turnoElegido.sePresento === true;' type="success" class="ml-2">Presente</plex-badge>
+            <plex-badge *ngIf='turnoElegido.sePresento === false;' type="warning" class="ml-2">Ausente</plex-badge>
+          </div>
+          <div justify class="mt-4 w-100">
+            <plex-button type="danger" label="Anular turno" (click)="anularTurno()"
+                         *ngIf="turnoElegido.sePresento === false && !turnoElegido.anulado"></plex-button>
+            <plex-button type="success" label="Se presentó" (click)="cambiarEstado(true)"
+                         *ngIf="turnoElegido.sePresento === false"></plex-button>
+            <plex-button type="warning" label="Ausente" (click)="cambiarEstado(false)"
+                         *ngIf="turnoElegido.sePresento === true"></plex-button>
+          </div>
+        </div>
+        <hr>
+        <!-- <plex-button type="primary" label="Generar Comprobante de Turno" class="pull-right" [disabled]="turnoElegido.sePresento"
+                                    (click)="generarComprobante(turnoElegido)"></plex-button> -->
+      </div>
     </div>
-  </div>
-</section>
-
-<section *ngIf='componentPrint'>
-  <plex-box>
-    <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
-    </app-listado-turnos-pdf>
-  </plex-box>
-</section>
-<footer>
-  <plex-button label="Volver" type="danger" routerLink="/homeAdministracion" icon="arrow-left-bold"></plex-button>
-</footer>
-<!--</div>-->
+  </plex-layout-sidebar>
+</plex-layout>

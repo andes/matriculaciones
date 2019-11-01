@@ -51,6 +51,7 @@ export class TurnosComponent implements OnInit {
         fechaHoy: new Date()
     };
 
+    public main = 12;
     public componentPrint = false;
     turnosParaListado: any;
     constructor(private _turnoService: TurnoService,
@@ -107,6 +108,7 @@ export class TurnosComponent implements OnInit {
     }
 
     showTurno(turno: any) {
+        this.main = 8;
         this.muestraAusente = false;
         this.turnoElegido = turno;
         if (moment(this.hoy).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')) {
@@ -176,6 +178,7 @@ export class TurnosComponent implements OnInit {
     }
 
     cerrarDetalleTurno() {
+        this.main = 12;
         this.turnoElegido = null;
     }
 

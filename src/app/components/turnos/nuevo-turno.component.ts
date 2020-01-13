@@ -29,8 +29,8 @@ export class NuevoTurnoComponent implements AfterViewInit {
   private format = 'DD/MM/YYYY';
   private agendaConfig: IAgendaMatriculaciones;
   private cantidadTurnosPorHora: number;
-  horariosDisponibles: any[] = [];
-  private fechaElegida: Date;
+  private horariosDisponibles: any[] = [];
+  public fechaElegida: Date;
   private fechaConsulta: Date;
   public turnoElegido: boolean;
   private lblTurno: string;
@@ -63,6 +63,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
       // Obtengo la configuración de la agenda.
       this.getConfiguracionAgenda();
     }
+
   }
 
   /**
@@ -104,6 +105,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
       this.fechaConsulta = new Date();
       this.getPrimerDia();
     });
+
   }
 
   private buildHorariosDisponibles() {
@@ -225,16 +227,11 @@ export class NuevoTurnoComponent implements AfterViewInit {
       datesDisabled: this.diasDeshabilitados(countTurnosXDia), // Fechas deshabilitados.
       weekStart: 0, // La semana empieza los lunes.
       daysOfWeekDisabled: this.getDaysOfWeekDisabled(), // días de la semana deshabilitados (lunes, martes, etc.).
-      startDate: startDate,
       defaultViewDate: startDate,
       language: 'es',
       todayHighlight: true
     };
     this.$div.datepicker(this.options);
-    this.$div.datepicker('setDate', startDate);
-
-    this.sinTurnos = false;
-    this.onChangeFecha({ date: startDate });
   }
   private getPrimerDia(fecha?) {
     let hayTurnos = false;

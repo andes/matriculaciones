@@ -1,6 +1,6 @@
 
 
 export interface IPais {
-    id: String;
-    nombre: String;
+  id: String;
+  nombre: String;
 }

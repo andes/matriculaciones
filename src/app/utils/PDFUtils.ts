@@ -1,6 +1,8 @@
+import { Injectable } from '@angular/core';
 
 const jsPDF = require('jspdf');
 
+@Injectable()
 export class PDFUtils {
 
     public generarCredencial(profesional: any, grado: any, fotoProfesional, firmaProfesional, firmaAdmin, profesion, copia, fechaImpresion): any {

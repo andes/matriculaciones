@@ -1,20 +1,18 @@
-import { Injectable } from '@angular/core';
-import { BaseService } from './base.service';
-import { Observable } from 'rxjs/Rx';
 import { Server } from '@andes/shared';
+import { Observable } from 'rxjs';
+import { IPais } from './../interfaces/IPais';
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class PaisService {
-    private paisesURL = '/core/tm/paises';  // URL to web api
 
-    constructor(private server: Server) { }
+  private paisUrl = '/core/tm/paises';  // URL to web api
 
-    getPaises(id?): Observable<any[]> {
-        if (id) {
-            return this.server.get(this.paisesURL + '/' + id);
-        } else {
-            return this.server.get(this.paisesURL);
-        }
+  constructor(private server: Server) { }
 
-    }
+  getPaises(params: any): Observable<IPais[]> {
+    return this.server.get(this.paisUrl, { params: params, showError: true });
+  }
+
 }

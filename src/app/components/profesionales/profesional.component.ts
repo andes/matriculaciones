@@ -60,6 +60,8 @@ import {
 import { Auth } from '@andes/auth';
 import { Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Component({
   selector: 'app-profesional',
@@ -203,10 +205,12 @@ export class ProfesionalComponent implements OnInit {
 
   ngOnInit() {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
+    this._provinciaService.get({}).subscribe(rta => {
+      this.provincias = rta;
+    });
     this.sexos = enumerados.getObjSexos();
     this.tipoComunicacion = enumerados.getObjTipoComunicacion();
     this.tipoDocumento = enumerados.getObjTipoDoc();
-    this.loadProvincias();
     const cargaLocalidad = {
       id: null
     };
@@ -409,147 +413,70 @@ export class ProfesionalComponent implements OnInit {
 
 
   // Filtrado de combos
-  loadPaises() {
-    this._paisService.getPaises().subscribe(resp => {
-      this.paises = resp;
-    });
+  loadPaises(event) {
+    this._paisService.getPaises({}).subscribe(event.callback);
   }
 
-  loadProvincias(pais?) {
-    let paisValor = null;
-    if (pais) {
-      paisValor = pais.value.id;
+  loadProvincias(event, pais) {
+    if (pais && pais.id) {
+      this._provinciaService.get({
+        pais: pais.id
+      }).subscribe(event.callback);
     }
-    this._provinciaService.get({
-      'pais': paisValor
-    })
-      .subscribe(resp => {
-        this.provincias = resp;
+  }
+  loadLocalidades(event, provincia) {
+    this._localidadService.get({ 'provincia': provincia.value.id }).subscribe(event.callback);
+  }
+
+  loadLocalidadesLegal(provincia) {
+    if (provincia && provincia.id) {
+      this._localidadService.getXProvincia(provincia.id).subscribe(result => {
+        this.localidadesLegal = result;
+        this.profesional.domicilios[1].ubicacion.localidad = null;
       });
-  }
-
-  loadLocalidadesLegal(provincia?) {
-    if ((provincia && provincia.query) || (provincia && provincia.value)) {
-      this._localidadService.getXProvincia(provincia.value.codigo)
-        .subscribe(resp => {
-          this.localidadesLegal = resp;
-          // provincia.callback(resp);
-        });
-    } else {
-      if (this.profesional.domicilios[1].ubicacion.provincia) {
-        this._provinciaService.get({ id: this.profesional.domicilios[1].ubicacion.provincia.id })
-          .subscribe((resp: any) => {
-            if (resp) {
-
-
-              let localidadValor;
-              if (provincia && provincia.value) {
-                localidadValor = provincia.value._id;
-              } else {
-                localidadValor = resp.codigo;
-              }
-
-              this._localidadService.getXProvincia(localidadValor)
-                .subscribe(resp1 => {
-                  this.localidadesLegal = resp1;
-                  // provincia.callback(resp1);
-                });
-            }
-          });
-      } else {
-
-        this.localidadesLegal = [];
-        // provincia.callback([]);
-
-      }
-
-    }
-
-  }
-  loadLocalidadesReal(provincia?) {
-    if ((provincia && provincia.query) || (provincia && provincia.value)) {
-      this._localidadService.getXProvincia(provincia.value.codigo)
-        .subscribe(resp => {
-          this.localidadesReal = resp;
-
-        });
-    } else {
-      if (this.profesional.domicilios[0].ubicacion.provincia) {
-        this._provinciaService.get({ id: this.profesional.domicilios[0].ubicacion.provincia.id })
-          .subscribe((resp: any) => {
-            if (resp) {
-
-              let localidadValor;
-              if (provincia && provincia.value) {
-                localidadValor = provincia.value._id;
-              } else {
-                localidadValor = resp.codigo;
-              }
-              this._localidadService.getXProvincia(localidadValor)
-                .subscribe(resp2 => {
-                  this.localidadesReal = resp2;
-
-                });
-
-            }
-          });
-      } else {
-
-        this.localidadesReal = [];
-
-
-      }
-
-    }
-
-  }
-
-  loadLocalidadesProfesional(provincia?) {
-    if ((provincia && provincia.query) || (provincia && provincia.value)) {
-      this._localidadService.getXProvincia(provincia.value.codigo)
-        .subscribe(resp => {
-          this.localidadesProfesional = resp;
-
-        });
-    } else {
-      if (this.profesional.domicilios[2].ubicacion.provincia) {
-        this._provinciaService.get({ id: this.profesional.domicilios[2].ubicacion.provincia.id })
-          .subscribe((resp: any) => {
-            if (resp) {
-
-              let localidadValor;
-              if (provincia && provincia.value) {
-                localidadValor = provincia.value._id;
-              } else {
-                localidadValor = resp.codigo;
-              }
-              this._localidadService.getXProvincia(localidadValor)
-                .subscribe(resp3 => {
-                  this.localidadesProfesional = resp3;
-
-                });
-            }
-          });
-      } else {
-        this.localidadesProfesional = [];
-      }
-
     }
   }
+
+  loadLocalidadesReal(provincia) {
+    if (provincia && provincia.id) {
+      this._localidadService.getXProvincia(provincia.id).subscribe(result => {
+        this.localidadesReal = result;
+        this.profesional.domicilios[0].ubicacion.localidad = null;
+      });
+    }
+  }
+
+  changeProvActualReal(event) {
+    if (event.value) {
+      this.loadLocalidadesReal(this.profesional.domicilios[0].ubicacion.provincia);
+    }
+  }
+
+  loadLocalidadesProfesional(provincia) {
+    if (provincia && provincia.id) {
+      this._localidadService.getXProvincia(provincia.id).subscribe(result => {
+        this.localidadesProfesional = result;
+        this.profesional.domicilios[2].ubicacion.localidad = null;
+
+      });
+    }
+  }
+
+
 
   cp(event, i) {
     this.profesional.domicilios[i].codigoPostal = event.value.codigoPostal;
   }
   loadProfesiones(event) {
-    this._profesionService.getProfesiones().subscribe(event.callback);
+    this._profesionService.getProfesiones().pipe(catchError(() => of(null))).subscribe(event.callback);
   }
 
   loadEntidadesFormadoras(event) {
-    this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
+    this._entidadFormadoraService.getEntidadesFormadoras().pipe(catchError(() => of(null))).subscribe(event.callback);
   }
 
   loadSexos(event) {
-    this._sexoService.getSexos().subscribe(event.callback);
+    this._sexoService.getSexos().pipe(catchError(() => of(null))).subscribe(event.callback);
   }
   addContacto() {
     const nuevoContacto = Object.assign({}, {
@@ -574,13 +501,13 @@ export class ProfesionalComponent implements OnInit {
     this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[1].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
     this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
-    this.loadLocalidadesLegal();
+    this.loadLocalidadesLegal(this.profesional.domicilios[1].ubicacion.provincia);
     this.profesional.domicilios[2].valor = this.profesional.domicilios[0].valor;
     this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;
     this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
     this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
-    this.loadLocalidadesProfesional();
+    this.loadLocalidadesProfesional(this.profesional.domicilios[2].ubicacion.provincia);
   }
 
   actualizar($event) {

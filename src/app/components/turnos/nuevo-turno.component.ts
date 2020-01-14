@@ -46,8 +46,8 @@ export class NuevoTurnoComponent implements AfterViewInit {
 
   @Output() onTurnoSeleccionado = new EventEmitter<Date>();
   @Input() private tipoTurno: Enums.TipoTurno;
-  @ViewChild('input') input: ElementRef;
-  @ViewChild('div') div: ElementRef;
+  @ViewChild('input', { static: false }) input: ElementRef;
+  @ViewChild('div', { static: false }) div: ElementRef;
 
   constructor(private _element: ElementRef,
     private _turnoService: TurnoService,

@@ -6,7 +6,7 @@
           <div class="row">
             <div class="col-2">
               <app-foto-general (showFoto)="mostrarFoto($event)" [profesional]="profesional" [img64]="img64"></app-foto-general>
-            </div>
+          </div>
             <div class="col-9 margenFoto">
               <app-header-profesional [profesional]="profesional"></app-header-profesional>
             </div>
@@ -15,11 +15,6 @@
                 <i class="mdi mdi-pencil"></i>
               </button>
             </div>
-            <!-- <div class="col-1 ">
-                            <button class="float-right btn btn-success" (click)="pdf()">
-                                <i class="mdi mdi-file-pdf-box"></i>
-                            </button>
-                        </div> -->
           </div>
 
         </header>
@@ -58,16 +53,6 @@
 
             <!-- Foto -->
             <plex-tab label="Foto">
-              <!-- <div class="row">
-                                <div class="col-12 text-center">
-                                    <div class="form-group">
-                                        <label style="font-weight: bold">Foto Actual</label>
-
-                                        <app-foto-general [profesional]="profesional" [img64]="img64"></app-foto-general>
-
-                                    </div>
-                                </div>
-                            </div> -->
 
               <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)" (previewImg)="previewImg($event)"></app-foto-profesional>
             </plex-tab>
@@ -90,55 +75,7 @@
 
       </plex-box>
     </div>
-    <!-- <div class="col" *ngIf='mostrarGrado'>
-        <plex-box>
-            <div class="row">
-                <div class="col-12">
-                    Se requiere la aprobación par que se le asigne un número de matrícula.
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <plex-button label="Designar" type="danger" (click)="aprobarProfesional()" class="pull-right"></plex-button>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-12">
-                    Imprmir un certificado de ética.
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <plex-button label="Imprimir" type="primary" [disabled]="true" class="pull-right"></plex-button>                    
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-12">
-                    Anular matrícula.
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <plex-button label="Anular" type="danger" (click)="anularMatricula()" class="pull-right"></plex-button>
-                </div>
-            </div>
-            <hr>
-            <div class="row">
-                <div class="col-12">
-                    Generar Credencial
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <plex-button label="Generar" type="primary" (click)="generarCredencial()" class="pull-right" [disabled]="!profesional.foto || !profesional.formacionGrado.matriculaNumero || !(profesional.firmas && profesional.firmas.length > 0)"></plex-button>
-                </div>
-            </div>
-        </plex-box>
-        </div> -->
     <div class="col-4" *ngIf="mostrar">
-
       <app-formacion-grado-detalle [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" [index]="indexFormacionGradoSelected" [profesional]="profesional" (cerrarDetalle)='cerrar(true)' (matriculacion)="matricularProfesional($event)"></app-formacion-grado-detalle>
     </div>
     <div class="col-4" *ngIf="mostrarGrado">
@@ -155,5 +92,4 @@
 
   <plex-button type="danger" *ngIf="flag == false" label="volver" (click)="volverProfesional()" icon="arrow-left-bold"></plex-button>
   <plex-button type="danger" *ngIf="flag == true" label="volver" (click)="volver()" icon="arrow-left-bold"></plex-button>
-  <!-- <plex-button type="danger" *ngIf="flag == true" label="Ir a listado profesionales" (click)="volverP()" icon="arrow-left-bold"></plex-button> -->
 </footer>

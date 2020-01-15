@@ -1,7 +1,13 @@
 <plex-layout main="{{ main }}">
+  <plex-layout-main *ngIf='componentPrint'>
+    <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
+    </app-listado-turnos-pdf>
+  </plex-layout-main>
   <plex-layout-main *ngIf='!componentPrint'>
     <plex-title titulo="Turnos">
-      <plex-button type="primary" (click)="imprimir()" icon='file-pdf'></plex-button>
+      <plex-button *ngIf="turnosDelDia.length > 0" type="primary" (click)="imprimir()" icon='file-pdf'
+                   [label]="lblTurnos">
+      </plex-button>
       <plex-button class="ml-2" label="Volver" type="danger" routerLink="/homeAdministracion">
       </plex-button>
     </plex-title>
@@ -28,7 +34,7 @@
                       <strong class="contador">{{solicitudesDeCambio}}</strong>
                   </span>
 
-                  <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button> 
+                  <plex-button type="primary " label='Cambio de DNI' routerLink="/listadoCambioDni"></plex-button>
               </div>
           </div>-->
     <!-- SEARCH -->
@@ -100,12 +106,12 @@
                   {{posgrado.matriculacion[posgrado.matriculacion.length -
                         1].matriculaNumero}}
                 </plex-badge>
-                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre && 
+                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
                       hoy >= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="ml-2"
                             type="danger">
                   VENCIDA
                 </plex-badge>
-                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre && 
+                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
                     hoy <= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="ml-2" type="danger">
                   SUSPENDIDA
                 </plex-badge>
@@ -121,10 +127,7 @@
     <!-- <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button" (click)="nextPage()">
             <p class="text-center"> Ver más </p>
         </div> -->
-    <section *ngIf='componentPrint'>
-      <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
-      </app-listado-turnos-pdf>
-    </section>
+
   </plex-layout-main>
   <plex-layout-sidebar *ngIf="turnoElegido">
     <plex-title titulo="Detalle del Turno" size="sm">

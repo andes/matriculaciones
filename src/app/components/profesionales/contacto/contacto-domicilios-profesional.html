@@ -1,89 +1,38 @@
-<plex-box>
-
-    <div class="row ">
-        <div class="col-12 text-center">
-            <legend class="info-subtitle">DOMICILIOS</legend>
-
-        </div>
+<div *ngFor="let domicilio of profesional.domicilios;" class="mt-3">
+  <plex-title titulo="Domicilio {{domicilio.tipo}}" size="sm">
+  </plex-title>
+  <div class="row">
+    <div class="col-4">
+      <label>Dirección</label>
+      <div>{{ domicilio?.valor }}</div>
     </div>
-    <div *ngFor="let domicilio of profesional.domicilios;">
-        <div >
-            <br>
-            <header>
-                <legend class="info-subtitle">Domicilio {{domicilio.tipo}}</legend>
-            </header>
-            <div class="row">
-                <div class="col-4">
-                    <label>Dirección</label>
-                    <div>{{ domicilio?.valor }}</div>
-                </div>
-                <div class="col-4">
-                    <label>C.P.</label>
-                    <div>{{ domicilio?.codigoPostal }}</div>
-                </div>
-                <div class="col-4">
-                    <label>Localidad</label>
-                    <div>{{ domicilio.ubicacion?.localidad?.nombre }}</div>
-                </div>
-            </div>
-            <div class="row">
-
-                <div class="col-4">
-                    <label>Provincia</label>
-                    <div>{{ domicilio.ubicacion?.provincia?.nombre }}</div>
-                </div>
-                <div class="col-4">
-                    <label>País</label>
-                    <div>{{ domicilio.ubicacion?.pais?.nombre }}</div>
-                </div>
-            </div>
-        </div>
+    <div class="col-4">
+      <label>C.P.</label>
+      <div>{{ domicilio?.codigoPostal }}</div>
     </div>
-    <br>
-    <br>
-    <div class="row ">
-        <div class="col-12 text-center">
-            <legend class="info-subtitle">CONTACTOS</legend>
-
-        </div>
+    <div class="col-4">
+      <label>Localidad</label>
+      <div>{{ domicilio.ubicacion?.localidad?.nombre }}</div>
     </div>
-    <div>
-        <div class="row">
-            <div class="col-md-4" *ngFor="let contacto of profesional.contactos; let i = index">
-                <label>{{ contacto.tipo}}</label>
-                <div>{{ contacto.valor }}</div>
+  </div>
+  <div class="row">
 
-            </div>
-        </div>
+    <div class="col-4">
+      <label>Provincia</label>
+      <div>{{ domicilio.ubicacion?.provincia?.nombre }}</div>
     </div>
-</plex-box>
-
-
-<!--
-
-<plex-box>   
-<fieldset *ngFor="let domicilio of profesional.domicilios; let i = index;">
-    <legend class="info-subtitle">Domicilio {{domicilio.tipo}}</legend>
-    <div class="row">
-        <div class="col-8">
-            <label>Dirección</label> <div>{{ domicilio.valor }}</div>
-        </div>
-        <div class="col-4">
-            <label>C.P.</label> <div>{{ domicilio.codigoPostal }}</div>
-        </div>
+    <div class="col-4">
+      <label>País</label>
+      <div>{{ domicilio.ubicacion?.pais?.nombre }}</div>
     </div>
-    <div class="row">
-        <div class="col-4">
-            <label>Localidad</label> <div>{{ domicilio.ubicacion.localidad.nombre }}</div>
-        </div>
-        <div class="col-4">
-            <label>Provincia</label> <div>{{ domicilio.ubicacion.provincia.nombre }}</div>
-        </div>
-        <div class="col-4">
-            <label>País</label> <div>{{ domicilio.ubicacion.pais.nombre }}</div>
-        </div>
-    </div>
-    <hr *ngIf="i !== profesional.domicilios.length - 1">
-</fieldset>
-</plex-box>
--->
+  </div>
+</div>
+<br>
+<plex-title titulo="Contactos" size="sm" class="mt-3">
+</plex-title>
+<div class="row">
+  <div class="col-md-4" *ngFor="let contacto of profesional.contactos; let i = index">
+    <label>{{ contacto.tipo}}</label>
+    <div>{{ contacto.valor }}</div>
+  </div>
+</div>

@@ -1,41 +1,21 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Plex } from '@andes/plex/src/lib/core/service';
-// Settings
-import { AppSettings } from './../../app.settings';
 import { Location } from '@angular/common';
 // Utils
 import { PDFUtils } from './../../utils/PDFUtils';
-
-// Enums
-import {
-  getEnumAsObjects,
-  EstadoCivil,
-  TipoContacto,
-  TipoDomicilio
-} from './../../utils/enumerados';
 import { FotoGeneralComponent } from './foto-general.component';
 // Services
-import { PaisService } from './../../services/pais.service';
-import { ProvinciaService } from './../../services/provincia.service';
-import { LocalidadService } from './../../services/localidad.service';
-import { ProfesionService } from './../../services/profesion.service';
 import { ProfesionalService } from './../../services/profesional.service';
-import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
-import { SexoService } from './../../services/sexo.service';
 import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
-import { DataService } from './../../services/data.service';
 
 // Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
 import { Auth } from '@andes/auth';
-import { constants } from 'fs';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-
 
 const jsPDF = require('jspdf');
 
@@ -43,8 +23,8 @@ const jsPDF = require('jspdf');
   selector: 'app-detalle-profesional',
   templateUrl: 'detalle-profesional.html',
   styles: ['.margenFoto { padding-bottom: 1%; }']
-
 })
+
 export class DetalleProfesionalComponent implements OnInit {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
   public formSancion: FormGroup;
@@ -378,8 +358,6 @@ export class DetalleProfesionalComponent implements OnInit {
     // } else {
     //     this.mostrar = true;
     // }
-
-
   }
 
   cerrar(grado) {
@@ -395,9 +373,7 @@ export class DetalleProfesionalComponent implements OnInit {
     this.editable = true;
   }
 
-
   habilitaPosgrado() {
-
     const res = this.profesional.formacionGrado.find(p => p.profesion.codigo === 1 || p.profesion.codigo === 2);
     return res;
   }

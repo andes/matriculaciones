@@ -1,176 +1,140 @@
-<plex-box type="invert">
-    <header>
-        <div class="row">
-            <div class="col">
-                <h3 class="float-left">{{formacion.profesion.nombre}} </h3>
-                <div class="btn-group float-right" *ngIf='formacion.papelesVerificados'>
-                    <!-- <plex-button type="success" icon="credit-card" (click)="generarCredencial()"></plex-button> -->
-                    <plex-button title="Mantener el mismo numero de matricula" *ngIf='formacion.matriculacion && formacion.matriculado === false'
-                        type="success" icon="equal" (click)="matricularProfesional(formacion,true)"></plex-button>
-                    <!-- <plex-tooltip text="Asignar número de matrícula" position="right">-->
-                    <plex-button type="primary" icon="mdi mdi-plus" title="Agregar nueva matricula" *ngIf=' this.profesional.formacionGrado[index].matriculado === false'
-                        (click)="matricularProfesional(formacion,false)"></plex-button>
-                    <!--</plex-tooltip>-->
+<plex-title titulo="{{formacion.profesion.nombre}}" size="lg">
+  <plex-button title="Mantener el mismo numero de matricula"
+               *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === false'
+               type="success" icon="equal" (click)="matricularProfesional(formacion,true)"></plex-button>
+  <plex-button type="primary" icon="mdi mdi-plus" title="Agregar nueva matricula"
+               *ngIf='formacion.papelesVerificados && this.profesional.formacionGrado[index].matriculado === false'
+               (click)="matricularProfesional(formacion,false)"></plex-button>
+  <plex-button title="Renovar antes de la fecha del vencimiento" type="warning"
+               *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
+               icon="mdi mdi-calendar-check" (click)="renovarAntesVencimiento()"></plex-button>
+  <plex-button type="danger" title="Anular matricula"
+               *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
+               [disabled]="!motivoBaja" icon="mdi mdi-block-helper" (click)="darDeBaja()"></plex-button>
+  <plex-button title="Papeles verificados" *ngIf='formacion.matriculacion && !formacion.papelesVerificados && formacion.renovacion === true && esSupervisor '
+               type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
 
-                    <plex-button  title="Renovar antes de la fecha del vencimiento" type="warning" *ngIf='formacion.matriculacion && formacion.matriculado === true' icon="mdi mdi-calendar-check"
-                        (click)="renovarAntesVencimiento()"></plex-button>
-                    <plex-button type="danger" *ngIf='formacion.matriculacion && formacion.matriculado === true' [disabled]="!motivoBaja" icon="mdi mdi-block-helper"
-                        (click)="darDeBaja()"></plex-button>
+  <plex-button title="Papeles verificados" *ngIf='!profesional.formacionGrado[index].matriculacion && !profesional.formacionGrado[index].papelesVerificados && esSupervisor'
+               type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
 
-                </div>
-                <div class="btn-group float-right" *ngIf='formacion.matriculacion && !formacion.papelesVerificados && formacion.renovacion === true && esSupervisor '>
-                    <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
-                </div>
-                <div class="btn-group float-right" *ngIf='!profesional.formacionGrado[index].matriculacion && !profesional.formacionGrado[index].papelesVerificados && esSupervisor'>
-                    <plex-button type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
-                </div>
-                <div *ngIf='formacion.matriculacion'>
-                    <plex-button type="success" class="btn-group float-right" *ngIf='formacion.matriculado === false && formacion.papelesVerificados === false && formacion.renovacion === false'
-                        label='Renovar' (click)="renovar()"></plex-button>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="row">
-        <div class="col-12">
-            <div class="row" *ngIf="formacion.matriculacion && formacion.matriculacion.length > 0">
-                <div class="col-12 text-center">
-                    <div class="form-group badge badge-white ">
-                        <label>
-                            <strong>Ultima matrícula</strong>
-                        </label>
-                        <div>
-                            <strong>{{ formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero }}</strong>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <plex-button title="Renovar" type="success" class="btn-group float-right"
+               *ngIf='formacion.matriculacion && formacion.matriculado === false && formacion.papelesVerificados === false && formacion.renovacion === false'
+               label='Renovar' (click)="renovar()"></plex-button>
+</plex-title>
+<div class="row" *ngIf="formacion.matriculacion && formacion.matriculacion.length > 0">
+  <div class="col-12">
+    <plex-badge type="success">Ultima matrícula
+      <strong>{{ formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero }}</strong></plex-badge>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <div class="form-group" *ngIf='!edit'>
+      <label>
+        <strong>Título</strong>
+      </label>
+      <div>{{ formacion.titulo }}</div>
+    </div>
+    <div class="form-group" *ngIf='edit'>
+      <plex-text label="Título" [(ngModel)]="formacion.titulo" name='titulo' [required]="true"></plex-text>
+      <plex-button type="success" icon="mdi mdi-check" (click)='actualizar();edit = false'></plex-button>
 
-            <div class="row">
-                <div class="col-6">
-                    <div class="form-group" *ngIf='!edit'>
-                        <label>
-                            <strong>Título</strong>
-                        </label>
-                        <div>{{ formacion.titulo }}</div>
-                    </div>
-                    <div class="form-group" *ngIf='edit'>
-                        <plex-text label="Título" [(ngModel)]="formacion.titulo" name='titulo' [required]="true"></plex-text>
-                        <plex-button type="success" icon="mdi mdi-check" (click)='actualizar();edit = false'></plex-button>
-
-                    </div>
-                </div>
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>
-                            <strong>Entidad Formadora</strong>
-                        </label>
-                        <div>{{ formacion.entidadFormadora?.nombre }}</div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <!-- <div class="col-6">
-                    <div class="form-group">
-                        <label>
-                            <strong>Fecha Título</strong>
-                        </label>
-                        <div>{{ formacion.fechaTitulo | date: 'dd/MM/yyyy'}}</div>
-                    </div>
-                </div> -->
-                <div class="col-6">
-                    <div class="form-group">
-                        <label>
-                            <strong>Fecha de egreso</strong>
-                        </label>
-                        <div>{{ formacion.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
-                    </div>
-                </div>
-                <div class="col-12" *ngIf='formacion.matriculacion && formacion.matriculado === true  '>
-                    <div class="form-group">
-                        <label style="font-weight: bold">Motivo de la baja</label>
-                        <textarea class="form-control" [(ngModel)]="motivoBaja"></textarea>
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="col-12 badge badge-danger  " style='margin-top: 45px; margin-bottom: 7px;' *ngIf='formacion.matriculado === false && formacion.matriculacion 
+    </div>
+  </div>
+  <div class="col-6">
+    <div class="form-group">
+      <label>
+        <strong>Entidad Formadora</strong>
+      </label>
+      <div>{{ formacion.entidadFormadora?.nombre }}</div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-6">
+    <div class="form-group">
+      <label>
+        <strong>Fecha de egreso</strong>
+      </label>
+      <div>{{ formacion.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
+    </div>
+  </div>
+  <div class="col-12" *ngIf='formacion.matriculacion && formacion.matriculado === true  '>
+    <div class="form-group">
+      <label style="font-weight: bold">Motivo de la baja</label>
+      <textarea class="form-control" [(ngModel)]="motivoBaja"></textarea>
+    </div>
+  </div>
+  <br>
+  <br>
+  <div class="col-12 badge badge-danger  " style='margin-top: 45px; margin-bottom: 7px;'
+       *ngIf='formacion.matriculado === false && formacion.matriculacion
                 && formacion.matriculacion[formacion.matriculacion.length - 1].baja  && formacion.matriculacion[formacion.matriculacion.length - 1].baja.motivo'>
-                    <div class="row">
-                        <div class="form-group col-6 ">
-                            <strong>Motivo de la baja</strong>
-                            <br> {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.motivo }}
-
-                        </div>
-                        <div class="form-group col-6 ">
-                            <strong>Fecha</strong>
-                            <br> {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.fecha | fecha }}
-
-                        </div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
-
-    <hr>
     <div class="row">
-        <div class="col-12">
+      <div class="form-group col-6 ">
+        <strong>Motivo de la baja</strong>
+        <br> {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.motivo }}
 
-            <plex-accordion style="color:black !important">
-                <plex-panel tituloPrincipal="Gestion" [active]="false">
-                    <div class="row">
-                        <div class="col-12">
-                            <table class="table">
-                                <thead>
-                                    <th>Nº</th>
-                                    <th>Matrícula Nº</th>
-                                    <th>Inicio</th>
-                                    <th>Fin</th>
-                                </thead>
-                                <tbody *ngIf='formacion.matriculacion'>
-                                    <tr *ngFor="let matriculacion of formacion.matriculacion; let i = index;">
-                                    
-                                        <td>{{ matriculacion.revalidacionNumero }}</td>
-                                        <td>{{ matriculacion.matriculaNumero }}</td>
-                                        <td *ngIf='i === 0'>{{ formacion.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</td>
-                                        <td *ngIf='i !== 0'>{{ matriculacion.inicio  | date: 'dd/MM/yyyy'}}</td>
-                                        <td>{{ matriculacion.fin | date: 'dd/MM/yyyy'}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+      </div>
+      <div class="form-group col-6 ">
+        <strong>Fecha</strong>
+        <br> {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.fecha | fecha }}
 
-                </plex-panel>
-            </plex-accordion>
-            <hr>
-            <plex-accordion style="color:black !important" *ngIf='tieneBajas !== false'>
-                <plex-panel tituloPrincipal="Bajas" [active]="false">
-                    <div class="col-12">
-                        <table class="table">
-                            <thead>
-                                <th>N° Matricula</th>
-                                <th>Motivo</th>
-                                <th>Fecha</th>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let matriculacion of formacion.matriculacion">
-                                    <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.matriculaNumero }}</td>
-                                    <td *ngIf='matriculacion.baja.motivo !== ""'> {{ matriculacion.baja?.motivo }}</td>
-                                    <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja?.fecha | fecha }}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </plex-panel>
-            </plex-accordion>
-        </div>
+      </div>
     </div>
-    <br>
-    <br>
-    <hr>
-    <plex-button class="float-right" type="danger" label='Cerrar' (click)="cerrar()"></plex-button>
-</plex-box>
+  </div>
+
+
+</div>
+<div class="row mt-3">
+  <div class="col-12">
+    <plex-accordion style="color:black !important">
+      <plex-panel tituloPrincipal="Gestion" [active]="false">
+        <div class="row">
+          <div class="col-12">
+            <table class="table">
+              <thead>
+                <th>Nº</th>
+                <th>Matrícula Nº</th>
+                <th>Inicio</th>
+                <th>Fin</th>
+              </thead>
+              <tbody *ngIf='formacion.matriculacion'>
+                <tr *ngFor="let matriculacion of formacion.matriculacion; let i = index;">
+
+                  <td>{{ matriculacion.revalidacionNumero }}</td>
+                  <td>{{ matriculacion.matriculaNumero }}</td>
+                  <td *ngIf='i === 0'>{{ formacion.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</td>
+                  <td *ngIf='i !== 0'>{{ matriculacion.inicio  | date: 'dd/MM/yyyy'}}</td>
+                  <td>{{ matriculacion.fin | date: 'dd/MM/yyyy'}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </plex-panel>
+    </plex-accordion>
+    <plex-accordion class="mt-3" style="color:black !important" *ngIf='tieneBajas !== false'>
+      <plex-panel tituloPrincipal="Bajas" [active]="false">
+        <div class="col-12">
+          <table class="table">
+            <thead>
+              <th>N° Matricula</th>
+              <th>Motivo</th>
+              <th>Fecha</th>
+            </thead>
+            <tbody>
+              <tr *ngFor="let matriculacion of formacion.matriculacion">
+                <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.matriculaNumero }}</td>
+                <td *ngIf='matriculacion.baja.motivo !== ""'> {{ matriculacion.baja?.motivo }}</td>
+                <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja?.fecha | fecha }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </plex-panel>
+    </plex-accordion>
+  </div>
+</div>
+<plex-button class="float-right mt-3" type="danger" label='Cerrar' (click)="cerrar()"></plex-button>

@@ -464,10 +464,7 @@ export class ProfesionalComponent implements OnInit {
     if ($event.formValid) {
 
       this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
-      // tslint:disable-next-line:max-line-length
-      // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
-      // tslint:disable-next-line:max-line-length
       this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));

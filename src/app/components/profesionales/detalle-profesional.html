@@ -1,124 +1,95 @@
-<footer *ngIf="flag == true">
-  <plex-button type="danger" label="volver" (click)="volver()" icon="arrow-left-bold"></plex-button>
-</footer>
-
-
-
-
-<plex-layout>
+<plex-layout main="{{ (mostrar || mostrarGrado) ? 8 : 12 }}">
   <plex-layout-main>
-    <section *ngIf="flag == true">
-      <plex-title titulo="" size="lg">
-        <plex-button type="danger" label="volver" (click)="volver()" icon="arrow-left-bold"></plex-button>
-      </plex-title>
+    <header *ngIf="flag == true">
       <div class="row">
-        <div class="col-8">
-          <plex-box>
-            <header>
-              <div class="row">
-                <div class="col-2">
-                  <app-foto-general (showFoto)="mostrarFoto($event)" [profesional]="profesional" [img64]="img64">
-                  </app-foto-general>
-                </div>
-                <div class="col-9 margenFoto">
-                  <app-header-profesional [profesional]="profesional"></app-header-profesional>
-                </div>
-                <div class="col-1 ">
-                  <button *ngIf="profesional.habilitado" class="float-right btn btn-primary" (click)="editar()">
-                    <i class="mdi mdi-pencil"></i>
-                  </button>
-                </div>
-              </div>
-
-            </header>
-            <div id="wrapper">
-              <plex-tabs>
-                <!-- Contacto y Domicilios -->
-                <plex-tab label="Contacto y Domicilios">
-                  <app-contacto-domicilios-profesional [profesional]="profesional">
-                  </app-contacto-domicilios-profesional>
-                </plex-tab>
-
-                <!-- Formación de Grado -->
-                <plex-tab label="Formación de Grado">
-                  <app-formacion-grado [profesional]="profesional"
-                                       (formacionGradoSelected)="formacionGradoSelected($event)"
-                                       [tieneFirma]="tieneFirma" [tieneFirmaAdmin]="tieneFirmaAdmin"
-                                       (updateProfesional)="guardarGrado($event)"></app-formacion-grado>
-                </plex-tab>
-
-                <!-- Renovaciones -->
-                <!--<plex-tab label="Renovaciones">
-                                  <app-renovaciones-profesional [profesional]="profesional"></app-renovaciones-profesional>
-                              </plex-tab>-->
-
-                <!-- Formacion Posgrado -->
-                <plex-tab label="Formación de Posgrado">
-                  <div *ngIf=' habilitaPosgrado() !== undefined'>
-                    <app-formacion-posgrado [profesional]="profesional"
-                                            (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)"
-                                            (updateProfesional)="updateProfesional($event)"></app-formacion-posgrado>
-                  </div>
-                  <div *ngIf=' habilitaPosgrado() === undefined'>
-                    <span class="badge badge-danger">Su profesión no le permite cargar un posgrado</span>
-
-                  </div>
-                </plex-tab>
-
-                <!-- Sanciones -->
-                <plex-tab label="Sanciones">
-                  <app-sanciones [profesional]="profesional" (updateProfesional)="updateProfesional($event)">
-                  </app-sanciones>
-                </plex-tab>
-
-                <!-- Foto -->
-                <plex-tab label="Foto">
-
-                  <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)"
-                                        (previewImg)="previewImg($event)"></app-foto-profesional>
-                </plex-tab>
-
-                <!-- Firmas -->
-                <plex-tab label="Firmas">
-                  <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)"
-                                          (onFileUploadedFirmaAdmin)="guardarFirmaAdminGrid($event)"
-                                          (tieneFirma)="this.tieneFirma = true"
-                                          (tieneFirmaAdmin)="this.tieneFirmaAdmin = true"></app-firmas-profesional>
-                </plex-tab>
-
-                <!-- Notas -->
-                <plex-tab label="Notas">
-                  <app-notas-profesional [profesional]="profesional" (onSaved)="guardarNotas($event)">
-                  </app-notas-profesional>
-                </plex-tab>
-                <plex-tab label="Otros">
-                  <app-otros-datos [profesional]="profesional" (submitOtrosDatos)="guardarOtrosDatos($event)">
-                  </app-otros-datos>
-                </plex-tab>
-              </plex-tabs>
-            </div>
-
-
-          </plex-box>
+        <div class="col-2">
+          <app-foto-general (showFoto)="mostrarFoto($event)" [profesional]="profesional" [img64]="img64">
+          </app-foto-general>
         </div>
-        <div class="col-4" *ngIf="mostrar">
-          <app-formacion-grado-detalle [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]"
-                                       [index]="indexFormacionGradoSelected" [profesional]="profesional"
-                                       (cerrarDetalle)='cerrar(true)' (matriculacion)="matricularProfesional($event)">
-          </app-formacion-grado-detalle>
+        <div class="col-7 margenFoto">
+          <app-header-profesional [profesional]="profesional"></app-header-profesional>
         </div>
-        <div class="col-4" *ngIf="mostrarGrado">
-          <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"
-                                          [index]="indexFormacionPosgradoSelected" [profesional]="profesional"
-                                          (matriculacion)="matricularProfesionalEspecialidad($event)"
-                                          (anioDeGraciaOutPut)="anioDeGracia($event)" (cerrarDetalle)='cerrar(false)'>
-          </app-formacion-posgrado-detalle>
+        <div class="col-3 d-flex justify-content-end">
+          <plex-button *ngIf="profesional.habilitado" type="primary" label="Editar" (click)="editar()"></plex-button>
+          <plex-button type="danger" label="volver" (click)="volver()"></plex-button>
         </div>
-
       </div>
-    </section>
+    </header>
+    <div id="wrapper" *ngIf="flag == true">
+      <plex-tabs>
+        <!-- Contacto y Domicilios -->
+        <plex-tab label="Contacto y Domicilios">
+          <app-contacto-domicilios-profesional [profesional]="profesional">
+          </app-contacto-domicilios-profesional>
+        </plex-tab>
+
+        <!-- Formación de Grado -->
+        <plex-tab label="Formación de Grado">
+          <app-formacion-grado [profesional]="profesional" (formacionGradoSelected)="formacionGradoSelected($event)"
+                               [tieneFirma]="tieneFirma" [tieneFirmaAdmin]="tieneFirmaAdmin"
+                               (updateProfesional)="guardarGrado($event)">
+          </app-formacion-grado>
+        </plex-tab>
+        <!-- Formacion Posgrado -->
+        <plex-tab label="Formación de Posgrado">
+          <div *ngIf=' habilitaPosgrado() !== undefined'>
+            <app-formacion-posgrado [profesional]="profesional"
+                                    (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)"
+                                    (updateProfesional)="updateProfesional($event)"></app-formacion-posgrado>
+          </div>
+          <div *ngIf=' habilitaPosgrado() === undefined'>
+            <span class="badge badge-danger">Su profesión no le permite cargar un posgrado</span>
+
+          </div>
+        </plex-tab>
+
+        <!-- Sanciones -->
+        <plex-tab label="Sanciones">
+          <app-sanciones [profesional]="profesional" (updateProfesional)="updateProfesional($event)">
+          </app-sanciones>
+        </plex-tab>
+
+        <!-- Foto -->
+        <plex-tab label="Foto">
+
+          <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)"
+                                (previewImg)="previewImg($event)"></app-foto-profesional>
+        </plex-tab>
+
+        <!-- Firmas -->
+        <plex-tab label="Firmas">
+          <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)"
+                                  (onFileUploadedFirmaAdmin)="guardarFirmaAdminGrid($event)"
+                                  (tieneFirma)="this.tieneFirma = true" (tieneFirmaAdmin)="this.tieneFirmaAdmin = true">
+          </app-firmas-profesional>
+        </plex-tab>
+
+        <!-- Notas -->
+        <plex-tab label="Notas">
+          <app-notas-profesional [profesional]="profesional" (onSaved)="guardarNotas($event)">
+          </app-notas-profesional>
+        </plex-tab>
+        <plex-tab label="Otros">
+          <app-otros-datos [profesional]="profesional" (submitOtrosDatos)="guardarOtrosDatos($event)">
+          </app-otros-datos>
+        </plex-tab>
+      </plex-tabs>
+    </div>
     <app-profesional *ngIf="flag == false" [profesional]='profesional' [showOtraEntidadFormadora]='tieneOtraEntidad'
                      [confirmar]='confirmar' (editado)="this.flag = true" [editable]='editable'></app-profesional>
 
   </plex-layout-main>
+  <plex-layout-sidebar *ngIf="mostrar && flag == true">
+    <app-formacion-grado-detalle [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]"
+                                 [index]="indexFormacionGradoSelected" [profesional]="profesional"
+                                 (cerrarDetalle)='cerrar(true)' (matriculacion)="matricularProfesional($event)">
+    </app-formacion-grado-detalle>
+  </plex-layout-sidebar>
+  <plex-layout-sidebar *ngIf="mostrarGrado && flag == true">
+    <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"
+                                    [index]="indexFormacionPosgradoSelected" [profesional]="profesional"
+                                    (matriculacion)="matricularProfesionalEspecialidad($event)"
+                                    (anioDeGraciaOutPut)="anioDeGracia($event)" (cerrarDetalle)='cerrar(false)'>
+    </app-formacion-posgrado-detalle>
+  </plex-layout-sidebar>
 </plex-layout>

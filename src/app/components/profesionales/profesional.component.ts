@@ -1,62 +1,23 @@
-import {
-  Component,
-  OnInit,
-  Output,
-  Input,
-  EventEmitter
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  FormArray
-} from '@angular/forms';
-// import { Plex } from '@andes/plex/src/lib/core/service';
-// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
-import {
-  Plex
-} from '@andes/plex';
+import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Location } from '@angular/common';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Plex } from '@andes/plex';
 
 // Enums
 import * as enumerados from './../../utils/enumerados';
-import {
-  getEnumAsObjects,
-  Sexo,
-  EstadoCivil,
-  TipoContacto
-} from './../../utils/enumerados';
 import { Matching } from '@andes/match';
 
 // Services
-import {
-  PaisService
-} from './../../services/pais.service';
-import {
-  ProvinciaService
-} from './../../services/provincia.service';
-import {
-  LocalidadService
-} from './../../services/localidad.service';
-import {
-  ProfesionService
-} from './../../services/profesion.service';
-import {
-  ProfesionalService
-} from './../../services/profesional.service';
-import {
-  EntidadFormadoraService
-} from './../../services/entidadFormadora.service';
-import {
-  SexoService
-} from './../../services/sexo.service';
+import { PaisService } from './../../services/pais.service';
+import { ProvinciaService } from './../../services/provincia.service';
+import { LocalidadService } from './../../services/localidad.service';
+import { ProfesionService } from './../../services/profesion.service';
+import { ProfesionalService } from './../../services/profesional.service';
+import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
+import { SexoService } from './../../services/sexo.service';
 
 // Interfaces
-import {
-  IProfesional
-} from './../../interfaces/IProfesional';
-import {
-  ISiisa
-} from './../../interfaces/ISiisa';
+import { IProfesional } from './../../interfaces/IProfesional';
 import { Auth } from '@andes/auth';
 import { Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
@@ -77,7 +38,7 @@ export class ProfesionalComponent implements OnInit {
     gender: 0.3,
     birthDate: 0.05
   };
-  public provincias: any[];
+  public provincias: any[] = [];
   public localidades: any[];
   public paises: any[];
   public estadoCivil: any;
@@ -183,9 +144,9 @@ export class ProfesionalComponent implements OnInit {
     idRenovacion: null,
 
   };
-  localidadesReal: any[];
-  localidadesLegal: any[];
-  localidadesProfesional: any[];
+  localidadesReal: any[] = [];
+  localidadesLegal: any[] = [];
+  localidadesProfesional: any[] = [];
   matcheo = false;
 
   @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
@@ -201,7 +162,8 @@ export class ProfesionalComponent implements OnInit {
     private _turnosService: TurnoService,
     private plex: Plex,
     public auth: Auth,
-    private router: Router) { }
+    private router: Router,
+    private location: Location) { }
 
   ngOnInit() {
     this.estadoCivil = enumerados.getObjsEstadoCivil();
@@ -314,24 +276,12 @@ export class ProfesionalComponent implements OnInit {
             if (matcheo) {
               this.plex.info('info', 'Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
             } else {
-              // this.ocultarBtn = true;
               this.onProfesionalCompleto.emit(this.profesional);
-              // this.router.navigate(['requisitosGenerales']);
             }
 
 
           });
 
-      // if (this.matcheo) {
-      //   console.log('la wea matcheo');
-      //   this.plex.alert('Ya existe un profesional registrados con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
-      // } else {
-      //   console.log("acaaaaaa entre la wea mala")
-      //   // this.ocultarBtn = true;
-      //   // this.onProfesionalCompleto.emit(this.profesional);
-      //   // this.router.navigate(['requisitosGenerales']);
-      //   // this.onProfesionalCompleto.emit(this.profesional);
-      // }
 
     } else {
       this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
@@ -344,10 +294,7 @@ export class ProfesionalComponent implements OnInit {
       let matcheo = false;
       this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
       this.profesional.formacionGrado[0].exportadoSisa = false;
-      // tslint:disable-next-line:max-line-length
-      // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
-      // tslint:disable-next-line:max-line-length
       this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
@@ -463,7 +410,6 @@ export class ProfesionalComponent implements OnInit {
   }
 
 
-
   cp(event, i) {
     this.profesional.domicilios[i].codigoPostal = event.value.codigoPostal;
   }
@@ -493,6 +439,10 @@ export class ProfesionalComponent implements OnInit {
     if (i >= 0) {
       this.profesional.contactos.splice(i, 1);
     }
+  }
+
+  volverProfesional() {
+    this.location.back();
   }
 
   completar() {

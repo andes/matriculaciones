@@ -245,7 +245,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
       sexo: this.profesional.sexo
     };
     this._turnosService.getTurnosPorDocumento(parametros).subscribe((resultado: any) => {
-      if (!resultado) {
+      if (resultado.length === 0) {
         this._turnosService.saveTurnoSolicitados(this.profesional)
           .subscribe((nuevoProfesional) => {
             if (nuevoProfesional == null) {

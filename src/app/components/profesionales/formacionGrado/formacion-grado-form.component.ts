@@ -48,15 +48,6 @@ export class FormacionGradoFormComponent implements OnInit {
     papelesVerificados: false,
     matriculacion: null,
   };
-  // matriculacion: [{
-  //     matriculaNumero: null,
-  //     libro: null,
-  //     folio: null,
-  //     inicio: null,
-  //     fin: null,
-  //     revalidacionNumero: null,
-  // }],
-
 
   @Output() submitGrado = new EventEmitter();
 
@@ -84,8 +75,6 @@ export class FormacionGradoFormComponent implements OnInit {
         this.submitGrado.emit(this.profesionalGrado);
         this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
       }
-
-      // form.reset();
     }
 
   }

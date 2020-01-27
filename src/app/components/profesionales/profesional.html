@@ -97,7 +97,6 @@
     <div class="row">
       <div class="col-md-12">
         <plex-title class="mt-3" titulo="Domicilio {{profesional.domicilios[0].tipo}}" size="sm">
-
           <plex-button title="Completa los siguientes domicilios con los mismos datos" type="success"
                        label="completar domicilios" type="primary btn-sm" (click)="completar()" class="pull-right">
           </plex-button>
@@ -107,7 +106,7 @@
       </div>
       <div class="col-md-4">
         <plex-select label="Provincia" [required]="
-                profesional.domicilios[2].tipo !=='profesional'"
+                profesional.domicilios[0].tipo !=='profesional'"
                      [(ngModel)]="profesional.domicilios[0].ubicacion.provincia" name="provinciaReal"
                      [data]="provincias" labelField="nombre"
                      (change)="loadLocalidadesReal(profesional.domicilios[0].ubicacion.provincia)">
@@ -142,7 +141,7 @@
             </plex-select>
           </div>
           <div class=" col-md-4">
-            <plex-select label="Localidad" name="localidadLegal" (change)='cp($event, 0)'
+            <plex-select label="Localidad" name="localidadLegal" (change)='cp($event, 1)'
                          [(ngModel)]="profesional.domicilios[1].ubicacion.localidad" [data]="localidadesLegal"
                          [required]="profesional.domicilios[1].tipo !== 'profesional'">
             </plex-select>
@@ -175,7 +174,7 @@
             </plex-select>
           </div>
           <div class=" col-md-4">
-            <plex-select label="Localidad" name="localidad" (change)='cp($event, 0)'
+            <plex-select label="Localidad" name="localidad" (change)='cp($event, 2)'
                          [(ngModel)]="profesional.domicilios[2].ubicacion.localidad" [data]="localidadesProfesional"
                          [required]="profesional.domicilios[2].tipo !== 'profesional'">
             </plex-select>

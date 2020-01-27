@@ -21,8 +21,7 @@ const jsPDF = require('jspdf');
 
 @Component({
   selector: 'app-detalle-profesional',
-  templateUrl: 'detalle-profesional.html',
-  styles: ['.margenFoto { padding-bottom: 1%; }']
+  templateUrl: 'detalle-profesional.html'
 })
 
 export class DetalleProfesionalComponent implements OnInit {
@@ -145,9 +144,6 @@ export class DetalleProfesionalComponent implements OnInit {
 
   constructor(private _profesionalService: ProfesionalService,
     private _turnoService: TurnoService,
-    private _formBuilder: FormBuilder,
-    private _pdfUtils: PDFUtils,
-    private _numeracionesService: NumeracionMatriculasService,
     private route: ActivatedRoute,
     private router: Router,
     public auth: Auth,
@@ -162,12 +158,7 @@ export class DetalleProfesionalComponent implements OnInit {
         this._profesionalService.getProfesional({ id: params['id'] }).subscribe(profesional => {
           this.profesional = profesional[0];
           if (profesional.length === 0) {
-            this.flag = false;
-          } else {
-            this.profesional = profesional[0];
-            this.flag = true;
-          }
-          if (this.flag === false) {
+
             this.route.params
               .switchMap((paramsTemporal: Params) =>
                 this._turnoService.getTurnoSolicitados(paramsTemporal['id']).pipe(catchError(() => of(null)))
@@ -179,10 +170,15 @@ export class DetalleProfesionalComponent implements OnInit {
                   } else {
                     this.tieneOtraEntidad = false;
                   }
+                  this.habilitaPosgrado();
+                  this.flag = false;
                 }
               );
+          } else {
+            this.profesional = profesional[0];
+            this.flag = true;
+            this.habilitaPosgrado();
           }
-          this.habilitaPosgrado();
         });
       }
     });

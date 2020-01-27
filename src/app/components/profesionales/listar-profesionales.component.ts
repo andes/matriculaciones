@@ -1,44 +1,24 @@
 // General
-import {
-  Component,
-  OnInit,
-  HostBinding
-} from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import * as Enums from './../../utils/enumerados';
-import {
-  FormBuilder,
-  FormGroup
-} from '@angular/forms';
-import {
-  Router,
-  ActivatedRoute
-} from '@angular/router';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
-
-// Interfaces
-import {
-  IProfesional
-} from '../../interfaces/IProfesional';
-// Services
-import {
-  ProfesionalService
-} from './../../services/profesional.service';
+import { IProfesional } from '../../interfaces/IProfesional';
+import { ProfesionalService } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
-import { Subject } from 'rxjs/Subject';
+import { Subject } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-listar-profesionales',
-  templateUrl: 'listar-profesionales.html',
-  styleUrls: ['listar-profesionales.scss']
-
+  templateUrl: 'listar-profesionales.html'
 })
-export class ListarProfesionalesComponent implements OnInit {
-  @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
 
-  private profesionales: IProfesional[] = [];
-  private profesionalElegido: IProfesional;
-  private showListado: Boolean = true;
+export class ListarProfesionalesComponent implements OnInit {
+  public profesionales: IProfesional[] = [];
+  public profesionalElegido: IProfesional;
   public dni: string = null;
   public estadoSeleccionadoG;
   public estadoSeleccionadoE;
@@ -72,8 +52,6 @@ export class ListarProfesionalesComponent implements OnInit {
   public mostrarRestablecer;
   public verDeshabilitado;
   public expSisa = false;
-  modalScrollDistance = 2;
-  modalScrollThrottle = 10;
   public limit = 50;
   public exportSisa = {
     fechaDesde: '',
@@ -103,13 +81,13 @@ export class ListarProfesionalesComponent implements OnInit {
       numeroMatriculaEspecialidad: ''
     });
 
-    this.searchForm.valueChanges.debounceTime(900).subscribe(
+    this.searchForm.valueChanges.pipe(debounceTime(900)).subscribe(
       (value) => {
         this.value = value;
-        if (this.value.estado.nombre === 'Todos') {
+        if (this.value.estado && this.value.estado.nombre === 'Todos') {
           this.value.estado.nombre = '';
         }
-        if (this.value.estadoEspecialidad.nombre === 'Todos') {
+        if (this.value.estadoEspecialidad && this.value.estadoEspecialidad.nombre === 'Todos') {
           this.value.estadoEspecialidad.nombre = '';
         }
         this.buscar();
@@ -140,41 +118,23 @@ export class ListarProfesionalesComponent implements OnInit {
   buscar(event?: any) {
     this.verBajas = this.value ? this.value.verBajas : false;
     this.profesionalElegido = null;
-    const doc = this.dni ? this.dni : '';
-    const apellidoProf = this.apellido ? this.apellido : '';
     this._profesionalService.getProfesional({
       documento: this.value ? this.value.documento : '',
       apellido: this.value ? this.value.apellido : '',
       nombre: this.value ? this.value.nombre : '',
-      estado: this.value ? this.value.estado.nombre : '',
+      estado: this.value && this.value.estado ? this.value.estado.nombre : '',
       estadoE: this.value ? this.value.estadoEspecialidad.nombre : '',
       bajaMatricula: this.value ? this.value.verBajas : false,
-      // rematriculado: this.estaRematriculado ? this.estaRematriculado : 0,
-      // matriculado: this.estaMatriculado ? this.estaMatriculado : 0,
       habilitado: this.value ? this.value.verDeshabilitado : false,
       numeroMatriculaGrado: this.value ? this.value.numeroMatriculaGrado : '',
       numeroMatriculaEspecialidad: this.value ? this.value.numeroMatriculaEspecialidad : '',
       matriculacion: true,
       limit: this.limit
-
     }).subscribe((data) => {
       this.profesionales = data;
-      // this.totalProfesionales = data.length;
-      let totalR = 0;
-      let totalM = 0;
-      for (let _i = 0; _i < this.profesionales.length; _i++) {
-        if (this.profesionales[_i].rematriculado === 1) {
-          totalR += 1;
-        } else {
-          totalM += 1;
-        }
-      }
-      // this.totalProfesionalesRematriculados = totalR;
-      // this.totalProfesionalesMatriculados = totalM;
     });
-
-
   }
+
   cerrarResumenProfesional() {
     this.profesionalElegido = null;
   }
@@ -183,20 +143,11 @@ export class ListarProfesionalesComponent implements OnInit {
     this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
 
-
   matriculadoGrado() {
-    if (this.estado == null) {
+    if (!this.estado && this.estado.nombre === 'Todas') {
       this.estadoSeleccionadoG = null;
     } else {
-      if (this.estado.nombre === 'Suspendidas') {
-        this.estadoSeleccionadoG = this.estado.nombre;
-      }
-      if (this.estado.nombre === 'Vigentes') {
-        this.estadoSeleccionadoG = this.estado.nombre;
-      }
-      if (this.estado.nombre === 'Todos') {
-        this.estadoSeleccionadoG = null;
-      }
+      this.estadoSeleccionadoG = this.estado.nombre;
     }
     this.buscar();
   }
@@ -219,8 +170,6 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   filtrarRematriculados() {
-    // this.filtroRematriculados = true;
-    // this.filtroMatriculados = false;
     this.estaRematriculado = true;
     this.estaMatriculado = false;
     this.mostrarRestablecer = true;
@@ -248,9 +197,7 @@ export class ListarProfesionalesComponent implements OnInit {
     } else {
       this.muestraFiltro = false;
     }
-
   }
-
 
   verNuevoProfesional(valor) {
     if (valor === true) {
@@ -258,12 +205,10 @@ export class ListarProfesionalesComponent implements OnInit {
       this.confirmar = true;
     } else {
       this.nuevoProfesional = false;
-
     }
-
   }
 
-  onModalScrollDown() {
+  onScroll() {
     this.limit = this.limit + 15;
     this.buscar();
   }

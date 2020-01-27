@@ -2,12 +2,8 @@ import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Plex } from '@andes/plex';
-
-// Enums
 import * as enumerados from './../../utils/enumerados';
 import { Matching } from '@andes/match';
-
-// Services
 import { PaisService } from './../../services/pais.service';
 import { ProvinciaService } from './../../services/provincia.service';
 import { LocalidadService } from './../../services/localidad.service';
@@ -15,8 +11,6 @@ import { ProfesionService } from './../../services/profesion.service';
 import { ProfesionalService } from './../../services/profesional.service';
 import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
 import { SexoService } from './../../services/sexo.service';
-
-// Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
 import { Auth } from '@andes/auth';
 import { Router } from '@angular/router';
@@ -151,7 +145,7 @@ export class ProfesionalComponent implements OnInit {
 
   @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
-  constructor(private _formBuilder: FormBuilder,
+  constructor(
     private _sexoService: SexoService,
     private _paisService: PaisService,
     private _provinciaService: ProvinciaService,
@@ -375,11 +369,15 @@ export class ProfesionalComponent implements OnInit {
     this._localidadService.get({ 'provincia': provincia.value.id }).subscribe(event.callback);
   }
 
-  loadLocalidadesLegal(provincia) {
+  loadLocalidadesLegal(provincia, completando?) {
     if (provincia && provincia.id) {
       this._localidadService.getXProvincia(provincia.id).subscribe(result => {
         this.localidadesLegal = result;
-        this.profesional.domicilios[1].ubicacion.localidad = null;
+        if (completando) {
+          this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
+        } else {
+          this.profesional.domicilios[1].ubicacion.localidad = null;
+        }
       });
     }
   }
@@ -399,19 +397,26 @@ export class ProfesionalComponent implements OnInit {
     }
   }
 
-  loadLocalidadesProfesional(provincia) {
+  loadLocalidadesProfesional(provincia, completando?) {
     if (provincia && provincia.id) {
       this._localidadService.getXProvincia(provincia.id).subscribe(result => {
         this.localidadesProfesional = result;
-        this.profesional.domicilios[2].ubicacion.localidad = null;
+        if (completando) {
+          this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
+        } else {
+          this.profesional.domicilios[2].ubicacion.localidad = null;
+        }
 
       });
     }
   }
 
-
   cp(event, i) {
-    this.profesional.domicilios[i].codigoPostal = event.value.codigoPostal;
+    if (event.value) {
+      this.profesional.domicilios[i].codigoPostal = event.value.codigoPostal;
+    } else {
+      this.profesional.domicilios[i].codigoPostal = null;
+    }
   }
   loadProfesiones(event) {
     this._profesionService.getProfesiones().pipe(catchError(() => of(null))).subscribe(event.callback);
@@ -450,14 +455,12 @@ export class ProfesionalComponent implements OnInit {
     this.profesional.domicilios[1].codigoPostal = this.profesional.domicilios[0].codigoPostal;
     this.profesional.domicilios[1].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[1].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
-    this.profesional.domicilios[1].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
-    this.loadLocalidadesLegal(this.profesional.domicilios[1].ubicacion.provincia);
+    this.loadLocalidadesLegal(this.profesional.domicilios[1].ubicacion.provincia, true);
     this.profesional.domicilios[2].valor = this.profesional.domicilios[0].valor;
     this.profesional.domicilios[2].codigoPostal = this.profesional.domicilios[0].codigoPostal;
     this.profesional.domicilios[2].ubicacion.pais = this.profesional.domicilios[0].ubicacion.pais;
     this.profesional.domicilios[2].ubicacion.provincia = this.profesional.domicilios[0].ubicacion.provincia;
-    this.profesional.domicilios[2].ubicacion.localidad = this.profesional.domicilios[0].ubicacion.localidad;
-    this.loadLocalidadesProfesional(this.profesional.domicilios[2].ubicacion.provincia);
+    this.loadLocalidadesProfesional(this.profesional.domicilios[2].ubicacion.provincia, true);
   }
 
   actualizar($event) {

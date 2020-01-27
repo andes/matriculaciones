@@ -19,6 +19,7 @@ import { debounceTime } from 'rxjs/operators';
 export class ListarProfesionalesComponent implements OnInit {
   public profesionales: IProfesional[] = [];
   public profesionalElegido: IProfesional;
+  private showListado: Boolean = true;
   public dni: string = null;
   public estadoSeleccionadoG;
   public estadoSeleccionadoE;

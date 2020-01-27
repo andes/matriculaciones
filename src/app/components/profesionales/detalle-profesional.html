@@ -15,8 +15,8 @@
         </div>
       </div>
     </header>
-    <div id="wrapper" *ngIf="flag == true">
-      <plex-tabs>
+    <ng-container id="wrapper" *ngIf="flag == true">
+      <plex-tabs size="full">
         <!-- Contacto y Domicilios -->
         <plex-tab label="Contacto y Domicilios">
           <app-contacto-domicilios-profesional [profesional]="profesional">
@@ -74,18 +74,18 @@
           </app-otros-datos>
         </plex-tab>
       </plex-tabs>
-    </div>
+    </ng-container>
     <app-profesional *ngIf="flag == false" [profesional]='profesional' [showOtraEntidadFormadora]='tieneOtraEntidad'
                      [confirmar]='confirmar' (editado)="this.flag = true" [editable]='editable'></app-profesional>
 
   </plex-layout-main>
-  <plex-layout-sidebar *ngIf="mostrar && flag == true">
+  <plex-layout-sidebar type="invert" *ngIf="mostrar && flag == true">
     <app-formacion-grado-detalle [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]"
                                  [index]="indexFormacionGradoSelected" [profesional]="profesional"
                                  (cerrarDetalle)='cerrar(true)' (matriculacion)="matricularProfesional($event)">
     </app-formacion-grado-detalle>
   </plex-layout-sidebar>
-  <plex-layout-sidebar *ngIf="mostrarGrado && flag == true">
+  <plex-layout-sidebar type="invert" *ngIf="mostrarGrado && flag == true">
     <app-formacion-posgrado-detalle [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"
                                     [index]="indexFormacionPosgradoSelected" [profesional]="profesional"
                                     (matriculacion)="matricularProfesionalEspecialidad($event)"

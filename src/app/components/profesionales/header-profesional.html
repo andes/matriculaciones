@@ -11,14 +11,17 @@
         <span *ngIf='profesional.fechaNacimiento'>{{profesional | edad}} |</span>
         <span *ngIf='profesional.tipoDocumento'>{{profesional.tipoDocumento}}</span>
         <span *ngIf='!profesional.tipoDocumento'>DNI</span> {{ profesional.documento }}
-        <span *ngIf='profesional.documentoViejo' class="text-danger hover" title="Cambio el documento(ver otros)">*</span> | {{'CUIT ' + profesional?.cuit }}
+        <span *ngIf='profesional.documentoViejo' class="text-danger hover"
+              title="Cambio el documento(ver otros)">*</span> | {{'CUIT ' + profesional?.cuit }}
         <br /> {{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }} | {{profesional.contactos[0]?.valor
                 }} | {{profesional.nacionalidad?.nombre}}
         <br>
       </span>
 
-      <span *ngIf='profesional.habilitado === true' class="badge badge-success" style="font-size: 70%;">Habilitado</span>
-      <span *ngIf='profesional.habilitado === false' class="badge badge-warning" style="font-size: 70%;">Deshabilitado</span>
+      <span *ngIf='profesional.habilitado === true' class="badge badge-success"
+            style="font-size: 70%;">Habilitado</span>
+      <span *ngIf='profesional.habilitado === false' class="badge badge-warning"
+            style="font-size: 70%;">Deshabilitado</span>
       <plex-bool type="slide" [(ngModel)]="habilitado" (change)='habilitar()' name="especialidad.activo"></plex-bool>
     </div>
     <div class="float-right">

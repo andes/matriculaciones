@@ -160,10 +160,10 @@ export class TurnosComponent implements OnInit {
   }
 
   showProfesional(turno: any) {
-    if (turno.tipo = 'matriculacion') {
+    if (turno.tipo === 'matriculacion') {
       this.router.navigate(['/profesional', turno.profesional.id]);
     }
-    if (turno.tipo = 'renovacion') {
+    if (turno.tipo === 'renovacion') {
       this.router.navigate(['/profesional', turno.profesional.idRenovacion]);
     }
 

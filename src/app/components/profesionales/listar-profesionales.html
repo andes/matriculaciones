@@ -17,7 +17,7 @@
                      routerLink="/homeAdministracion">
         </plex-button>
       </plex-title>
-      <plex-wrapper [formGroup]="searchForm">¿
+      <plex-wrapper [formGroup]="searchForm">
         <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus"
                    placeholder="Ingrese documento">
         </plex-text>
@@ -190,7 +190,8 @@
           <div class="row mb-1">
             <div class="col text-center">
               <app-foto-general [profesional]="profesionalElegido" [idProfesional]="profesionalElegido.id"
-                                [img64]="img64"></app-foto-general>
+                                [img64]="img64">
+              </app-foto-general>
             </div>
           </div>
           <div class="row mb-1" *ngIf="profesionalElegido.apellido">
@@ -231,7 +232,8 @@
         <plex-button label="Editar profesional" type="primary" (click)="showProfesional(profesionalElegido)">
         </plex-button>
         <plex-button *ngIf="profesionalElegido.habilitado" label="Dar sobreturno" type="warning"
-                     (click)="sobreTurno(profesionalElegido)"></plex-button>
+                     (click)="sobreTurno(profesionalElegido)">
+        </plex-button>
       </div>
     </div>
     <div *ngIf='verExportador'>
@@ -242,11 +244,13 @@
       <div class="row">
         <div class="col-6">
           <plex-datetime label="Fecha desde" type="date" [(ngModel)]="exportSisa.fechaDesde" (change)="checkExpSisa()"
-                         name='fechaDesde'></plex-datetime>
+                         name='fechaDesde'>
+          </plex-datetime>
         </div>
         <div class="col-6">
           <plex-datetime label="Fecha hasta" type="date" [(ngModel)]="exportSisa.fechaHasta" (change)="checkExpSisa()"
-                         name='fechaDesde'></plex-datetime>
+                         name='fechaDesde'>
+          </plex-datetime>
         </div>
         <div class="col-12">
           <br>

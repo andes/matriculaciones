@@ -1,4 +1,5 @@
-<!-- <app-formacion-grado-form [profesional]="profesional" (submitGrado)="addFormacionGrado($event)"></app-formacion-grado-form> -->
+<app-formacion-grado-form [profesional]="profesional" (submitGrado)="addFormacionGrado($event)">
+</app-formacion-grado-form>
 <div *ngIf='!edit'>
   <plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
     <header>

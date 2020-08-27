@@ -91,6 +91,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
               if (!mantenerNumero) {
                 matriculaNumero = num[0].proximoNumero;
                 num[0].proximoNumero = matriculaNumero + 1;
+                this.formacion.fechaDeInscripcion = new Date();
               }
 
               if (mantenerNumero) {

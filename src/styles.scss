@@ -1,4 +1,6 @@
 @import '~@andes/plex/src/lib/styles.scss';
+$adi-font-path: '~@andes/icons/fonts/';
+@import '~@andes/icons/scss/andes-icons';
 
 .datepicker table {
   width: 100%;

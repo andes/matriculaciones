@@ -1,37 +1,38 @@
 <plex-title titulo="Foto profesional" size="sm">
-  <plex-button label="Guardar foto" size="sm" type="success" (click)="upload()" *ngIf='base64textString.length > 0'>
-  </plex-button>
-  <plex-button *ngIf='fotoPreview && !sacarFoto && !subirFoto' label="Sacar otra foto" type="info" size="sm"
-               (click)="volverASacar();"></plex-button>
-  <plex-button *ngIf='sacarFoto && !subirFoto' label="Sacar foto" size="sm" type="info" (click)="triggerSnapshot();">
-  </plex-button>
+    <plex-button label="Guardar foto" size="sm" type="success" (click)="upload()" *ngIf='base64textString.length > 0'>
+    </plex-button>
+    <plex-button *ngIf='fotoPreview && !sacarFoto && !subirFoto' label="Sacar otra foto" type="info" size="sm"
+                 (click)="volverASacar();"></plex-button>
+    <plex-button *ngIf='sacarFoto && !subirFoto' label="Sacar foto" size="sm" type="info" (click)="triggerSnapshot();">
+    </plex-button>
 </plex-title>
 <div class="row" *ngIf="profesional.habilitado">
-  <div class="col-6 text-center">
-    <div (click)='subirFoto = true;sacarFoto = false;'>
-      <span class="mdi mdi-upload" style="font-size: 50px;"></span>
-      <br>
-      <span>Subir Foto</span>
+    <div class="col-6 text-center">
+        <div class="h-100 d-flex flex-column" justify="start">
+            <plex-button type="info" icon="upload" size="lg" (click)='subirFoto = true;sacarFoto = false;'>
+            </plex-button>
+            <plex-label titulo="Subir una foto"></plex-label>
+
+            <plex-button type="info" class="mt-2" size="lg" icon="camara-foto"
+                         (click)='subirFoto = false;sacarFoto = true;'>
+            </plex-button>
+            <plex-label titulo="Tomar una foto"></plex-label>
+        </div>
     </div>
-    <div (click)='subirFoto = false;sacarFoto = true;'>
-      <span class="mdi mdi-camera" style="font-size: 50px;"></span>
-      <br>
-      <span>Sacar Foto</span>
+    <div class="col-6" *ngIf='!sacarFoto && subirFoto'>
+        <label for="filePicker">Seleccione una foto</label>
+        <br>
+        <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
+        <input type="file" (change)="onImageChange($event)" accept="image/jpeg">
     </div>
-  </div>
-  <div class="col-6" *ngIf='!sacarFoto && subirFoto'>
-    <label for="filePicker">Seleccione una foto</label>
-    <br>
-    <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
-    <input type="file" (change)="onImageChange($event)" accept="image/jpeg">
-  </div>
-  <div class="col-6 text-right" *ngIf='sacarFoto && !subirFoto'>
-    <webcam [height]="200" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
-            [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable" [videoOptions]="videoOptions"
-            (cameraSwitched)="cameraWasSwitched($event)" (initError)="handleInitError($event)"></webcam>
-  </div>
-  <div *ngIf='fotoPreview && !sacarFoto && !subirFoto' class="col-6 text-right">
-    <img [src]="fotoPreview" alt="" height="200px">¿
-  </div>
+    <div class="col-6 text-right" *ngIf='sacarFoto && !subirFoto'>
+        <webcam [height]="200" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+                [videoOptions]="videoOptions" (cameraSwitched)="cameraWasSwitched($event)"
+                (initError)="handleInitError($event)"></webcam>
+    </div>
+    <div *ngIf='fotoPreview && !sacarFoto && !subirFoto' class="col-6 text-right">
+        <img [src]="fotoPreview" alt="" height="200px">¿
+    </div>
 </div>
 <div *ngIf="!profesional.habilitado">Función disponible solo para matrículas habilitadas.</div>

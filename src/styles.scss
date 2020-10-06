@@ -1,17 +1,21 @@
 @import '~@andes/plex/src/lib/styles.scss';
+$adi-font-path: '~@andes/icons/fonts/';
+@import '~@andes/icons/scss/andes-icons';
 
 .datepicker table {
   width: 100%;
 }
 
-.datepicker table tr td.disabled, .datepicker table tr td.disabled:hover {
-  background:#ff6a30 !important;
+.datepicker table tr td.disabled,
+.datepicker table tr td.disabled:hover {
+  background: #ff6a30 !important;
   padding: 0px 0px 0px 0px;
   border: 2px solid white !important;
   font-weight: 700;
 }
 
-.datepicker table tr td, .datepicker table tr th {
+.datepicker table tr td,
+.datepicker table tr th {
   height: 40px !important;
   text-align: center;
   border-radius: 0px !important;
@@ -24,6 +28,6 @@
   box-shadow: 0 0 0 0;
 }
 
-.btn-horario .btn-info{
+.btn-horario .btn-info {
   margin-top: 5px !important;
 }

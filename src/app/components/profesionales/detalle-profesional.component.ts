@@ -38,7 +38,7 @@ export class DetalleProfesionalComponent implements OnInit {
   public confirmar = true;
   public tieneFirma = null;
   public editable = false;
-  @ViewChild('fotoHijo', { static: false }) fotoHijo: FotoGeneralComponent;
+  @ViewChild('fotoHijo') fotoHijo: FotoGeneralComponent;
   @Input() public profesional: IProfesional = {
     id: null,
     habilitado: true,

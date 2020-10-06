@@ -6,14 +6,13 @@
     </plex-title>
     <header *ngIf="nuevoProfesional === false">
       <plex-title titulo="Buscar profesional" size="lg">
-        <plex-button type="primary" icon="mdi mdi-format-list-numbered" title='Numeraciones'
-                     routerLink="/listadoNumeraciones">
+        <plex-button type="primary" icon="format-list-bulleted" title='Numeraciones' routerLink="/listadoNumeraciones">
         </plex-button>
-        <plex-button type="primary" icon="mdi mdi-account-plus" title='Nuevo profesional'
+        <plex-button type="primary" icon="account-plus" title='Nuevo profesional'
                      (click)='nuevoProfesional = true;confirmar = true'></plex-button>
-        <plex-button type="primary" icon="mdi mdi-file-excel" *ngIf="tienePermisos" title='Exportar SISA'
+        <plex-button type="primary" icon="file" *ngIf="tienePermisos" title='Exportar SISA'
                      (click)='verExportador = true;profesionalElegido = false;'></plex-button>
-        <plex-button *ngIf="nuevoProfesional === false" icon="keyboard-return" title='Volver' type="danger"
+        <plex-button *ngIf="nuevoProfesional === false" icon="arrow-left" title='Volver' type="danger"
                      routerLink="/homeAdministracion">
         </plex-button>
       </plex-title>

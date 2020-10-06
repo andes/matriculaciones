@@ -7,10 +7,8 @@ import { LOCALE_ID } from '@angular/core';
 
 // Global
 
-import { Daterangepicker } from 'ng2-daterangepicker';
 import { PlexModule, Plex } from '@andes/plex';
 import { Auth } from '@andes/auth';
-import { FileUploadModule, FileSelectDirective } from 'ng2-file-upload';
 import { Server } from '@andes/shared';
 import { RoutingGuard } from './app.routings-guard.class';
 import { PDFUtils } from './utils/PDFUtils';
@@ -159,9 +157,7 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
     HttpClientModule,
     PlexModule,
     routing,
-    FileUploadModule,
     InfiniteScrollModule,
-    Daterangepicker,
     Ng2ImgMaxModule,
     Ng2ImgToolsModule,
     ImageUploadModule.forRoot(),

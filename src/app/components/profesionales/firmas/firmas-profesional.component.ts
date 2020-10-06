@@ -13,11 +13,6 @@ import {
   Plex
 } from '@andes/plex';
 
-// FileUploader
-import {
-  FileUploader
-} from 'ng2-file-upload';
-
 // Interfaces
 import {
   IProfesional

@@ -5,8 +5,9 @@
     "src/polyfills.ts"
   ],
   "include": [
-    "src/**/*.ts",
+    "src/**/*.d.ts",
     "node_modules/@andes/**/*.ts",
+    "node_modules/ng2-slugify/**/*.ts"
   ],
   "exclude": [
     "src/test.ts",

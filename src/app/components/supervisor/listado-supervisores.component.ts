@@ -1,14 +1,4 @@
-import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
-
-// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
-import * as Enums from './../../utils/enumerados';
-import { FormBuilder, FormGroup, Validators, FormArray, FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-
-// Services
-import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
-import { ProfesionService } from './../../services/profesion.service';
-import { SIISAService } from '../../services/siisa.service';
+import { Component, HostBinding, OnDestroy } from '@angular/core';
 import { UsuarioService } from '../../services/usuario.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ProfesionalService } from '../../services/profesional.service';
@@ -16,13 +6,13 @@ import { Auth } from '@andes/auth';
 import { Ng2ImgMaxService } from 'ng2-img-max';
 import { Plex } from '@andes/plex';
 import { catchError } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-supervisores',
   templateUrl: 'listado-supervisores.html'
 })
-export class SupervisoresComponent implements OnInit {
+export class SupervisoresComponent implements OnDestroy {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
   public esSupervisor = false;
   public users;
@@ -39,6 +29,8 @@ export class SupervisoresComponent implements OnInit {
   public firmaAdmin = null;
   public textoLibre;
   public loading;
+  private searchSubscribe = new Subscription();
+
   constructor(
     private _profesionalService: ProfesionalService,
     private usuarioService: UsuarioService,
@@ -51,25 +43,36 @@ export class SupervisoresComponent implements OnInit {
 
   }
 
-  ngOnInit() {
+  ngOnDestroy() {
+    if (this.searchSubscribe) {
+      this.searchSubscribe.unsubscribe();
+    }
   }
 
   /**
 * Busca usuario cada vez que el campo de busca cambia su valor
 */
   public loadUsuarios() {
-    this.usuarioService.get().subscribe(
-      datos => {
-        this.users = datos;
+    if (this.textoLibre && this.textoLibre.length) {
+      let searchTerm = (this.textoLibre && this.textoLibre.length) ? this.textoLibre.trim() : '';
 
+      if (this.searchSubscribe) {
+        this.searchSubscribe.unsubscribe();
       }
-    );
+
+      this.usuarioService.find({ search: '^' + searchTerm, organizacion: this.auth.organizacion.id, fields: '-password -permisosGlobales -disclaimers', limit: 50 }).subscribe(
+        datos => {
+          this.users = datos;
+        }
+      );
+    } else {
+      this.users = null;
+    }
   }
 
   selectUser(user) {
     this.userSeleccionado = user;
-    this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d._id === this.auth.organizacion._id);
-    // tslint:disable-next-line:max-line-length
+    this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d.id === this.auth.organizacion.id);
     if (this.indexOrganizacion === -1) {
       this.plex.info('info', 'Este usuario no esta en la organizacion');
       this.userSeleccionado = null;
@@ -84,12 +87,14 @@ export class SupervisoresComponent implements OnInit {
       } else {
         this.esSupervisor = false;
       }
-      this._profesionalService.getProfesionalFirma({ firmaAdmin: this.userSeleccionado._id }).pipe(catchError(() => of(null))).subscribe(resp => {
-        if (resp) {
+      this._profesionalService.getProfesionalFirma({ firmaAdmin: this.userSeleccionado.id }).pipe(catchError(() => of(null))).subscribe(resp => {
+        if (resp && resp.firma) {
           this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp.firma);
           this.firmaAdmin = resp.firma;
+        } else {
+          this.urlFirmaAdmin = null;
+          this.firmaAdmin = null;
         }
-        // this.nombreAdministrativo = resp.administracion;
       });
     }
   }
@@ -116,7 +121,7 @@ export class SupervisoresComponent implements OnInit {
     const firmaADmin = {
       'firma': this.base64textStringAdmin,
       'nombreCompleto': 'asda',
-      'idSupervisor': this.userSeleccionado._id
+      'idSupervisor': this.userSeleccionado.id
     };
     this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
       this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
@@ -124,15 +129,20 @@ export class SupervisoresComponent implements OnInit {
   }
 
   modificarPermiso() {
+    let permisosUss = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos;
+
     if (this.esSupervisor) {
-      this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.push('matriculaciones:supervisor:aprobar');
+      permisosUss.push('matriculaciones:supervisor:aprobar');
     } else {
       // tslint:disable-next-line:max-line-length
-      const index = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.findIndex(d => d === 'matriculaciones:supervisor:aprobar'); // find index in your array
-      this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.splice(index, 1);
-
+      const index = permisosUss.findIndex(d => d === 'matriculaciones:supervisor:aprobar');
+      permisosUss.splice(index, 1);
     }
-    this.usuarioService.save(this.userSeleccionado).subscribe(data => {
+    const body = {
+      permisos: permisosUss,
+    };
+    this.usuarioService.updateOrganizacion(this.userSeleccionado.usuario, this.auth.organizacion.id, body).subscribe(() => {
+      this.plex.toast('success', 'Permisos grabados exitosamente!');
     });
   }
 

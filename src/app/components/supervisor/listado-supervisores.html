@@ -8,13 +8,13 @@
               <h3>Administración de Supervisores</h3>
             </header>
 
-            <plex-text [(ngModel)]="textoLibre" name='busqueda' (change)="loadUsuarios()"
-                       prefix="<i class='account-search'></i>" placeholder="Buscar por DNI, nombre o apellido">
+            <plex-text [(ngModel)]="textoLibre" name='busqueda' [debounce]="500" (change)="loadUsuarios()"
+                       prefix="<i class='mdi mdi-account-search'></i>" placeholder="Buscar por DNI, nombre o apellido">
             </plex-text>
             <!--Loader-->
             <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
             <div *ngIf="users && !users.length" class="alert alert-danger">
-              El usuario no se ha encontrado
+              <i class="mdi mdi-account-alert"></i> El usuario no se ha encontrado
             </div>
             <!--Tabla de resultados por SimpleQuery -->
             <table *ngIf="users && users.length" class="table table-striped">
@@ -27,7 +27,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr class="hover" *ngFor="let user of users  | textFilter:textoLibre ; let i=index">
+                <tr class="hover" *ngFor="let user of users; let i=index">
                   <td>{{user.usuario}}</td>
                   <td *ngIf="user.apellido; else sinDatos">
                     {{user.apellido}}
@@ -40,8 +40,8 @@
                   </ng-template>
 
                   <td>
-                    <plex-button title="Seleccionar Usuario" icon="check-circle-outline" type="link"
-                                 (click)="selectUser(user)"></plex-button>
+                    <plex-button title="Seleccionar Usuario" icon="check-circle" type="link" (click)="selectUser(user)">
+                    </plex-button>
                   </td>
                 </tr>
               </tbody>
@@ -56,7 +56,7 @@
             <plex-bool type="slide" [(ngModel)]="esSupervisor" (change)='modificarPermiso()' label='Es Supervisor?'
                        name="especialidad"></plex-bool>
             <div class="col-12">
-              <div class="page-title">Firma</div>
+              <div class="page-title">{{ urlFirmaAdmin ? 'Firma' : 'Sin Firma'}}</div>
               <img *ngIf='urlFirmaAdmin' [src]="urlFirmaAdmin" style="width: 300px" />
               <div class="form-group">
                 <div>
@@ -80,9 +80,11 @@
           </plex-box>
         </div>
       </div>
-
-
-
+      <div class="col-12">
+        <br>
+        <plex-button *ngIf='base64textStringAdmin' label="Guardar" type="success" (click)="guardarFirmaAdminGrid()">
+        </plex-button>
+      </div>
     </plex-box>
   </section>
 </form>

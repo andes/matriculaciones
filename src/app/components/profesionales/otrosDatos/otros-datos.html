@@ -1,20 +1,24 @@
 <plex-accordion>
-  <plex-panel tituloPrincipal="Otros datos" icon="plus-circle-outline" [active]="activeAcc">
+  <plex-panel tituloPrincipal="Otros datos" icon="plus-circle" [active]="activeAcc">
     <div class="row">
       <div class="col">
         <form #otros='ngForm'>
           <div class="row">
             <div class="col-4">
-              <plex-int label="Matrícula provincial" [(ngModel)]="otrosDatos.matriculaProvincial" name="matriculaProvincial" [required]="true" [readonly]="!profesional.habilitado"></plex-int>
+              <plex-int label="Matrícula provincial" [(ngModel)]="otrosDatos.matriculaProvincial"
+                        name="matriculaProvincial" [required]="true" [readonly]="!profesional.habilitado"></plex-int>
             </div>
             <div class="col-md-4">
-              <plex-text label="Folio" [(ngModel)]="otrosDatos.folio" name='folio' [required]="true" [readonly]="!profesional.habilitado"></plex-text>
+              <plex-text label="Folio" [(ngModel)]="otrosDatos.folio" name='folio' [required]="true"
+                         [readonly]="!profesional.habilitado"></plex-text>
             </div>
             <div class="col-md-4">
-              <plex-text label="Libro" [(ngModel)]="otrosDatos.libro" name='libro' [required]="true" [readonly]="!profesional.habilitado"></plex-text>
+              <plex-text label="Libro" [(ngModel)]="otrosDatos.libro" name='libro' [required]="true"
+                         [readonly]="!profesional.habilitado"></plex-text>
             </div>
             <div class="col-md-4">
-              <plex-int label="Año" [(ngModel)]="otrosDatos.anio" name='anio' [required]="true" [readonly]="!profesional.habilitado"></plex-int>
+              <plex-int label="Año" [(ngModel)]="otrosDatos.anio" name='anio' [required]="true"
+                        [readonly]="!profesional.habilitado"></plex-int>
             </div>
 
           </div>
@@ -23,8 +27,10 @@
 
           <div class="row">
             <div class="col">
-              <plex-button *ngIf="profesional.habilitado" label="Guardar" type="success" class="float-right" (click)="onSubmit($event,otros)" validateForm="true"></plex-button>
-              <plex-button *ngIf="!profesional.habilitado" disabled="true" label="Guardar" type="success" class="float-right" (click)="onSubmit($event,otros)" validateForm="true"></plex-button>
+              <plex-button *ngIf="profesional.habilitado" label="Guardar" type="success" class="float-right"
+                           (click)="onSubmit($event,otros)" validateForm="true"></plex-button>
+              <plex-button *ngIf="!profesional.habilitado" disabled="true" label="Guardar" type="success"
+                           class="float-right" (click)="onSubmit($event,otros)" validateForm="true"></plex-button>
 
             </div>
           </div>
@@ -61,7 +67,8 @@
   <div class="row">
     <div class="col-12" *ngIf='profesional.documentoViejo'>
       <br><br>
-      <span><span class="text-danger">*</span>Realizó un cambio de documento del N°<strong>{{profesional.documentoViejo}}</strong> al <strong>{{profesional.documento}} </strong> </span>
+      <span><span class="text-danger">*</span>Realizó un cambio de documento del
+        N°<strong>{{profesional.documentoViejo}}</strong> al <strong>{{profesional.documento}} </strong> </span>
     </div>
   </div>
 </plex-accordion>

@@ -10,7 +10,7 @@
         </plex-button>
         <plex-button type="primary" icon="account-plus" title='Nuevo profesional'
                      (click)='nuevoProfesional = true;confirmar = true'></plex-button>
-        <plex-button type="primary" icon="file" *ngIf="tienePermisos" title='Exportar SISA'
+        <plex-button type="primary" icon="download" *ngIf="tienePermisos" title='Exportar SISA'
                      (click)='verExportador = true;profesionalElegido = false;'></plex-button>
         <plex-button *ngIf="nuevoProfesional === false" icon="arrow-left" title='Volver' type="danger"
                      routerLink="/homeAdministracion">
@@ -181,7 +181,7 @@
     </div>
     <div *ngIf='profesionalElegido'>
       <plex-title titulo="Resumen profesional" size="md">
-        <plex-button type="danger" size="sm" (click)="cerrarResumenProfesional()" icon="window-close">
+        <plex-button type="danger" size="sm" (click)="cerrarResumenProfesional()" icon="cruz">
         </plex-button>
       </plex-title>
       <div class="row">
@@ -237,7 +237,7 @@
     </div>
     <div *ngIf='verExportador'>
       <plex-title titulo="Exportar a SISA" size="md">
-        <plex-button type="danger" size="sm" icon="window-close" (click)="verExportador = false;">
+        <plex-button type="danger" size="sm" icon="cruz" (click)="verExportador = false;">
         </plex-button>
       </plex-title>
       <div class="row">

@@ -60,7 +60,7 @@
                 overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
          [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
       <div class="col-12" *ngIf="turnos.length === 0" class="alert alert-danger">
-        <i class="mdi mdi-account-alert"></i> No se encontró ningún turno
+        No se encontró ningún turno
       </div>
       <div class="col-12">
         <ul class="list-group w-100">

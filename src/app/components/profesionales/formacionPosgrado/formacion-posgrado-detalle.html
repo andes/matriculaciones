@@ -180,8 +180,8 @@
                         Vigente</span>
                     </td>
                     <td *ngIf='formacion.fechasDeAltas.length > 1'>
-                      <plex-button icon='window-close' type="danger"
-                                   (click)="borrarFechaAlta(formacion.fechasDeAltas,i)"></plex-button>
+                      <plex-button icon='cruz' type="danger" (click)="borrarFechaAlta(formacion.fechasDeAltas,i)">
+                      </plex-button>
                     </td>
                   </tr>
                 </tbody>

@@ -1,131 +1,133 @@
 <section>
-    <div class="row">
-        <div class="col-8">
-            <plex-box type="primary">
-                <header>
-                    <div class="row">
-                        <div class="col">
-                            <div class="page-title">Listado de solicitudes de cambio de DNI</div>
-                        </div>
-                    </div>
-                    <br>
-                </header>
-                <div class="row">
-                    <div class="col-12">
-                        <div *ngIf="solicitudesDeCambio.length === 0" class="alert alert-danger">
-                            <i class="mdi mdi-account-alert"></i> No se encontró ningúna solicitud
-                        </div>
-                        <ul class="list-group hover">
-                            <li class="list-group-item" *ngFor="let listado of solicitudesDeCambio; let i = index;" (click)="seleccionar(listado)">
+  <div class="row">
+    <div class="col-8">
+      <plex-box type="primary">
+        <header>
+          <div class="row">
+            <div class="col">
+              <div class="page-title">Listado de solicitudes de cambio de DNI</div>
+            </div>
+          </div>
+          <br>
+        </header>
+        <div class="row">
+          <div class="col-12">
+            <div *ngIf="solicitudesDeCambio.length === 0" class="alert alert-danger">
+              <i class="mdi mdi-account-alert"></i> No se encontró ningúna solicitud
+            </div>
+            <ul class="list-group hover">
+              <li class="list-group-item" *ngFor="let listado of solicitudesDeCambio; let i = index;"
+                  (click)="seleccionar(listado)">
 
-                                <div class="row" style="width: 100%">
-                                    <div class="col-9">
-                                        <h5 class="box-title-elemento">
-                                            <strong> {{listado.apellido}}</strong> {{listado.nombre}}
-                                        </h5>
-                                        <h6 class="box-title-elemento">
-                                            DNI actual: 
-                                             {{listado.dniActual}}
-                                            <br>
-                                            Fecha: 
-                                             {{listado.fecha | fecha}}
-                                        </h6>
+                <div class="row" style="width: 100%">
+                  <div class="col-9">
+                    <h5 class="box-title-elemento">
+                      <strong> {{listado.apellido}}</strong> {{listado.nombre}}
+                    </h5>
+                    <h6 class="box-title-elemento">
+                      DNI actual:
+                      {{listado.dniActual}}
+                      <br>
+                      Fecha:
+                      {{listado.fecha | fecha}}
+                    </h6>
 
-                                    </div>
-                                    <div class="col-3">
-                                        <h6 class="box-title-elemento margenBadge">
-                                            <span class="badge badge-danger" *ngIf='listado.atendida === false'>Sin atender</span>
-                                            <span class="badge badge-success" *ngIf='listado.atendida === true'>Atendido</span>
-                                        </h6>
-                                    </div>
+                  </div>
+                  <div class="col-3">
+                    <h6 class="box-title-elemento margenBadge">
+                      <span class="badge badge-danger" *ngIf='listado.atendida === false'>Sin atender</span>
+                      <span class="badge badge-success" *ngIf='listado.atendida === true'>Atendido</span>
+                    </h6>
+                  </div>
 
 
 
-                                </div>
+                </div>
 
-                            </li>
-                        </ul>
-                        <!-- <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button" (click)="nextPage()">
+              </li>
+            </ul>
+            <!-- <div *ngIf="turnos.length > 1 && turnos.length < turnosTotal" class="alert alert-info" role="button" (click)="nextPage()">
                             <p class="text-center"> Ver más </p>
                         </div> -->
 
-                    </div>
-                </div>
-            </plex-box>
+          </div>
         </div>
-        <div class="col-4" *ngIf='solicitudElegida'>
-            <plex-box>
-                <header>
-                    <button class="float-right btn btn-danger" (click)="cerrarResumenSolicitud()">
-                        <i class="mdi mdi-window-close"></i>
-                    </button>
-                    <div class="page-title">Cambio de DNI</div>
-                </header>
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="row mb-1">
-                            <div class="col">
-                                <label class="block">Apellido y nombre</label>
-                                <span>{{solicitudElegida.apellido}},{{solicitudElegida.nombre}}</span>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <div class="col-6">
-                                <label class="block">Nacionalidad</label>
-                                <span>{{ solicitudElegida.nacionalidad.nombre }}</span>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <div class="col-6">
-                                <label>Sexo</label>
-                                <span>{{ solicitudElegida.sexo}}</span>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <div class="col-5">
-                                <label>DNI Actual</label>
-                                <span>{{ solicitudElegida.dniActual}}</span>
-                            </div>
+      </plex-box>
+    </div>
+    <div class="col-4" *ngIf='solicitudElegida'>
+      <plex-box>
+        <header>
+          <button class="float-right btn btn-danger" (click)="cerrarResumenSolicitud()">
+            <i class="cruz"></i>
+          </button>
+          <div class="page-title">Cambio de DNI</div>
+        </header>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="row mb-1">
+              <div class="col">
+                <label class="block">Apellido y nombre</label>
+                <span>{{solicitudElegida.apellido}},{{solicitudElegida.nombre}}</span>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6">
+                <label class="block">Nacionalidad</label>
+                <span>{{ solicitudElegida.nacionalidad.nombre }}</span>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6">
+                <label>Sexo</label>
+                <span>{{ solicitudElegida.sexo}}</span>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-5">
+                <label>DNI Actual</label>
+                <span>{{ solicitudElegida.dniActual}}</span>
+              </div>
 
-                            <div class="col-md-2 text-center">
-                                <span class="mdi mdi-arrow-right-bold-box-outline text-info" style='font-size:50px; position:absolute; right: 58.73%;'></span>
-                            </div>
-                            <div class="col-5">
-                                <label>DNI Nuevo</label>
-                                <span>{{ solicitudElegida.dniNuevo}}</span>
-                            </div>
-                        </div>
-                        <div class="row mb-1">
-                            <div class="col-6">
-                                <label>Fecha solicitud</label>
-                                <span>{{ solicitudElegida.fecha | fecha}}</span>
-                            </div>
-                            <div class="col-6">
-                                <div style="position: relative;
+              <div class="col-md-2 text-center">
+                <span class="mdi mdi-arrow-right-bold-box-outline text-info"
+                      style='font-size:50px; position:absolute; right: 58.73%;'></span>
+              </div>
+              <div class="col-5">
+                <label>DNI Nuevo</label>
+                <span>{{ solicitudElegida.dniNuevo}}</span>
+              </div>
+            </div>
+            <div class="row mb-1">
+              <div class="col-6">
+                <label>Fecha solicitud</label>
+                <span>{{ solicitudElegida.fecha | fecha}}</span>
+              </div>
+              <div class="col-6">
+                <div style="position: relative;
                                     top: 26px;
                                     left: 37px;">
-                                    <span class="badge badge-danger" *ngIf='solicitudElegida.atendida === false'>Sin atender</span>
-                                    <span class="badge badge-success" *ngIf='solicitudElegida.atendida === true'>Atendido</span>
+                  <span class="badge badge-danger" *ngIf='solicitudElegida.atendida === false'>Sin atender</span>
+                  <span class="badge badge-success" *ngIf='solicitudElegida.atendida === true'>Atendido</span>
 
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <div class="row mb-1">
-                            <div class="col-12 text-center">
-                                <plex-button label="Aprobar Cambio de DNI" type="success" (click)="aprobar()"></plex-button>
-                                <plex-button *ngIf='!Match' label="Eliminar" type="danger" (click)="eliminar()"></plex-button>
-                            </div>
-                        </div>
-                    </div>
                 </div>
-
-            </plex-box>
+              </div>
+            </div>
+            <br>
+            <div class="row mb-1">
+              <div class="col-12 text-center">
+                <plex-button label="Aprobar Cambio de DNI" type="success" (click)="aprobar()"></plex-button>
+                <plex-button *ngIf='!Match' label="Eliminar" type="danger" (click)="eliminar()"></plex-button>
+              </div>
+            </div>
+          </div>
         </div>
+
+      </plex-box>
     </div>
+  </div>
 
 </section>
 
 <footer>
-    <plex-button label="Volver" type="danger" routerLink="/turnos"></plex-button>
+  <plex-button label="Volver" type="danger" routerLink="/turnos"></plex-button>
 </footer>

@@ -20,15 +20,15 @@
             </plex-button>
             <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                          title="Generar credencial" type="success" class="float-right btnGrado"
-                         icon="mdi mdi-credit-card" (click)="credencialAcciones(i)"></plex-button>
+                         icon="card-account-details" (click)="credencialAcciones(i)"></plex-button>
             <plex-button title="Generar certificado de ética" type="warning"
                          *ngIf='formacionGrado.matriculacion && formacionGrado.matriculado' class="float-right btnGrado"
-                         icon="mdi mdi-certificate" (click)="generarCertificadoEtica(i)"></plex-button>
+                         icon="documentos" (click)="generarCertificadoEtica(i)"></plex-button>
             <plex-button *ngIf="profesional.habilitado === true" title="Editar" type="success"
-                         class="float-right btnGrado" icon="mdi mdi-pencil" (click)="editar(formacionGrado,i)">
+                         class="float-right btnGrado" icon="lapiz" (click)="editar(formacionGrado,i)">
             </plex-button>
             <plex-button class="float-right btnGrado" type="danger" title="Imprimir datos del profesional"
-                         (click)="pdf(i)" icon='mdi mdi-file-pdf-box'> </plex-button>
+                         (click)="pdf(i)" icon='impresora'> </plex-button>
           </div>
         </div>
       </div>

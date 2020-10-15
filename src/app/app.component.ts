@@ -57,18 +57,18 @@ export class AppComponent {
       this.auth.organizaciones().subscribe(data => {
 
         if (data.length > 1) {
-          this.menuList = [{ label: 'Seleccionar organización', icon: 'home', route: '/selectOrganizacion' }, ...this.menuList];
+          this.menuList = [{ label: 'Seleccionar organización', icon: 'hospital', route: '/selectOrganizacion' }, ...this.menuList];
           this.plex.updateMenu(this.menuList);
         }
         accessList.push({
           label: 'Home',
-          icon: 'mdi mdi-home',
+          icon: 'home',
           route: '/homeAdministracion'
         });
         if (this.auth.getPermissions('matriculaciones:agenda:?').length > 0) {
           accessList.push({
             label: 'Agenda',
-            icon: 'mdi mdi-pencil-box-outline',
+            icon: 'calendar',
             route: '/agenda'
           });
         }
@@ -76,27 +76,27 @@ export class AppComponent {
 
           accessList.push({
             label: 'Turnos',
-            icon: 'mdi mdi-calendar',
+            icon: 'calendar',
             route: '/turnos'
           });
         }
         if (this.auth.getPermissions('matriculaciones:profesionales:?').length > 0) {
           accessList.push({
             label: 'Profesionales',
-            icon: 'mdi mdi-account-multiple',
+            icon: ' account-multiple',
             route: '/listarProfesionales'
           });
         }
         if (this.auth.check('matriculaciones:reportes')) {
           accessList.push({
             label: 'Reportes',
-            icon: 'mdi mdi-file-chart',
+            icon: 'file-chart',
             route: '/reportes'
           });
         }
         accessList.push({
           label: 'Supervisores',
-          icon: 'mdi mdi-account-multiple',
+          icon: 'account-multiple',
           route: '/supervisores'
         });
         accessList.push({

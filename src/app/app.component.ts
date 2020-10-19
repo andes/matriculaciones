@@ -83,7 +83,7 @@ export class AppComponent {
         if (this.auth.getPermissions('matriculaciones:profesionales:?').length > 0) {
           accessList.push({
             label: 'Profesionales',
-            icon: ' account-multiple',
+            icon: 'account-multiple',
             route: '/listarProfesionales'
           });
         }
@@ -110,6 +110,7 @@ export class AppComponent {
         accessList.forEach((permiso) => {
           this.menuList.push(permiso);
         });
+        this.plex.updateMenu(this.menuList);
       });
     } else {
       // Página pública

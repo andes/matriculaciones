@@ -3,22 +3,22 @@
     <plex-button title="Mantener el mismo numero de matricula"
                  *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === false'
                  type="success" icon="equal" (click)="matricularProfesional(formacion,true)"></plex-button>
-    <plex-button type="primary" icon="mdi mdi-plus" title="Agregar nueva matricula"
+    <plex-button type="primary" icon="plus" title="Agregar nueva matricula"
                  *ngIf='formacion.papelesVerificados && this.profesional.formacionGrado[index].matriculado === false'
                  (click)="matricularProfesional(formacion,false)"></plex-button>
     <plex-button title="Renovar antes de la fecha del vencimiento" type="warning"
                  *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
-                 icon="mdi mdi-calendar-check" (click)="renovarAntesVencimiento()"></plex-button>
+                 icon="calendar" (click)="renovarAntesVencimiento()"></plex-button>
     <plex-button type="danger" title="Anular matricula"
                  *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
-                 [disabled]="!motivoBaja" icon="mdi mdi-block-helper" (click)="darDeBaja()"></plex-button>
+                 [disabled]="!motivoBaja" icon="prohibido " (click)="darDeBaja()"></plex-button>
     <plex-button title="Papeles verificados"
                  *ngIf='formacion.matriculacion && !formacion.papelesVerificados && formacion.renovacion === true && esSupervisor '
-                 type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
+                 type="success" icon="check" (click)="papelesVerificados()"></plex-button>
 
     <plex-button title="Papeles verificados"
                  *ngIf='!profesional.formacionGrado[index].matriculacion && !profesional.formacionGrado[index].papelesVerificados && esSupervisor'
-                 type="success" icon="mdi mdi-check" (click)="papelesVerificados()"></plex-button>
+                 type="success" icon="check" (click)="papelesVerificados()"></plex-button>
 
     <plex-button title="Renovar" type="success" class="btn-group float-right"
                  *ngIf='formacion.matriculacion && formacion.matriculado === false && formacion.papelesVerificados === false && formacion.renovacion === false'
@@ -40,7 +40,7 @@
       </div>
       <div class="form-group" *ngIf='edit'>
         <plex-text label="Título" [(ngModel)]="formacion.titulo" name='titulo' [required]="true"></plex-text>
-        <plex-button type="success" icon="mdi mdi-check" (click)='actualizar();edit = false'></plex-button>
+        <plex-button type="success" icon="check" (click)='actualizar();edit = false'></plex-button>
 
       </div>
     </div>

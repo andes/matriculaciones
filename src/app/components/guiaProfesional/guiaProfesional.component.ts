@@ -7,19 +7,12 @@ import {
     EventEmitter,
     HostBinding
 } from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    Validators
-} from '@angular/forms';
 
 // Plex
 import { Plex } from '@andes/plex';
 import { ProfesionalService } from '../../services/profesional.service';
 import * as Enums from './../../utils/enumerados';
 import { ProfesionService } from '../../services/profesion.service';
-
-
 
 @Component({
     selector: 'app-guia-profesional',
@@ -32,7 +25,7 @@ export class GuiaProfesionalComponent implements OnInit {
     public filtro;
     public profEncontrado;
     public mostrarInfo = false;
-    public busqueda = {
+    public busqueda: any = {
         nombre: null,
         apellido: null,
         documento: null,
@@ -70,11 +63,7 @@ export class GuiaProfesionalComponent implements OnInit {
 
 
     limpiaFiltro() {
-        this.busqueda.documento = null;
-        this.busqueda.formacionGrado = null;
-        this.busqueda.numeroMatricula = null;
-        this.busqueda.apellido = null,
-            this.busqueda.nombre = null;
+        this.busqueda = {};
     }
 
 }

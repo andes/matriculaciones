@@ -48,13 +48,14 @@
                                         <plex-text label="Nombre" [(ngModel)]="busqueda.nombre" name='nombre'></plex-text>
                                     </div>
                                     <div class="col-md-4">
-                                        <plex-text label="Apellido" name='numMatricula' [(ngModel)]="busqueda.apellido"
+                                        <plex-text label="Apellido" name='apellido' [(ngModel)]="busqueda.apellido"
                                             placeholder="escriba un documento" [required]="true">
                                         </plex-text>
                                     </div>
                                     <div class="col-md-4">
-                                        <plex-select label="Profesion" [(ngModel)]="busqueda.formacionGrado" name='profesion'
-                                            (getData)="loadProfesiones($event)" [required]="true"></plex-select>
+                                        <plex-int label="Número Matrícula" name='numMatricula' [(ngModel)]="busqueda.numeroMatricula"
+                                            placeholder="Escriba matrícula" [required]="true">
+                                        </plex-int>
                                     </div>
                                 </div>
                             </div>
@@ -81,36 +82,19 @@
                     </thead>
                     <ng-container *ngFor='let unProfesional of profEncontrado'>
                         <tbody *ngFor='let unProfesion of unProfesional.profesiones'>
-                            <ng-container *ngIf=' (filtro && filtro.id === 2 || filtro.id === 1) && (unProfesion.profesion.codigo === busqueda.codigoProfesion)'>
-                                <td>{{unProfesional.apellido}} {{unProfesional.nombre}}</td>
-                                <td>{{unProfesional.sexo}}</td>
-                                <td>{{unProfesional.documento}}</td>
-                                <td>{{unProfesional.nacionalidad}}</td>
-                                <td> {{unProfesion.profesion.nombre}}</td>
-                                <td> {{unProfesion.matriculacion[unProfesion.matriculacion.length -
-                                    1].matriculaNumero}}</td>
-                                <td *ngIf='unProfesion.matriculado'>
-                                    <span class="badge badge-success">Activa</span>
-                                </td>
-                                <td *ngIf='!unProfesion.matriculado'>
-                                    <span class="badge badge-danger">vencida</span>
-                                </td>
-                            </ng-container>
-                            <ng-container *ngIf='(filtro && filtro.id === 0)'>
-                                    <td>{{unProfesional.apellido}} {{unProfesional.nombre}}</td>
-                                    <td>{{unProfesional.sexo}}</td>
-                                    <td>{{unProfesional.documento}}</td>
-                                    <td>{{unProfesional.nacionalidad}}</td>
-                                    <td> {{unProfesion.profesion.nombre}}</td>
-                                    <td> {{unProfesion.matriculacion[unProfesion.matriculacion.length -
-                                        1].matriculaNumero}}</td>
-                                    <td *ngIf='unProfesion.matriculado'>
-                                        <span class="badge badge-success">Activa</span>
-                                    </td>
-                                    <td *ngIf='!unProfesion.matriculado'>
-                                        <span class="badge badge-danger">vencida</span>
-                                    </td>
-                                </ng-container>
+                            <td>{{unProfesional.apellido}} {{unProfesional.nombre}}</td>
+                            <td>{{unProfesional.sexo}}</td>
+                            <td>{{unProfesional.documento}}</td>
+                            <td>{{unProfesional.nacionalidad}}</td>
+                            <td> {{unProfesion.profesion.nombre}}</td>
+                            <td> {{unProfesion.matriculacion[unProfesion.matriculacion.length -
+                                1].matriculaNumero}}</td>
+                            <td *ngIf='unProfesion.matriculado'>
+                                <span class="badge badge-success">Activa</span>
+                            </td>
+                            <td *ngIf='!unProfesion.matriculado'>
+                                <span class="badge badge-danger">vencida</span>
+                            </td>
                         </tbody>
                     </ng-container>
 

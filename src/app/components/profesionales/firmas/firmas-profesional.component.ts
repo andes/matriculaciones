@@ -54,7 +54,7 @@ export class FirmasProfesionalComponent implements OnInit {
 
   ngOnInit() {
     this._profesionalService.getProfesionalFirma({ id: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
-      this.urlFirma = (resp && resp.firma) ? this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp) : null;
+      this.urlFirma = resp ? this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp) : null;
     });
     this._profesionalService.getProfesionalFirma({ firmaAdmin: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
       if (resp && resp.firma) {

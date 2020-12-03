@@ -3,12 +3,8 @@
 <div *ngIf='!edit'>
   <plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
     <header>
+      <plex-title [titulo]='formacionGrado.profesion.nombre' size="sm" class="info-subtitle float-left"></plex-title>
       <div class="row">
-        <div class="col">
-          <legend class="info-subtitle float-left">
-            {{formacionGrado.profesion.nombre}}
-          </legend>
-        </div>
         <div class="col">
           <div class="btn-group float-right">
             <span *ngIf="formacionGrado.matriculacion !== null" class="badge badge-info">Nro Matrícula:
@@ -109,13 +105,9 @@
   </div>
   <div class="row" *ngIf='edit  && !credencial'>
     <div class="col">
-      <div class="row">
-        <div class="col">
-          <legend class="info-subtitle float-left">
-            {{formacionSelected.profesion.nombre}}
-          </legend>
-        </div>
-      </div>
+      <plex-title [titulo]='formacionSelected.profesion.nombre' size="sm">
+        <adjunto-titulo-profesional [profesionalId]='profesional.id' [formacionSelected]='formacionSelected' ></adjunto-titulo-profesional>
+      </plex-title>
       <form #posgrado='ngForm'>
         <div class="row">
           <div class="col-md-6">

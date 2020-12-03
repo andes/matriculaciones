@@ -84,6 +84,7 @@ import { GuiaProfesionalComponent } from './components/guiaProfesional/guiaProfe
 import { TurnosComponent } from './components/turnos/turnos.component';
 import { ListadoTurnosPdfComponent } from './components/turnos/listado-turnos-pdf.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
+import { UploadFileComponent } from './shared/components/upload-file.component';
 
 // Locales
 import { AppComponent } from './app.component';
@@ -120,6 +121,7 @@ import { TextFilterPipe } from './pipes/textFilter.pipe';
 import { UsuarioService } from './services/usuario.service';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
 import { Ng2ImgToolsModule } from 'ng2-img-tools';
+import { TituloProfesionalComponent } from './components/profesionales/tituloProfesional/adjunto-titulo-profesional.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -148,7 +150,9 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
     ScrollComponent,
     SupervisoresComponent,
     ListadoTurnosPdfComponent,
-    ReportesComponent
+    ReportesComponent,
+    UploadFileComponent,
+    TituloProfesionalComponent
   ],
   imports: [
     BrowserModule,

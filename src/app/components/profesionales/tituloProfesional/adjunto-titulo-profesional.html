@@ -1,0 +1,3 @@
+<plex-button type="success" tooltip="Descargar título" class='float-right' *ngIf='formacionSelected.tituloFileId' icon='download'
+  (click)='descargar(formacionSelected.tituloFileId)'></plex-button>
+<upload-file label="Adjuntar Título" [extensiones]="['pdf']" (onUpload)="onUpload($event)" [modulo]="'editarProfesional'" ></upload-file>

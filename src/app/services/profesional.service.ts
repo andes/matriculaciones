@@ -75,6 +75,13 @@ export class ProfesionalService extends BaseService {
     return this.server.get(this.profesionalesURL + 'matching', { params: params, showError: true });
   }
 
+  saveProfesionalTituloGrado(metadata): Observable<any> {
+    return this.server.post(this.profesionalesURL + 'formacionGrado/titulo', metadata);
+  }
+
+  saveProfesionalTituloPosgrado(metadata): Observable<any> {
+    return this.server.post(this.profesionalesURL + 'formacionPosgrado/titulo', metadata);
+  }
 
 }
 

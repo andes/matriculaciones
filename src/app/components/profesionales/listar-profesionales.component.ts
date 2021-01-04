@@ -238,4 +238,10 @@ export class ListarProfesionalesComponent implements OnInit {
     const fechasEgreso = profesional.formacionGrado.map(grado => grado.fechaEgreso);
     return Math.max.apply(null, fechasEgreso);
   }
+
+  crearMuevoProfesional() {
+    this.cerrarResumenProfesional();
+    this.nuevoProfesional = true;
+    this.confirmar = true;
+  }
 }

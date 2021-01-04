@@ -9,7 +9,7 @@
         <plex-button type="primary" icon="format-list-bulleted" title='Numeraciones' routerLink="/listadoNumeraciones">
         </plex-button>
         <plex-button type="primary" icon="account-plus" title='Nuevo profesional'
-                     (click)='nuevoProfesional = true;confirmar = true'></plex-button>
+                     (click)='crearMuevoProfesional()'></plex-button>
         <plex-button type="primary" icon="download" *ngIf="tienePermisos" title='Exportar SISA'
                      (click)='verExportador = true;profesionalElegido = false;'></plex-button>
         <plex-button *ngIf="nuevoProfesional === false" icon="arrow-left" title='Volver' type="danger"

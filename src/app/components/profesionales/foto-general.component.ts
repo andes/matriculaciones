@@ -31,7 +31,7 @@ import { of } from 'rxjs';
   styles: ['.img-circle {  border-radius: 50%;  width: 128px !important;height: 128px !important;}']
 
 })
-export class FotoGeneralComponent implements OnChanges {
+export class FotoGeneralComponent implements OnInit, OnChanges {
   @Input() profesional: IProfesional;
   @Input() img64 = null;
   @Input() idProfesional;
@@ -41,21 +41,17 @@ export class FotoGeneralComponent implements OnChanges {
     private _profesionalService: ProfesionalService) {
   }
 
-  // ngOnChanges() {
-  //     if (this.img64 !== undefined && this.img64 !== null) {
-  //         this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).subscribe(resp => {
-  //             this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
-  //             if (this.img64 !== undefined && this.img64 !== null) {
-  //                 this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
-  //             }
-  //         });
+  ngOnInit() {
 
-  //     }
+    this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
+      if (resp) {
+        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
+        this.tieneFoto = true;
+      }
+    });
 
+  }
 
-
-
-  // }
   ngOnChanges() {
     if (this.img64) {
       this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);

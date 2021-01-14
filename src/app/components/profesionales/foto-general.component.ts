@@ -59,7 +59,6 @@ export class FotoGeneralComponent implements OnInit, OnChanges {
       this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
         if (resp) {
           this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
-          this.tieneFoto = true;
         }
       });
     }

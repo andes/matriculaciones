@@ -37,6 +37,8 @@ import { SolicitarSobreTurnoMatriculacionComponent } from './components/turnos/s
 import { SupervisoresComponent } from './components/supervisor/listado-supervisores.component';
 import { GuiaProfesionalComponent } from './components/guiaProfesional/guiaProfesional.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
+import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
+import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -49,7 +51,10 @@ const appRoutes: Routes = [
     { path: 'agenda', component: AgendaComponent, canActivate: [RoutingGuard] },
     { path: 'nuevoProfesional', component: ProfesionalComponent, canActivate: [RoutingGuard] },
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
-    { path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent },
+    {
+        path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent,
+        children: [{ path: 'seleccion-turnos', component: SeleccionTurnosComponent }, { path: 'seleccion-profesional', component: SeleccionProfesionalComponent }]
+    },
     { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent, canActivate: [RoutingGuard] },
     { path: 'cambioDni', component: CambioDniComponent },
     { path: 'listadoCambioDni', component: ListadoCambioDniComponent },

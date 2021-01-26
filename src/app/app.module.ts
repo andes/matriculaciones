@@ -122,6 +122,8 @@ import { UsuarioService } from './services/usuario.service';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
 import { Ng2ImgToolsModule } from 'ng2-img-tools';
 import { TituloProfesionalComponent } from './components/profesionales/tituloProfesional/adjunto-titulo-profesional.component';
+import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
+import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -152,7 +154,9 @@ import { TituloProfesionalComponent } from './components/profesionales/tituloPro
     ListadoTurnosPdfComponent,
     ReportesComponent,
     UploadFileComponent,
-    TituloProfesionalComponent
+    TituloProfesionalComponent,
+    SeleccionTurnosComponent,
+    SeleccionProfesionalComponent
   ],
   imports: [
     BrowserModule,

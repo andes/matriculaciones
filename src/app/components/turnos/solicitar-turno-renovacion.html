@@ -1,14 +1,16 @@
-<plex-layout>
+<plex-layout main="8">
   <plex-layout-main>
     <header justify>
-      <plex-title *ngIf="!turnoSeleccionado" titulo="Solicitud de turno para renovación de matrícula" size="md"></plex-title>
-      <plex-title *ngIf="turnoSeleccionado" titulo="Complete con sus datos" size="md"></plex-title>
-      <plex-button label="Volver" *ngIf='!id' type="danger" size="md" routerLink="/requisitosGenerales">
+      <plex-title *ngIf="!turnoSeleccionado" titulo="Renovación matrícula" size="sm">
+      </plex-title>
+      <plex-title *ngIf="turnoSeleccionado" titulo="Complete con sus datos" size="sm"></plex-title>
+      <plex-button label="Volver" *ngIf='!id' type="danger" size="sm" routerLink="/requisitosGenerales">
       </plex-button>
-      <plex-button label="Volver" *ngIf='id' type="danger" size="md" routerLink="/listarProfesionales">
+      <plex-button label="Volver" *ngIf='id' type="danger" size="sm" routerLink="/listarProfesionales">
       </plex-button>
     </header>
-    <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno" (onTurnoSeleccionado)="onTurnoSeleccionado($event)" [sobreTurno]="id"></app-nuevo-turno>
+    <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno"
+                     (onTurnoSeleccionado)="onTurnoSeleccionado($event)" [sobreTurno]="id"></app-nuevo-turno>
 
     <form #formNuevoProf='ngForm' *ngIf="turnoSeleccionado && !id">
       <fieldset>
@@ -48,23 +50,36 @@
                   <i class="mdi mdi-account-alert"></i> No hay resultados que coincidan con los datos ingresados
                 </div>
 
-                <li class="list-group-item mt-3" *ngFor="let prof of profEncontrado; let i = index;" [ngClass]="{'active': isSelected()}" (click)="profesionalEncontrado(profEncontrado[i])">
+                <li class="list-group-item mt-3" *ngFor="let prof of profEncontrado; let i = index;"
+                    [ngClass]="{'active': isSelected()}" (click)="profesionalEncontrado(profEncontrado[i])">
                   <div *ngIf='profEncontrado.length > 0'> {{prof.select}}</div>
                 </li>
                 <li class="mt-3" justify="center">
 
-                  <plex-button *ngIf='profElegido' type="success" size="md" label="Confirmar turno" (click)="onProfesionalCompleto($event)" class="pull-right" validateForm="true">
+                  <plex-button *ngIf='profElegido' type="success" size="md" label="Confirmar turno"
+                               (click)="onProfesionalCompleto($event)" class="pull-right" validateForm="true">
                   </plex-button>
                 </li>
               </ul>
-
             </fieldset>
           </div>
         </div>
-
       </fieldset>
-
     </form>
   </plex-layout-main>
+  <plex-layout-sidebar type="invert">
+    <router-outlet></router-outlet>
 
+    <!-- <plex-title titulo="Dar turno" size="sm">
+      <plex-badge type="info">21/01/2021</plex-badge>
+      <plex-button class="ml-2" label="Continuar" type="success" size="sm"></plex-button>
+      <plex-button class="ml-2" title="Volver" icon="arrow-left" type="danger" size="sm"></plex-button>
+    </plex-title>
+    <div class="h-75" justify="center">
+      <plex-label titulo="Comienza seleccionando un día del calendario"
+                  subtitulo="De éste modo, podrás visualizar los horarios disponibles" type="default" size="lg"
+                  icon="calendar" direction="column">
+      </plex-label>
+    </div> -->
+  </plex-layout-sidebar>
 </plex-layout>

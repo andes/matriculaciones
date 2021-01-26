@@ -189,7 +189,9 @@ export class NuevoTurnoComponent implements AfterViewInit {
   private onChangeFecha(event: any) {
     const fecha = new Date(event.date);
     this.fechaComparacion = moment(fecha).format('L');
-    this.buildHorariosDisponibles();
+    //this.buildHorariosDisponibles();
+    const params = { inicio: this.agendaConfig.horarioInicioTurnos, fin: this.agendaConfig.horarioFinTurnos, fecha };
+    this.router.navigate(['/solicitarTurnoRenovacion/seleccion-turnos'], { queryParams: params });
     // Limpio el estado de los horarios.
     this.horariosDisponibles.forEach(horario => {
       horario.ocupado = false;
@@ -316,6 +318,16 @@ export class NuevoTurnoComponent implements AfterViewInit {
     return dias.toString();
   }
 
+  public writeValue(date: any) {
+    this.fechaElegida = date;
+    if (this.fechaElegida) {
+      const temp = this.fechaElegida ? moment(this.fechaElegida).format(this.format) : null;
+      if (this.$input) {
+        this.$input.val(temp);
+      }
+    }
+  }
+
   /**
    * Actions
    */
@@ -380,15 +392,5 @@ export class NuevoTurnoComponent implements AfterViewInit {
         this.router.navigate(['listarProfesionales']);
       }
     });
-  }
-
-  private writeValue(date: any) {
-    this.fechaElegida = date;
-    if (this.fechaElegida) {
-      const temp = this.fechaElegida ? moment(this.fechaElegida).format(this.format) : null;
-      if (this.$input) {
-        this.$input.val(temp);
-      }
-    }
   }
 }

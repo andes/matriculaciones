@@ -1,0 +1,50 @@
+<plex-title titulo="Dar turno" size="sm">
+    <plex-badge type="info">21/01/2021</plex-badge>
+    <plex-button class="ml-2" label="Continuar" type="success" size="sm"></plex-button>
+    <plex-button class="ml-2" title="Volver" icon="arrow-left" type="danger" size="sm"></plex-button>
+</plex-title>
+<plex-label titulo="21/01/2021" subtitulo="Jueves 15:39" type="success" size="lg" icon="calendar-today">
+</plex-label>
+<plex-title titulo="Seleccionar turno" size="sm"></plex-title>
+<plex-grid size="md" type="auto">
+    <plex-card type="dark" size="sm" *ngFor="let turno of horariosDisponibles; let idx = index"
+               (click)="buildFechaTurno(horariosDisponibles[idx])"
+               [ngClass]="{'turno-activo' : isActive(horariosDisponibles[idx]),'mt-2' : true,'btn-horario' : true}">
+        <plex-label titulo="{{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos < 10 ? '0' : '' ) +
+      horariosDisponibles[idx].minutos }} hs" size="md">
+        </plex-label>
+    </plex-card>
+</plex-grid>
+
+<!-- <fieldset>
+    <div class="row">
+        <div class="col-md-5" *ngIf="fechaElegida != undefined">
+            <label>Seleccione fecha</label>
+            <div class="row mt-3" justify="left">
+                <div class="col">
+                    <plex-badge *ngIf='sinTurnos && horariosDisponibles.length > 0' type="danger">No hay mas turnos para
+                        la
+                        fecha seleccionada</plex-badge>
+                    <plex-badge *ngIf='horariosDisponibles.length === 0' type="danger">No hay mas turnos para la
+                        fecha seleccionada</plex-badge>
+                </div>
+            </div>
+            <div class="row mt-3" justify="left">
+                <div class="col-sm-3" *ngFor="let turno of horariosDisponibles; let idx = index">
+                    <plex-button [disabled]="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado" size="block"
+                                 type="info" (click)="buildFechaTurno(horariosDisponibles[idx]) "
+                                 [ngClass]="{'turno-activo' : isActive(horariosDisponibles[idx]),'mt-2' : true,'btn-horario' : true}">
+                        {{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos < 10 ? '0' : '' ) +
+                          horariosDisponibles[idx].minutos }} hs </plex-button>
+                </div>
+            </div>
+            <div class="row mt-3">
+                <div class="col" justify>
+                    <plex-button id="#btn-continue" [disabled]="!horarioSi" type="success" (click)="confirmTurno()">
+                        Continuar
+                    </plex-button>
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset> -->

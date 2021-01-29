@@ -124,6 +124,7 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
 import { TituloProfesionalComponent } from './components/profesionales/tituloProfesional/adjunto-titulo-profesional.component';
 import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
 import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
+import { InicioTurnosComponent } from './components/turnos/inicio-turnos/inicio-turnos.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -156,7 +157,8 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
     UploadFileComponent,
     TituloProfesionalComponent,
     SeleccionTurnosComponent,
-    SeleccionProfesionalComponent
+    SeleccionProfesionalComponent,
+    InicioTurnosComponent
   ],
   imports: [
     BrowserModule,

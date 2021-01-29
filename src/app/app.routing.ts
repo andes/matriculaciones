@@ -39,6 +39,7 @@ import { GuiaProfesionalComponent } from './components/guiaProfesional/guiaProfe
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
 import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
+import { InicioTurnosComponent } from './components/turnos/inicio-turnos/inicio-turnos.component';
 
 const appRoutes: Routes = [
     { path: 'home', component: HomeComponent },
@@ -53,7 +54,7 @@ const appRoutes: Routes = [
     { path: 'solicitarTurnoMatriculacion', component: SolicitarTurnoMatriculacionComponent },
     {
         path: 'solicitarTurnoRenovacion', component: SolicitarTurnoRenovacionComponent,
-        children: [{ path: 'seleccion-turnos', component: SeleccionTurnosComponent }, { path: 'seleccion-profesional', component: SeleccionProfesionalComponent }]
+        children: [{ path: 'seleccion-turnos', component: SeleccionTurnosComponent }, { path: 'seleccion-profesional', component: SeleccionProfesionalComponent }, { path: 'inicio-turnos', component: InicioTurnosComponent }]
     },
     { path: 'solicitarTurnoRenovacion/:id', component: SolicitarTurnoRenovacionComponent, canActivate: [RoutingGuard] },
     { path: 'cambioDni', component: CambioDniComponent },

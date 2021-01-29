@@ -1,23 +1,30 @@
 import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AgendaService } from '../../../services/agenda.service';
 import { IAgendaMatriculaciones } from '../../../interfaces/IAgendaMatriculaciones';
 import { Plex } from '@andes/plex';
 import { TurnoService } from '../../../services/turno.service';
+import { NuevoTurnoComponent } from '../nuevo-turno.component';
+
 
 const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
 const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
 
 @Component({
   selector: 'app-seleccion-turnos',
-  templateUrl: './seleccion-turnos.component.html'
+  templateUrl: './seleccion-turnos.component.html',
+  styleUrls: ['./seleccion-turnos.component.scss']
 })
 export class SeleccionTurnosComponent implements OnInit {
   inicio = null;
   fin = null;
+  duracionTurno = null;
+  private $input: any;
+  private $div: any;
   private format = 'DD/MM/YYYY';
   private agendaConfig: IAgendaMatriculaciones;
   private cantidadTurnosPorHora: number;
-  private horariosDisponibles: any[] = [];
+  public horariosDisponibles: any[] = [];
   public fechaElegida: Date;
   private fechaConsulta: Date;
   public turnoElegido: boolean;
@@ -31,18 +38,19 @@ export class SeleccionTurnosComponent implements OnInit {
   public sinTurnos = false;
 
   @Output() onTurnoSeleccionado = new EventEmitter<Date>();
-  @ViewChild('input') input: ElementRef;
+  @ViewChild('input') input: NuevoTurnoComponent;
+  @ViewChild('div') div: NuevoTurnoComponent;
 
-  constructor(private route: ActivatedRoute, private _turnoService: TurnoService, private plex: Plex,
+
+  constructor(private route: ActivatedRoute, private _turnoService: TurnoService, private _agendaService: AgendaService, private plex: Plex,
     private router: Router) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.inicio = params['inicio'];
       this.fin = params['fin'];
+      this.duracionTurno = params['duracionTurno'];
       this.fecha = params['fecha'];
-
-      console.log(this.fecha, this.inicio, this.fin)
       this.onChangeFecha(this.fecha);
     });
   }
@@ -52,10 +60,12 @@ export class SeleccionTurnosComponent implements OnInit {
     this.horariosDisponibles = [];
     let res = null;
     let entradaU = false;
-    let minutos = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('mm'), 10);
-    const minutosFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('mm'), 10);
-    const horaInicio = parseInt(moment(this.agendaConfig.horarioInicioTurnos).format('HH'), 10);
-    const horaFin = parseInt(moment(this.agendaConfig.horarioFinTurnos).format('HH'), 10);
+    console.log('INICIO: ', this.inicio)
+    console.log('FIN: ', this.fin)
+    let minutos = parseInt(moment(this.inicio).format('mm'), 10);
+    const minutosFin = parseInt(moment(this.fin).format('mm'), 10);
+    const horaInicio = parseInt(moment(this.inicio).format('HH'), 10);
+    const horaFin = parseInt(moment(this.fin).format('HH'), 10);
     const horaActual = parseInt(new moment().format('HH'), 10);
     const minutosActual = parseInt(new moment().format('mm'), 10);
     const fechaActual = new Date();
@@ -63,31 +73,45 @@ export class SeleccionTurnosComponent implements OnInit {
     let i = horaInicio;
     let flag = true;
     let nx = 0;
+    console.log('minutos ', minutos);
+    console.log('minutosFin ', minutosFin);
+    console.log('horaInicio ', horaInicio);
+    console.log('horaFin ', horaFin);
+    console.log('horaActual ', horaActual);
+    console.log('minutosActual ', minutosActual);
+    console.log('duracion ', this.duracionTurno)
     while (n <= horaFin && flag === true) {
-      while (nx < (60 / this.agendaConfig.duracionTurno) && flag === true) {
+      while (nx < (60 / this.duracionTurno) && flag === true) {
         if (entradaU === false) {
+          console.log('entradaU es false')
           entradaU = true;
         } else {
           if ((i === horaFin) && minutosFin === minutos) {
+            console.log('i === horaFin && minutosFin ===minutos')
             flag = false;
           } else {
 
-            if ((this.agendaConfig.duracionTurno + minutos) >= 60) {
-              minutos = (minutos + this.agendaConfig.duracionTurno) - 60;
+            if ((this.duracionTurno + minutos) >= 60) {
+              console.log('duracionTurno+minutos >=60')
+              minutos = (minutos + this.duracionTurno) - 60;
+              console.log('minutos: ', minutos);
               i++;
             } else {
-              if ((this.agendaConfig.duracionTurno + minutos) <= 60) {
-                res = minutos + this.agendaConfig.duracionTurno;
+              if ((this.duracionTurno + minutos) <= 60) {
+                console.log('duracionTurno+minutos <=60')
+                res = minutos + this.duracionTurno;
+                console.log('res: ', res);
               }
               minutos = res;
-
+              console.log('minutos fuera de if: ', minutos);
             }
           }
         }
         if (flag === true) {
-
+          console.log('flaaaag === true');
           if (this.fechaComparacion === moment(fechaActual).format('L')) {
             if (i > horaActual) {
+              console.log('entro a if i mayor a horaActual')
               this.horariosDisponibles.push({
                 hora: i,
                 minutos: minutos,
@@ -95,7 +119,9 @@ export class SeleccionTurnosComponent implements OnInit {
               });
             }
             if (i === horaActual) {
+              console.log('entro a if i igual a horaActual')
               if (minutos > minutosActual) {
+                console.log('entro a minutos mayor a minutosActual')
                 this.horariosDisponibles.push({
                   hora: i,
                   minutos: minutos,
@@ -105,6 +131,7 @@ export class SeleccionTurnosComponent implements OnInit {
             }
           } else {
             if (minutos === 60) {
+              console.log('entro a if minutos 60')
               minutos = 0;
               i++;
             }
@@ -122,15 +149,14 @@ export class SeleccionTurnosComponent implements OnInit {
       n++;
 
     }
-
-    this.writeValue(fecha);
-
+    console.log('horarios disponibles', this.horariosDisponibles)
   }
 
-  private onChangeFecha(fechaa: any) {
-    const fecha = new Date(fechaa.date);
+  private onChangeFecha(date: any) {
+    const fecha = new Date(date);
     this.fechaComparacion = moment(fecha).format('L');
     this.buildHorariosDisponibles();
+    console.log('vuelvee')
     // Limpio el estado de los horarios.
     this.horariosDisponibles.forEach(horario => {
       horario.ocupado = false;
@@ -158,6 +184,8 @@ export class SeleccionTurnosComponent implements OnInit {
         this.sinTurnos = true;
       }
     });
+
+    this.writeValue(fecha);
   }
 
   buildFechaTurno(turno: any) {
@@ -174,6 +202,7 @@ export class SeleccionTurnosComponent implements OnInit {
       return true;
     }
   }
+
   confirmTurno() {
     this.lblTurno = moment(this.fechaElegida).format('llll');
     this.lblTurno = diasSemana[this.fechaElegida.getDay()] + ' '
@@ -191,7 +220,9 @@ export class SeleccionTurnosComponent implements OnInit {
     this.boxType = 'success';
     this.turnoElegido = true;
     this.onTurnoSeleccionado.emit(this.fechaElegida);
-
+    console.log('prueba: ', this.lblTurno);
+    const params = { fecha: this.fechaElegida };
+    this.router.navigate(['/solicitarTurnoRenovacion/seleccion-profesional'], { queryParams: params });
   }
 
   confirmSobreTurno() {
@@ -232,5 +263,4 @@ export class SeleccionTurnosComponent implements OnInit {
       }
     }
   }
-
 }

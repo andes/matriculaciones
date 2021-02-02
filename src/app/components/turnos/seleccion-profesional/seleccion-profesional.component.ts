@@ -43,7 +43,7 @@ export class SeleccionProfesionalComponent implements OnInit {
   public nombre;
   public apellido;
   public profEncontrado: any = [];
-  lblTurno: string;
+  public horarioElegido: string;
 
   @Input() public profesional: IProfesional = {
     id: null,
@@ -169,7 +169,7 @@ export class SeleccionProfesionalComponent implements OnInit {
   onTurnoSeleccionado(turno: Date) {
     this._turnoSeleccionado = turno;
     this.turnoSeleccionado = true;
-    this.lblTurno = moment(this._turnoSeleccionado).format('llll');
+    this.horarioElegido = moment(this.fecha).format('LLLL');
     if (this.id) {
       this.saveSobreTurno();
     }
@@ -224,7 +224,6 @@ export class SeleccionProfesionalComponent implements OnInit {
           this.noEncontrado = true;
         }
         this.profEncontrado = resp;
-        console.log('1: ', this.profEncontrado);
         this.profElegido = resp[0];
         this.profesionalEncontrado(this.profElegido);
       });
@@ -255,7 +254,7 @@ export class SeleccionProfesionalComponent implements OnInit {
             }
           });
       } else {
-        this.plex.info('info', 'usted ya tiene un turno para el dia <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
+        this.plex.info('info', 'Usted ya tiene un turno para el día <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
 
       }
     });
@@ -264,7 +263,6 @@ export class SeleccionProfesionalComponent implements OnInit {
 
   profesionalEncontrado(profEncontrado) {
     if (profEncontrado) {
-      console.log('2: ', profEncontrado);
       this.profElegido = profEncontrado;
       this.profesional.idRenovacion = profEncontrado.idRenovacion;
       this.profesional.nombre = profEncontrado.nombre;

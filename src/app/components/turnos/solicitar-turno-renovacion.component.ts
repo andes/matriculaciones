@@ -42,6 +42,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   public nombre;
   public apellido;
   public profEncontrado: any = [];
+  foco = 'sidebar';
   lblTurno: string;
 
   @Input() public profesional: IProfesional = {
@@ -262,7 +263,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             }
           });
       } else {
-        this.plex.info('info', 'usted ya tiene un turno para el dia <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
+        this.plex.info('info', 'Usted ya tiene un turno para el día <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
 
       }
     });

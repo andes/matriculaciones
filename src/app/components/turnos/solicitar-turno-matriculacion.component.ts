@@ -47,12 +47,7 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
 
   }
 
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.fecha = params['fecha'];
-      //this.onTurnoSeleccionado(this.fecha);
-    });
-  }
+  ngOnInit() { }
 
   onTurnoSeleccionado(turno: Date) {
     this._turnoSeleccionado = turno;

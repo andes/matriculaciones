@@ -46,7 +46,7 @@ export class SeleccionTurnosComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.inicio = params['inicio'];
       this.fin = params['fin'];
-      this.duracionTurno = parseInt(params['duracionTurno']);
+      this.duracionTurno = parseInt(params['duracionTurno'], 0);
       this.fecha = params['fecha'];
       this.tipoTurno = params['tipoTurno'];
       this.onChangeFecha(this.fecha);
@@ -166,7 +166,7 @@ export class SeleccionTurnosComponent implements OnInit {
 
     this.fechaElegida.setHours(turno.hora);
     this.fechaElegida.setMinutes(turno.minutos);
-    this.horarioElegido = moment(this.fechaElegida).format('LLLL');
+    this.horarioElegido = moment(this.fechaElegida).format('h:mm a');
     if (this.fechaElegida.getHours() !== 0) {
       this.horarioSi = true;
     }

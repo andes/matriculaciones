@@ -18,21 +18,18 @@ const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', '
 export class SeleccionTurnosComponent implements OnInit {
   inicio = null;
   fin = null;
+  tipoTurno = null;
   duracionTurno = null;
   private $input: any;
-  private $div: any;
   private format = 'DD/MM/YYYY';
-  private agendaConfig: IAgendaMatriculaciones;
-  private cantidadTurnosPorHora: number;
   public horariosDisponibles: any[] = [];
   public fechaElegida: Date;
-  private fechaConsulta: Date;
   public turnoElegido: boolean;
   private lblTurno: string;
-  private options: any = {};
   public boxType: string;
   public horarioSi = false;
   public horario = new Date();
+  public horarioElegido: Date;
   public fecha = new Date();
   public fechaComparacion: Date;
   public sinTurnos = false;
@@ -49,8 +46,9 @@ export class SeleccionTurnosComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.inicio = params['inicio'];
       this.fin = params['fin'];
-      this.duracionTurno = params['duracionTurno'];
+      this.duracionTurno = parseInt(params['duracionTurno']);
       this.fecha = params['fecha'];
+      this.tipoTurno = params['tipoTurno'];
       this.onChangeFecha(this.fecha);
     });
   }
@@ -60,8 +58,6 @@ export class SeleccionTurnosComponent implements OnInit {
     this.horariosDisponibles = [];
     let res = null;
     let entradaU = false;
-    console.log('INICIO: ', this.inicio)
-    console.log('FIN: ', this.fin)
     let minutos = parseInt(moment(this.inicio).format('mm'), 10);
     const minutosFin = parseInt(moment(this.fin).format('mm'), 10);
     const horaInicio = parseInt(moment(this.inicio).format('HH'), 10);
@@ -73,45 +69,29 @@ export class SeleccionTurnosComponent implements OnInit {
     let i = horaInicio;
     let flag = true;
     let nx = 0;
-    console.log('minutos ', minutos);
-    console.log('minutosFin ', minutosFin);
-    console.log('horaInicio ', horaInicio);
-    console.log('horaFin ', horaFin);
-    console.log('horaActual ', horaActual);
-    console.log('minutosActual ', minutosActual);
-    console.log('duracion ', this.duracionTurno)
     while (n <= horaFin && flag === true) {
       while (nx < (60 / this.duracionTurno) && flag === true) {
         if (entradaU === false) {
-          console.log('entradaU es false')
           entradaU = true;
         } else {
           if ((i === horaFin) && minutosFin === minutos) {
-            console.log('i === horaFin && minutosFin ===minutos')
             flag = false;
           } else {
-
+            const cuenta = this.duracionTurno + minutos;
             if ((this.duracionTurno + minutos) >= 60) {
-              console.log('duracionTurno+minutos >=60')
               minutos = (minutos + this.duracionTurno) - 60;
-              console.log('minutos: ', minutos);
               i++;
             } else {
               if ((this.duracionTurno + minutos) <= 60) {
-                console.log('duracionTurno+minutos <=60')
                 res = minutos + this.duracionTurno;
-                console.log('res: ', res);
               }
               minutos = res;
-              console.log('minutos fuera de if: ', minutos);
             }
           }
         }
         if (flag === true) {
-          console.log('flaaaag === true');
           if (this.fechaComparacion === moment(fechaActual).format('L')) {
             if (i > horaActual) {
-              console.log('entro a if i mayor a horaActual')
               this.horariosDisponibles.push({
                 hora: i,
                 minutos: minutos,
@@ -119,9 +99,7 @@ export class SeleccionTurnosComponent implements OnInit {
               });
             }
             if (i === horaActual) {
-              console.log('entro a if i igual a horaActual')
               if (minutos > minutosActual) {
-                console.log('entro a minutos mayor a minutosActual')
                 this.horariosDisponibles.push({
                   hora: i,
                   minutos: minutos,
@@ -131,7 +109,6 @@ export class SeleccionTurnosComponent implements OnInit {
             }
           } else {
             if (minutos === 60) {
-              console.log('entro a if minutos 60')
               minutos = 0;
               i++;
             }
@@ -147,16 +124,13 @@ export class SeleccionTurnosComponent implements OnInit {
       }
       nx = 0;
       n++;
-
     }
-    console.log('horarios disponibles', this.horariosDisponibles)
   }
 
   private onChangeFecha(date: any) {
     const fecha = new Date(date);
     this.fechaComparacion = moment(fecha).format('L');
     this.buildHorariosDisponibles();
-    console.log('vuelvee')
     // Limpio el estado de los horarios.
     this.horariosDisponibles.forEach(horario => {
       horario.ocupado = false;
@@ -192,6 +166,7 @@ export class SeleccionTurnosComponent implements OnInit {
 
     this.fechaElegida.setHours(turno.hora);
     this.fechaElegida.setMinutes(turno.minutos);
+    this.horarioElegido = moment(this.fechaElegida).format('LLLL');
     if (this.fechaElegida.getHours() !== 0) {
       this.horarioSi = true;
     }
@@ -204,25 +179,15 @@ export class SeleccionTurnosComponent implements OnInit {
   }
 
   confirmTurno() {
-    this.lblTurno = moment(this.fechaElegida).format('llll');
-    this.lblTurno = diasSemana[this.fechaElegida.getDay()] + ' '
-      + this.fechaElegida.getDate().toString() + ' de '
-      + meses[this.fechaElegida.getMonth()] + ' de '
-      + this.fechaElegida.getFullYear() + ', '
-      + this.fechaElegida.getHours();
-
-    if (this.fechaElegida.getMinutes() > 0) {
-      this.lblTurno += ':' + this.fechaElegida.getMinutes();
-    }
-
-    this.lblTurno += ' hs';
-
-    this.boxType = 'success';
     this.turnoElegido = true;
     this.onTurnoSeleccionado.emit(this.fechaElegida);
-    console.log('prueba: ', this.lblTurno);
+
     const params = { fecha: this.fechaElegida };
-    this.router.navigate(['/solicitarTurnoRenovacion/seleccion-profesional'], { queryParams: params });
+    if (this.tipoTurno === 'renovacion') {
+      this.router.navigate(['/solicitarTurnoRenovacion/seleccion-profesional'], { queryParams: params });
+    } else {
+      this.router.navigate(['/solicitarTurnoMatriculacion/nuevoProfesional'], { queryParams: params });
+    }
   }
 
   confirmSobreTurno() {
@@ -261,6 +226,14 @@ export class SeleccionTurnosComponent implements OnInit {
       if (this.$input) {
         this.$input.val(temp);
       }
+    }
+  }
+
+  volverInicio() {
+    if (this.tipoTurno === 'renovacion') {
+      this.router.navigate(['/solicitarTurnoRenovacion']);
+    } else {
+      this.router.navigate(['/solicitarTurnoMatriculacion']);
     }
   }
 }

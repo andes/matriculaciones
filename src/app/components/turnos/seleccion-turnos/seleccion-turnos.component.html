@@ -1,12 +1,12 @@
-<plex-title titulo="Dar turno" size="sm">
+<plex-title titulo="Dar turno">
     <plex-badge type="info">{{fechaElegida | date: 'dd/MM/yyyy'}}</plex-badge>
     <plex-button class="ml-2" label="Continuar" type="success" size="sm" id="#btn-continue" [disabled]="!horarioSi"
                  (click)="confirmTurno()"></plex-button>
-    <plex-button class="ml-2" title="Volver" icon="arrow-left" type="danger" size="sm"
-                 routerLink="/solicitarTurnoRenovacion/inicio-turnos">
+    <plex-button class="ml-2" title="Volver" icon="arrow-left" type="danger" size="sm" (click)="volverInicio()">
     </plex-button>
 </plex-title>
-<plex-label titulo="{{fechaElegida | date: 'dd/MM/yyyy'}}" subtitulo="" type="success" size="lg" icon="calendar-today">
+<plex-label titulo="{{fechaElegida | date: 'dd/MM/yyyy'}}" subtitulo="{{horarioElegido}}" type="success" size="lg"
+            icon="calendar-today">
 </plex-label>
 <plex-title titulo="Seleccionar turno" size="sm"></plex-title>
 <plex-grid size="md" type="auto" *ngIf="fechaElegida != undefined">
@@ -25,7 +25,8 @@
             </plex-card>
         </div>
         <div *ngIf="horariosDisponibles[idx] && !horariosDisponibles[idx].ocupado">
-            <plex-card type="dark" size="sm" (click)="buildFechaTurno(horariosDisponibles[idx])"
+            <plex-card [selected]="isActive(horariosDisponibles[idx])" type="dark" size="sm"
+                       (click)="buildFechaTurno(horariosDisponibles[idx])"
                        [ngClass]="{'turno-activo' : isActive(horariosDisponibles[idx]),'mt-2' : true,'btn-horario' : true}">
                 <plex-label titulo="{{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos < 10 ? '0' : '') + horariosDisponibles[idx].minutos }}
                 hs" size="md">
@@ -33,3 +34,4 @@
             </plex-card>
         </div>
     </div>
+</plex-grid>

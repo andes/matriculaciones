@@ -7,6 +7,7 @@ import { AgendaService } from './../../services/agenda.service';
 import { IAgendaMatriculaciones } from './../../interfaces/IAgendaMatriculaciones';
 import { Plex } from '@andes/plex';
 import { Router } from '@angular/router';
+import { stringify } from '@angular/compiler/src/util';
 const jQuery = window['jQuery'] = require('jquery/dist/jquery');
 const moment = window['moment'] = require('moment/moment.js');
 require('./bootstrap-datepicker/bootstrap-datepicker.js');
@@ -111,10 +112,13 @@ export class NuevoTurnoComponent implements AfterViewInit {
 
   private onChangeFecha(event: any) {
     const fecha = new Date(event.date);
-    console.log('fechaaaaaaaa: ', fecha)
     this.fechaComparacion = moment(fecha).format('L');
-    const params = { inicio: this.agendaConfig.horarioInicioTurnos, fin: this.agendaConfig.horarioFinTurnos, duracionTurno: this.agendaConfig.duracionTurno, fecha };
-    this.router.navigate(['/solicitarTurnoRenovacion/seleccion-turnos'], { queryParams: params });
+    const params = { inicio: this.agendaConfig.horarioInicioTurnos, fin: this.agendaConfig.horarioFinTurnos, duracionTurno: this.agendaConfig.duracionTurno, fecha, tipoTurno: this.tipoTurno };
+    if (stringify(this.tipoTurno) === 'renovacion') {
+      this.router.navigate(['/solicitarTurnoRenovacion/seleccion-turnos'], { queryParams: params });
+    } else {
+      this.router.navigate(['/solicitarTurnoMatriculacion/seleccion-turnos'], { queryParams: params });
+    }
   }
 
   private buildCalendarOptions(countTurnosXDia: any[], startDate) {
@@ -210,23 +214,5 @@ export class NuevoTurnoComponent implements AfterViewInit {
       });
     }
     return dias.toString();
-  }
-
-  /**
-   * Actions
-   */
-  buildFechaTurno(turno: any) {
-
-    this.fechaElegida.setHours(turno.hora);
-    this.fechaElegida.setMinutes(turno.minutos);
-    if (this.fechaElegida.getHours() !== 0) {
-      this.horarioSi = true;
-    }
-  }
-
-  isActive(turno: any) {
-    if ((this.fechaElegida.getHours() === turno.hora) && (this.fechaElegida.getMinutes() === turno.minutos)) {
-      return true;
-    }
   }
 }

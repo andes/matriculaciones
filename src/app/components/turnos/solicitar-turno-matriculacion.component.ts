@@ -16,7 +16,7 @@ import * as moment from 'moment';
 // Utils
 import { PDFUtils } from './../../utils/PDFUtils';
 import * as Enums from './../../utils/enumerados';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
 const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -29,15 +29,17 @@ const jsPDF = require('jspdf');
 export class SolicitarTurnoMatriculacionComponent implements OnInit {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
   public tipoTurno: Enums.TipoTurno;
+  public fecha = null;
   private formTurno: FormGroup;
   public turnoSeleccionado: boolean;
   public turnoGuardado: boolean;
   private _turnoSeleccionado: Date;
   public _nuevoProfesional: any;
-  lblTurno: string;
+  public horarioElegido: string;
   constructor(private _formBuilder: FormBuilder,
     private _turnosService: TurnoService,
     private router: Router,
+    private route: ActivatedRoute,
     private _pdfUtils: PDFUtils,
     private plex: Plex) {
 
@@ -46,24 +48,16 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    this.route.queryParams.subscribe(params => {
+      this.fecha = params['fecha'];
+      //this.onTurnoSeleccionado(this.fecha);
+    });
   }
 
   onTurnoSeleccionado(turno: Date) {
     this._turnoSeleccionado = turno;
-    this.lblTurno = moment(this._turnoSeleccionado).format('llll');
-    this.lblTurno = diasSemana[this._turnoSeleccionado.getDay()] + ' '
-      + this._turnoSeleccionado.getDate().toString() + ' de '
-      + meses[this._turnoSeleccionado.getMonth()] + ' de '
-      + this._turnoSeleccionado.getFullYear() + ', '
-      + this._turnoSeleccionado.getHours();
-
-    if (this._turnoSeleccionado.getMinutes() > 0) {
-      this.lblTurno += ':' + this._turnoSeleccionado.getMinutes();
-    }
-
-    this.lblTurno += ' hs';
     this.turnoSeleccionado = true;
+    this.horarioElegido = moment(this._turnoSeleccionado).format('llll');
   }
 
   saveTurno() {
@@ -82,7 +76,6 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
   }
 
   onProfesionalCompleto(profesional: any) {
-
     const parametros = {
       documento: profesional.documento,
       tipoTurno: 'matriculacion',
@@ -107,7 +100,6 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
           });
       } else {
         this.plex.info('info', 'usted ya tiene un turno para el dia <strong>' + moment(resultado[0].fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
-        // this.router.navigate(['requisitosGenerales']);
       }
     });
   }

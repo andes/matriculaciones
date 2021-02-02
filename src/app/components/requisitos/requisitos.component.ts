@@ -29,9 +29,9 @@ export class RequisitosMatriculaUniversitariaComponent {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public terminosLeidos = false;
 
-    constructor(private router: Router) {}
+    constructor(private router: Router) { }
 
-     onClick() {
+    onClick() {
         this.router.navigate(['/solicitarTurnoMatriculacion']);
     }
 }
@@ -44,7 +44,7 @@ export class RequisitosMatriculaUniversitariaComponent {
 export class RequisitosMatriculaTecnicaAuxiliarComponent {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public terminosLeidos = false;
-    constructor(private router: Router) {}
+    constructor(private router: Router) { }
 
     onClick() {
         this.router.navigate(['/solicitarTurnoMatriculacion']);

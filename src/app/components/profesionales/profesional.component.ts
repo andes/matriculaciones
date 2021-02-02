@@ -13,7 +13,7 @@ import { EntidadFormadoraService } from './../../services/entidadFormadora.servi
 import { SexoService } from './../../services/sexo.service';
 import { IProfesional } from './../../interfaces/IProfesional';
 import { Auth } from '@andes/auth';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -39,7 +39,9 @@ export class ProfesionalComponent implements OnInit {
   public tipoDocumento: any[];
   public tipoComunicacion: any[];
   public vacio = [];
+  public fecha: Date;
   public ocultarBtn = false;
+  public lblTurno: string;
   @Input() nuevoProf = false;
   @Input() confirmar = false;
   @Input() editable = false;
@@ -145,6 +147,7 @@ export class ProfesionalComponent implements OnInit {
 
   @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
+
   constructor(
     private _sexoService: SexoService,
     private _paisService: PaisService,
@@ -157,6 +160,7 @@ export class ProfesionalComponent implements OnInit {
     private plex: Plex,
     public auth: Auth,
     private router: Router,
+    private route: ActivatedRoute,
     private location: Location) { }
 
   ngOnInit() {
@@ -222,8 +226,15 @@ export class ProfesionalComponent implements OnInit {
       }
     }
 
+    this.route.queryParams.subscribe(params => {
+      this.fecha = params['fecha'];
+      this.onTurnoSeleccionado();
+    });
   }
 
+  onTurnoSeleccionado() {
+    this.lblTurno = moment(this.fecha).format('llll');
+  }
 
   showOtra(entidadFormadora) {
     if (entidadFormadora.value) {

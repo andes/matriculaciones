@@ -1,15 +1,16 @@
-<plex-title titulo="Dar turno" size="sm">
+<plex-title titulo="Dar turno">
     <plex-badge type="info">{{fecha | date: 'dd/MM/yyyy'}}</plex-badge>
     <plex-button *ngIf='profElegido' class="ml-2" label="Confirmar turno" type="success" size="sm"
                  (click)="onProfesionalCompleto($event)"></plex-button>
     <plex-button class="ml-2" title="Volver" icon="arrow-left" type="danger" size="sm"
-                 routerLink="/solicitarTurnoRenovacion/seleccion-turnos"></plex-button>
+                 routerLink="/solicitarTurnoRenovacion"></plex-button>
 </plex-title>
-
+<plex-label titulo="{{fecha | date: 'dd/MM/yyyy'}}" subtitulo="{{horarioElegido}}" type="success" size="lg"
+            icon="calendar-today">
+</plex-label>
 <plex-wrapper>
-    <form #formNuevoProf='ngForm'>
+    <form #formNuevoProf='ngForm' *ngIf="turnoSeleccionado">
         <div class="row">
-            <!-- *ngIf="turnoSeleccionado" -->
             <div class="col-md-6">
                 <plex-text label="Nombre" [(ngModel)]="nombre" name="nombre" [required]="true">
                 </plex-text>
@@ -52,6 +53,6 @@
                     subtitulo="DNI:{{prof.documento}}" size="lg">
             <plex-icon name="medico" type="info" size="lg"></plex-icon>
         </plex-label>
-        <plex-badge size="lg" type="warning">Renovacion</plex-badge>
+        <plex-badge size="lg" type="warning">Renovación</plex-badge>
     </plex-item>
 </plex-list>

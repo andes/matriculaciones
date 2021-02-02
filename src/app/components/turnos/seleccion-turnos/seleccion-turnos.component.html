@@ -9,12 +9,12 @@
             icon="calendar-today">
 </plex-label>
 <plex-title titulo="Seleccionar turno" size="sm"></plex-title>
-<plex-grid size="md" type="auto" *ngIf="fechaElegida != undefined">
-    <div *ngIf='sinTurnos && horariosDisponibles.length > 0' class="h-75" justify="center">
-        <plex-label titulo="No hay mas turnos para la fecha seleccionada" subtitulo="" type="default" size="lg"
-                    icon="calendar" direction="column">
-        </plex-label>
-    </div>
+<div *ngIf='sinTurnos && horariosDisponibles.length > 0' class="h-75" justify="center">
+    <plex-label titulo="No hay mas turnos para la fecha seleccionada" subtitulo="" type="default" size="lg"
+                icon="calendar" direction="column">
+    </plex-label>
+</div>
+<plex-grid size="md" type="auto" *ngIf="!sinTurnos && fechaElegida != undefined">
     <div *ngFor="let turno of horariosDisponibles; let idx = index">
         <div *ngIf="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado">
             <plex-card type="dark" class="disabled" size="sm" (click)="buildFechaTurno(horariosDisponibles[idx])"

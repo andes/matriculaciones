@@ -17,6 +17,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { stringify } from '@angular/compiler/src/util';
 
 @Component({
   selector: 'app-profesional',
@@ -281,13 +282,11 @@ export class ProfesionalComponent implements OnInit {
             if (matcheo) {
               this.plex.info('info', 'Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
             } else {
-              this.onProfesionalCompleto.emit(this.profesional);
+              const stringProfesional = JSON.stringify(this.profesional);
+              const params = { profesional: stringProfesional, fechaElegida: this.fecha };
+              this.router.navigate(['/solicitarTurnoMatriculacion'], { queryParams: params });
             }
-
-
           });
-
-
     } else {
       this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
     }

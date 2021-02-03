@@ -215,4 +215,33 @@ export class NuevoTurnoComponent implements AfterViewInit {
     }
     return dias.toString();
   }
+
+  confirmSobreTurno() {
+
+    const minutos = this.horario.getMinutes();
+    const hora = this.horario.getHours();
+
+    this.fecha.setHours(hora);
+    this.fecha.setMinutes(minutos);
+    this.lblTurno = moment(this.fecha).format('llll');
+    this.lblTurno = diasSemana[this.fecha.getDay()] + ' '
+      + this.fecha.getDate().toString() + ' de '
+      + meses[this.fecha.getMonth()] + ' de '
+      + this.fecha.getFullYear() + ', '
+      + this.fecha.getHours();
+
+    if (this.fecha.getMinutes() > 0) {
+      this.lblTurno += ':' + this.fecha.getMinutes();
+    }
+
+    this.lblTurno += ' hs';
+
+    this.plex.confirm(this.lblTurno).then((resultado) => {
+      if (resultado) {
+        this.onTurnoSeleccionado.emit(this.fecha);
+        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+        this.router.navigate(['listarProfesionales']);
+      }
+    });
+  }
 }

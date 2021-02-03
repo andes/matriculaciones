@@ -159,9 +159,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
   ngOnInit() {
     this.route.params.subscribe(params => {
       this.id = params['id'];
-
     });
-
   }
 
   onTurnoSeleccionado(turno: Date) {
@@ -182,25 +180,6 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     if (this.id) {
       this.saveSobreTurno();
     }
-  }
-
-  saveTurno() {
-
-    this.formTurno = this._formBuilder.group({
-      fecha: this._turnoSeleccionado,
-      tipo: this.tipoTurno,
-      profesional: this._nuevoProfesional._id
-    });
-
-    this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value })
-      .subscribe(turno => {
-        const pdf = this._pdfUtils.comprobanteTurnoRenovacion(turno);
-        pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
-      });
-  }
-
-  isSelected(turno: any) {
-    return this.profElegido;
   }
 
   saveSobreTurno() {
@@ -224,64 +203,4 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
           });
       });
   }
-
-  buscar($event) {
-    if ($event.formValid) {
-      // tslint:disable-next-line:max-line-length
-      this._profesionalService.getResumenProfesional({ documento: this.documento, nombre: this.nombre, apellido: this.apellido }).subscribe(resp => {
-        if (resp.length === 0) {
-          this.noEncontrado = true;
-        }
-        this.profEncontrado = resp;
-        this.profElegido = resp[0];
-        this.profesionalEncontrado(this.profElegido);
-      });
-    }
-  }
-
-  onProfesionalCompleto() {
-    const parametros = {
-      documento: this.profesional.documento,
-      tipoTurno: 'renovacion',
-      sexo: this.profesional.sexo
-    };
-    this._turnosService.getTurnosPorDocumento(parametros).subscribe((resultado: any) => {
-      if (resultado.length === 0) {
-        this._turnosService.saveTurnoSolicitados(this.profesional)
-          .subscribe((nuevoProfesional) => {
-            if (nuevoProfesional == null) {
-              this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
-            } else {
-
-              this._nuevoProfesional = nuevoProfesional;
-              this.turnoGuardado = true;
-              if (this._turnoSeleccionado && this._nuevoProfesional) {
-                this.saveTurno();
-              }
-              this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-              this.router.navigate(['requisitosGenerales']);
-            }
-          });
-      } else {
-        this.plex.info('info', 'Usted ya tiene un turno para el día <strong>' + moment(resultado.fecha).format('DD MMMM YYYY, h:mm a' + '</strong>'));
-
-      }
-    });
-
-  }
-
-  profesionalEncontrado(profEncontrado) {
-    if (profEncontrado) {
-      this.profElegido = profEncontrado;
-      this.profesional.idRenovacion = profEncontrado.idRenovacion;
-      this.profesional.nombre = profEncontrado.nombre;
-      this.profesional.apellido = profEncontrado.apellido;
-      this.profesional.documento = profEncontrado.documento;
-      this.profesional.fechaNacimiento = profEncontrado.fechaNacimiento;
-      this.profesional.sexo = profEncontrado.sexo;
-      this.profesional.formacionGrado = profEncontrado.formacionGrado;
-    }
-  }
-
-
 }

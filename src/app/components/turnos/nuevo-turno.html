@@ -1,4 +1,4 @@
-<!-- <div class="row" *ngIf="sobreTurno">
+<div class="row" *ngIf="sobreTurno">
   <div class="col-12 text-center">
     <header>
       <div class="page-title">Seleccione fecha</div>
@@ -16,9 +16,9 @@
               (click)="confirmSobreTurno()">Confirmar</button>
     </div>
   </div>
-</div> -->
+</div>
 
-<plex-grid size="sm" type="full">
+<plex-grid size="sm" type="full" *ngIf="!sobreTurno">
   <fieldset>
     <div #div class="datepicker"></div>
     <input #input type="hidden">

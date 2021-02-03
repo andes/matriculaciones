@@ -30,6 +30,8 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
   public tipoTurno: Enums.TipoTurno;
   public fecha = null;
+  public profesionalRegistrado = null;
+  public fechaElegida = null;
   private formTurno: FormGroup;
   public turnoSeleccionado: boolean;
   public turnoGuardado: boolean;
@@ -47,7 +49,17 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
 
   }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['profesional'] !== undefined) {
+        const profJson = JSON.parse(params['profesional']);
+        this.profesionalRegistrado = profJson;
+        this.fechaElegida = params['fechaElegida'];
+        this.onTurnoSeleccionado(this.fechaElegida);
+        this.onProfesionalCompleto(this.profesionalRegistrado);
+      }
+    });
+  }
 
   onTurnoSeleccionado(turno: Date) {
     this._turnoSeleccionado = turno;
@@ -83,7 +95,6 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
             if (nuevoProfesional == null) {
               this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
             } else {
-
               this._nuevoProfesional = nuevoProfesional;
               this.turnoGuardado = true;
               if (this._turnoSeleccionado && this._nuevoProfesional) {

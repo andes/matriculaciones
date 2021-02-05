@@ -8,43 +8,26 @@
 <plex-label titulo="{{fecha | date: 'dd/MM/yyyy'}}" subtitulo="{{horarioElegido}}" type="success" size="lg"
             icon="calendar-today">
 </plex-label>
-<plex-wrapper>
-    <form #formNuevoProf='ngForm' *ngIf="turnoSeleccionado">
-        <div class="row">
-            <div class="col-md-6">
-                <plex-text label="Nombre" [(ngModel)]="nombre" name="nombre" [required]="true">
-                </plex-text>
-            </div>
-            <div class="col-md-6">
-                <plex-text label="Apellido" [(ngModel)]="apellido" name="apellido" [required]="true"></plex-text>
-
-            </div>
-            <div class="col-md-9">
-                <plex-int label="Nº de Documento" [(ngModel)]="documento" name="documento" [required]="true"></plex-int>
-
-            </div>
-            <div class="col-md-3">
-                <label class="form-control-label">&nbsp;</label>
-                <plex-button type="info" label=" Buscar" (click)="buscar($event)" validateForm="true">
-                </plex-button>
-            </div>
-        </div>
-    </form>
-</plex-wrapper>
+<form #formNuevoProf='ngForm' *ngIf="turnoSeleccionado">
+    <plex-wrapper>
+        <plex-text label="Nombre" [(ngModel)]="nombre" name="nombre" [required]="true">
+        </plex-text>
+        <plex-text label="Apellido" [(ngModel)]="apellido" name="apellido" [required]="true"></plex-text>
+        <plex-int label="Nº de Documento" [(ngModel)]="documento" name="documento" [required]="true"></plex-int>
+        <plex-button type="info" label=" Buscar" (click)="buscar($event)" validateForm="true">
+        </plex-button>
+    </plex-wrapper>
+</form>
 
 
 <div class="h-100" *ngIf="profEncontrado.length === 0 && noEncontrado">
-    <section>
-        <plex-label justify="center" titulo="Sin resultados"
-                    subtitulo="Revisá que los datos ingresados sean correctos, si no estás registrado dirígete a 'Matricularme por primera vez' en la página de inicio"
-                    type="warning" size="lg" direction="column" icon="account-alert">
-        </plex-label>
-    </section>
-    <section>
-        <plex-button justify="center" type="info" size="sm" routerLink="/requisitosGenerales"
-                     label="Matricularme por primera vez">
-        </plex-button>
-    </section>
+    <plex-label justify="center" titulo="Sin resultados"
+                subtitulo="Revisá que los datos ingresados sean correctos, si no estás registrado dirígete a 'Matricularme por primera vez' en la página de inicio"
+                type="warning" size="lg" direction="column" icon="account-alert">
+    </plex-label>
+    <plex-button justify="center" type="info" size="sm" routerLink="/requisitosGenerales"
+                 label="Matricularme por primera vez">
+    </plex-button>
 </div>
 <plex-list>
     <plex-item *ngFor="let prof of profEncontrado; let i = index;" [ngClass]="{'active': isSelected()}"

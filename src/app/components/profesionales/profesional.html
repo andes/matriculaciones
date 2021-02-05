@@ -2,6 +2,7 @@
   <plex-layout-main>
     <form #formNuevoProf='ngForm'>
       <ng-container *ngIf="editable">
+        <!-- Cuando se edita los datos del profesional-->
         <plex-title justify titulo="Editar profesional" size="lg">
           <plex-button type="success" label="Confirmar Datos" (click)="actualizar($event)" class="pull-right"
                        validateForm="true"></plex-button>
@@ -9,9 +10,10 @@
         </plex-title>
       </ng-container>
       <ng-container *ngIf="!editable && confirmar == false && !ocultarBtn">
+        <!-- Cuando se solicita un turno -->
         <plex-title justify titulo="Registro de profesional" size="lg">
           <plex-badge type="success mr-2">
-            Fecha y hora: {{ lblTurno }}.
+            TURNO: {{ lblTurno }}.
           </plex-badge>
           <plex-button type="danger" label="volver" (click)="volverProfesional()"></plex-button>
         </plex-title>

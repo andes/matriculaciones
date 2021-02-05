@@ -29,6 +29,7 @@ const jsPDF = require('jspdf');
 export class SolicitarTurnoMatriculacionComponent implements OnInit {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
   public tipoTurno: Enums.TipoTurno;
+  public tipoMatricula: string;
   public fecha = null;
   public profesionalRegistrado = null;
   public fechaElegida = null;
@@ -46,12 +47,19 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
     private plex: Plex) {
 
     this.tipoTurno = Enums.TipoTurno.matriculacion;
-
   }
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      if (params['profesional'] !== undefined) {
+
+      if (params['tipoMatricula']) {
+        if (params['tipoMatricula'] === 'universitaria') {
+          this.tipoMatricula = 'universitaria';
+        } else {
+          this.tipoMatricula = 'tecnicaaux';
+        }
+      }
+      if (params['profesional']) {
         const profJson = JSON.parse(params['profesional']);
         this.profesionalRegistrado = profJson;
         this.fechaElegida = params['fechaElegida'];

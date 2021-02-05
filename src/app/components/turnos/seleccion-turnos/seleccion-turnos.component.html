@@ -2,7 +2,7 @@
     <plex-badge type="info">{{fechaElegida | date: 'dd/MM/yyyy'}}</plex-badge>
     <plex-button class="ml-2" label="Continuar" type="success" size="sm" id="#btn-continue" [disabled]="!horarioSi"
                  (click)="confirmTurno()"></plex-button>
-    <plex-button class="ml-2" title="Volver" icon="arrow-left" type="danger" size="sm" (click)="volverInicio()">
+    <plex-button class="ml-2 " title="Volver" icon="arrow-left" type="danger" size="sm" (click)="volverInicio()">
     </plex-button>
 </plex-title>
 <plex-label titulo="{{fechaElegida | date: 'dd/MM/yyyy'}}" subtitulo="{{horarioElegido}}" type="success" size="lg"
@@ -16,22 +16,15 @@
 </div>
 <plex-grid size="md" type="auto" *ngIf="!sinTurnos && fechaElegida != undefined">
     <div *ngFor="let turno of horariosDisponibles; let idx = index">
-        <div *ngIf="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado">
-            <plex-card type="dark" class="disabled" size="sm" (click)="buildFechaTurno(horariosDisponibles[idx])"
-                       [ngClass]="{'turno-activo' : isActive(horariosDisponibles[idx]),'mt-2' : true,'btn-horario' : true}">
-                <plex-label titulo="{{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos < 10 ? '0' : '') + horariosDisponibles[idx].minutos }}
+        <plex-card [selected]="isActive(horariosDisponibles[idx])"
+                   type="{{(horariosDisponibles[idx] && horariosDisponibles[idx].ocupado)?'':'dark'}}" size="sm"
+                   (click)="buildFechaTurno(horariosDisponibles[idx])"
+                   [ngClass]="{'turno-activo' : isActive(horariosDisponibles[idx]),'disabled':(horariosDisponibles[idx] && horariosDisponibles[idx].ocupado)}">
+            <plex-badge type="warning" *ngIf="horariosDisponibles[idx] && horariosDisponibles[idx].ocupado">No
+                disponible</plex-badge>
+            <plex-label titulo="{{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos < 10 ? '0' : '') + horariosDisponibles[idx].minutos }}
                 hs" size="md">
-                </plex-label>
-            </plex-card>
-        </div>
-        <div *ngIf="horariosDisponibles[idx] && !horariosDisponibles[idx].ocupado">
-            <plex-card [selected]="isActive(horariosDisponibles[idx])" type="dark" size="sm"
-                       (click)="buildFechaTurno(horariosDisponibles[idx])"
-                       [ngClass]="{'turno-activo' : isActive(horariosDisponibles[idx]),'mt-2' : true,'btn-horario' : true}">
-                <plex-label titulo="{{ horariosDisponibles[idx].hora }}:{{ (horariosDisponibles[idx].minutos < 10 ? '0' : '') + horariosDisponibles[idx].minutos }}
-                hs" size="md">
-                </plex-label>
-            </plex-card>
-        </div>
+            </plex-label>
+        </plex-card>
     </div>
 </plex-grid>

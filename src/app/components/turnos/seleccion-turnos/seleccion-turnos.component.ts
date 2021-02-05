@@ -1,31 +1,25 @@
-import { Component, ElementRef, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AgendaService } from '../../../services/agenda.service';
-import { IAgendaMatriculaciones } from '../../../interfaces/IAgendaMatriculaciones';
 import { Plex } from '@andes/plex';
 import { TurnoService } from '../../../services/turno.service';
 import { NuevoTurnoComponent } from '../nuevo-turno.component';
 
-
-const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
-const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
 @Component({
   selector: 'app-seleccion-turnos',
-  templateUrl: './seleccion-turnos.component.html',
-  styleUrls: ['./seleccion-turnos.component.scss']
+  templateUrl: './seleccion-turnos.component.html'
 })
 export class SeleccionTurnosComponent implements OnInit {
   inicio = null;
   fin = null;
   tipoTurno = null;
+  tipoMatricula = null;
   duracionTurno = null;
   private $input: any;
   private format = 'DD/MM/YYYY';
   public horariosDisponibles: any[] = [];
   public fechaElegida: Date;
   public turnoElegido: boolean;
-  private lblTurno: string;
   public boxType: string;
   public horarioSi = false;
   public horario = new Date();
@@ -49,6 +43,9 @@ export class SeleccionTurnosComponent implements OnInit {
       this.duracionTurno = parseInt(params['duracionTurno'], 0);
       this.fecha = params['fecha'];
       this.tipoTurno = params['tipoTurno'];
+      this.tipoMatricula = params['tipoMatricula'];
+      this.horarioSi = false;
+      this.horarioElegido = undefined;
       this.onChangeFecha(this.fecha);
     });
   }
@@ -163,12 +160,15 @@ export class SeleccionTurnosComponent implements OnInit {
   }
 
   buildFechaTurno(turno: any) {
-
-    this.fechaElegida.setHours(turno.hora);
-    this.fechaElegida.setMinutes(turno.minutos);
-    this.horarioElegido = moment(this.fechaElegida).format('h:mm a');
-    if (this.fechaElegida.getHours() !== 0) {
-      this.horarioSi = true;
+    if (turno && turno.ocupado) {
+      this.plex.info('warning', 'El horario no se encuentra disponible');
+    } else {
+      this.fechaElegida.setHours(turno.hora);
+      this.fechaElegida.setMinutes(turno.minutos);
+      this.horarioElegido = moment(this.fechaElegida).format('H:mm a');
+      if (this.fechaElegida.getHours() !== 0) {
+        this.horarioSi = true;
+      }
     }
   }
 
@@ -202,9 +202,13 @@ export class SeleccionTurnosComponent implements OnInit {
 
   volverInicio() {
     if (this.tipoTurno === 'renovacion') {
-      this.router.navigate(['/solicitarTurnoRenovacion']);
+      this.router.navigate(['/requisitosGenerales']);
     } else {
-      this.router.navigate(['/solicitarTurnoMatriculacion']);
+      if (this.tipoMatricula === 'universitaria') {
+        this.router.navigate(['/requisitosMatriculaUniversitaria']);
+      } else {
+        this.router.navigate(['/requisitosMatriculaTecnicaAuxiliar']);
+      }
     }
   }
 }

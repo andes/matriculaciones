@@ -29,8 +29,6 @@ export class NuevoTurnoComponent implements AfterViewInit {
   private $div: any;
   private format = 'DD/MM/YYYY';
   private agendaConfig: IAgendaMatriculaciones;
-  private cantidadTurnosPorHora: number;
-  private horariosDisponibles: any[] = [];
   public fechaElegida: Date;
   private fechaConsulta: Date;
   public turnoElegido: boolean;
@@ -42,11 +40,13 @@ export class NuevoTurnoComponent implements AfterViewInit {
   public fecha = new Date();
   public fechaComparacion: Date;
   public sinTurnos = false;
+  public showSidebar = false;
   cupoDiario = 0;
   @Input() sobreTurno: any;
 
   @Output() onTurnoSeleccionado = new EventEmitter<Date>();
   @Input() private tipoTurno: Enums.TipoTurno;
+  @Input() private tipoMatricula: Enums.TipoMatricula;
 
   @ViewChild('input') input: ElementRef;
   @ViewChild('div') div: ElementRef;
@@ -102,7 +102,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
       const fin = new Date(this.agendaConfig.horarioFinTurnos);
       const dif = Math.abs(inicio.getTime() - fin.getTime());
       this.cupoDiario = (Math.round((dif / 1000) / 60) / this.agendaConfig.duracionTurno);
-      // Calculo los turnos disponibles por día.
+      // Calculo los turnos disponibles por día.[tipoMatricula]="tipoMatricula"
       // Obtengo la cantidad de turnos por fecha del mes.
       this.fechaConsulta = new Date();
       this.getPrimerDia();
@@ -111,12 +111,14 @@ export class NuevoTurnoComponent implements AfterViewInit {
   }
 
   private onChangeFecha(event: any) {
-    const fecha = new Date(event.date);
-    this.fechaComparacion = moment(fecha).format('L');
-    const params = { inicio: this.agendaConfig.horarioInicioTurnos, fin: this.agendaConfig.horarioFinTurnos, duracionTurno: this.agendaConfig.duracionTurno, fecha, tipoTurno: this.tipoTurno };
+    this.showSidebar = true;
+    this.fechaElegida = new Date(event.date);
+    this.fechaComparacion = moment(this.fechaElegida).format('L');
     if (stringify(this.tipoTurno) === 'renovacion') {
+      const params = { inicio: this.agendaConfig.horarioInicioTurnos, fin: this.agendaConfig.horarioFinTurnos, duracionTurno: this.agendaConfig.duracionTurno, fecha: this.fechaElegida, tipoTurno: this.tipoTurno };
       this.router.navigate(['/solicitarTurnoRenovacion/seleccion-turnos'], { queryParams: params });
     } else {
+      const params = { inicio: this.agendaConfig.horarioInicioTurnos, fin: this.agendaConfig.horarioFinTurnos, duracionTurno: this.agendaConfig.duracionTurno, fecha: this.fechaElegida, tipoTurno: this.tipoTurno, tipoMatricula: this.tipoMatricula };
       this.router.navigate(['/solicitarTurnoMatriculacion/seleccion-turnos'], { queryParams: params });
     }
   }

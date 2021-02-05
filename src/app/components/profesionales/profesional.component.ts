@@ -457,7 +457,11 @@ export class ProfesionalComponent implements OnInit {
   }
 
   volverProfesional() {
-    this.location.back();
+    if (this.editable) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/solicitarTurnoMatriculacion']);
+    }
   }
 
   completar() {

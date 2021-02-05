@@ -2,14 +2,8 @@
   <plex-layout-main>
     <header justify>
       <plex-title *ngIf="!turnoSeleccionado" titulo="Selección de fecha para matriculación" size="md"></plex-title>
-      <div>
-        <plex-badge *ngIf="turnoSeleccionado" type="success mr-2">
-          Fecha y hora: {{ horarioElegido }}.
-        </plex-badge>
-        <plex-button label="Volver" type="danger" routerLink="/requisitosMatriculaUniversitaria"></plex-button>
-      </div>
     </header>
-    <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno"
+    <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno" [tipoMatricula]="tipoMatricula"
                      (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
   </plex-layout-main>
   <plex-layout-sidebar type="invert">

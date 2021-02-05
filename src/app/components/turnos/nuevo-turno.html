@@ -23,7 +23,7 @@
     <div #div class="datepicker"></div>
     <input #input type="hidden">
   </fieldset>
-  <ng-container *ngIf="fechaElegida === undefined">
+  <ng-container *ngIf="!fechaElegida && !showSidebar">
     <section *mobile="false" class="w-100 h-75" justify="center">
       <plex-label size="xl" titulo="Comienza seleccionando un día del calendario" direction="column" align="center"
                   subtitulo="De éste modo, podrás visualizar los horarios disponibles" icon="calendario-mas">

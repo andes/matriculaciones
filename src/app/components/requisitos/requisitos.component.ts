@@ -28,11 +28,12 @@ export class RequisitosGeneralesComponent implements OnInit {
 export class RequisitosMatriculaUniversitariaComponent {
     @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
     public terminosLeidos = false;
-
     constructor(private router: Router) { }
 
     onClick() {
-        this.router.navigate(['/solicitarTurnoMatriculacion']);
+        const tipoMatricula = 'universitaria';
+        const params = { tipoMatricula: tipoMatricula };
+        this.router.navigate(['/solicitarTurnoMatriculacion'], { queryParams: params });
     }
 }
 
@@ -47,6 +48,8 @@ export class RequisitosMatriculaTecnicaAuxiliarComponent {
     constructor(private router: Router) { }
 
     onClick() {
-        this.router.navigate(['/solicitarTurnoMatriculacion']);
+        const tipoMatricula = 'tecnicaaux';
+        const params = { tipoMatricula: tipoMatricula };
+        this.router.navigate(['/solicitarTurnoMatriculacion'], { queryParams: params });
     }
 }

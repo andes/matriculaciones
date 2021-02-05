@@ -1,14 +1,8 @@
-import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex';
-// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 
 // Services
-import { PaisService } from './../../../services/pais.service';
-import { ProvinciaService } from './../../../services/provincia.service';
-import { LocalidadService } from './../../../services/localidad.service';
-import { ProfesionService } from './../../../services/profesion.service';
-import { EntidadFormadoraService } from './../../../services/entidadFormadora.service';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { TurnoService } from './../../../services/turno.service';
 
@@ -19,11 +13,7 @@ import { IProfesional } from './../../../interfaces/IProfesional';
 import { Params, ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 
-const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
-const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
-const jsPDF = require('jspdf');
-
+import { jsPDF } from 'jspdf';
 @Component({
   selector: 'app-seleccion-profesional',
   templateUrl: './seleccion-profesional.component.html'
@@ -45,7 +35,7 @@ export class SeleccionProfesionalComponent implements OnInit {
   public profEncontrado: any = [];
   public horarioElegido: string;
 
-  @Input() public profesional: IProfesional = {
+  public profesional: IProfesional = {
     id: null,
     habilitado: true,
     nombre: null,
@@ -140,13 +130,8 @@ export class SeleccionProfesionalComponent implements OnInit {
 
   constructor(private _formBuilder: FormBuilder,
     private _turnosService: TurnoService,
-    private _paisService: PaisService,
     private route: ActivatedRoute,
-    private _provinciaService: ProvinciaService,
-    private _localidadService: LocalidadService,
-    private _profesionService: ProfesionService,
     private _profesionalService: ProfesionalService,
-    private _entidadFormadoraService: EntidadFormadoraService,
     private _pdfUtils: PDFUtils,
     private plex: Plex,
     private router: Router) {
@@ -190,7 +175,7 @@ export class SeleccionProfesionalComponent implements OnInit {
       });
   }
 
-  isSelected(turno: any) {
+  isSelected() {
     return this.profElegido;
   }
 
@@ -208,17 +193,12 @@ export class SeleccionProfesionalComponent implements OnInit {
               tipo: this.tipoTurno,
               profesional: nuevoProfesional._id
             });
-
-            this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value })
-              .subscribe(turno => {
-              });
           });
       });
   }
 
   buscar($event) {
     if ($event.formValid) {
-      // tslint:disable-next-line:max-line-length
       this._profesionalService.getResumenProfesional({ documento: this.documento, nombre: this.nombre, apellido: this.apellido }).subscribe(resp => {
         if (resp.length === 0) {
           this.noEncontrado = true;

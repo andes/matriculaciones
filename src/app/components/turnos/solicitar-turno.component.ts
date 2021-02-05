@@ -26,7 +26,6 @@ export class SolicitarTurnoComponent implements OnInit, OnChanges {
     formRematriculacion: FormGroup;
     tipoTurno: Enums.TipoTurno;
     turnoSeleccionado: Date;
-    foco = 'sidebar';
 
     constructor(private _formBuilder: FormBuilder) { }
 

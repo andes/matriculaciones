@@ -16,6 +16,7 @@ export interface IProfesional {
     cuit: string;
     fechaNacimiento: Date;
     lugarNacimiento: string;
+    profesionalMatriculado?: Boolean;
     nacionalidad: {
         nombre: string;
         codigo: number;

@@ -238,8 +238,10 @@ export class ProfesionalComponent implements OnInit {
   }
 
   showOtra(entidadFormadora) {
-    if (entidadFormadora.value) {
-      this.showOtraEntidadFormadora = entidadFormadora.value.nombre === 'Otra';
+    if (entidadFormadora !== null) {
+      if (entidadFormadora.value) {
+        this.showOtraEntidadFormadora = entidadFormadora.value.nombre === 'Otra';
+      }
     }
   }
 

@@ -127,7 +127,7 @@ export class ListarProfesionalesComponent implements OnInit {
       estadoE: this.value ? this.value.estadoEspecialidad.nombre : '',
       bajaMatricula: this.value ? this.value.verBajas : false,
       habilitado: this.value ? this.value.verDeshabilitado : false,
-      numeroMatriculaGrado: this.value ? this.value.numeroMatriculaGrado : '',
+      numeroMatriculaGrado: this.value && this.value.numeroMatriculaGrado ? this.value.numeroMatriculaGrado : '',
       numeroMatriculaEspecialidad: this.value ? this.value.numeroMatriculaEspecialidad : '',
       matriculacion: true,
       limit: this.limit

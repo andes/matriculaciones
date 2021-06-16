@@ -179,6 +179,8 @@ export class NuevoTurnoComponent implements AfterViewInit {
     });
     let inicioMes;
     let finMes;
+    let tiempoTranscurrido = Date.now();
+    let hoy = new Date(tiempoTranscurrido);
     if (fecha) {
       inicioMes = new Date(new Date(fecha).getFullYear(), new Date(fecha).getMonth(), 1);
       finMes = new Date(new Date(fecha).getFullYear(), new Date(fecha).getMonth() + 1, 0);
@@ -192,6 +194,9 @@ export class NuevoTurnoComponent implements AfterViewInit {
         return moment(date).isSame(moment(dia.fecha), 'day');
       });
       if (resultado.length > this.cupoDiario) {
+        fechasExcluidas.push(date);
+      }
+      if (date.getTime() < hoy.getTime() && date.toDateString() !== hoy.toDateString()) {
         fechasExcluidas.push(date);
       }
       date = this.addDays(date, 1);

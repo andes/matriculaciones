@@ -141,12 +141,12 @@
                     {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
                     {{profesional.ultimaMatricula.matriculaNumero}}
                   </span>
-                  <span *ngIf="!profesional?.formacionGrado?.matriculado && profesional.ultimaMatricula && profesional.formacionGrado?.profesion?.nombre  && !ultimaMatricula?.baja?.motivo"
+                  <span *ngIf="profesional?.formacionGrado && !profesional.formacionGrado.matriculado && profesional.ultimaMatricula && profesional.formacionGrado?.profesion?.nombre  && !ultimaMatricula?.baja?.motivo"
                         class="badge badge-danger">
                     {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
                     {{profesional.ultimaMatricula.matriculaNumero}} vencida
                   </span>
-                  <span *ngIf="!profesional.formacionGrado?.matriculado && profesional.ultimaMatricula && profesional.formacionGrado?.profesion?.nombre && profesional.ultimaMatricula?.baja?.motivo"
+                  <span *ngIf="profesional?.formacionGrado && !profesional.formacionGrado.matriculado && profesional.ultimaMatricula?.baja?.motivo && profesional.formacionGrado?.profesion?.nombre"
                         class="badge badge-danger">
                     {{profesional.formacionGrado.profesion.nombre}}: Matrícula n°
                     {{profesional.ultimaMatricula.matriculaNumero}} suspendida
@@ -157,7 +157,7 @@
                     {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
                     {{profesional.ultimaMatriculaPosgrado.matriculaNumero}}
                   </span>
-                  <span *ngIf="!profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (profesional.formacionPosgrado.tieneVencimiento && !isVencida(profesional.ultimaMatriculaPosgrado?.fin)) "
+                  <span *ngIf="profesional?.formacionGrado && !profesional.formacionPosgrado.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (profesional.formacionPosgrado.tieneVencimiento && !isVencida(profesional.ultimaMatriculaPosgrado?.fin)) "
                         class="badge badge-danger">
                     {{profesional.formacionPosgrado.especialidad.nombre}}: Matrícula n°
                     {{profesional.ultimaMatriculaPosgrado.matriculaNumero}} suspendida

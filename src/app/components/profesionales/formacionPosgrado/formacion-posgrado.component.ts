@@ -65,9 +65,7 @@ export class FormacionPosgradoComponent implements OnInit {
         } else {
             this.profesional.formacionPosgrado = [formacionPosgradoEntrante];
         }
-
         this.updateProfesional.emit(this.profesional);
-
     }
 
     ngOnInit() {
@@ -117,7 +115,6 @@ export class FormacionPosgradoComponent implements OnInit {
         this.updateProfesional.emit(this.profesional);
     }
 
-
     loadEntidadesFormadoras(event) {
         this._entidadFormadoraService.getEntidadesFormadoras().subscribe(event.callback);
     }
@@ -125,7 +122,6 @@ export class FormacionPosgradoComponent implements OnInit {
     loadModalidadesCertificacion(event) {
         this._modalidadesCertificacionService.getModalidadesCertificacion().subscribe(event.callback);
     }
-
 
     confirm(i) {
         this.plex.confirm('¿Desea eliminar?').then((resultado) => {
@@ -159,7 +155,6 @@ export class FormacionPosgradoComponent implements OnInit {
 
     editar(formacionPosgrado, index) {
         this.formacionPosgradoSelected.emit(index);
-
         this.edit = true;
         if (formacionPosgrado.certificacion) {
             this.certificacion = formacionPosgrado.certificacion;
@@ -179,11 +174,18 @@ export class FormacionPosgradoComponent implements OnInit {
             this.certificacion = certificacion;
         }
         this.formacionSelected = formacionPosgrado;
+        if (!this.formacionSelected.fechaDeVencimiento) {
+            this.actualizarFecha();
+        }
         if (!this.formacionSelected.institucionFormadora || !this.formacionSelected.institucionFormadora.codigo) {
             this.showOtraEntidadFormadora = true;
         } else {
             this.showOtraEntidadFormadora = false;
         }
+    }
+
+    actualizarFecha() {
+        this.formacionSelected.fechaDeVencimiento = moment(this.formacionSelected.fechasDeAltas[this.formacionSelected.fechasDeAltas.length - 1].fecha).add(6, 'years');
     }
 
     pushFechasAlta() {

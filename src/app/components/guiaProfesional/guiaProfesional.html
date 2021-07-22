@@ -12,56 +12,55 @@
 
                         <div class="row">
                             <div class="col-3">
-                                <plex-select label="Seleccione una opción" (change)='limpiaFiltro()' [(ngModel)]="filtro"
-                                    name="seleccionOpcion" [data]="guiaProfesionalEnum" [required]="true"></plex-select>
+                                <plex-select label="Seleccione una opción" (change)='limpiaFiltro()'
+                                             [(ngModel)]="filtro" name="seleccionOpcion" [data]="guiaProfesionalEnum"
+                                             [required]="true"></plex-select>
                             </div>
                             <div class="col-9">
-                                <!-- <div class="row" *ngIf=' filtro && filtro.id === 0'>
-                            <div class="col-md-6">
-                                <plex-text label="apellido" [(ngModel)]="busqueda.apellido" name="apellido" [required]="true"></plex-text>
-                            </div>
-                            <div class="col-md-6">
-                                <plex-text label="Nombre" [(ngModel)]="busqueda.nombre" name="nombre" [required]="true"></plex-text>
-                            </div>
-                        </div> -->
-
                                 <div class="row" *ngIf=' filtro && filtro.id === 0'>
                                     <div class="col-md-6">
                                         <plex-text label="Documento" [(ngModel)]="busqueda.documento" name='documento'
-                                            placeholder="Escriba un documento" [required]="true">
+                                                   placeholder="Ingrese un documento" [required]="true">
                                         </plex-text>
                                     </div>
                                 </div>
                                 <div class="row" *ngIf=' filtro && filtro.id === 1'>
                                     <div class="col-md-6">
-                                        <plex-select label="profesion" [(ngModel)]="busqueda.formacionGrado" name='formacionGrado'
-                                            (getData)="loadProfesiones($event)" [required]="true"></plex-select>
+                                        <plex-select label="profesion" [(ngModel)]="busqueda.formacionGrado"
+                                                     name='formacionGrado' (getData)="loadProfesiones($event)"
+                                                     placeholder="Seleccione una profesión" [required]="true">
+                                        </plex-select>
                                     </div>
                                     <div class="col-md-6">
-                                        <plex-int label="Número Matrícula" name='numMatricula' [(ngModel)]="busqueda.numeroMatricula"
-                                            placeholder="Escriba matrícula" [required]="true">
+                                        <plex-int label="Número Matrícula" name='numMatricula'
+                                                  [(ngModel)]="busqueda.numeroMatricula"
+                                                  placeholder="Ingrese una matrícula" [required]="true">
                                         </plex-int>
                                     </div>
                                 </div>
                                 <div class="row" *ngIf=' filtro && filtro.id === 2'>
                                     <div class="col-md-4">
-                                        <plex-text label="Nombre" [(ngModel)]="busqueda.nombre" name='nombre'></plex-text>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <plex-text label="Apellido" name='apellido' [(ngModel)]="busqueda.apellido"
-                                            placeholder="escriba un documento" [required]="true">
+                                        <plex-text label="Nombre" [(ngModel)]="busqueda.nombre" name='nombre'>
                                         </plex-text>
                                     </div>
                                     <div class="col-md-4">
-                                        <plex-int label="Número Matrícula" name='numMatricula' [(ngModel)]="busqueda.numeroMatricula"
-                                            placeholder="Escriba matrícula" [required]="true">
-                                        </plex-int>
+                                        <plex-text label="Apellido" name='apellido' [(ngModel)]="busqueda.apellido"
+                                                   placeholder="Ingrese un un apellido" [required]="true">
+                                        </plex-text>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <plex-select label="profesion" [(ngModel)]="busqueda.formacionGrado"
+                                                     name='formacionGrado' (getData)="loadProfesiones($event)"
+                                                     placeholder="Seleccione una profesión" [required]="true">
+                                        </plex-select>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <plex-button *ngIf='filtro' type='success' class="float-right" (click)='buscar($event,formNumeracion)'
-                            label='Buscar' validateForm="true"></plex-button>
+                        <br>
+                        <plex-button *ngIf='filtro' type='success' class="float-right"
+                                     (click)='buscar($event,formNumeracion)' label='Buscar' validateForm="true">
+                        </plex-button>
                     </form>
 
                 </header>

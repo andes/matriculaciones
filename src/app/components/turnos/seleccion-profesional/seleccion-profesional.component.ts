@@ -14,6 +14,7 @@ import { Params, ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 
 import { jsPDF } from 'jspdf';
+import { catchError } from 'rxjs/operators';
 @Component({
   selector: 'app-seleccion-profesional',
   templateUrl: './seleccion-profesional.component.html'
@@ -168,11 +169,20 @@ export class SeleccionProfesionalComponent implements OnInit {
       profesional: this._nuevoProfesional._id
     });
 
-    this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value })
-      .subscribe(turno => {
+    this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value }).pipe(
+      catchError((err) => {
+        this.plex.info('warning', err);
+        this.router.navigate(['requisitosGenerales']);
+        return null;
+      })
+    ).subscribe((turno) => {
+      if (turno) {
         const pdf = this._pdfUtils.comprobanteTurnoRenovacion(turno);
         pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
-      });
+        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+        this.router.navigate(['requisitosGenerales']);
+      }
+    });
   }
 
   isSelected() {
@@ -223,14 +233,11 @@ export class SeleccionProfesionalComponent implements OnInit {
             if (nuevoProfesional == null) {
               this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
             } else {
-
               this._nuevoProfesional = nuevoProfesional;
               this.turnoGuardado = true;
               if (this._turnoSeleccionado && this._nuevoProfesional) {
                 this.saveTurno();
               }
-              this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-              this.router.navigate(['requisitosGenerales']);
             }
           });
       } else {

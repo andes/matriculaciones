@@ -17,6 +17,7 @@ import * as moment from 'moment';
 import { PDFUtils } from './../../utils/PDFUtils';
 import * as Enums from './../../utils/enumerados';
 import { ActivatedRoute, Router } from '@angular/router';
+import { catchError } from 'rxjs/operators';
 
 const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
 const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -83,11 +84,22 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
       profesional: this._nuevoProfesional._id
     });
 
-    this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value })
-      .subscribe(turno => {
+    this._turnosService.saveTurnoMatriculacion({ turno: this.formTurno.value }).pipe(
+      catchError((err) => {
+        this.plex.info('warning', err);
+        this.router.navigate(['requisitosGenerales']);
+        return null;
+      })
+    ).subscribe((turno) => {
+      if (turno) {
         const pdf = this._pdfUtils.comprobanteTurno(turno);
         pdf.save('Turno ' + this._nuevoProfesional.nombre + ' ' + this._nuevoProfesional.apellido + '.pdf');
-      });
+        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+        this.router.navigate(['requisitosGenerales']);
+      }
+    });
+
+
   }
 
   onProfesionalCompleto(profesional: any) {
@@ -108,8 +120,6 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
               if (this._turnoSeleccionado && this._nuevoProfesional) {
                 this.saveTurno();
               }
-              this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-              this.router.navigate(['requisitosGenerales']);
             }
           });
       } else {

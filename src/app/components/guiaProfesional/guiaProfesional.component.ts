@@ -53,6 +53,7 @@ export class GuiaProfesionalComponent implements OnInit {
         if ($event.formValid) {
             if (this.busqueda.formacionGrado) {
                 this.busqueda['codigoProfesion'] = this.busqueda.formacionGrado.codigo;
+                this.busqueda['nombreProfesion'] = this.busqueda.formacionGrado.nombre;
             }
             this._profesionalService.getGuiaProfesional(this.busqueda).subscribe(x => {
                 this.profEncontrado = x;

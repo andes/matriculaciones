@@ -143,6 +143,7 @@ export interface IProfesional {
         matriculado: boolean;
         revalida: boolean;
         notas: string;
+        fechaDeVencimiento: Date;
     }];
     origen: String;
     sanciones: [{

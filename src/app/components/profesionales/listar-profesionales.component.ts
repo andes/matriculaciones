@@ -8,8 +8,9 @@ import { IProfesional } from '../../interfaces/IProfesional';
 import { ProfesionalService } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { debounceTime, catchError } from 'rxjs/operators';
+import { ProfesionService } from '../../services/profesion.service';
 
 @Component({
   selector: 'app-listar-profesionales',
@@ -63,10 +64,10 @@ export class ListarProfesionalesComponent implements OnInit {
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
-    private route: ActivatedRoute,
     private router: Router,
     public auth: Auth,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private profesionService: ProfesionService
   ) { }
 
   ngOnInit() {
@@ -74,6 +75,7 @@ export class ListarProfesionalesComponent implements OnInit {
       apellido: [''],
       nombre: [''],
       documento: [''],
+      profesion: '',
       estado: '',
       estadoEspecialidad: '',
       verBajas: false,
@@ -116,6 +118,12 @@ export class ListarProfesionalesComponent implements OnInit {
     this.verExportador = false;
   }
 
+  loadProfesiones(event) {
+    this.profesionService.getProfesiones().pipe(
+      catchError(() => of(null)))
+      .subscribe(event.callback);
+  }
+
   buscar(event?: any) {
     this.verBajas = this.value ? this.value.verBajas : false;
     this.profesionalElegido = null;
@@ -123,6 +131,7 @@ export class ListarProfesionalesComponent implements OnInit {
       documento: this.value ? this.value.documento : '',
       apellido: this.value ? this.value.apellido : '',
       nombre: this.value ? this.value.nombre : '',
+      profesion: this.value ? this.value.profesion?.codigo : '',
       estado: this.value && this.value.estado ? this.value.estado.nombre : '',
       estadoE: this.value ? this.value.estadoEspecialidad.nombre : '',
       bajaMatricula: this.value ? this.value.verBajas : false,

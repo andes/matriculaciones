@@ -26,7 +26,7 @@
                                 </div>
                                 <div class="row" *ngIf=' filtro && filtro.id === 1'>
                                     <div class="col-md-6">
-                                        <plex-select label="profesion" [(ngModel)]="busqueda.formacionGrado"
+                                        <plex-select label="profesión" [(ngModel)]="busqueda.formacionGrado"
                                                      name='formacionGrado' (getData)="loadProfesiones($event)"
                                                      placeholder="Seleccione una profesión" [required]="true">
                                         </plex-select>
@@ -45,11 +45,11 @@
                                     </div>
                                     <div class="col-md-4">
                                         <plex-text label="Apellido" name='apellido' [(ngModel)]="busqueda.apellido"
-                                                   placeholder="Ingrese un un apellido" [required]="true">
+                                                   placeholder="Ingrese un apellido" [required]="true">
                                         </plex-text>
                                     </div>
                                     <div class="col-md-4">
-                                        <plex-select label="profesion" [(ngModel)]="busqueda.formacionGrado"
+                                        <plex-select label="profesión" [(ngModel)]="busqueda.formacionGrado"
                                                      name='formacionGrado' (getData)="loadProfesiones($event)"
                                                      placeholder="Seleccione una profesión" [required]="true">
                                         </plex-select>

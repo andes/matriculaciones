@@ -1,186 +1,65 @@
-<app-formacion-posgrado-form [profesional]="profesional" (submitPosgrado)="saveProfesional($event)"></app-formacion-posgrado-form>
-<!--<hr>-->
-<div *ngIf='!edit'>
-    <plex-box *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;">
-        <!-- <div *ngIf='formacionPosgrado.especialidad.nombre !== null'> -->
-        <header *ngIf='formacionPosgrado.especialidad.nombre !== null'>
-            <plex-title [titulo]="formacionPosgrado.especialidad.nombre" size="sm">
-                <span *ngIf="formacionPosgrado.matriculacion !== null" class="badge badge-info">Nro
-                    Matricula:
-                    <br> {{ formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].matriculaNumero }}
-                </span>
+<br>
+<plex-title titulo="Listado de posgrado" size="lg">
+    <plex-button type="success" size="md" (click)="cargarPosgrado()"> AGREGAR POSGRADO</plex-button>
+</plex-title>
 
-                <plex-button *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" class='ml-1' type="primary" icon="information-outline"
-                    (click)="showPosgrado(i)"></plex-button>
-                <plex-button title="editar" type="success" class="float-right btnGrado ml-1" icon="lapiz"
-                    (click)="editar(formacionPosgrado,i)"></plex-button>
-            </plex-title>
-        </header>
-        <div class="row" *ngIf='formacionPosgrado.especialidad.nombre !== null'>
-            <div class="col-4">
-                <label>Profesión</label>
-                <div>{{formacionPosgrado.profesion.nombre}}</div>
-            </div>
+<plex-table [columns]="columns" #table="plTable">
+    <tr *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;" (click)="showPosgrado(i)">
+        <td>
+            <plex-label icon="estetoscopio" type="info" case="capitalize" size="lg"
+                        titulo="{{ formacionPosgrado.especialidad?.nombre }}"
+                        subtitulo="Profesión: {{formacionPosgrado.profesion?.nombre}}">
+            </plex-label>
+        </td>
+        <td>
+            <plex-label size="lg"
+                        titulo="Nro. {{formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].matriculaNumero}}"
+                        subtitulo="{{formacionPosgrado.institucionFormadora?.nombre}}">
+            </plex-label>
+        </td>
+        <td>
+            <plex-badge size="lg" type="info">
+                {{formacionPosgrado.fechasDeAltas[formacionPosgrado.fechasDeAltas.length - 1]?.fecha |
+                date:'dd/MM/yyyy'}}</plex-badge>
+        </td>
+        <td>
+            <plex-badge *ngIf="formacionPosgrado.matriculacion.length && !formacionPosgrado.revalida && formacionPosgrado.tieneVencimiento && hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length-1].fin"
+                        type="{{((hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) > 365)?'danger':'info'}}">
+                {{((hoy.getTime() -
+                formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length-1].fin.getTime())/(1000 *
+                3600
+                *24) > 365)?'Vencida':'Año de gracia'}}
+            </plex-badge>
 
-            <div class="col-4">
-                <label>Institución Formadora</label>
-                <div>{{ formacionPosgrado.institucionFormadora?.nombre }}</div>
-            </div>
-            <div class="col-4" *ngIf='formacionPosgrado.matriculacion.length  === 0 && formacionPosgrado.revalida === false  && formacionPosgrado.tieneVencimiento'>
+            <plex-badge *ngIf="formacionPosgrado.matriculacion.length && !formacionPosgrado.revalida && formacionPosgrado.tieneVencimiento &&
+                formacionPosgrado.matriculado && hoy <= formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length-1].fin"
+                        type="success"> vigente
+            </plex-badge>
 
-                <div *ngIf='!formacionPosgrado.papelesVerificados' class="badge badge-warning">Papeles
-                    <br> sin verificar</div>
-                <div *ngIf='formacionPosgrado.papelesVerificados' class="badge badge-info">Papeles
-                    <br> Verificados</div>
-            </div>
-            <div class="col-4" *ngIf='formacionPosgrado.matriculacion.length  > 0 && formacionPosgrado.revalida === false  && formacionPosgrado.tieneVencimiento'>
-                <span *ngIf='formacionPosgrado.matriculado === false && hoy <= formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin '
-                    class="badge badge-danger"> Matricula
-                    <br> suspendida</span>
-                <span *ngIf='formacionPosgrado.matriculado === false && hoy >= formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin'
-                    class="badge badge-danger"> Matricula
-                    <br> Vencida</span>
-                <span *ngIf='(formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getFullYear() + 1) ===  hoy.getFullYear()'
-                    class="badge badge-info"> Año
-                    <br> de gracia</span>
-                <span *ngIf='formacionPosgrado.matriculado' class="badge badge-success"> Matriculado</span>
-            </div>
-            <div class="col-4" *ngIf='formacionPosgrado.matriculacion.length  > 0  && formacionPosgrado.revalida === true && formacionPosgrado.tieneVencimiento'>
+            <plex-badge *ngIf="formacionPosgrado.matriculacion.length && !formacionPosgrado.revalida && formacionPosgrado.tieneVencimiento && 
+                !formacionPosgrado.matriculado" type="danger"> Suspendida
+            </plex-badge>
 
-                <div *ngIf='!formacionPosgrado.papelesVerificados' class="badge badge-warning">Papeles
-                    <br> sin verificar</div>
-                <div *ngIf='formacionPosgrado.papelesVerificados' class="badge badge-info">Papeles
-                    <br> verificados</div>
-            </div>
-            <div class="col-4" *ngIf='!formacionPosgrado.tieneVencimiento'>
+            <plex-badge *ngIf='formacionPosgrado.matriculacion.length  && formacionPosgrado.revalida && formacionPosgrado.tieneVencimiento'
+                        type="{{formacionPosgrado.papelesVerificados?'info':'warning'}}">
+                {{formacionPosgrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+            </plex-badge>
 
-                <div class=" badge badge-warning">Especialidad sin vencimiento</div>
-            </div>
-            <!--<div class="col-1">
-            <plex-button class="float-right" type="primary" icon="information-outline"  *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" (click)="showPosgrado(i)"></plex-button>            
-        </div>-->
-        </div>
+            <plex-badge *ngIf='!formacionPosgrado.tieneVencimiento' type="warning">
+                Sin vencimiento
+            </plex-badge>
 
-        <!-- </div> -->
-    </plex-box>
-</div>
-<plex-box>
-    <div class="row" *ngIf='edit'>
+            <plex-badge *ngIf="formacionPosgrado.notas?.length" class='ml-2' type="info" size="md">
+                <plex-icon name="documento" type="info" size="sm"></plex-icon>
+            </plex-badge>
 
+            <plex-button class='ml-2' type="warning" size="sm" icon="pencil" tooltip="Editar"
+                         (click)="editarPosgrado(i)">
+            </plex-button>
 
+            <plex-button class='ml-2' type="danger" size="sm" icon="cesto" tooltip="Eliminar" (click)="darDeBaja(i)">
+            </plex-button>
 
-        <div class="col">
-            <plex-title [titulo]='formacionSelected.especialidad.nombre' size="sm">
-                <adjunto-titulo-profesional [profesionalId]='profesional.id' [formacionSelected]='formacionSelected' [formacionSelected]='formacionSelected' [isPosgrado]='true'></adjunto-titulo-profesional>
-            </plex-title>
-            <form #posgrado='ngForm'>
-                <div class="row">
-                    <div class="col-4">
-                        <plex-int label="Matricula Nro" (change)='ultimaMatricula()' [(ngModel)]="formacionSelected.matriculacion[0].matriculaNumero"
-                            name="matriculaNro" [required]="true"></plex-int>
-                        <!-- <span class="badge badge-info" *ngIf='profesionalP.matriculacion[0].matriculaNumero && !numeroMenor'>Ultimo Nro: {{ultimoNumeroMatricula}}</span> -->
-                        <span class="badge badge-danger" *ngIf='formacionSelected.matriculacion[0].matriculaNumero && numeroMenor'>debe
-                            ingresar un numero mayor que {{ultimoNumeroMatricula}} </span>
-                    </div>
-                    <!-- <div class="col-6">
-                        <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="formacionSelected.institucionFormadora"
-                            name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
-                        <plex-text *ngIf="showOtraEntidadFormadora" name='entidad' label="Otra Entidad Formadora"
-                            [(ngModel)]="formacionSelected.institucionFormadora.nombre" [required]="true"></plex-text>
-                    </div>
-                    <div class="col">
-                        <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" (change)='otraEntidad(formacionSelected)'
-                            name="otra"></plex-bool>
-                    </div> -->
-                    <div class="col-3">
-                        <plex-datetime type="date" label="Fecha de Ingreso" [(ngModel)]="formacionSelected.fechaIngreso"
-                            name="fechaIngreso"></plex-datetime>
-                    </div>
-                    <div class="col-3">
-                        <plex-datetime type="date" label="Fecha de Egreso" [(ngModel)]="formacionSelected.fechaEgreso"
-                            name="fechaEgreso"></plex-datetime>
-                    </div>
-                    <div class="col-3">
-                        <plex-text label="Libro" [(ngModel)]="formacionSelected.matriculacion[0].libro" name="libro"
-                            [required]="true"></plex-text>
-                    </div>
-                    <div class="col-3">
-                        <plex-text label="Folio" [(ngModel)]="formacionSelected.matriculacion[0].folio" name="folio"
-                            [required]="true"></plex-text>
-                    </div>
-                    <div class="col-4">
-                        <plex-select label="Modalidad" [(ngModel)]="certificacion.modalidad" name="certificacion"
-                            (getData)="loadModalidadesCertificacion($event)"></plex-select>
-                    </div>
-                </div>
-                <hr>
-                <h4>Fechas de altas</h4>
-                <div>
-                    <div class="row">
-
-                        <div class="col-6">
-                            <plex-datetime type="date" label="ultima fecha de alta" [(ngModel)]="formacionSelected.fechasDeAltas[formacionSelected.fechasDeAltas.length - 1].fecha"
-                                name="fecha" [required]="true"></plex-datetime>
-                        </div>
-                        <ng-container *ngIf='formacionSelected.fechasDeAltas[formacionSelected.fechasDeAltas.length - 1].fecha'>
-                            <div class="col-4">
-                                <plex-datetime type="date" label="Agregar otra fecha de alta" [(ngModel)]="proximaFechaDeAlta"
-                                    name="fechas"></plex-datetime>
-                            </div>
-                            <div class="col-2">
-                                <plex-button label="Agregar" type="success" class="float-right" *ngIf='proximaFechaDeAlta'
-                                    (click)="pushFechasAlta()"></plex-button>
-                            </div>
-                        </ng-container>
-                    </div>
-                </div>
-                <hr>
-                <h4>Notas</h4>
-                <div>
-                    <div class="row">
-                        <div class="col-12">
-                            <textarea class="form-control" name='notas' [(ngModel)]="formacionSelected.notas"></textarea>
-                            <br>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <plex-button label="Guardar" type="success" class="float-right" (click)="guardar($event)"
-                            validateForm="true"></plex-button>
-                        <plex-button label="Cerrar" type="danger" class="float-right" (click)="edit = false"
-                            validateForm="true"></plex-button>
-
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-</plex-box>
-
-<!--<plex-box>
-    <div class="row" style="margin-top:15px">
-        <div class="col-12">
-            <fieldset *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;">
-                <legend class="info-subtitle">
-                    {{formacionPosgrado.especialidad.nombre}}            
-                </legend>
-                <div class="row">
-                    <div class="col-4">
-                        <label>Profesión</label> 
-                        <div>{{formacionPosgrado.profesion.nombre}}</div>
-                    </div>
-                    <div class="col">
-                        <label>Institución Formadora</label> 
-                        <div>{{ formacionPosgrado.institucionFormadora.nombre }}</div>
-                    </div>
-                    <div class="col-1">
-                        <plex-button class="float-right" type="primary" icon="information-outline"  *ngIf="!formacionPosgrado.matriculacion?.matriculacionNumero" (click)="showPosgrado(i)"></plex-button>            
-                    </div>
-                </div>
-                <hr *ngIf="i !== profesional.formacionPosgrado.length - 1">
-            </fieldset>
-
-        </div>
-    </div>
-</plex-box>-->
+        </td>
+    </tr>
+</plex-table>

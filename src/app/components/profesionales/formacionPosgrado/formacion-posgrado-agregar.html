@@ -1,0 +1,40 @@
+<plex-box type="invert">
+    <plex-title titulo="Agregar posgrado" size="lg">
+        <plex-button class='ml-2' size="sm" type="danger" label="Cancelar" (click)="volver()"></plex-button>
+        <plex-button class='ml-2' size="sm" type="success" label="Guardar" (click)="onSubmit(formulario)"
+                     [disabled]="!formulario.valid"></plex-button>
+    </plex-title>
+    <form #formulario="ngForm">
+        <plex-grid cols="2">
+            <plex-select label="Profesión" [(ngModel)]="profesionalP.profesion" name="profesion" [data]="profesiones"
+                         [required]="true" [readonly]="!profesional.habilitado" placeholder="Seleccione una profesión">
+            </plex-select>
+            <plex-select label="Especialidad" [(ngModel)]="profesionalP.especialidad" name="especialidad"
+                         (getData)="loadEspecialidades($event)" [required]="true" [readonly]="!profesional.habilitado"
+                         placeholder="Seleccione una especialidad">
+            </plex-select>
+        </plex-grid>
+        <plex-int label="Matrícula Nro" [(ngModel)]="profesionalP.matriculacion[0].matriculaNumero" name="matriculaNro"
+                  [required]="true" [readonly]="!profesional.habilitado" placeholder="Ingrese nro de matrícula">
+        </plex-int>
+
+        <plex-grid cols="2">
+            <plex-text label="Libro" [(ngModel)]="profesionalP.matriculacion[0].libro" name="libro" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese un libro"></plex-text>
+
+            <plex-text label="Folio" [(ngModel)]="profesionalP.matriculacion[0].folio" name="folio" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese un folio"></plex-text>
+        </plex-grid>
+        <plex-select label="Modalidad" [(ngModel)]="profesionalP.certificacion.modalidad" name="modalidad"
+                     [required]="true" (getData)="loadModalidadesCertificacion($event)"
+                     [readonly]="!profesional.habilitado" placeholder="Seleccione una modalidad">
+        </plex-select>
+        <br>
+        <plex-title titulo="Fechas de alta" size="lg"></plex-title>
+        <plex-datetime type="date" label="Última fecha de alta" [(ngModel)]="profesionalP.fechasDeAltas[0].fecha"
+                       name="fecha" [required]="true" [readonly]="!profesional.habilitado"
+                       placeholder="Ingrese una fecha de alta">
+        </plex-datetime>
+    </form>
+
+</plex-box>

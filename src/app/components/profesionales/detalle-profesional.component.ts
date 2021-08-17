@@ -1,15 +1,8 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
 import { Location } from '@angular/common';
-// Utils
-import { PDFUtils } from './../../utils/PDFUtils';
 import { FotoGeneralComponent } from './foto-general.component';
-// Services
 import { ProfesionalService } from './../../services/profesional.service';
-import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
-
-// Interfaces
 import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
@@ -26,19 +19,21 @@ const jsPDF = require('jspdf');
 
 export class DetalleProfesionalComponent implements OnInit {
   @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
-  public formSancion: FormGroup;
-  public loading: Boolean = false;
+  public indiceObtenido;
   public indexFormacionGradoSelected: any;
   public indexFormacionPosgradoSelected: any;
   public mostrar = false;
   public mostrarGrado = false;
   public img64 = null;
   public vieneDeDetalle = null;
-  @Input() public flag = null;
   public confirmar = true;
   public tieneFirma = null;
   public editable = false;
+  public showEdit = false;
+  public showAdd = false;
+
   @ViewChild('fotoHijo') fotoHijo: FotoGeneralComponent;
+  @Input() public flag = null;
   @Input() public profesional: IProfesional = {
     id: null,
     habilitado: true,
@@ -184,7 +179,6 @@ export class DetalleProfesionalComponent implements OnInit {
     });
   }
 
-
   updateProfesional(callbackData?: any) {
     this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
     this._profesionalService.putProfesional(this.profesional).pipe(catchError(() => of(null)))
@@ -209,7 +203,6 @@ export class DetalleProfesionalComponent implements OnInit {
       'idProfesional': this.profesional.id
     };
     this.showFoto.emit(this.img64);
-    // this.fotoHijo.mostrarFoto(this.img64);
     this._profesionalService.saveProfesional({ imagen: imagenPro }).subscribe(resp => {
     });
   }
@@ -243,8 +236,6 @@ export class DetalleProfesionalComponent implements OnInit {
     };
 
     this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
-
-    // this.updateProfesional();
   }
 
   guardarSancion(sancion: any) {
@@ -264,7 +255,6 @@ export class DetalleProfesionalComponent implements OnInit {
       'data': posgrado,
       'agente': this.auth.usuario.nombreCompleto
     };
-
     this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
   }
 
@@ -298,7 +288,6 @@ export class DetalleProfesionalComponent implements OnInit {
     } else {
       this.profesional.formacionGrado[this.indexFormacionGradoSelected].matriculacion.push(matriculacion);
     }
-    // this.updateProfesional();
 
   }
 
@@ -317,7 +306,6 @@ export class DetalleProfesionalComponent implements OnInit {
   }
 
   volver() {
-    // this.router.navigate(['/turnos', { id: this.profesional.id }]);
     this.location.back();
   }
   volverP() {
@@ -338,26 +326,49 @@ export class DetalleProfesionalComponent implements OnInit {
     this.mostrar = true;
     this.mostrarGrado = false;
     this.indexFormacionGradoSelected = formacion;
-    // if (this.mostrarGrado === true) {
-    //     this.mostrarGrado = false;
-    // } else {
-    //     this.mostrarGrado = true;
-    // }
   }
 
   formacionPosgradoSelected(posgrado: any) {
     this.mostrarGrado = true;
     this.mostrar = false;
     this.indexFormacionPosgradoSelected = posgrado;
-    // if (this.mostrar === true) {
-    //     this.mostrar = false;
-    // } else {
-    //     this.mostrar = true;
-    // }
+  }
+
+  mostrarEdicion(mostrarEdit) {
+    this.showEdit = mostrarEdit;
+    this.showAdd = false;
+  }
+
+  cancelarPosgradoEdit(edit) {
+    this.showEdit = edit;
+    this.mostrarGrado = false;
+    this.showAdd = false;
+  }
+
+  mostrarAdd(mostrarAgregar) {
+    this.showAdd = mostrarAgregar;
+    this.showEdit = false;
+    this.mostrarGrado = false;
+  }
+
+  cancelarPosgradoAdd(add) {
+    this.showAdd = add;
+    this.mostrarGrado = false;
+    this.showEdit = false;
+  }
+
+  obtenerIndice(indice) {
+    this.indiceObtenido = indice;
+  }
+
+  editarEspecialidad(editar) {
+    this.showEdit = editar;
+    this.showAdd = false;
+    this.mostrarGrado = false;
   }
 
   cerrar(grado) {
-    if (grado === true) {
+    if (grado) {
       this.mostrar = false;
     } else {
       this.mostrarGrado = false;
@@ -373,19 +384,5 @@ export class DetalleProfesionalComponent implements OnInit {
     const res = this.profesional.formacionGrado.find(p => p.profesion.codigo === 1 || p.profesion.codigo === 2);
     return res;
   }
-
-  // pdf(){
-  //     const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional);
-  //     pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-  // }
-  // generarCredencial() {
-
-  //             // this._profesionalService.getCredencial(this.profesional.id)
-  //             //     .subscribe((resp) => {
-  //                     const pdf = this._pdfUtils.generarCredencial(this.profesional);
-  //                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-  //                     // this.loading = false;
-  //              //   });
-  //         }
 }
 

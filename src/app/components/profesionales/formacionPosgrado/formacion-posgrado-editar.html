@@ -1,0 +1,117 @@
+<plex-box type="invert">
+    <plex-title titulo="Editar posgrado" size="md">
+        <plex-button class='ml-2' size="sm" type="danger" label="Cancelar" (click)="volver()"></plex-button>
+        <plex-button class='ml-2' size="sm" type="success" label="Guardar" (click)="guardar(formulario)"
+                     [disabled]="!formulario.valid"></plex-button>
+        <plex-dropdown icon="dots-vertical" size="sm" type="link" [right]="true" [items]="dropitems"></plex-dropdown>
+    </plex-title>
+
+    <form #formulario='ngForm'>
+        <plex-grid cols="2">
+            <plex-select label="Profesión" [(ngModel)]="profesion" name="profesion" [required]="true"
+                         [data]="profesiones" [readonly]="!profesional.habilitado"
+                         placeholder="Seleccione una profesión">
+            </plex-select>
+            <plex-select label="Especialidad" [(ngModel)]="especialidad" name="especialidad"
+                         (getData)="loadEspecialidades($event)" [required]="true" [readonly]="!profesional.habilitado"
+                         placeholder="Seleccione una especialidad">
+            </plex-select>
+        </plex-grid>
+        <plex-int label="Matrícula Nro" [(ngModel)]="matriculaNumero" name="matriculaNro" [required]="true"
+                  [readonly]="!profesional.habilitado" placeholder="Ingrese nro de matrícula">
+        </plex-int>
+
+        <plex-grid cols="2">
+            <plex-text label="Libro" [(ngModel)]="libro" name="libro" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese un libro"></plex-text>
+
+            <plex-text label="Folio" [(ngModel)]="folio" name="folio" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese un folio"></plex-text>
+        </plex-grid>
+        <plex-select label="Modalidad" [(ngModel)]="modalidad" name="modalidad" [required]="true"
+                     (getData)="loadModalidadesCertificacion($event)" [readonly]="!profesional.habilitado"
+                     placeholder="Seleccione una especialidad">
+        </plex-select>
+    </form>
+    <br>
+    <ng-container *ngIf="!fechaAgregada && !fechaEditada">
+        <plex-title titulo="Fechas de alta" size="md">
+            <plex-button class='ml-2' size="sm" type="success" label="Nueva fecha de alta"
+                         (click)="agregarFechaDeAlta()"></plex-button>
+        </plex-title>
+        <div class="row">
+            <div class="col-12">
+                <plex-table [columns]="columns" #table="plTable">
+                    <plex-table-columns>
+                    </plex-table-columns>
+                    <tr *ngFor="let unaFecha of profesional.formacionPosgrado[indice].fechasDeAltas;let i = index">
+                        <td>{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}</td>
+                        <td>
+                            <plex-button class='ml-2' size="sm" type="danger" icon="cesto" class="float-right"
+                                         tooltip="Eliminar"
+                                         (click)="borrarFechaAlta(profesional.formacionPosgrado[indice].fechasDeAltas,i)">
+                            </plex-button>
+                            <plex-button *ngIf='i === (profesional.formacionPosgrado[indice].fechasDeAltas.length - 1)'
+                                         class='ml-2' size="sm" type="warning" icon="pencil" class="float-right"
+                                         tooltip="Editar" (click)="agregarFechaEditada()">
+                            </plex-button>
+                        </td>
+                    </tr>
+                </plex-table>
+                <br>
+            </div>
+        </div>
+    </ng-container>
+
+    <ng-container *ngIf="fechaAgregada">
+        <form #formulario='ngForm'>
+            <plex-title titulo="Agregar nueva fecha de alta" size="md">
+                <plex-button class='ml-2' size="sm" type="danger" icon="close" tooltip="Cancelar"
+                             (click)="cerrarFechaAlta()"></plex-button>
+                <plex-button class='ml-2' size="sm" type="success" icon="check" tooltip="Guardar"
+                             (click)="pushFechasAlta()" [disabled]="!formulario.valid"></plex-button>
+            </plex-title>
+
+            <plex-datetime type="date" label="Ingrese otra fecha de alta" [(ngModel)]="proximaFechaDeAlta" name="fecha"
+                           [required]="true" [readonly]="!profesional.habilitado" placeholder="Ingrese una fecha">
+            </plex-datetime>
+        </form>
+        <br>
+    </ng-container>
+
+    <ng-container *ngIf="fechaEditada">
+        <form #formulario='ngForm'>
+            <plex-title titulo="Editar fecha de alta" size="md">
+                <plex-button class='ml-2' size="sm" type="danger" icon="close" tooltip="Cancelar"
+                             (click)="cerrarFechaAlta()"></plex-button>
+                <plex-button class='ml-2' size="sm" type="success" icon="check" tooltip="Guardar"
+                             [disabled]="!formulario.valid" (click)="editarUltimaFechaAlta(formulario)"></plex-button>
+            </plex-title>
+
+            <plex-datetime type="date" label="Ingrese otra fecha de alta" [(ngModel)]="proximaFechaDeAlta" name="fecha"
+                           [required]="true" [readonly]="!profesional.habilitado" placeholder="Ingrese una fecha">
+            </plex-datetime>
+        </form>
+        <br>
+    </ng-container>
+
+    <plex-title titulo="Notas" size="md">
+        <plex-button *ngIf="profesional.formacionPosgrado[indice].notas?.length && !editarOagregar" class='ml-2'
+                     size="sm" type="warning" icon="pencil" tooltip="Editar" (click)="condicionNota()">
+        </plex-button>
+        <plex-button *ngIf="!profesional.formacionPosgrado[indice].notas?.length && !editarOagregar" class='ml-2'
+                     size="sm" type="success" label="Agregar nota" (click)="condicionNota()"></plex-button>
+
+        <plex-button *ngIf="editarOagregar" class='ml-2' size="sm" type="success" icon="check" tooltip="Guardar"
+                     (click)="guardarNota()">
+        </plex-button>
+        <plex-button *ngIf="editarOagregar" class='ml-2' size="sm" type="danger" icon="close" tooltip="Cancelar"
+                     (click)="cerrarNota()">
+        </plex-button>
+    </plex-title>
+    <plex-text *ngIf="existeNota" [(ngModel)]="nota" name="nota" [readonly]="!profesional.habilitado"
+               placeholder="Ingrese una nota">
+    </plex-text>
+    <plex-label *ngIf="!existeNota && profesional.formacionPosgrado[indice].notas?.length">
+        {{profesional.formacionPosgrado[indice].notas}}</plex-label>
+</plex-box>

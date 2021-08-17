@@ -71,7 +71,8 @@ import { SancionesComponent } from './components/profesionales/sanciones/sancion
 import { SancionesFormComponent } from './components/profesionales/sanciones/sanciones-form.component';
 import { HeaderProfesionalComponent } from './components/profesionales/header-profesional.component';
 import { FormacionPosgradoComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado.component';
-import { FormacionPosgradoFormComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-form.component';
+import { FormacionPosgradoEditarComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-editar-component';
+import { FormacionPosgradoAgregarComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-agregar.component';
 import { FormacionGradoFormComponent } from './components/profesionales/formacionGrado/formacion-grado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
@@ -105,7 +106,8 @@ const COMPS_PROFESIONAL = [
   FormacionGradoDetalleComponent,
   FormacionPosgradoComponent,
   FormacionPosgradoDetalleComponent,
-  FormacionPosgradoFormComponent,
+  FormacionPosgradoEditarComponent,
+  FormacionPosgradoAgregarComponent,
   ListarProfesionalesComponent,
   OtroDatosComponent,
   CambioDniComponent,

@@ -1,46 +1,55 @@
-// Angular
-import {
-  Component,
-  Input,
-  OnInit,
-  OnChanges
-} from '@angular/core';
-// Plex
-import {
-  Plex
-} from '@andes/plex';
 
-// Interfaces
-import {
-  IProfesional
-} from './../../interfaces/IProfesional';
+import { Component, Input, Output, OnInit, EventEmitter, OnChanges } from '@angular/core';
+import { Plex } from '@andes/plex';
+import { IProfesional } from './../../interfaces/IProfesional';
 import { DomSanitizer } from '@angular/platform-browser';
-
 import { ProfesionalService } from './../../services/profesional.service';
-import { environment } from '../../../environments/environment';
 import { Auth } from '@andes/auth';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 @Component({
   selector: 'app-header-profesional',
-  templateUrl: 'header-profesional.html'
+  templateUrl: 'header-profesional.html',
+  styles: ['.img-circle {  border-radius: 50%;  width: 128px !important;height: 128px !important;}']
 })
-export class HeaderProfesionalComponent implements OnInit {
+
+export class HeaderProfesionalComponent implements OnInit, OnChanges {
   public foto = null;
-  public urlFoto = null;
-  public supervisor = null;
   public agenteMatriculador = null;
   public habilitado: any;
+  public tieneFoto = false;
   @Input() profesional: IProfesional;
+  @Input() img64 = null;
+  @Input() idProfesional;
+  @Output() salida = new EventEmitter();
   constructor(private _profesionalService: ProfesionalService,
     public sanitizer: DomSanitizer,
-    public auth: Auth, private plex: Plex) {
+    public auth: Auth, private plex: Plex
+  ) {
 
   }
   ngOnInit() {
     this.habilitado = this.profesional.habilitado;
     this.agenteMatriculador = this.auth.usuario.nombreCompleto;
 
+    this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
+      if (resp) {
+        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
+        this.tieneFoto = true;
+      }
+    });
+  }
+
+  ngOnChanges() {
+    if (this.img64) {
+      this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + this.img64);
+    } else if (this.idProfesional) {
+      this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
+        if (resp) {
+          this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/png;base64,' + resp);
+        }
+      });
+    }
   }
 
   habilitar() {
@@ -66,9 +75,10 @@ export class HeaderProfesionalComponent implements OnInit {
       }
     });
 
-
-
   }
 
+  editar() {
+    this.salida.emit();
+  }
 
 }

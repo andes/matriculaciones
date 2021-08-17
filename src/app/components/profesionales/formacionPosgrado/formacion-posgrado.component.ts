@@ -1,53 +1,53 @@
-// Angular
-import {
-    Component,
-    OnInit,
-    Input,
-    Output,
-    EventEmitter
-} from '@angular/core';
-import {
-    FormBuilder,
-    FormGroup,
-    Validators
-} from '@angular/forms';
-
-// Plex
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, } from '@angular/forms';
 import { Plex } from '@andes/plex';
-
-// Interfaces
 import { IProfesional } from './../../../interfaces/IProfesional';
-import { ISiisa } from './../../../interfaces/ISiisa';
-
-// Services
 import { SIISAService } from './../../../services/siisa.service';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
-
 @Component({
     selector: 'app-formacion-posgrado',
-    templateUrl: 'formacion-posgrado.html'
+    templateUrl: 'formacion-posgrado.html',
+    styles: ['#matDropdown { display: flex!important}']
 })
-export class FormacionPosgradoComponent implements OnInit {
-    // formPosgrado: FormGroup;
-    profesiones: any[];
-    // accordionActive = false;
-    public resultado: boolean;
 
+export class FormacionPosgradoComponent implements OnInit {
     @Input() profesional: IProfesional;
     @Output() formacionPosgradoSelected = new EventEmitter();
     @Output() updateProfesional = new EventEmitter();
+    @Output() showPosgradoEdit = new EventEmitter();
+    @Output() showPosgradoAdd = new EventEmitter();
+    @Output() indice = new EventEmitter();
     public showOtraEntidadFormadora = false;
-
     public certificacion = {
         modalidad: null,
         fecha: null
     };
     public hoy;
-    public edit = false;
+    public edit = true;
+    public agregar = true;
     public formacionSelected;
     public proximaFechaDeAlta;
+    public columns = [
+        {
+            key: 'nombre',
+            label: 'ESPECIALIDAD'
+        },
+        {
+            key: 'matriculaNumero',
+            label: 'NRO. DE MATRICULA'
+        },
+        {
+            key: 'fecha',
+            label: 'FECHA DE ALTA'
+        },
+        {
+            key: 'fin',
+            label: 'ESTADO',
+            rigth: true
+        },
+    ];
     constructor(private _fb: FormBuilder,
         private _siisaSrv: SIISAService,
         private _profesionalService: ProfesionalService,
@@ -70,11 +70,17 @@ export class FormacionPosgradoComponent implements OnInit {
         this.hoy = new Date();
     }
 
-
-
-
     showPosgrado(posgrado: any) {
         this.formacionPosgradoSelected.emit(posgrado);
+    }
+
+    editarPosgrado(i) {
+        this.showPosgradoEdit.emit(this.edit);
+        this.indice.emit(i);
+    }
+
+    cargarPosgrado() {
+        this.showPosgradoAdd.emit(this.agregar);
     }
 
 
@@ -123,7 +129,6 @@ export class FormacionPosgradoComponent implements OnInit {
     }
 
     editar(formacionPosgrado, index) {
-        // this.formacionPosgradoSelected.emit(index);
         this.formacionPosgradoSelected.emit(index);
 
         this.edit = true;
@@ -164,6 +169,25 @@ export class FormacionPosgradoComponent implements OnInit {
                 });
             }
         });
+    }
 
+    darDeBaja(i) {
+        this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
+            if (resultado) {
+                this.profesional.formacionPosgrado[i].matriculado = false;
+                this.profesional.formacionPosgrado[i].papelesVerificados = false;
+                this.actualizar();
+            }
+        });
+    }
+
+    actualizar() {
+        const cambio = {
+            'op': 'updateEstadoPosGrado',
+            'data': this.profesional.formacionPosgrado
+        };
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+            this.plex.toast('success', 'Se ha eliminado con éxito!', 'informacion', 1000);
+        });
     }
 }

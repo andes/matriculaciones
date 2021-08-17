@@ -1,27 +1,11 @@
-// Angular
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter,
-    OnInit
-} from '@angular/core';
-// Plex
-import {
-    Plex
-} from '@andes/plex';
 
-// Interfaces
-import {
-    IProfesional
-} from './../../../interfaces/IProfesional';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Plex } from '@andes/plex';
+import { IProfesional } from './../../../interfaces/IProfesional';
 import * as moment from 'moment';
-
-// Services
 import { ProfesionalService } from './../../../services/profesional.service';
 import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
 import { Auth } from '@andes/auth';
-
 @Component({
     selector: 'app-formacion-posgrado-detalle',
     templateUrl: 'formacion-posgrado-detalle.html',
@@ -31,30 +15,55 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     @Input() formacion: any;
     @Input() index: any;
-    public esSupervisor;
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
     @Output() anioDeGraciaOutPut = new EventEmitter();
-
-
+    @Output() editarEspecialidad = new EventEmitter();
+    @Output() indice = new EventEmitter();
+    public esSupervisor;
+    public edit = true;
     hoy = new Date();
     public showBtnSinVencimiento = false;
+    public columns = [
+        {
+            key: 'fecha',
+            sort: (a: any, b: any) => a.fecha.getTime() - b.fecha.getTime()
+        }
+    ];
+    public revalidaciones = [
+        {
+            key: 'revalidacionNumero',
+            label: 'NRO.'
+        },
+        {
+            key: 'matriculaNumero',
+            label: 'MATRÍCULA NRO.'
+        },
+        {
+            key: 'inicio',
+            label: 'INICIO'
+        },
+        {
+            key: 'fin',
+            label: 'FIN'
+        },
+        {
+            key: 'tieneVencimiento',
+            label: 'ESTADO'
+        }
+    ];
     constructor(private _profesionalService: ProfesionalService,
         private plex: Plex,
         private _numeracionesService: NumeracionMatriculasService, public auth: Auth) {
-
-
     }
 
     ngOnInit() {
+        this.hoy = new Date();
         this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
-        // this.esSupervisor = true;
-
         if (moment().diff(moment(this.profesional.fechaNacimiento, 'DD-MM-YYYY'), 'years') >= 65) {
             this.showBtnSinVencimiento = true;
         }
-
     }
 
     matricularProfesional(formacion: any, mantenerNumero) {
@@ -76,21 +85,12 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     }
                 }
 
-
-                // this._numeracionesService.getOne({ codigoSisaEspecialidad: formacion.especialidad.codigo })
-                //     .subscribe((num) => {
-
                 let matriculaNumero;
-
 
                 if (mantenerNumero) {
                     matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
                 }
-                // if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) < new Date().getFullYear()) {
-                //     this.formacion.fechasDeAltas.push({ fecha: new Date() });
-                //     this.profesional.formacionPosgrado[this.index] = this.formacion;
-                //     revNumero = 0;
-                // }
+
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {
                     matriculaNumero: matriculaNumero,
@@ -110,12 +110,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     this.profesional.formacionPosgrado[this.index].matriculacion.push(oMatriculacion);
                 }
                 this.actualizar();
-                // this.matriculacion.emit(oMatriculacion);
             }
-            // });
-
-
-
         });
     }
 
@@ -136,8 +131,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.formacion.papelesVerificados = true;
         this.formacion.matri = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;
-
-        // this.actualizar();
     }
 
     darDeBaja() {
@@ -148,7 +141,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 this.actualizar();
             }
         });
-
     }
 
     anioDeGracia() {
@@ -166,21 +158,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     renovar() {
-        // if ((this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1) === new Date().getFullYear()) {
         this.formacion.papelesVerificados = false;
         this.formacion.revalida = true;
         this.profesional.formacionPosgrado[this.index] = this.formacion;
         this.actualizar();
-        // } else {
-
-        //     this.formacion.papelesVerificados = false;
-        //     this.formacion.revalida = true;
-        //     this.formacion.fechasDeAltas.push({ fecha: new Date() });
-        //     this.profesional.formacionPosgrado[this.index] = this.formacion;
-        //     console.log(this.formacion);
-        //     this.actualizar();
-
-        // }
     }
 
     renovarAntesVencimiento() {
@@ -195,17 +176,16 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         });
     }
 
-
     cerrar() {
         this.cerrarDetalle.emit(false);
     }
 
-    actualizar() {
-        // this._profesionalService.putProfesional(this.profesional)
-        // .subscribe(resp => {
-        //      this.profesional = resp;
-        // });
+    editar() {
+        this.editarEspecialidad.emit(this.edit);
+        this.indice.emit(this.index);
+    }
 
+    actualizar() {
         const cambio = {
             'op': 'updateEstadoPosGrado',
             'data': this.profesional.formacionPosgrado

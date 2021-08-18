@@ -44,8 +44,7 @@ export class FormacionPosgradoComponent implements OnInit {
         },
         {
             key: 'fin',
-            label: 'ESTADO',
-            rigth: true
+            label: '',
         },
     ];
     constructor(private _fb: FormBuilder,

@@ -22,7 +22,7 @@
                 {{formacionPosgrado.fechasDeAltas[formacionPosgrado.fechasDeAltas.length - 1]?.fecha |
                 date:'dd/MM/yyyy'}}</plex-badge>
         </td>
-        <td>
+        <td class="column-right my-3">
             <plex-badge *ngIf="formacionPosgrado.matriculacion.length && !formacionPosgrado.revalida && formacionPosgrado.tieneVencimiento && hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length-1].fin"
                         type="{{((hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) > 365)?'danger':'info'}}">
                 {{((hoy.getTime() -
@@ -59,6 +59,7 @@
 
             <plex-button class='ml-2' type="danger" size="sm" icon="cesto" tooltip="Eliminar" (click)="darDeBaja(i)">
             </plex-button>
+
 
         </td>
     </tr>

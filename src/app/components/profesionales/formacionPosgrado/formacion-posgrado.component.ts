@@ -9,7 +9,6 @@ import { ModalidadesCertificacionService } from '../../../services/modalidadesCe
 @Component({
     selector: 'app-formacion-posgrado',
     templateUrl: 'formacion-posgrado.html',
-    styles: ['#matDropdown { display: flex!important}']
 })
 
 export class FormacionPosgradoComponent implements OnInit {
@@ -24,6 +23,7 @@ export class FormacionPosgradoComponent implements OnInit {
         modalidad: null,
         fecha: null
     };
+    itemsDropdown: any = [];
     public hoy;
     public edit = true;
     public agregar = true;
@@ -67,6 +67,12 @@ export class FormacionPosgradoComponent implements OnInit {
 
     ngOnInit() {
         this.hoy = new Date();
+    }
+
+    setDropDown(i) {
+        this.itemsDropdown = [];
+        this.itemsDropdown[0] = { icon: 'lapiz', label: 'EDITAR POSGRADO', handler: () => { this.editarPosgrado(i); } };
+        this.itemsDropdown[1] = { icon: 'cesto', label: 'ELIMINAR POSGRADO', handler: () => { this.darDeBaja(i); } };
     }
 
     showPosgrado(posgrado: any) {

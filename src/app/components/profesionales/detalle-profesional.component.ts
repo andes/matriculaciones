@@ -364,7 +364,6 @@ export class DetalleProfesionalComponent implements OnInit {
   editarEspecialidad(editar) {
     this.showEdit = editar;
     this.showAdd = false;
-    this.mostrarGrado = false;
   }
 
   cerrar(grado) {

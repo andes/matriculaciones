@@ -52,14 +52,9 @@
             <plex-badge *ngIf="formacionPosgrado.notas?.length" class='ml-2' type="info" size="md">
                 <plex-icon name="documento" type="info" size="sm"></plex-icon>
             </plex-badge>
-
-            <plex-button class='ml-2' type="warning" size="sm" icon="pencil" tooltip="Editar"
-                         (click)="editarPosgrado(i)">
-            </plex-button>
-
-            <plex-button class='ml-2' type="danger" size="sm" icon="cesto" tooltip="Eliminar" (click)="darDeBaja(i)">
-            </plex-button>
-
+            <plex-dropdown icon="dots-vertical" size="sm" type="link" [right]="true" [items]="itemsDropdown"
+                           (onOpen)="setDropDown(i)">
+            </plex-dropdown>
 
         </td>
     </tr>

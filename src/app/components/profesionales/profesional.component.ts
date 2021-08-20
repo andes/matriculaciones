@@ -246,18 +246,13 @@ export class ProfesionalComponent implements OnInit {
   confirmarDatos($event) {
     if ($event.formValid) {
       let matcheo = false;
-      // tslint:disable-next-line:max-line-length
-      // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
       this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
-      // tslint:disable-next-line:max-line-length
-
       this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
       this.profesional.contactos.map(elem => {
         elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
         return elem;
       });
       this.matching();
-
 
       this._profesionalService.getProfesionalesMatching({ documento: this.profesional.documento })
         .subscribe(
@@ -290,7 +285,6 @@ export class ProfesionalComponent implements OnInit {
     } else {
       this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
     }
-
   }
 
   confirmarDatosAdmin($event) {
@@ -329,34 +323,47 @@ export class ProfesionalComponent implements OnInit {
             if (matcheo) {
               this.plex.info('info', 'Ya existe un profesional registrados con estos datos');
             } else {
-              this._profesionalService.saveProfesional({ profesional: this.profesional })
-                .subscribe(nuevoProfesional => {
+              this._profesionalService.saveProfesional({ profesional: this.profesional }).pipe(
+                catchError((err) => {
+                  this.plex.info('warning', err);
+                  this.router.navigate(['requisitosGenerales']);
+                  return null;
+                })).subscribe(nuevoProfesional => {
                   if (nuevoProfesional === null) {
                     this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
                   } else {
-                    this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-                    this.editado.emit(true);
-                    if (this.nuevoProf) {
-                      this._turnosService.saveTurnoSolicitados(nuevoProfesional)
-                        .subscribe((nuevoProfesional2) => {
-                          const turno = {
-                            fecha: new Date(),
-                            tipo: 'matriculacion',
-                            profesional: nuevoProfesional._id
-                          };
-                          this._turnosService.saveTurnoMatriculacion({ turno: turno })
-                            .subscribe(_turno => {
-                              this.router.navigate(['/profesional', nuevoProfesional._id]);
-                            });
-                        });
+                    if (nuevoProfesional._id) {
+                      if (this.nuevoProf) {
+                        this._turnosService.saveTurnoSolicitados(nuevoProfesional).pipe(
+                          catchError((err) => {
+                            this.plex.info('warning', err);
+                            this.router.navigate(['requisitosGenerales']);
+                            return null;
+                          })).subscribe(() => {
+                            const turno = {
+                              fecha: new Date(),
+                              tipo: 'matriculacion',
+                              profesional: nuevoProfesional._id
+                            };
+                            this._turnosService.saveTurnoMatriculacion({ turno: turno }).pipe(
+                              catchError((err) => {
+                                this.plex.info('warning', err);
+                                this.router.navigate(['requisitosGenerales']);
+                                return null;
+                              })).subscribe(_turno => {
+                                this.router.navigate(['/profesional', nuevoProfesional._id]);
+                              });
+                          });
+                        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+                        this.editado.emit(true);
+                      }
+                    } else {
+                      this.plex.toast('danger', 'Error al cargar los datos, vuelva a intentarlo!', 'informacion', 1000);
                     }
                   }
-
                 });
             }
-
           });
-
     } else {
       this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
     }
@@ -546,23 +553,4 @@ export class ProfesionalComponent implements OnInit {
 
         });
   }
-
-  // guardarTurnoNuevoProf(profesional) {
-  //   profesional.idRenovacion = this.profesional.id;
-  //   profesional.id = null;
-  //   delete profesional._id;
-  //   this._turnosService.saveTurnoSolicitados(profesional)
-  //     .subscribe((nuevoProfesional) => {
-  //      const turnoObj = {
-  //         fecha: new Date(),
-  //         tipo: 'matriculacion',
-  //         profesional: nuevoProfesional._id
-  //       };
-
-  //       this._turnosService.saveTurnoMatriculacion({ turno: turnoObj })
-  //         .subscribe(turno => {
-  //           this.router.navigate(['/profesional', nuevoProfesional._id]);
-  //         });
-  //     });
-  // }
 }

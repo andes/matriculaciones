@@ -7,7 +7,7 @@ import { LOCALE_ID } from '@angular/core';
 
 // Global
 
-import { PlexModule, Plex, PlexVisualizadorService } from '@andes/plex';
+import { PlexModule, Plex } from '@andes/plex';
 import { Auth } from '@andes/auth';
 import { Server } from '@andes/shared';
 import { RoutingGuard } from './app.routings-guard.class';
@@ -194,8 +194,7 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
     SIISAService,
     ModalidadesCertificacionService,
     UsuarioService,
-    ListadoTurnosPdfComponent,
-    PlexVisualizadorService
+    ListadoTurnosPdfComponent
   ],
   bootstrap: [AppComponent]
 })

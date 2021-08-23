@@ -179,8 +179,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
     });
     let inicioMes;
     let finMes;
-    let tiempoTranscurrido = Date.now();
-    let hoy = new Date(tiempoTranscurrido);
+    let hoy = new Date();
     if (fecha) {
       inicioMes = new Date(new Date(fecha).getFullYear(), new Date(fecha).getMonth(), 1);
       finMes = new Date(new Date(fecha).getFullYear(), new Date(fecha).getMonth() + 1, 0);

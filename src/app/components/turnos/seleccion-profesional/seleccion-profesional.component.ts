@@ -38,6 +38,7 @@ export class SeleccionProfesionalComponent implements OnInit {
   public profesional: IProfesional = {
     id: null,
     habilitado: true,
+    // profesionalMatriculado: null,
     nombre: null,
     apellido: null,
     tipoDocumento: null,
@@ -123,6 +124,7 @@ export class SeleccionProfesionalComponent implements OnInit {
     agenteMatriculador: '',
     OtrosDatos: null,
     idRenovacion: null,
+    // createdAT: null,
     documentoViejo: null
   };
   public profElegido;

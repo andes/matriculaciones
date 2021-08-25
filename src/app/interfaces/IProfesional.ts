@@ -8,6 +8,7 @@ import {
 export interface IProfesional {
     id: string;
     habilitado: Boolean;
+    // profesionalMatriculado: Boolean;
     nombre: string;
     apellido: string;
     tipoDocumento: string;
@@ -170,5 +171,6 @@ export interface IProfesional {
         nombreCompleto: String
     };
     idRenovacion: String;
+    // createdAT: Date;
     documentoViejo: Number;
 }

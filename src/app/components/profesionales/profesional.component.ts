@@ -53,6 +53,7 @@ export class ProfesionalComponent implements OnInit {
   @Input() public profesional: IProfesional = {
     id: null,
     habilitado: true,
+    // profesionalMatriculado: null,
     nombre: null,
     apellido: null,
     tipoDocumento: null,
@@ -139,6 +140,7 @@ export class ProfesionalComponent implements OnInit {
     agenteMatriculador: '',
     OtrosDatos: null,
     idRenovacion: null,
+    // createdAT: null
 
   };
   localidadesReal: any[] = [];
@@ -458,7 +460,8 @@ export class ProfesionalComponent implements OnInit {
 
   volverProfesional() {
     if (this.editable) {
-      this.location.back();
+      // this.location.back();
+      this.router.navigate(['/listarProfesionales']);
     } else {
       this.router.navigate(['/solicitarTurnoMatriculacion']);
     }
@@ -493,6 +496,7 @@ export class ProfesionalComponent implements OnInit {
           this.plex.toast('success', 'Se modificó con éxito!', 'informacion', 1000);
           this.editado.emit(true);
         });
+      this.volverProfesional();
     } else {
       this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
     }

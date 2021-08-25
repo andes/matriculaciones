@@ -7,7 +7,7 @@ import { LOCALE_ID } from '@angular/core';
 
 // Global
 
-import { PlexModule, Plex } from '@andes/plex';
+import { PlexModule, Plex, PlexVisualizadorService } from '@andes/plex';
 import { Auth } from '@andes/auth';
 import { Server } from '@andes/shared';
 import { RoutingGuard } from './app.routings-guard.class';
@@ -85,6 +85,7 @@ import { TurnosComponent } from './components/turnos/turnos.component';
 import { ListadoTurnosPdfComponent } from './components/turnos/listado-turnos-pdf.component';
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { UploadFileComponent } from './shared/components/upload-file.component';
+import { ListarProfesionalesDetalleComponent } from './components/profesionales/listar-profesionales-detalle.component';
 
 // Locales
 import { AppComponent } from './app.component';
@@ -110,6 +111,7 @@ const COMPS_PROFESIONAL = [
   OtroDatosComponent,
   CambioDniComponent,
   ListadoCambioDniComponent,
+  ListarProfesionalesDetalleComponent
 ];
 
 // Pipes
@@ -169,7 +171,7 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
     Ng2ImgMaxModule,
     Ng2ImgToolsModule,
     ImageUploadModule.forRoot(),
-    WebcamModule
+    WebcamModule,
 
   ],
   providers: [
@@ -194,6 +196,7 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
     SIISAService,
     ModalidadesCertificacionService,
     UsuarioService,
+    PlexVisualizadorService,
     ListadoTurnosPdfComponent
   ],
   bootstrap: [AppComponent]

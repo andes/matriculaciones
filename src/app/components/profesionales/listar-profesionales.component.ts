@@ -43,7 +43,8 @@ export class ListarProfesionalesComponent implements OnInit {
     id: null,
     nombre: null
   };
-  public editable = false;
+  public editable = true;
+  public tieneOtraEntidad = false;
   public confirmar = false;
   public estadosMatriculas: any;
   public verBajas = false;
@@ -54,12 +55,47 @@ export class ListarProfesionalesComponent implements OnInit {
   public verDeshabilitado;
   public expSisa = false;
   public limit = 50;
+  public editar = false;
+  public seleccionado = false;
+  public profesionalSeleccionado;
+  itemsDropdown: any = [];
+  openedDropDown = null;
   public exportSisa = {
     fechaDesde: '',
     fechaHasta: ''
   };
   searchForm: FormGroup;
   value;
+  public columns = [
+    {
+      key: 'profesional',
+      label: 'PROFESIONAL',
+      sorteable: false,
+    },
+    {
+      key: 'documento',
+      label: 'DOCUMENTO',
+      sorteable: false,
+    },
+    {
+      key: 'matricula',
+      label: 'MATRÍCULA',
+      sorteable: false,
+    },
+    {
+      key: 'fechaNacimiento',
+      label: 'FECHA DE NACIMIENTO',
+      sorteable: false,
+    },
+    {
+      key: 'ultimoTramite',
+      label: 'FECHA ÚLTIMO TRAMITE',
+      sorteable: false,
+    },
+    {
+      key: ''
+    }
+  ];
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
@@ -80,7 +116,9 @@ export class ListarProfesionalesComponent implements OnInit {
       verDeshabilitado: false,
       numeroMatriculaGrado: '',
       numeroMatriculaEspecialidad: ''
-    });
+    }
+
+    );
 
     this.searchForm.valueChanges.pipe(debounceTime(900)).subscribe(
       (value) => {
@@ -107,13 +145,27 @@ export class ListarProfesionalesComponent implements OnInit {
     this.tienePermisos = this.auth.check('matriculaciones:profesionales:getProfesional');
   }
 
+  setDropDown(profesional) {
+    this.itemsDropdown = [];
+    this.itemsDropdown[0] = { icon: 'turno-mas', label: 'DAR SOBRETURNO', handler: () => { this.sobreTurno(profesional); } };
+    this.itemsDropdown[1] = { icon: 'pencil', label: 'EDITAR', handler: () => { this.editarProfesional(profesional); } };
+  }
+
   showProfesional(profesional: any) {
     this.router.navigate(['/profesional', profesional.id]);
   }
 
+  editarProfesional(profesional: any) {
+    this.editar = true;
+    this.profesionalSeleccionado = profesional;
+    // this.verExportador = false;
+    this.seleccionado = false;
+  }
+
   seleccionar(profesional: any) {
-    this.profesionalElegido = profesional;
+    this.profesionalSeleccionado = profesional;
     this.verExportador = false;
+    this.seleccionado = true;
   }
 
   buscar(event?: any) {
@@ -243,5 +295,14 @@ export class ListarProfesionalesComponent implements OnInit {
     this.cerrarResumenProfesional();
     this.nuevoProfesional = true;
     this.confirmar = true;
+  }
+
+  exportarSISA() {
+    this.verExportador = true;
+    this.seleccionado = false;
+  }
+
+  cancelarDetalle(evento) {
+    this.seleccionado = evento;
   }
 }

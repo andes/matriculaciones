@@ -34,33 +34,45 @@
         </plex-select>
     </form>
     <br>
+
     <ng-container *ngIf="!fechaAgregada && !fechaEditada">
         <plex-title titulo="Fechas de alta" size="md">
             <plex-button class='ml-2' size="sm" type="success" label="Nueva fecha de alta"
                          (click)="agregarFechaDeAlta()"></plex-button>
         </plex-title>
-        <div class="row">
-            <div class="col-12">
-                <plex-table [columns]="columns" #table="plTable">
-                    <plex-table-columns>
-                    </plex-table-columns>
-                    <tr *ngFor="let unaFecha of profesional.formacionPosgrado[indice].fechasDeAltas;let i = index">
-                        <td>{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}</td>
-                        <td>
-                            <plex-button class='ml-2' size="sm" type="danger" icon="cesto" class="float-right"
-                                         tooltip="Eliminar"
-                                         (click)="borrarFechaAlta(profesional.formacionPosgrado[indice].fechasDeAltas,i)">
-                            </plex-button>
-                            <plex-button *ngIf='i === (profesional.formacionPosgrado[indice].fechasDeAltas.length - 1)'
-                                         class='ml-2' size="sm" type="warning" icon="pencil" class="float-right"
-                                         tooltip="Editar" (click)="agregarFechaEditada()">
-                            </plex-button>
-                        </td>
-                    </tr>
-                </plex-table>
-                <br>
-            </div>
-        </div>
+        <plex-list size="sm">
+            <plex-item *ngFor="let unaFecha of profesional.formacionPosgrado[indice].fechasDeAltas;let i = index"
+                       [selectable]="false">
+                <plex-label icon="calendarios" titulo="{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}"></plex-label>
+                <plex-button size="sm" type="danger" icon="cesto" tooltip="Eliminar" justify="center"
+                             (click)="borrarFechaAlta(profesional.formacionPosgrado[indice].fechasDeAltas,i)">
+                </plex-button>
+                <plex-button *ngIf='i === (profesional.formacionPosgrado[indice].fechasDeAltas.length - 1)' size="sm"
+                             type="warning" icon="pencil" tooltip="Editar" (click)="agregarFechaEditada()">
+                </plex-button>
+
+            </plex-item>
+        </plex-list>
+        <!-- <plex-table [columns]="columns" #table="plTable">
+            <plex-table-columns>
+            </plex-table-columns>
+            <tr *ngFor="let unaFecha of profesional.formacionPosgrado[indice].fechasDeAltas;let i = index">
+                <td>
+                    <plex-label icon="calendarios" titulo="{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}"></plex-label>
+                </td>
+                <td>
+                    <plex-button class='ml-2' size="sm" type="danger" icon="cesto" class="float-right"
+                                 tooltip="Eliminar"
+                                 (click)="borrarFechaAlta(profesional.formacionPosgrado[indice].fechasDeAltas,i)">
+                    </plex-button>
+                    <plex-button *ngIf='i === (profesional.formacionPosgrado[indice].fechasDeAltas.length - 1)'
+                                 class='ml-2' size="sm" type="warning" icon="pencil" class="float-right"
+                                 tooltip="Editar" (click)="agregarFechaEditada()">
+                    </plex-button>
+                </td>
+            </tr>
+        </plex-table> -->
+        <br>
     </ng-container>
 
     <ng-container *ngIf="fechaAgregada">

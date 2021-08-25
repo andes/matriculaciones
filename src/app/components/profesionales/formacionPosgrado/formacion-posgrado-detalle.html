@@ -101,7 +101,9 @@
         <plex-table-columns>
         </plex-table-columns>
         <tr *ngFor="let unaFecha of formacion.fechasDeAltas;let i = index">
-          <td>{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}</td>
+          <td>
+            <plex-label icon="calendarios" titulo="{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}"></plex-label>
+          </td>
         </tr>
       </plex-table>
       <br>

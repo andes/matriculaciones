@@ -163,7 +163,7 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
     ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
-    PlexModule,
+    PlexModule.forRoot({ networkLoading: true }),
     routing,
     InfiniteScrollModule,
     Ng2ImgMaxModule,

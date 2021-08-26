@@ -40,22 +40,7 @@
             <plex-button class='ml-2' size="sm" type="success" label="Nueva fecha de alta"
                          (click)="agregarFechaDeAlta()"></plex-button>
         </plex-title>
-        <plex-list size="sm">
-            <plex-item *ngFor="let unaFecha of profesional.formacionPosgrado[indice].fechasDeAltas;let i = index"
-                       [selectable]="false">
-                <plex-label icon="calendarios" titulo="{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}"></plex-label>
-                <plex-button size="sm" type="danger" icon="cesto" tooltip="Eliminar" justify="center"
-                             (click)="borrarFechaAlta(profesional.formacionPosgrado[indice].fechasDeAltas,i)">
-                </plex-button>
-                <plex-button *ngIf='i === (profesional.formacionPosgrado[indice].fechasDeAltas.length - 1)' size="sm"
-                             type="warning" icon="pencil" tooltip="Editar" (click)="agregarFechaEditada()">
-                </plex-button>
-
-            </plex-item>
-        </plex-list>
-        <!-- <plex-table [columns]="columns" #table="plTable">
-            <plex-table-columns>
-            </plex-table-columns>
+        <plex-table>
             <tr *ngFor="let unaFecha of profesional.formacionPosgrado[indice].fechasDeAltas;let i = index">
                 <td>
                     <plex-label icon="calendarios" titulo="{{ unaFecha.fecha | date: 'dd/MM/yyyy' }}"></plex-label>
@@ -71,7 +56,7 @@
                     </plex-button>
                 </td>
             </tr>
-        </plex-table> -->
+        </plex-table>
         <br>
     </ng-container>
 
@@ -113,12 +98,11 @@
         </plex-button>
         <plex-button *ngIf="!profesional.formacionPosgrado[indice].notas?.length && !editarOagregar" class='ml-2'
                      size="sm" type="success" label="Agregar nota" (click)="condicionNota()"></plex-button>
-
-        <plex-button *ngIf="editarOagregar" class='ml-2' size="sm" type="success" icon="check" tooltip="Guardar"
-                     (click)="guardarNota()">
-        </plex-button>
         <plex-button *ngIf="editarOagregar" class='ml-2' size="sm" type="danger" icon="close" tooltip="Cancelar"
                      (click)="cerrarNota()">
+        </plex-button>
+        <plex-button *ngIf="editarOagregar" class='ml-2' size="sm" type="success" icon="check" tooltip="Guardar"
+                     (click)="guardarNota()">
         </plex-button>
     </plex-title>
     <plex-text *ngIf="existeNota" [(ngModel)]="nota" name="nota" [readonly]="!profesional.habilitado"

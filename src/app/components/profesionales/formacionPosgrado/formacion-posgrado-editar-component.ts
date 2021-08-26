@@ -36,12 +36,6 @@ export class FormacionPosgradoEditarComponent implements OnInit {
     public nota;
     public modalidad;
     public proximaFechaDeAlta;
-    public columns = [
-        {
-            key: 'fecha',
-            sort: (a: any, b: any) => a.fecha.getTime() - b.fecha.getTime()
-        }
-    ];
 
     constructor(
         private _profesionalService: ProfesionalService,

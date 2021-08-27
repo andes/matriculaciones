@@ -1,8 +1,7 @@
-// General
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { ProfesionalService } from './../../services/profesional.service';

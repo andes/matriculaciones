@@ -1,14 +1,12 @@
-// General
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import * as Enums from './../../utils/enumerados';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router } from '@angular/router';
 import 'rxjs/add/operator/switchMap';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { ProfesionalService } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
-import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -19,36 +17,27 @@ import { map } from 'rxjs/operators';
 })
 
 export class ListarProfesionalesComponent implements OnInit {
-  // public profesionales: IProfesional[] = [];
   public profesionales$: Observable<any[]>;
   private listadoProfesionales: any[];
   public profesionalElegido: IProfesional;
-  private showListado: Boolean = true;
-  public dni: string = null;
   public estadoSeleccionadoG;
   public estadoSeleccionadoE;
   public tienePermisos;
-  public apellido: string = null;
-  public nombre: string = null;
   public vieneDeListado = null;
   public totalProfesionales = null;
   public estadoEspecialidad: {
     id: null,
     nombre: null
   };
-  $subject: Subject<void> = new Subject<void>();
   public nuevoProfesional = false;
   public totalProfesionalesRematriculados = null;
   public totalProfesionalesMatriculados = null;
-  public matriculaVencida = null;
   public hoy = null;
   public muestraFiltro = false;
   public estado: {
     id: null,
     nombre: null
   };
-  public editable = true;
-  public tieneOtraEntidad = false;
   public confirmar = false;
   public estadosMatriculas: any;
   public verBajas = false;
@@ -56,16 +45,12 @@ export class ListarProfesionalesComponent implements OnInit {
   public estaRematriculado;
   public estaMatriculado;
   public mostrarRestablecer;
-  public verDeshabilitado;
   public expSisa = false;
   public limit = 50;
   public editar = false;
   public seleccionado = false;
   public profesionalSeleccionado;
-  public selectable = true;
-  public filtro: any = {};
   itemsDropdown: any = [];
-  openedDropDown = null;
   public exportSisa = {
     fechaDesde: '',
     fechaHasta: ''
@@ -104,7 +89,6 @@ export class ListarProfesionalesComponent implements OnInit {
   constructor(
     private _profesionalService: ProfesionalService,
     private excelService: ExcelService,
-    private route: ActivatedRoute,
     private router: Router,
     public auth: Auth,
     private formBuilder: FormBuilder
@@ -185,7 +169,6 @@ export class ListarProfesionalesComponent implements OnInit {
       habilitado: this.value ? this.value.verDeshabilitado : false,
       numeroMatriculaGrado: this.value ? this.value.numeroMatriculaGrado : '',
       numeroMatriculaEspecialidad: this.value ? this.value.numeroMatriculaEspecialidad : '',
-      // profesionalMatriculado: this.value ? this.value.profesionalMatriculado : false,
       matriculacion: true,
       limit: this.limit
     }).pipe(
@@ -201,60 +184,11 @@ export class ListarProfesionalesComponent implements OnInit {
     this.router.navigate(['/solicitarTurnoRenovacion', profesional.id]);
   }
 
-  matriculadoGrado() {
-    if (!this.estado && this.estado.nombre === 'Todas') {
-      this.estadoSeleccionadoG = null;
-    } else {
-      this.estadoSeleccionadoG = this.estado.nombre;
-    }
-    this.buscar();
-  }
-
-  matriculadoEspecialidad() {
-    if (this.estadoEspecialidad == null) {
-      this.estadoSeleccionadoE = null;
-    } else {
-      if (this.estadoEspecialidad.nombre === 'Suspendidas') {
-        this.estadoSeleccionadoE = this.estadoEspecialidad.nombre;
-      }
-      if (this.estadoEspecialidad.nombre === 'Vigentes') {
-        this.estadoSeleccionadoE = this.estadoEspecialidad.nombre;
-      }
-      if (this.estadoEspecialidad.nombre === 'Todos') {
-        this.estadoSeleccionadoE = null;
-      }
-    }
-    this.buscar();
-  }
-
-  filtrarRematriculados() {
-    this.estaRematriculado = true;
-    this.estaMatriculado = false;
-    this.mostrarRestablecer = true;
-    this.buscar();
-  }
-
-  filtrarMatriculados() {
-
-    this.estaMatriculado = true;
-    this.estaRematriculado = false;
-    this.mostrarRestablecer = true;
-    this.buscar();
-  }
-
   filtrarTodos() {
     this.estaMatriculado = false;
     this.estaRematriculado = false;
     this.mostrarRestablecer = false;
     this.buscar();
-  }
-
-  mostrarFiltros() {
-    if (this.muestraFiltro === false) {
-      this.muestraFiltro = true;
-    } else {
-      this.muestraFiltro = false;
-    }
   }
 
   verNuevoProfesional(valor) {

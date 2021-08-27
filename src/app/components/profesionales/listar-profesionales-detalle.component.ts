@@ -1,19 +1,11 @@
 import { Component, OnInit, OnChanges, EventEmitter, HostBinding, Output } from '@angular/core';
-import * as Enums from './../../utils/enumerados';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
-// import 'rxjs/add/operator/switchMap';
+import { Router } from '@angular/router';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { ProfesionalService } from './../../services/profesional.service';
-import { Auth } from '@andes/auth';
-import { ExcelService } from '../../services/excel.service';
-import { Subject } from 'rxjs';
-import { debounceTime } from 'rxjs/operators';
 import { Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-
 @Component({
     selector: 'app-listar-profesionales-detalle',
     templateUrl: 'listar-profesionales-detalle.html',
@@ -25,7 +17,6 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
     @Output() cancelar = new EventEmitter();
     @Output() editarSidebar = new EventEmitter();
     @Input() idProfesional: IProfesional;
-
     @Input('profesionalSeleccionado')
     set _profesionalSeleccionado(value) {
         this.profesionalObtenido = value;
@@ -33,15 +24,11 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
     }
     public cancel = false;
     public profesionalObtenido;
-    public pos;
     public profesional;
     public hoy;
-    public editar = false;
-    public editable = false;
     public img64 = null;
     public foto: any;
     public tieneFoto = false;
-    value;
     public columns = [
         {
             key: 'nombre',
@@ -64,7 +51,6 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
 
     ngOnInit() {
         this.hoy = new Date();
-
         this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
             if (resp) {
                 this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
@@ -95,13 +81,6 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
 
     actualizarIndice() {
         this.profesional = this.profesionalObtenido;
-    }
-
-    cargarProfesionales() {
-        this._profesionalService.getProfesional({
-        }).subscribe((data) => {
-            this.profesionales = data;
-        });
     }
 
     showProfesional(profesional: any) {

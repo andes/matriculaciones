@@ -34,9 +34,10 @@
 
           </div>
         </plex-wrapper>
+
       </header>
 
-      <plex-title titulo="Listado de matriculados" size="lg">
+      <!-- <plex-title titulo="Listado de matriculados" size="lg">
         <plex-bool class='ml-2' type="slide" label="Ver bajas de matriculas" formControlName="verBajas"
                    name="especialidad.activo">
         </plex-bool>
@@ -46,35 +47,96 @@
         </plex-bool>
         <plex-button class='ml-2' size="sm" type="success" label='Nuevo profesional' (click)='crearMuevoProfesional()'>
         </plex-button>
-        <plex-dropdown tooltip="Agregar columnas" icon="format-list-checks" type="info" size="sm" class='ml-2'
-                       [right]="true">
-        </plex-dropdown>
-      </plex-title>
+      </plex-title> -->
       <plex-table [columns]="columns" #table="plTable">
-        <plex-table-columns>
-        </plex-table-columns>
-        <tr *ngFor="let profesional of profesionales; let i = index" (click)="seleccionar(profesional)">
-          <td>
-            <plex-label titulo="{{profesional.apellido + ' ' + profesional.nombre}}"></plex-label>
+        <plex-title titulo="Listado de matriculados" size="lg">
+          <div [formGroup]="searchForm">
+            <plex-bool class='ml-2' type="slide" label="Ver bajas de matriculas" formControlName="verBajas"
+                       name="especialidad.activo">
+            </plex-bool>
+
+            <plex-bool class='ml-3' type="slide" label="Deshabilitado" formControlName="verDeshabilitado"
+                       name="especialidad.activo">
+            </plex-bool>
+          </div>
+          <plex-button class='ml-2' size="sm" type="success" label='Nuevo profesional'
+                       (click)='crearMuevoProfesional()'>
+          </plex-button>
+          <plex-table-columns>
+          </plex-table-columns>
+        </plex-title>
+
+        <tr *ngFor="let profesional of (profesionales$ | async); let i = index" (click)="seleccionar(profesional)"
+            [class.selectable]="selectable" [class.selected]="profesional.selected">
+          <td>{{profesional.apellido + ', ' + profesional.nombre}}
+            <!-- <plex-label titulo="{{profesional.apellido + ', ' + profesional.nombre}}"></plex-label> -->
           </td>
-          <td>
-            <plex-label titulo="{{profesional.documento}}"></plex-label>
+          <td *plTableCol="'documento'">{{profesional.documento}}
+            <!-- <plex-label titulo="{{profesional.documento}}"></plex-label> -->
+          </td>
+          <td *plTableCol="'profesion'">
+            <div *ngFor="let profesionalGrado of profesional.formacionGrado">
+              <plex-badge *ngIf="profesionalGrado.matriculacion?.length && !profesionalGrado.renovacion && profesionalGrado.matriculado && hoy <= profesionalGrado.matriculacion[profesionalGrado.matriculacion.length-1].fin"
+                          type="success"> <strong>{{profesionalGrado.profesion.nombre}}</strong>: Matrícula N°
+                {{profesional.formacionGrado[0].matriculacion[profesional.formacionGrado[0].matriculacion.length-1]?.matriculaNumero}}
+                <!-- MATRICULA VIGENTE-->
+              </plex-badge>
+
+              <plex-badge *ngIf="profesionalGrado.matriculacion?.length && !profesionalGrado.renovacion && !profesionalGrado.matriculado"
+                          type="warning"> <strong>{{profesionalGrado.profesion.nombre}}</strong>: Matrícula N°
+                {{profesional.formacionGrado[0].matriculacion[profesional.formacionGrado[0].matriculacion.length-1]?.matriculaNumero}}
+                <strong> - Suspendida</strong>
+                <!-- MATRICULA SUSPENDIDA-->
+              </plex-badge>
+
+              <plex-badge *ngIf="profesionalGrado.matriculacion?.length && !profesionalGrado.renovacion && profesionalGrado.matriculado && hoy > profesionalGrado.matriculacion[profesionalGrado.matriculacion.length-1].fin"
+                          type="{{((hoy.getTime() - profesionalGrado.matriculacion[profesionalGrado.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) > 365)?'danger':'info'}}">
+                <strong>{{profesionalGrado.profesion.nombre}}</strong>: Matrícula N°
+                {{profesional.formacionGrado[0].matriculacion[profesional.formacionGrado[0].matriculacion.length-1]?.matriculaNumero}}
+                <strong> - {{((hoy.getTime()
+                  -profesionalGrado.matriculacion[profesionalGrado.matriculacion.length-1].fin.getTime())/(1000 * 3600
+                  *24) > 365)?'Vencida':'Año de gracia'}}</strong>
+                <!-- MATRICULA VENCIDA O EN AÑO DE GRACIA-->
+              </plex-badge>
+
+              <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado">
+                <plex-badge *ngIf="profesionalPosgrado.matriculacion?.length && !profesionalPosgrado.renovacion && profesionalPosgrado.matriculado && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length-1].fin"
+                            type="success"> <strong>{{profesionalPosgrado.especialidad.nombre}}</strong>: Matrícula N°
+                  {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length-1].matriculaNumero}}
+                  <!-- POSGRADO VIGENTE-->
+                </plex-badge>
+
+                <plex-badge *ngIf="profesionalPosgrado.matriculacion.length && !profesionalPosgrado.renovacion && !profesionalPosgrado.matriculado"
+                            type="warning"> <strong>{{profesionalPosgrado.especialidad.nombre}}</strong>: Matrícula N°
+                  {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length-1].matriculaNumero}}
+                  <strong>Suspendida</strong>
+                  <!-- POSGRADO SUSPENDIDO-->
+                </plex-badge>
+
+                <plex-badge *ngIf="profesionalPosgrado.matriculacion?.length && !profesionalPosgrado.renovacion && profesionalPosgrado.matriculado && hoy > profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length-1].fin"
+                            type="{{((hoy.getTime() - profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) > 365)?'danger':'info'}}">
+                  <strong>{{profesionalPosgrado.especialidad.nombre}}</strong>: Matrícula N°
+                  {{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length-1].matriculaNumero}}
+                  <strong>{{((hoy.getTime()
+                    -profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length-1].fin.getTime())/(1000
+                    * 3600
+                    *24) > 365)?'Vencida':'Año de gracia'}}</strong>
+                  <!-- POSGRADO VENCIDO O EN AÑO DE GRACIA-->
+                </plex-badge>
+              </div>
+            </div>
+
           </td>
 
-          <td>
-            <plex-label *ngIf="profesional.formacionGrado[0].matriculacion"
-                        titulo="{{profesional.formacionGrado[0].matriculacion[profesional.formacionGrado[0].matriculacion.length-1]?.matriculaNumero}}"
-                        subtitulo="{{profesional.formacionGrado[0].profesion.nombre}}"></plex-label>
-          </td>
-
-          <td>
+          <td *plTableCol="'fechaNacimiento'">
             <plex-badge type="info">{{profesional.fechaNacimiento | fecha}}</plex-badge>
           </td>
 
-          <td>
+          <td *plTableCol="'ultimoTramite'">
             <plex-badge type="warning"> {{ getFechaUltimoTramite(profesional) | fecha}}</plex-badge>
           </td>
-          <td class="column-right my-3">
+
+          <td class="column-right my-3 d-flex align-items-center">
             <plex-button type="info" icon="eye" size="sm" (click)="showProfesional(profesional)"
                          tooltip="Ver profesional">
             </plex-button>
@@ -216,14 +278,16 @@
     </div>
     <div *ngIf="editar">
       <app-profesional [profesional]='profesionalSeleccionado' [showOtraEntidadFormadora]='tieneOtraEntidad'
-                       [confirmar]='confirmar' (editado)="this.flag = true" [editable]='true'></app-profesional>
+                       [confirmar]='confirmar' (editado)="editar=false" [desdeListaProfesionales]="true"
+                       [editable]='true'>
+      </app-profesional>
     </div>
   </plex-layout-main>
 
   <plex-layout-sidebar type="invert">
     <div *ngIf='seleccionado'>
       <app-listar-profesionales-detalle [profesionalSeleccionado]="profesionalSeleccionado"
-                                        (cancelar)="cancelarDetalle($event)"
+                                        (cancelar)="cancelarDetalle($event)" (editarSidebar)="editarProfesional($event)"
                                         [idProfesional]="profesionalSeleccionado.id">
       </app-listar-profesionales-detalle>
     </div>

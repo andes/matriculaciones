@@ -10,6 +10,8 @@ import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-listar-profesionales',
@@ -17,7 +19,9 @@ import { debounceTime } from 'rxjs/operators';
 })
 
 export class ListarProfesionalesComponent implements OnInit {
-  public profesionales: IProfesional[] = [];
+  // public profesionales: IProfesional[] = [];
+  public profesionales$: Observable<any[]>;
+  private listadoProfesionales: any[];
   public profesionalElegido: IProfesional;
   private showListado: Boolean = true;
   public dni: string = null;
@@ -58,6 +62,8 @@ export class ListarProfesionalesComponent implements OnInit {
   public editar = false;
   public seleccionado = false;
   public profesionalSeleccionado;
+  public selectable = true;
+  public filtro: any = {};
   itemsDropdown: any = [];
   openedDropDown = null;
   public exportSisa = {
@@ -69,28 +75,27 @@ export class ListarProfesionalesComponent implements OnInit {
   public columns = [
     {
       key: 'profesional',
-      label: 'PROFESIONAL',
-      sorteable: false,
+      label: 'Profesional',
     },
     {
       key: 'documento',
-      label: 'DOCUMENTO',
-      sorteable: false,
+      label: 'Documento',
+      opcional: true,
     },
     {
-      key: 'matricula',
-      label: 'MATRÍCULA',
-      sorteable: false,
+      key: 'profesion',
+      label: 'Profesión',
+      opcional: true,
     },
     {
       key: 'fechaNacimiento',
-      label: 'FECHA DE NACIMIENTO',
-      sorteable: false,
+      label: 'Fecha nacimiento',
+      opcional: true,
     },
     {
       key: 'ultimoTramite',
-      label: 'FECHA ÚLTIMO TRAMITE',
-      sorteable: false,
+      label: 'Fecha último trámite',
+      opcional: true,
     },
     {
       key: ''
@@ -158,7 +163,6 @@ export class ListarProfesionalesComponent implements OnInit {
   editarProfesional(profesional: any) {
     this.editar = true;
     this.profesionalSeleccionado = profesional;
-    // this.verExportador = false;
     this.seleccionado = false;
   }
 
@@ -171,7 +175,7 @@ export class ListarProfesionalesComponent implements OnInit {
   buscar(event?: any) {
     this.verBajas = this.value ? this.value.verBajas : false;
     this.profesionalElegido = null;
-    this._profesionalService.getProfesional({
+    this.profesionales$ = this._profesionalService.getProfesional({
       documento: this.value ? this.value.documento : '',
       apellido: this.value ? this.value.apellido : '',
       nombre: this.value ? this.value.nombre : '',
@@ -181,11 +185,12 @@ export class ListarProfesionalesComponent implements OnInit {
       habilitado: this.value ? this.value.verDeshabilitado : false,
       numeroMatriculaGrado: this.value ? this.value.numeroMatriculaGrado : '',
       numeroMatriculaEspecialidad: this.value ? this.value.numeroMatriculaEspecialidad : '',
+      // profesionalMatriculado: this.value ? this.value.profesionalMatriculado : false,
       matriculacion: true,
       limit: this.limit
-    }).subscribe((data) => {
-      this.profesionales = data;
-    });
+    }).pipe(
+      map(data => this.listadoProfesionales = data)
+    );
   }
 
   cerrarResumenProfesional() {
@@ -253,7 +258,7 @@ export class ListarProfesionalesComponent implements OnInit {
   }
 
   verNuevoProfesional(valor) {
-    if (valor === true) {
+    if (valor) {
       this.nuevoProfesional = true;
       this.confirmar = true;
     } else {
@@ -295,6 +300,7 @@ export class ListarProfesionalesComponent implements OnInit {
     this.cerrarResumenProfesional();
     this.nuevoProfesional = true;
     this.confirmar = true;
+    this.seleccionado = false;
   }
 
   exportarSISA() {

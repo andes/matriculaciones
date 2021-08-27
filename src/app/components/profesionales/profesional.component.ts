@@ -46,6 +46,7 @@ export class ProfesionalComponent implements OnInit {
   @Input() nuevoProf = false;
   @Input() confirmar = false;
   @Input() editable = false;
+  @Input() desdeListaProfesionales: any;
   @Output() editado = new EventEmitter();
   public noPoseedomicilioProfesional = false;
   // public estadosCiviles: any[];
@@ -460,8 +461,11 @@ export class ProfesionalComponent implements OnInit {
 
   volverProfesional() {
     if (this.editable) {
-      // this.location.back();
-      this.router.navigate(['/listarProfesionales']);
+      if (this.desdeListaProfesionales) {
+        this.editado.emit();
+      } else {
+        this.location.back();
+      }
     } else {
       this.router.navigate(['/solicitarTurnoMatriculacion']);
     }

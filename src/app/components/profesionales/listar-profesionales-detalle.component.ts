@@ -23,6 +23,7 @@ import { of } from 'rxjs';
 export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
     public profesionales: IProfesional[];
     @Output() cancelar = new EventEmitter();
+    @Output() editarSidebar = new EventEmitter();
     @Input() idProfesional: IProfesional;
 
     @Input('profesionalSeleccionado')
@@ -86,6 +87,10 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
 
     volver() {
         this.cancelar.emit(this.cancel);
+    }
+
+    editarProfesional() {
+        this.editarSidebar.emit(this.profesional);
     }
 
     actualizarIndice() {

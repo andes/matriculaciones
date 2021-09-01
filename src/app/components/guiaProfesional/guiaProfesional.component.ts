@@ -2,9 +2,6 @@
 import {
     Component,
     OnInit,
-    Input,
-    Output,
-    EventEmitter,
     HostBinding
 } from '@angular/core';
 
@@ -52,7 +49,7 @@ export class GuiaProfesionalComponent implements OnInit {
     buscar($event) {
         if ($event.formValid) {
             if (this.busqueda.formacionGrado) {
-                this.busqueda['idProfesion'] = this.busqueda.formacionGrado._id;
+                this.busqueda['codigoProfesion'] = this.busqueda.formacionGrado.codigo;
             }
             this._profesionalService.getGuiaProfesional(this.busqueda).subscribe(x => {
                 this.profEncontrado = x;

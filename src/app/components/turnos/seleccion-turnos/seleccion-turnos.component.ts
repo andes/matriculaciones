@@ -7,7 +7,8 @@ import { NuevoTurnoComponent } from '../nuevo-turno.component';
 
 @Component({
   selector: 'app-seleccion-turnos',
-  templateUrl: './seleccion-turnos.component.html'
+  templateUrl: './seleccion-turnos.component.html',
+  styleUrls: ['seleccion-turnos.scss']
 })
 export class SeleccionTurnosComponent implements OnInit {
   inicio = null;

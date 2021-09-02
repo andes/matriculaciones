@@ -195,7 +195,8 @@ export class NuevoTurnoComponent implements AfterViewInit {
       if (resultado.length > this.cupoDiario) {
         fechasExcluidas.push(date);
       }
-      if (date.getTime() < hoy.getTime() && date.toDateString() !== hoy.toDateString()) {
+
+      if (moment(hoy).add(-1, 'days').isAfter(date)) {
         fechasExcluidas.push(date);
       }
       date = this.addDays(date, 1);

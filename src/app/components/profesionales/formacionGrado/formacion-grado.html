@@ -18,10 +18,7 @@
                          title="Generar credencial" type="success" class="float-right btnGrado"
                          icon="card-account-details" (click)="credencialAcciones(i)"></plex-button>
 
-            <plex-button title="Generar certificado de ética" type="warning"
-                         *ngIf='formacionGrado.matriculacion.length && formacionGrado.matriculado && 
-                         (hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length-1].fin ) || 
-                         ((hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) < 365)'
+            <plex-button title="Generar certificado de ética" type="warning" *ngIf='verificarBoton(i)'
                          class="float-right btnGrado" icon="documentos" (click)="generarCertificadoEtica(i)">
             </plex-button>
 
@@ -52,25 +49,26 @@
         <label>Fecha de primer matricula</label>
         <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
       </div>
+      <div *ngIf="formacionGrado.matriculacion">
+        <plex-badge *ngIf="verificarBadgeVencido(i)" type="{{verificarFecha(i)?'danger':'info'}}">
+          {{verificarFecha(i)?' Matricula Vencida':'Año de gracia'}}
+        </plex-badge>
 
-      <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado && hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length-1].fin"
-                  type="{{((hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) > 365)?'danger':'info'}}">
-        {{((hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length-1].fin.getTime())/(1000
-        *3600*24) > 365)?' Matricula Vencida':'Año de gracia'}}
-      </plex-badge>
+        <plex-badge *ngIf="verificarBadgeVigente(i)" type="success"> Matriculado
+        </plex-badge>
 
-      <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado && hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length-1].fin"
-                  type="success"> Matriculado
-      </plex-badge>
+        <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado"
+                    type="danger"> Matricula <br> suspendida
+        </plex-badge>
 
-      <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado"
-                  type="danger"> Matricula <br> suspendida
-      </plex-badge>
-
-      <plex-badge *ngIf='formacionGrado.matriculacion.length  && formacionGrado.renovacion'
-                  type="{{formacionGrado.papelesVerificados?'info':'warning'}}">
-        {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
-      </plex-badge>
+        <plex-badge *ngIf='formacionGrado.matriculacion.length  && formacionGrado.renovacion'
+                    type="{{formacionGrado.papelesVerificados?'info':'warning'}}">
+          {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+        </plex-badge>
+      </div>
+      <div *ngIf="!formacionGrado.matriculacion">
+        <plex-badge type="danger">No posee matricula</plex-badge>
+      </div>
 
     </div>
   </plex-box>

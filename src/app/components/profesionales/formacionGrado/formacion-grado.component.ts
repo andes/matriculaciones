@@ -76,7 +76,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
           .subscribe((respFirmaAdmin) => {
             this.tieneFirmaAdmin = respFirmaAdmin;
           });
-        });
+      });
   }
 
   ngOnChanges() {
@@ -88,14 +88,6 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
   }
 
   addFormacionGrado(fGrado: any) {
-    // const cambio = {
-    //     'op': 'updateGrado',
-    //     'data': fGrado,
-    //     'agente': this.auth.usuario.nombreCompleto
-    // };
-
-    // // this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {});
-    // this.profesional.formacionGrado.push(fGrado);
     this.updateProfesional.emit(fGrado);
 
   }
@@ -125,11 +117,9 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
                     const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
                     const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0], this.copias, this.fechaImpresion);
                     pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-                    // this.loading = false;
                   });
                 });
             });
-
         }
       });
   }
@@ -153,18 +143,6 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
 
   }
-
-  // verificaVencimiento() {
-  //     for (var _i = 0; _i < this.profesional.formacionGrado.length; _i++) {
-  //         if (this.profesional.formacionGrado[_i].matriculacion) {
-  // if (this.profesional.formacionGrado[_i].matriculacion[this.profesional.formacionGrado[_i].matriculacion.length - 1].fin < this.hoy) {
-  //     this.profesional.formacionGrado[_i].matriculado = false;
-  //     this.profesional.formacionGrado[_i].papelesVerificados = false;
-  //     this.updateProfesional.emit(this.profesional);
-  //              }
-  //          }
-  //      }
-  // }
 
   actualizar($event) {
     if ($event.formValid) {
@@ -215,7 +193,6 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     if (this.profesional.formacionGrado[grado].matriculacion === null) {
       tipoMatricula = 'MATRICULACION';
     } else {
-      // if (moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).startOf('day').toDate() === moment().startOf('day').toDate()){
       if (moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
         tipoMatricula = 'MATRICULACION';
       } else {
@@ -225,5 +202,28 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional, grado, tipoMatricula);
     pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
   }
+  verificarBoton(i) {
+    let formacionGrado = this.profesional.formacionGrado[i];
+    if (formacionGrado.matriculacion && !formacionGrado.renovacion) {
+      return formacionGrado.matriculacion.length && formacionGrado.matriculado &&
+        (this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) ||
+        (!this.verificarFecha(i));
+    } else {
+      return false;
+    }
+  }
 
+  verificarBadgeVencido(i) {
+    let formacionGrado = this.profesional.formacionGrado[i];
+    return formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado && this.hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin;
+  }
+
+  verificarBadgeVigente(i) {
+    let formacionGrado = this.profesional.formacionGrado[i];
+    return formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado && this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin;
+  }
+  verificarFecha(i) {
+    let formacionGrado = this.profesional.formacionGrado[i];
+    return ((this.hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+  }
 }

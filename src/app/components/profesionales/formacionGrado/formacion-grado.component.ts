@@ -1,23 +1,7 @@
-// Angular
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter, OnInit, OnChanges
-} from '@angular/core';
-// Plex
-import {
-  Plex
-} from '@andes/plex';
-
-// Interfaces
-import {
-  IProfesional
-} from './../../../interfaces/IProfesional';
-
-// Services
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
+import { Plex } from '@andes/plex';
+import { IProfesional } from './../../../interfaces/IProfesional';
 import { ProfesionalService } from './../../../services/profesional.service';
-import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
 import { PDFUtils } from '../../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
 import { ProfesionService } from '../../../services/profesion.service';
@@ -26,14 +10,14 @@ import * as moment from 'moment';
 import * as enumerados from './../../../utils/enumerados';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-
+import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-formacion-grado',
   templateUrl: 'formacion-grado.html',
   styleUrls: ['grado.scss']
 
 })
-export class FormacionGradoComponent implements OnInit, OnChanges {
+export class FormacionGradoComponent implements OnInit {
 
   @Input() profesional: IProfesional;
   @Output() formacionGradoSelected = new EventEmitter();
@@ -55,7 +39,7 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
   public indexGrado;
   public fechaImpresion = new Date();
   constructor(private _profesionalService: ProfesionalService,
-    private _numeracionesService: NumeracionMatriculasService,
+    public sanitizer: DomSanitizer,
     private _profesionService: ProfesionService,
     private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, private plex: Plex) { }
 
@@ -77,10 +61,13 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
             this.tieneFirmaAdmin = respFirmaAdmin;
           });
       });
+<<<<<<< HEAD
   }
 
   ngOnChanges() {
 
+=======
+>>>>>>> fix(MAT-67): imprimir credencial
   }
 
   showFormacion(formacion: any) {
@@ -89,7 +76,6 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
 
   addFormacionGrado(fGrado: any) {
     this.updateProfesional.emit(fGrado);
-
   }
 
   credencialAcciones(i) {
@@ -153,7 +139,6 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
       this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
         this.edit = false;
         this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
-
       });
     }
   }

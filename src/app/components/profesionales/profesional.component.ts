@@ -323,42 +323,28 @@ export class ProfesionalComponent implements OnInit {
             if (matcheo) {
               this.plex.info('info', 'Ya existe un profesional registrados con estos datos');
             } else {
-              this._profesionalService.saveProfesional({ profesional: this.profesional }).pipe(
-                catchError((err) => {
-                  this.plex.info('warning', err);
-                  this.router.navigate(['requisitosGenerales']);
-                  return null;
-                })).subscribe(nuevoProfesional => {
+              this._profesionalService.saveProfesional({ profesional: this.profesional })
+                .subscribe(nuevoProfesional => {
                   if (nuevoProfesional === null) {
                     this.plex.info('info', 'El profesional que quiere agregar ya existe(verificar dni)');
                   } else {
                     if (nuevoProfesional._id) {
+                      this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
+                      this.editado.emit(true);
                       if (this.nuevoProf) {
-                        this._turnosService.saveTurnoSolicitados(nuevoProfesional).pipe(
-                          catchError((err) => {
-                            this.plex.info('warning', err);
-                            this.router.navigate(['requisitosGenerales']);
-                            return null;
-                          })).subscribe(() => {
+                        this._turnosService.saveTurnoSolicitados(nuevoProfesional)
+                          .subscribe((nuevoProfesional2) => {
                             const turno = {
                               fecha: new Date(),
                               tipo: 'matriculacion',
                               profesional: nuevoProfesional._id
                             };
-                            this._turnosService.saveTurnoMatriculacion({ turno: turno }).pipe(
-                              catchError((err) => {
-                                this.plex.info('warning', err);
-                                this.router.navigate(['requisitosGenerales']);
-                                return null;
-                              })).subscribe(_turno => {
+                            this._turnosService.saveTurnoMatriculacion({ turno: turno })
+                              .subscribe(_turno => {
                                 this.router.navigate(['/profesional', nuevoProfesional._id]);
                               });
                           });
-                        this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-                        this.editado.emit(true);
                       }
-                    } else {
-                      this.plex.toast('danger', 'Error al cargar los datos, vuelva a intentarlo!', 'informacion', 1000);
                     }
                   }
                 });

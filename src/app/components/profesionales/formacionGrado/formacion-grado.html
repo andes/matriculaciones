@@ -18,7 +18,7 @@
                          title="Generar credencial" type="success" class="float-right btnGrado"
                          icon="card-account-details" (click)="credencialAcciones(i)"></plex-button>
 
-            <plex-button title="Generar certificado de ética" type="warning" *ngIf='verificarBoton(i)'
+            <plex-button title="Generar certificado de ética" type="warning" *ngIf='verificarEmisionCerificado(i)'
                          class="float-right btnGrado" icon="documentos" (click)="generarCertificadoEtica(i)">
             </plex-button>
 

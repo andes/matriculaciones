@@ -50,11 +50,11 @@
         <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
       </div>
       <div *ngIf="formacionGrado.matriculacion">
-        <plex-badge *ngIf="verificarBadgeVencido(i)" type="{{verificarFecha(i)?'danger':'info'}}">
+        <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type="{{verificarFecha(i)?'danger':'info'}}">
           {{verificarFecha(i)?' Matricula Vencida':'Año de gracia'}}
         </plex-badge>
 
-        <plex-badge *ngIf="verificarBadgeVigente(i)" type="success"> Matriculado
+        <plex-badge *ngIf="verificarVencimiento(i) === 'vigente'" type="success"> Matriculado
         </plex-badge>
 
         <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado"

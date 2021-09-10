@@ -61,13 +61,6 @@ export class FormacionGradoComponent implements OnInit {
             this.tieneFirmaAdmin = respFirmaAdmin;
           });
       });
-<<<<<<< HEAD
-  }
-
-  ngOnChanges() {
-
-=======
->>>>>>> fix(MAT-67): imprimir credencial
   }
 
   showFormacion(formacion: any) {
@@ -89,23 +82,49 @@ export class FormacionGradoComponent implements OnInit {
     this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).pipe(catchError(() => of(null)))
       .subscribe((resp) => {
         if (resp) {
-          const img = 'data:image/jpeg;base64,' + resp;
-          this._profesionalService.getProfesionalFirma({ id: this.profesional.id }).pipe(catchError(() => of(null)))
-            .subscribe((respFirma) => {
-              this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id }).pipe(catchError(() => of(null)))
-                .subscribe((respFirmaAdmin) => {
-                  const firma = 'data:image/jpeg;base64,' + respFirma;
-                  const firmaAdmin = {
-                    firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
-                    administracion: this.supervisor.nombreCompleto
-                  };
-                  this._profesionService.getProfesiones().pipe(catchError(() => of(null))).subscribe(datos => {
-                    const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
-                    const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0], this.copias, this.fechaImpresion);
-                    pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+          let caracteresFoto = resp.split('/');
+          if (caracteresFoto[2].localeCompare('4AAQSkZJRgABAQEASABIAAD')) {
+            const img = 'data:image/jpeg;base64,' + resp;
+            this._profesionalService.getProfesionalFirma({ id: this.profesional.id }).pipe(catchError(() => of(null)))
+              .subscribe((respFirma) => {
+                this._profesionalService.getProfesionalFirma({ firmaAdmin: this.supervisor.id }).pipe(catchError(() => of(null)))
+                  .subscribe((respFirmaAdmin) => {
+                    const firma = 'data:image/jpeg;base64,' + respFirma;
+                    const firmaAdmin = {
+                      firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
+                      administracion: this.supervisor.nombreCompleto
+                    };
+                    this._profesionService.getProfesiones().pipe(catchError(() => of(null))).subscribe(datos => {
+                      const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
+                      if (!seleccionado.length) {
+                        this.plex.info('warning', 'Error en los datos del profesional');
+                      } else {
+                        if (!this.profesional.formacionGrado[grado].matriculacion[this.profesional.formacionGrado[grado].matriculacion.length - 1].matriculaNumero) {
+                          this.plex.info('warning', 'El profesional no posee un numero de matrícula');
+                        } else {
+                          if (!this.supervisor.nombreCompleto) {
+                            this.plex.info('warning', 'El profesional no posee un supervisor');
+                          } else {
+                            if (!respFirmaAdmin.firma) {
+                              this.plex.info('warning', 'No existe firma del supervisor');
+                            } else {
+                              if (!Object.keys(respFirma).length) {
+                                this.plex.info('warning', 'El profesional no posee una firma');
+                              } else {
+                                const pdf = this._pdfUtils.generarCredencial(this.profesional, grado, img, firma, firmaAdmin, seleccionado[0], this.copias, this.fechaImpresion);
+                                pdf.save('Credencial ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+                              }
+                            }
+                          }
+
+                        }
+                      }
+                    });
                   });
-                });
-            });
+              });
+          } else {
+            this.plex.info('warning', 'El profesional no posee una foto');
+          }
         }
       });
   }

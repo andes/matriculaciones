@@ -8,8 +8,9 @@ import { ProfesionalService } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
 import { Subject, of } from 'rxjs';
-import { debounceTime, catchError } from 'rxjs/operators';
+import { debounceTime, catchError, map } from 'rxjs/operators';
 import { ProfesionService } from '../../services/profesion.service';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-listar-profesionales',

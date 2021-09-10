@@ -20,7 +20,6 @@
     <plex-title titulo="Notas" size="md">
     </plex-title>
     <plex-label *ngIf="profesional.notas">{{profesional.notas[0]}}</plex-label>
-    <plex-label *ngIf="!profesional.notas || profesional.notas[0]===''">Sin notas</plex-label>
     <br>
     <plex-title titulo="Posgrados" size="md">
     </plex-title>
@@ -28,7 +27,7 @@
     <plex-table *ngIf="profesional.formacionPosgrado" [columns]="columns" #table="plTable">
         <plex-table-columns>
         </plex-table-columns>
-        <tr *ngFor="let posgrados of profesional.formacionPosgrado">
+        <tr *ngFor="let posgrados of profesional.formacionPosgrado; let i = index">
             <td>
                 <plex-label titulo="{{posgrados.especialidad.nombre}}" subtitulo="{{posgrados.profesion.nombre}}">
                 </plex-label>
@@ -38,29 +37,22 @@
                 </plex-label>
             </td>
             <td>
-                <plex-badge *ngIf="posgrados.matriculacion.length && !posgrados.revalida && posgrados.tieneVencimiento && hoy > posgrados.matriculacion[posgrados.matriculacion.length-1].fin"
-                            type="{{((hoy.getTime() - posgrados.matriculacion[posgrados.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) > 365)?'danger':'info'}}">
-                    {{((hoy.getTime() -
-                    posgrados.matriculacion[posgrados.matriculacion.length-1].fin.getTime())/(1000 *
-                    3600
-                    *24) > 365)?'Vencida':'Año de gracia'}}
+                <plex-badge *ngIf="verificarEstado(i) === 'vencida'" type="{{verificarFecha(i)?'danger':'info'}}">
+                    {{verificarFecha(i)?'Vencida':'Año de gracia'}}
                 </plex-badge>
 
-                <plex-badge *ngIf="posgrados.matriculacion.length && !posgrados.revalida && posgrados.tieneVencimiento &&
-                    posgrados.matriculado && hoy <= posgrados.matriculacion[posgrados.matriculacion.length-1].fin"
-                            type="success"> vigente
+                <plex-badge *ngIf="verificarEstado(i) === 'vigente'" type="success"> vigente
                 </plex-badge>
 
-                <plex-badge *ngIf="posgrados.matriculacion.length && !posgrados.revalida && posgrados.tieneVencimiento && 
-                    !posgrados.matriculado" type="danger"> Suspendida
+                <plex-badge *ngIf="verificarEstado(i) === 'suspendida'" type="warning"> Suspendida
                 </plex-badge>
 
-                <plex-badge *ngIf='posgrados.matriculacion.length  && posgrados.revalida && posgrados.tieneVencimiento'
+                <plex-badge *ngIf="verificarEstado(i) === 'verificarPapeles'"
                             type="{{posgrados.papelesVerificados?'info':'warning'}}">
                     {{posgrados.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
                 </plex-badge>
 
-                <plex-badge *ngIf='!posgrados.tieneVencimiento' type="warning">
+                <plex-badge *ngIf="verificarEstado(i) === 'sinVencimiento'" type="warning">
                     Sin vencimiento
                 </plex-badge>
             </td>

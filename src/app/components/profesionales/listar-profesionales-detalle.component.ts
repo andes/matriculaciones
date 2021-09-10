@@ -86,4 +86,32 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
     showProfesional(profesional: any) {
         this.router.navigate(['/profesional', profesional.id]);
     }
+
+    verificarEstado(i) {
+        let profesionalPosgrado = this.profesional.formacionPosgrado[i];
+        if (profesionalPosgrado.matriculacion?.length) {
+            if (!profesionalPosgrado.matriculado) {
+                return 'suspendida';
+            } else {
+                if (!profesionalPosgrado.tieneVencimiento) {
+                    return 'sinVencimiento';
+                } else {
+                    if (profesionalPosgrado.revalida) {
+                        return 'verificarPapeles';
+                    } else {
+                        if (this.hoy > profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin) {
+                            return 'vencida';
+                        } else {
+                            return 'vigente';
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    verificarFecha(i) {
+        let profesionalPosgrado = this.profesional.formacionPosgrado[i];
+        return ((this.hoy.getTime() - profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+    }
 }

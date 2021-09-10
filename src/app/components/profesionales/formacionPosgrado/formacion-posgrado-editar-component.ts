@@ -56,14 +56,13 @@ export class FormacionPosgradoEditarComponent implements OnInit {
 
     dropitems = [
         {
-            label: 'ELIMINAR ESPECIALIDAD',
+            label: 'DAR DE BAJA',
             icon: 'cesto',
             handler: ($event: Event) => {
                 $event.stopPropagation();
                 this.darDeBaja();
             }
         },
-
     ];
 
     actualizarIndice() {

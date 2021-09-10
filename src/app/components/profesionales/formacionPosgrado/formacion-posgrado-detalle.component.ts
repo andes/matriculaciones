@@ -25,13 +25,27 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     public edit = true;
     hoy = new Date();
     public showBtnSinVencimiento = false;
-    public columns = [
+    public columnasFechas = [
         {
             key: 'fecha',
             sort: (a: any, b: any) => a.fecha.getTime() - b.fecha.getTime()
         }
     ];
-    public revalidaciones = [
+    public matricula = [
+        {
+            key: 'matriculaNumero',
+            label: 'MATRÍCULA NRO.'
+        },
+        {
+            key: 'inicio',
+            label: 'INICIO'
+        },
+        {
+            key: 'fin',
+            label: 'FIN'
+        },
+    ];
+    public revalida = [
         {
             key: 'revalidacionNumero',
             label: 'NRO.'
@@ -49,9 +63,9 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             label: 'FIN'
         },
         {
-            key: 'tieneVencimiento',
+            key: 'estado',
             label: 'ESTADO'
-        }
+        },
     ];
     constructor(private _profesionalService: ProfesionalService,
         private plex: Plex,
@@ -66,10 +80,12 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         }
     }
 
-    matricularProfesional(formacion: any, mantenerNumero) {
-        let texto = '¿Desea agregar una nueva matricula?';
-        if (mantenerNumero) {
-            texto = '¿Desea mantener el numero de la matricula?';
+    matricularProfesional(formacion: any, index) {
+        let texto;
+        if (this.estaVencida(this.index) || !formacion.matriculacion[index].tieneVencimiento) {
+            texto = '¿Desea agregar una nueva reválida?';
+        } else {
+            texto = '¿Desea revalidar antes de la fecha de vencimiento?';
         }
 
         this.plex.confirm(texto).then((resultado) => {
@@ -87,9 +103,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
                 let matriculaNumero;
 
-                if (mantenerNumero) {
-                    matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
-                }
+                matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
 
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {
@@ -98,7 +112,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     folio: this.formacion.matriculacion[formacion.matriculacion.length - 1].folio,
                     inicio: new Date(),
                     notificacionVencimiento: false,
-                    fin: new Date(new Date('01/01/2000').setFullYear(vencimientoAnio)),
+                    fin: new Date(new Date().setFullYear(vencimientoAnio)),
                     revalidacionNumero: revNumero + 1
                 };
 
@@ -203,7 +217,36 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 }
                 this.profesional.formacionPosgrado[this.index] = this.formacion;
                 this.actualizar();
+                this.plex.toast('success', 'La fecha de vencimiento fue desactivada con exito', 'informacion', 1000);
             }
         });
+    }
+
+    estaVencida(i) {
+        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        return ((this.hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+    }
+
+    verificarFecha(i) {
+        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        if (formacionPosgrado.matriculacion.length) {
+            if (formacionPosgrado.revalida) {
+                return 'revalida';
+            } else {
+                if (!formacionPosgrado.matriculado) {
+                    return 'suspendida';
+                } else {
+                    if (!formacionPosgrado.tieneVencimiento) {
+                        return 'sinVencimiento';
+                    } else {
+                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin) {
+                            return 'vencida';
+                        } else {
+                            return 'vigente';
+                        }
+                    }
+                }
+            }
+        }
     }
 }

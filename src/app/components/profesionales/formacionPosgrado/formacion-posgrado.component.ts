@@ -29,14 +29,21 @@ export class FormacionPosgradoComponent implements OnInit {
     public agregar = true;
     public formacionSelected;
     public proximaFechaDeAlta;
+    openedDropDown = null;
     public columns = [
         {
             key: 'nombre',
-            label: 'ESPECIALIDAD'
+            label: 'ESPECIALIDAD',
+            sorteable: true,
+            sort: (a, b) => {
+                return a.profesional.formacionPosgrado.especialidad.nombre.localeCompare(b.profesional.formacionPosgrado.especialidad.nombre);
+            }
         },
         {
             key: 'matriculaNumero',
-            label: 'NRO. DE MATRICULA'
+            label: 'NRO. DE MATRICULA',
+            sorteable: true,
+            sort: (a, b) => { return a.profesional.formacionPosgrado.matriculacion.numeroMatricula.localeCompare(b.profesional.formacionPosgrado.matriculacion.numeroMatricula); }
         },
         {
             key: 'fecha',
@@ -69,10 +76,28 @@ export class FormacionPosgradoComponent implements OnInit {
         this.hoy = new Date();
     }
 
-    setDropDown(i) {
+    setDropDown(i, drop) {
+        if (this.openedDropDown) {
+            this.openedDropDown.open = (this.openedDropDown === drop) ? true : false;
+
+        }
+        this.openedDropDown = drop;
         this.itemsDropdown = [];
-        this.itemsDropdown[0] = { icon: 'lapiz', label: 'EDITAR POSGRADO', handler: () => { this.editarPosgrado(i); } };
-        this.itemsDropdown[1] = { icon: 'cesto', label: 'ELIMINAR POSGRADO', handler: () => { this.darDeBaja(i); } };
+        let pos = 0;
+        this.itemsDropdown[pos] = { icon: 'lapiz', label: ' EDITAR', handler: () => { this.editarPosgrado(i); } };
+        if (this.profesional.formacionPosgrado[i].matriculado && !this.profesional.formacionPosgrado[i].revalida) {
+            if (!this.profesional.formacionPosgrado[i].tieneVencimiento) {
+                pos++;
+                this.itemsDropdown[pos] = { icon: 'calendarios', label: ' ACTIVAR VENCIMIENTO', handler: () => { this.sinVencimiento(i); } };
+            } else {
+                pos++;
+                this.itemsDropdown[pos] = { icon: 'calendarios', label: ' DESACTIVAR VENCIMIENTO', handler: () => { this.sinVencimiento(i); } };
+            }
+        }
+        if (this.profesional.formacionPosgrado[i].matriculado) {
+            pos++;
+            this.itemsDropdown[pos] = { icon: 'cesto', label: ' DAR DE BAJA', handler: () => { this.darDeBaja(i); } };
+        }
     }
 
     showPosgrado(posgrado: any) {
@@ -191,8 +216,53 @@ export class FormacionPosgradoComponent implements OnInit {
             'op': 'updateEstadoPosGrado',
             'data': this.profesional.formacionPosgrado
         };
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-            this.plex.toast('success', 'Se ha eliminado con éxito!', 'informacion', 1000);
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
         });
+    }
+
+    sinVencimiento(i) {
+        if (this.profesional.formacionPosgrado[i].tieneVencimiento) {
+            this.plex.confirm('¿Desea desactivar el vencimiento de la matricula de esta especialidad?').then((resultado) => {
+                if (resultado) {
+                    this.profesional.formacionPosgrado[i].tieneVencimiento = false;
+                    this.actualizar();
+                }
+            });
+        } else {
+            this.plex.confirm('¿Desea activar el vencimiento de la matricula de esta especialidad?').then((resultado) => {
+                if (resultado) {
+                    this.profesional.formacionPosgrado[i].tieneVencimiento = true;
+                    this.actualizar();
+                }
+            });
+        }
+    }
+
+    estaVencida(i) {
+        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        return ((this.hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+    }
+
+    verificarFecha(i) {
+        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        if (formacionPosgrado.matriculacion.length) {
+            if (formacionPosgrado.revalida) {
+                return 'revalida';
+            } else {
+                if (!formacionPosgrado.matriculado) {
+                    return 'suspendida';
+                } else {
+                    if (!formacionPosgrado.tieneVencimiento) {
+                        return 'sinVencimiento';
+                    } else {
+                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin) {
+                            return 'vencida';
+                        } else {
+                            return 'vigente';
+                        }
+                    }
+                }
+            }
+        }
     }
 }

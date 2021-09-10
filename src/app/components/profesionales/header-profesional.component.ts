@@ -17,6 +17,7 @@ export class HeaderProfesionalComponent implements OnInit, OnChanges {
   public foto = null;
   public agenteMatriculador = null;
   public habilitado: any;
+  public estaHabilitado: any;
   public tieneFoto = false;
   @Input() profesional: IProfesional;
   @Input() img64 = null;
@@ -38,6 +39,11 @@ export class HeaderProfesionalComponent implements OnInit, OnChanges {
         this.tieneFoto = true;
       }
     });
+    if (this.profesional.habilitado) {
+      this.estaHabilitado = true;
+    } else {
+      this.estaHabilitado = false;
+    }
   }
 
   ngOnChanges() {
@@ -54,14 +60,16 @@ export class HeaderProfesionalComponent implements OnInit, OnChanges {
 
   habilitar() {
     let mensaje;
-    if (this.profesional.habilitado === true) {
-      mensaje = '¿Desea dar de baja este profesional?';
+    if (this.profesional.habilitado) {
+      mensaje = '¿Desea deshabilitar este profesional?';
     } else {
-      mensaje = '¿Desea dar de alta este profesional?';
+      mensaje = '¿Desea habilitar este profesional?';
     }
     this.plex.confirm(mensaje).then((resultado) => {
       if (resultado) {
-        this.profesional.habilitado = this.habilitado;
+        this.estaHabilitado = !this.estaHabilitado;
+        this.profesional.habilitado = !this.profesional.habilitado;
+        this.habilitado = !this.habilitado;
         const cambio = {
           'op': 'updateHabilitado',
           'data': this.habilitado,

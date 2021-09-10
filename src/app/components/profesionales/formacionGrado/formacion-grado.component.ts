@@ -213,14 +213,15 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     }
   }
 
-  verificarBadgeVencido(i) {
+  verificarVencimiento(i) {
     let formacionGrado = this.profesional.formacionGrado[i];
-    return formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado && this.hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin;
-  }
-
-  verificarBadgeVigente(i) {
-    let formacionGrado = this.profesional.formacionGrado[i];
-    return formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado && this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin;
+    if (formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado) {
+      if (this.hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) {
+        return 'vencida';
+      } else {
+        return 'vigente';
+      }
+    }
   }
   verificarFecha(i) {
     let formacionGrado = this.profesional.formacionGrado[i];

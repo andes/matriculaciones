@@ -8,7 +8,11 @@
     <b>Agente:</b> {{profesional.agenteMatriculador?profesional.agenteMatriculador:agenteMatriculador}}
   </plex-badge>
   <div subtitle>
-    <plex-button type="warning" size="sm" (click)="editar()">editar profesional</plex-button>
+    <plex-button type="info" size="sm" (click)="editar()">editar</plex-button>
+    <plex-button *ngIf="estaHabilitado" class='ml-2' type="warning" size="sm" (click)="habilitar()">Deshabilibar
+    </plex-button>
+    <plex-button *ngIf="!estaHabilitado" class='ml-2' type="success" size="sm" (click)="habilitar()">Habilitar
+    </plex-button>
   </div>
   <plex-label titulo="Documento" subtitulo="{{profesional.documento}}"></plex-label>
   <plex-label titulo="Fecha de Nacimiento" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">

@@ -16,28 +16,22 @@
       date:'dd/MM/yyyy'}}
     </plex-badge>
 
-    <plex-badge *ngIf="formacion.matriculacion.length && !formacion.revalida && formacion.tieneVencimiento && hoy > formacion.matriculacion[formacion.matriculacion.length-1].fin"
-                type="{{((hoy.getTime() - formacion.matriculacion[formacion.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) > 365)?'danger':'info'}}">
-      {{((hoy.getTime() -
-      formacion.matriculacion[formacion.matriculacion.length-1].fin.getTime())/(1000 * 3600
-      *24) > 365)?'Vencida':'Año de gracia'}}
+    <plex-badge *ngIf="verificarFecha(index) == 'vencida'" type="{{estaVencida(index)?'danger':'info'}}">
+      {{estaVencida(index)?'Vencida':'Año de gracia'}}
     </plex-badge>
 
-    <plex-badge *ngIf="formacion.matriculacion.length && !formacion.revalida && formacion.tieneVencimiento &&
-        formacion.matriculado && hoy < formacion.matriculacion[formacion.matriculacion.length-1].fin" type="success">
+    <plex-badge *ngIf="verificarFecha(index) == 'vigente'" type="success">
       vigente
     </plex-badge>
 
-    <plex-badge *ngIf="formacion.matriculacion.length && !formacion.revalida && formacion.tieneVencimiento && 
-        !formacion.matriculado" type="danger"> Suspendida
+    <plex-badge *ngIf="verificarFecha(index) == 'suspendida'" type="danger"> Suspendida
     </plex-badge>
 
-    <plex-badge *ngIf='formacion.matriculacion.length  && formacion.revalida && formacion.tieneVencimiento'
-                type="{{formacion.papelesVerificados?'info':'warning'}}">
+    <plex-badge *ngIf="verificarFecha(index) == 'revalida'" type="{{formacion.papelesVerificados?'info':'warning'}}">
       {{formacion.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
     </plex-badge>
 
-    <plex-badge *ngIf='!formacion.tieneVencimiento' type="warning">
+    <plex-badge *ngIf="verificarFecha(index) == 'sinVencimiento'" type="warning">
       Sin vencimiento
     </plex-badge>
 
@@ -50,45 +44,73 @@
   </plex-detail>
 
   <plex-title titulo="Notas" size="lg"></plex-title>
-
-  <plex-label>{{formacion.notas}}</plex-label>
+  <plex-label *ngIf="formacion.notas">{{formacion.notas}}</plex-label>
   <br>
 
-  <plex-title titulo="Revalidaciones" size="lg"></plex-title>
-
+  <plex-title titulo="Obtención de matricula" size="lg"></plex-title>
   <div class="row">
     <div class="col-12">
-      <plex-table [columns]="revalidaciones" #table="plTable">
-
-        <tr *ngFor="let matriculacion of formacion.matriculacion; let i = index">
-          <td>{{ matriculacion.revalidacionNumero }}</td>
-          <td>{{ matriculacion.matriculaNumero }}</td>
+      <plex-table [columns]="matricula" #table="plTable">
+        <tr>
+          <td>{{ formacion.matriculacion[0].matriculaNumero }}</td>
           <td>
             <plex-badge size="lg" type="info">
-              {{ matriculacion.inicio | date: 'dd/MM/yyyy'}}
+              {{ formacion.matriculacion[0].inicio | date: 'dd/MM/yyyy'}}
             </plex-badge>
           </td>
           <td>
-            <plex-badge *ngIf='i !== (formacion.matriculacion.length - 1) || formacion.tieneVencimiento ' size="lg"
-                        type="warning">{{ matriculacion.fin | date: 'dd/MM/yyyy'}}
+            <plex-badge *ngIf='formacion.tieneVencimiento ' size="lg" type="warning">{{ formacion.matriculacion[0].fin |
+              date: 'dd/MM/yyyy'}}
             </plex-badge>
-            <plex-badge *ngIf='i === (formacion.matriculacion.length - 1) && !formacion.tieneVencimiento' size="lg"
-                        type="warning"> Sin vencimiento
+            <plex-badge *ngIf='!formacion.tieneVencimiento' size="lg" type="warning"> Sin vencimiento
             </plex-badge>
-          </td>
-          <td>
-            <plex-badge *ngIf='(i === (formacion.matriculacion.length - 1) && formacion.matriculado) ' size="lg"
-                        type="{{(matriculacion.fin >= hoy || ((hoy.getTime() - formacion.matriculacion[formacion.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) < 365))?'success':'danger'}}">
-              {{(matriculacion.fin >= hoy && formacion.matriculado) || ((hoy.getTime() -
-              formacion.matriculacion[formacion.matriculacion.length-1].fin.getTime())/(1000 * 3600 * 24) <
-                365)? 'Vigente' :'Vencida'}} </plex-badge>
-
-                <plex-badge *ngIf='i !== (formacion.matriculacion.length - 1) || !formacion.matriculado' size="lg"
-                            type="danger"> NO VIGENTE
-                </plex-badge>
           </td>
         </tr>
       </plex-table>
+      <br>
+    </div>
+  </div>
+
+  <plex-title titulo="Revalidaciones" size="lg">
+    <plex-button type="success" size="sm" label="Renovar" (click)="matricularProfesional(formacion,index)">
+    </plex-button>
+
+  </plex-title>
+
+  <div class="row">
+    <div class="col-12">
+      <plex-table *ngIf="formacion.matriculacion[1]" [columns]="revalida" #table="plTable">
+
+        <tr *ngFor="let matriculacion of formacion.matriculacion; let i = index">
+          <ng-container *ngIf="i!==0">
+            <td>{{ matriculacion.revalidacionNumero-1 }}</td>
+            <td>{{ matriculacion.matriculaNumero }}</td>
+            <td>
+              <plex-badge size="lg" type="info">
+                {{ matriculacion.inicio | date: 'dd/MM/yyyy'}}
+              </plex-badge>
+            </td>
+            <td>
+              <plex-badge *ngIf='i !== (formacion.matriculacion.length - 1) || formacion.tieneVencimiento ' size="lg"
+                          type="warning">{{ matriculacion.fin | date: 'dd/MM/yyyy'}}
+              </plex-badge>
+              <plex-badge *ngIf='i === (formacion.matriculacion.length - 1) && !formacion.tieneVencimiento' size="lg"
+                          type="warning"> Sin vencimiento
+              </plex-badge>
+            </td>
+            <td>
+              <plex-badge *ngIf='(i === (formacion.matriculacion.length - 1) && formacion.matriculado) ' size="lg"
+                          type="{{(matriculacion.fin >= hoy || !estaVencida(i))?'success':'danger'}}">
+                {{!estaVencida(i)? 'Vigente' :'Vencida'}} </plex-badge>
+
+              <plex-badge *ngIf='i !== (formacion.matriculacion.length - 1) || !formacion.matriculado' size="lg"
+                          type="danger"> NO VIGENTE
+              </plex-badge>
+            </td>
+          </ng-container>
+        </tr>
+      </plex-table>
+      <plex-label *ngIf="!formacion.matriculacion[1]">El profesional no posee revalidaciones</plex-label>
     </div>
   </div>
   <br>
@@ -97,7 +119,7 @@
   </plex-title>
   <div class="row">
     <div class="col-12">
-      <plex-table [columns]="columns" #table="plTable">
+      <plex-table [columns]="columnasFechas" #table="plTable">
         <plex-table-columns>
         </plex-table-columns>
         <tr *ngFor="let unaFecha of formacion.fechasDeAltas;let i = index">

@@ -202,7 +202,8 @@ export class FormacionGradoComponent implements OnInit, OnChanges {
     const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional, grado, tipoMatricula);
     pdf.save('Turno ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
   }
-  verificarBoton(i) {
+
+  verificarEmisionCerificado(i) {
     let formacionGrado = this.profesional.formacionGrado[i];
     if (formacionGrado.matriculacion && !formacionGrado.renovacion) {
       return formacionGrado.matriculacion.length && formacionGrado.matriculado &&

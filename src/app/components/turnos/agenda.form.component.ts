@@ -1,5 +1,4 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { Plex } from '@andes/plex';
 import { Observable } from 'rxjs/Rx';
 
@@ -18,7 +17,7 @@ import * as enumerados from './../../utils/enumerados';
 })
 
 export class AgendaFormComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
         id: null,
         diasHabilitados: null,
@@ -41,7 +40,6 @@ export class AgendaFormComponent implements OnInit {
     constructor(private agendaService: AgendaService, private plex: Plex) {
         this.feriados = [];
     }
-
 
     ngOnInit() {
 
@@ -66,17 +64,17 @@ export class AgendaFormComponent implements OnInit {
         this.dias = enumerados.getObjDias();
 
         // Busco la config actual.
-        /*this.agendaService.get()
-            .subscribe(datos => {
-                this.currentAgenda = datos[0];
-                this.loadFormulario(this.currentAgenda);
-            });
+    /* this.agendaService.get()
+        .subscribe(datos => {
+            this.currentAgenda = datos[0];
+            this.loadFormulario(this.currentAgenda);
+        });
 
-        // Inicio el formulario.
-        this.loadFormulario();
-    }
+    // Inicio el formulario.
+    this.loadFormulario();
+}
 
-        */
+    */
     }
 
     agregarFeriado() {
@@ -92,9 +90,8 @@ export class AgendaFormComponent implements OnInit {
         if ($event.formValid) {
             this.currentAgenda.fechasExcluidas = this.feriados;
             this.feriadoNuevo = null;
-            let agendaOperation: Observable<IAgendaMatriculaciones>;
 
-            agendaOperation = this.agendaService.save(this.currentAgenda);
+            const agendaOperation = this.agendaService.save(this.currentAgenda);
 
             agendaOperation.subscribe(resultado => {
                 this.emitAgenda.emit(this.currentAgenda);

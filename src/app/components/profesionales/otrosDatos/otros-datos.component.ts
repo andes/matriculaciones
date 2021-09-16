@@ -43,8 +43,8 @@ export class OtroDatosComponent implements OnInit {
 
 
     constructor(private _fb: FormBuilder,
-        private plex: Plex,
-         private _profesionalService: ProfesionalService, ) {}
+                private plex: Plex,
+                private _profesionalService: ProfesionalService, ) {}
 
     ngOnInit() {
     }
@@ -53,9 +53,9 @@ export class OtroDatosComponent implements OnInit {
 
         if ($event.formValid) {
             this.profesional.OtrosDatos = [this.otrosDatos];
-         this.submitOtrosDatos.emit(this.otrosDatos);
+            this.submitOtrosDatos.emit(this.otrosDatos);
 
-         }
+        }
 
     }
 

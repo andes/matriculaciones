@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { IProfesional } from './../interfaces/IProfesional';
 
 @Injectable()
-export class DataService  {
+export class DataService {
     currentProfesional: IProfesional;
 
     currentList: any[];

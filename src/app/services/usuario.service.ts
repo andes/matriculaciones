@@ -7,7 +7,7 @@ import { throwError } from 'rxjs';
 @Injectable()
 export class UsuarioService {
 
-    private usuarioUrl = '/modules/gestor-usuarios/usuarios';  // URL to web api
+    private usuarioUrl = '/modules/gestor-usuarios/usuarios'; // URL to web api
 
     constructor(
         private server: Server,

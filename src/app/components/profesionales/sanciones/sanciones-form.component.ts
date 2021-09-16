@@ -32,18 +32,18 @@ export class SancionesFormComponent implements OnInit {
         nombre: 'Apercibimiento',
         id: 1
     },
-    {
-        nombre: 'Baja de Matrícula',
-        id: 2
-    },
-    {
-        nombre: 'Multa',
-        id: 3
-    },
-    {
-        nombre: 'Suspensión',
-        id: 4
-    }];
+                     {
+                         nombre: 'Baja de Matrícula',
+                         id: 2
+                     },
+                     {
+                         nombre: 'Multa',
+                         id: 3
+                     },
+                     {
+                         nombre: 'Suspensión',
+                         id: 4
+                     }];
 
     @Input() profesional: IProfesional;
     @Output() submitSancion = new EventEmitter();
@@ -74,18 +74,18 @@ export class SancionesFormComponent implements OnInit {
             nombre: 'Apercibimiento',
             id: 1
         },
-        {
-            nombre: 'Baja de Matrícula',
-            id: 2
-        },
-        {
-            nombre: 'Multa',
-            id: 3
-        },
-        {
-            nombre: 'Suspensión',
-            id: 4
-        }];
+                           {
+                               nombre: 'Baja de Matrícula',
+                               id: 2
+                           },
+                           {
+                               nombre: 'Multa',
+                               id: 3
+                           },
+                           {
+                               nombre: 'Suspensión',
+                               id: 4
+                           }];
 
         event.callback(sanciones);
     }

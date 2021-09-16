@@ -4,7 +4,6 @@ import { Plex } from '@andes/plex';
 import { IProfesional } from './../../../interfaces/IProfesional';
 import * as moment from 'moment';
 import { ProfesionalService } from './../../../services/profesional.service';
-import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
 import { Auth } from '@andes/auth';
 @Component({
     selector: 'app-formacion-posgrado-detalle',
@@ -63,8 +62,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         },
     ];
     constructor(private _profesionalService: ProfesionalService,
-        private plex: Plex,
-        private _numeracionesService: NumeracionMatriculasService, public auth: Auth) {
+                private plex: Plex, public auth: Auth) {
     }
 
     ngOnInit() {
@@ -96,10 +94,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     }
                 }
 
-                let matriculaNumero;
-
-                matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
-
+                const matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
                 const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                 const oMatriculacion = {
                     matriculaNumero: matriculaNumero,
@@ -199,12 +194,12 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     estaVencida(i) {
-        let formacionPosgrado = this.profesional.formacionPosgrado[this.profesional.formacionPosgrado.length - 1];
+        const formacionPosgrado = this.profesional.formacionPosgrado[this.profesional.formacionPosgrado.length - 1];
         return ((this.hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
     }
 
     verificarFecha(i) {
-        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        const formacionPosgrado = this.profesional.formacionPosgrado[i];
         if (formacionPosgrado.matriculacion.length) {
             if (formacionPosgrado.revalida) {
                 return 'revalida';

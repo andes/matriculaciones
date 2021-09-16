@@ -9,13 +9,13 @@ import 'rxjs/add/operator/catch';
 
 @Injectable()
 export class ProfesionService {
-  profesionesURL = '/core/tm/profesiones';
+    profesionesURL = '/core/tm/profesiones';
 
-  constructor(private server: Server) {
+    constructor(private server: Server) {
 
-  }
+    }
 
-  getProfesiones(): Observable<any[]> {
-    return this.server.get(this.profesionesURL);
-  }
+    getProfesiones(): Observable<any[]> {
+        return this.server.get(this.profesionesURL);
+    }
 }

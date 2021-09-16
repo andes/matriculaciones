@@ -7,53 +7,53 @@ import { Server } from '@andes/shared';
 @Injectable()
 export class NumeracionMatriculasService extends BaseService {
 
-  constructor(_http: HttpClient, private server: Server) {
-    super(_http);
-  }
+    constructor(_http: HttpClient, private server: Server) {
+        super(_http);
+    }
 
-  getOne(params: any): Observable<any> {
-    return this.server.get(this.numeracionesURL + '/', { params: params, showError: true });
-  }
+    getOne(params: any): Observable<any> {
+        return this.server.get(this.numeracionesURL + '/', { params: params, showError: true });
+    }
 
-  saveNumeracion(numeracionModel): Observable<any> {
-    return this.server.post(this.numeracionesURL, numeracionModel);
-  }
+    saveNumeracion(numeracionModel): Observable<any> {
+        return this.server.post(this.numeracionesURL, numeracionModel);
+    }
 
-  putNumeracion(numeracionModel): Observable<any> {
-    return this.server.put(this.numeracionesURL, numeracionModel);
+    putNumeracion(numeracionModel): Observable<any> {
+        return this.server.put(this.numeracionesURL, numeracionModel);
     // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
-  }
-
-  getNumeraciones(searchParams: any): Observable<any> {
-    const parametros: any = {
-      offset: null,
-      size: null,
-      codigo: null,
-      codigoEspecialidad: null,
-      especialidad: null,
-      profesion: null
-
-    };
-
-    if (searchParams.offset) {
-      parametros.offset = searchParams.offset;
     }
 
-    if (searchParams.size) {
-      parametros.size = searchParams.size;
+    getNumeraciones(searchParams: any): Observable<any> {
+        const parametros: any = {
+            offset: null,
+            size: null,
+            codigo: null,
+            codigoEspecialidad: null,
+            especialidad: null,
+            profesion: null
+
+        };
+
+        if (searchParams.offset) {
+            parametros.offset = searchParams.offset;
+        }
+
+        if (searchParams.size) {
+            parametros.size = searchParams.size;
+        }
+
+        if (searchParams.profesion) {
+            parametros.codigo = searchParams.profesion.codigo;
+        }
+
+        if (searchParams.especialidad) {
+            parametros.codigoEspecialidad = searchParams.especialidad.codigo;
+        }
+
+
+        return this.server.get(this.numeracionesURL, { params: parametros });
     }
-
-    if (searchParams.profesion) {
-      parametros.codigo = searchParams.profesion.codigo;
-    }
-
-    if (searchParams.especialidad) {
-      parametros.codigoEspecialidad = searchParams.especialidad.codigo;
-    }
-
-
-    return this.server.get(this.numeracionesURL, { params: parametros });
-  }
 
 
 

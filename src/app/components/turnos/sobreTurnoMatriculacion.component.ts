@@ -23,7 +23,7 @@ const jsPDF = require('jspdf');
     templateUrl: 'sobreTurnoMatriculacion.html'
 })
 export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     public tipoTurno: Enums.TipoTurno;
     private formTurno: FormGroup;
     public turnoSeleccionado: boolean;
@@ -33,15 +33,15 @@ export class SolicitarSobreTurnoMatriculacionComponent implements OnInit {
     public id = true;
 
     constructor(private _formBuilder: FormBuilder,
-        private _turnosService: TurnoService,
-        private _paisService: PaisService,
-        private _provinciaService: ProvinciaService,
-        private _localidadService: LocalidadService,
-        private _profesionService: ProfesionService,
-        private _profesionalService: ProfesionalService,
-        private _entidadFormadoraService: EntidadFormadoraService,
-        private _pdfUtils: PDFUtils,
-        private plex: Plex) {
+                private _turnosService: TurnoService,
+                private _paisService: PaisService,
+                private _provinciaService: ProvinciaService,
+                private _localidadService: LocalidadService,
+                private _profesionService: ProfesionService,
+                private _profesionalService: ProfesionalService,
+                private _entidadFormadoraService: EntidadFormadoraService,
+                private _pdfUtils: PDFUtils,
+                private plex: Plex) {
 
         this.tipoTurno = Enums.TipoTurno.matriculacion;
 

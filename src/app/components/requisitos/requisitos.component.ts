@@ -8,7 +8,7 @@ import { DropdownItem } from '@andes/plex';
 })
 
 export class RequisitosGeneralesComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
 
     public items: DropdownItem[];
 
@@ -26,7 +26,7 @@ export class RequisitosGeneralesComponent implements OnInit {
 })
 
 export class RequisitosMatriculaUniversitariaComponent {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     public terminosLeidos = false;
     constructor(private router: Router) { }
 
@@ -43,7 +43,7 @@ export class RequisitosMatriculaUniversitariaComponent {
 })
 
 export class RequisitosMatriculaTecnicaAuxiliarComponent {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     public terminosLeidos = false;
     constructor(private router: Router) { }
 

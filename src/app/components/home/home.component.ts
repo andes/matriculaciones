@@ -1,99 +1,99 @@
 import {
-  Component,
-  OnInit,
-  ViewEncapsulation
+    Component,
+    OnInit,
+    ViewEncapsulation
 } from '@angular/core';
 import {
-  Router
+    Router
 } from '@angular/router';
 import {
-  Plex
+    Plex
 } from '@andes/plex';
 import {
-  Observable
+    Observable
 } from 'rxjs/Rx';
 import {
-  Auth
+    Auth
 } from '@andes/auth';
 import {
-  AppComponent
+    AppComponent
 } from '../../app.component';
 
 @Component({
-  templateUrl: 'home.html',
-  styleUrls: ['home.scss'],
-  encapsulation: ViewEncapsulation.None // Use to disable CSS Encapsulation for this component
+    templateUrl: 'home.html',
+    styleUrls: ['home.scss'],
+    encapsulation: ViewEncapsulation.None // Use to disable CSS Encapsulation for this component
 })
 export class HomeComponent implements OnInit {
-  public usuario: number;
-  public password: string;
-  public loading = false;
-  public deshabilitar = false;
-  public autoFocus = 1;
+    public usuario: number;
+    public password: string;
+    public loading = false;
+    public deshabilitar = false;
+    public autoFocus = 1;
 
-  constructor(private plex: Plex, public auth: Auth, private router: Router, public appComponent: AppComponent) { }
+    constructor(private plex: Plex, public auth: Auth, private router: Router, public appComponent: AppComponent) { }
 
 
-  ngOnInit() {
-    if (this.auth.loggedIn) {
-      this.auth.logout();
+    ngOnInit() {
+        if (this.auth.loggedIn) {
+            this.auth.logout();
+        }
+        this.resync();
     }
-    this.resync();
-  }
 
-  cancelar() {
-    if (this.auth.loggedIn) {
-      this.auth.logout();
+    cancelar() {
+        if (this.auth.loggedIn) {
+            this.auth.logout();
+        }
+        this.resync();
+        this.redirect('/homeProfesionales');
     }
-    this.resync();
-    this.redirect('/homeProfesionales');
-  }
 
-  // login(event) {
-  //   if (event.formValid) {
-  //     this.deshabilitar = true;
-  //     this.loading = true;
-  //     this.auth.login(this.usuario.toString(), this.password)
-  //       .subscribe((data) => {
-  //         this.plex.updateUserInfo({usuario: this.auth.usuario});
-  //         this.router.navigate(['selectOrganizacion']);
-  //         // this.resync();
-  //         // this.router.navigate(['turnos']);
+    // login(event) {
+    //   if (event.formValid) {
+    //     this.deshabilitar = true;
+    //     this.loading = true;
+    //     this.auth.login(this.usuario.toString(), this.password)
+    //       .subscribe((data) => {
+    //         this.plex.updateUserInfo({usuario: this.auth.usuario});
+    //         this.router.navigate(['selectOrganizacion']);
+    //         // this.resync();
+    //         // this.router.navigate(['turnos']);
 
-  //       }, (err) => {
-  //         console.log('errororoor');
-  //         this.plex.alert('Usuario o contraseña incorrectos');
-  //         this.loading = false;
-  //         this.deshabilitar = false;
-  //       });
-  //   }
-  // }
+    //       }, (err) => {
+    //         console.log('errororoor');
+    //         this.plex.alert('Usuario o contraseña incorrectos');
+    //         this.loading = false;
+    //         this.deshabilitar = false;
+    //       });
+    //   }
+    // }
 
 
-  login(event) {
-    if (event.formValid) {
-      this.deshabilitar = true;
-      this.loading = true;
-      this.auth.login(this.usuario.toString(), this.password)
-        .subscribe((data) => {
-          this.plex.updateUserInfo({ usuario: this.auth.usuario });
-          this.router.navigate(['selectOrganizacion']);
-        }, (err) => {
-          this.plex.info('danger', 'Usuario o contraseña incorrectos');
-          this.loading = false;
-          this.deshabilitar = false;
-        });
+    login(event) {
+        if (event.formValid) {
+            this.deshabilitar = true;
+            this.loading = true;
+            this.auth.login(this.usuario.toString(), this.password)
+                .subscribe((data) => {
+                    this.plex.updateUserInfo({ usuario: this.auth.usuario });
+                    this.router.navigate(['selectOrganizacion']);
+                }, (err) => {
+                    this.plex.info('danger', 'Usuario o contraseña incorrectos');
+                    this.loading = false;
+                    this.deshabilitar = false;
+                });
+        }
     }
-  }
 
 
-  resync() {
-    this.appComponent.checkPermissions();
-  }
+    resync() {
+        this.appComponent.checkPermissions();
+    }
 
-  redirect(pagina: string) {
-    this.router.navigate(['./' + pagina]);
-    return false;
-  }
+    redirect(pagina: string) {
+        this.router.navigate(['./' + pagina]);
+        return false;
+    }
 
 }

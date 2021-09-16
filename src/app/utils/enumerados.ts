@@ -70,13 +70,13 @@ export function getEnumAsObjects(enumerado: any) {
 
 
 function titleCase(str) {
-    return str.toLowerCase().split(' ').map(function (word) {
+    return str.toLowerCase().split(' ').map((word) => {
         return (word.charAt(0).toUpperCase() + word.slice(1));
     }).join(' ');
 }
 
 // Exports
-/*export function getObjsSexo() {
+/* export function getObjsSexo() {
   return getEnumAsObjects(Object.keys(Sexo));
   let arrSexos = Object.keys(Sexo);
   arrSexos = arrSexos.slice(arrSexos.length / 2);

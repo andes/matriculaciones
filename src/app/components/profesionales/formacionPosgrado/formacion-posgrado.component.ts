@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, } from '@angular/forms';
 import { Plex } from '@andes/plex';
 import { IProfesional } from './../../../interfaces/IProfesional';
 import { ProfesionalService } from './../../../services/profesional.service';
@@ -53,7 +52,7 @@ export class FormacionPosgradoComponent implements OnInit {
             label: '',
         },
     ];
-    constructor(private _fb: FormBuilder,
+    constructor(
         private _profesionalService: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
         private _modalidadesCertificacionService: ModalidadesCertificacionService,
@@ -238,12 +237,12 @@ export class FormacionPosgradoComponent implements OnInit {
     }
 
     estaVencida(i) {
-        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        const formacionPosgrado = this.profesional.formacionPosgrado[i];
         return ((this.hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
     }
 
     verificarFecha(i) {
-        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        const formacionPosgrado = this.profesional.formacionPosgrado[i];
         if (formacionPosgrado.matriculacion.length) {
             if (formacionPosgrado.revalida) {
                 return 'revalida';

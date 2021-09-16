@@ -16,7 +16,7 @@ import { ProfesionService } from '../../services/profesion.service';
     templateUrl: 'guiaProfesional.html'
 })
 export class GuiaProfesionalComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
 
     public guiaProfesionalEnum;
     public filtro;

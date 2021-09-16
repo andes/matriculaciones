@@ -20,8 +20,8 @@ export class NumeracionMatriculasComponent implements OnInit {
     @Output() cambio = new EventEmitter();
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
-        private _profesionService: ProfesionService,
-        private _formBuilder: FormBuilder) {
+                private _profesionService: ProfesionService,
+                private _formBuilder: FormBuilder) {
 
     }
 

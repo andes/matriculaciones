@@ -13,27 +13,27 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class AgendaService {
 
-  private agendaUrl = '/modules/matriculaciones/agendaMatriculaciones';  // URL to web api
+    private agendaUrl = '/modules/matriculaciones/agendaMatriculaciones'; // URL to web api
 
-  constructor(private server: Server) { }
+    constructor(private server: Server) { }
 
-  get(): Observable<IAgendaMatriculaciones[]> {
-    return this.server.get(this.agendaUrl);
-  }
-
-  save(agenda: any): Observable<IAgendaMatriculaciones> {
-
-    if (agenda.id) {
-      return this.server.put(this.agendaUrl + '/' + agenda.id, agenda);
-    } else {
-      return this.server.post(this.agendaUrl, agenda);
-
-      // .map((res: Response) => res.json())
-      // .catch(this.handleError);
+    get(): Observable<IAgendaMatriculaciones[]> {
+        return this.server.get(this.agendaUrl);
     }
-  }
 
-  handleError(error: any) {
-    return Observable.throw(error.json().error || 'Server error');
-  }
+    save(agenda: any): Observable<IAgendaMatriculaciones> {
+
+        if (agenda.id) {
+            return this.server.put(this.agendaUrl + '/' + agenda.id, agenda);
+        } else {
+            return this.server.post(this.agendaUrl, agenda);
+
+            // .map((res: Response) => res.json())
+            // .catch(this.handleError);
+        }
+    }
+
+    handleError(error: any) {
+        return Observable.throw(error.json().error || 'Server error');
+    }
 }

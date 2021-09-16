@@ -35,7 +35,7 @@ export interface IProfesional {
         ubicacion: {
             localidad: any;
             provincia: any;
-            pais: any
+            pais: any;
         };
         ultimaActualizacion: Date;
         activo: boolean;
@@ -46,7 +46,7 @@ export interface IProfesional {
         ubicacion: {
             localidad: any;
             provincia: any;
-            pais: any
+            pais: any;
         };
         ultimaActualizacion: Date;
         activo: boolean;
@@ -57,7 +57,7 @@ export interface IProfesional {
         ubicacion: {
             localidad: any;
             provincia: any;
-            pais: any
+            pais: any;
         };
         ultimaActualizacion: Date;
         activo: boolean;
@@ -68,7 +68,7 @@ export interface IProfesional {
         fecha: Date;
     }];
     formacionGrado: [{
-        exportadoSisa?: Boolean,
+        exportadoSisa?: Boolean;
         profesion: {
             nombre: string;
             codigo: number;
@@ -89,15 +89,15 @@ export interface IProfesional {
             folio: String;
             inicio: Date;
             baja: {
-                motivo: String,
-                fecha: any
-            },
+                motivo: String;
+                fecha: any;
+            };
             notificacionVencimiento: Boolean;
             fin: Date;
             revalidacionNumero: Number;
         }];
-        matriculado: boolean,
-        fechaDeInscripcion?: Date
+        matriculado: boolean;
+        fechaDeInscripcion?: Date;
     }];
     formacionPosgrado: [{
         profesion: {
@@ -137,7 +137,7 @@ export interface IProfesional {
                 revalidacionNumero: Number;
             }
         ];
-        fechasDeAltas?: [{ fecha: Date }]
+        fechasDeAltas?: [{ fecha: Date }];
         tieneVencimiento?: boolean;
         papelesVerificados: boolean;
         matriculado: boolean;
@@ -150,7 +150,7 @@ export interface IProfesional {
         sancion: {
             id: Number;
             nombre: String;
-        },
+        };
         motivo: String;
         normaLegal: String;
         fecha: Date;
@@ -166,8 +166,8 @@ export interface IProfesional {
     rematriculado: Number;
     agenteMatriculador: String;
     supervisor?: {
-        id: String,
-        nombreCompleto: String
+        id: String;
+        nombreCompleto: String;
     };
     idRenovacion: String;
     documentoViejo: Number;

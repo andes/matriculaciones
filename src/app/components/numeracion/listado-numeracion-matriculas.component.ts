@@ -19,7 +19,7 @@ import { SIISAService } from '../../services/siisa.service';
     templateUrl: 'listado-numeracion-matriculas.html'
 })
 export class ListadoNumeracionMatriculasComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     public formBuscarNumeracion: FormGroup;
     public numeraciones: any[];
     public numeracionElegida: any;
@@ -33,15 +33,15 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     };
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
-        private _profesionService: ProfesionService,
-        private _formBuilder: FormBuilder,
-        private _router: Router,
-        private _siisaSrv: SIISAService) {
+                private _profesionService: ProfesionService,
+                private _formBuilder: FormBuilder,
+                private _router: Router,
+                private _siisaSrv: SIISAService) {
 
         this.numeraciones = [];
     }
     onScroll(event: any) {
-        /*this.currentPage++;
+        /* this.currentPage++;
         this.updateListado();*/
     }
     ngOnInit() {
@@ -91,7 +91,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
                 }
             });
 
-            this.showListado = true;
+        this.showListado = true;
     }
 
     toggleListado(show) {

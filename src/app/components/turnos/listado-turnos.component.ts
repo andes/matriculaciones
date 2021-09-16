@@ -22,8 +22,8 @@ export class ListadoTurnosComponent implements OnInit {
     public showListado: Boolean = true;
 
     constructor(private _turnoService: TurnoService,
-        private _formBuilder: FormBuilder,
-        private _pdfUtils: PDFUtils) { }
+                private _formBuilder: FormBuilder,
+                private _pdfUtils: PDFUtils) { }
 
     onScroll() {
     }

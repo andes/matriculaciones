@@ -7,16 +7,16 @@ import { environment } from '../../environments/environment';
 @Injectable()
 export class LocalidadService {
 
-  private localidadUrl = '/core/tm/localidades';  // URL to web api
+    private localidadUrl = '/core/tm/localidades'; // URL to web api
 
-  constructor(private server: Server) { }
+    constructor(private server: Server) { }
 
-  get(params: any): Observable<ILocalidad[]> {
-    return this.server.get(this.localidadUrl, { params: params, showError: true });
-  }
+    get(params: any): Observable<ILocalidad[]> {
+        return this.server.get(this.localidadUrl, { params: params, showError: true });
+    }
 
-  getXProvincia(provincia: String): Observable<ILocalidad[]> {
-    return this.server.get(this.localidadUrl + '?provincia=' + provincia);
-  }
+    getXProvincia(provincia: String): Observable<ILocalidad[]> {
+        return this.server.get(this.localidadUrl + '?provincia=' + provincia);
+    }
 }
 

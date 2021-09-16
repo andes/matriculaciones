@@ -11,10 +11,10 @@ import 'rxjs/add/operator/catch';
 @Injectable()
 export class SexoService {
 
-  private sexosUrl = '/core/tm/siisa' + '/sexo';
-  constructor(private server: Server) {
-  }
-  getSexos(): Observable<ISiisa[]> {
-    return this.server.get(this.sexosUrl);
-  }
+    private sexosUrl = '/core/tm/siisa' + '/sexo';
+    constructor(private server: Server) {
+    }
+    getSexos(): Observable<ISiisa[]> {
+        return this.server.get(this.sexosUrl);
+    }
 }

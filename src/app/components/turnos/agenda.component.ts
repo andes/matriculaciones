@@ -11,4 +11,4 @@ import { ConfiguracionAgendaComponent } from './configuracion-agenda.component';
 export class AgendaComponent {
 
 
- }
+}

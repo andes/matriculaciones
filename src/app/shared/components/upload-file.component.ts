@@ -83,7 +83,7 @@ export class UploadFileComponent {
                 this.disabled = false;
                 this.uploadElement.nativeElement.value = null;
                 const status = event.status;
-                let body = JSON.parse(event.body as string);
+                const body = JSON.parse(event.body as string);
                 body.ext = this.getExtension(this.currentFileUpload.name);
                 if (status >= 200 && status < 300) {
                     this.onUpload.emit({ status, body });

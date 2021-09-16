@@ -4,119 +4,119 @@ import { BaseService } from './base.service';
 import { Observable } from 'rxjs/Rx';
 
 import {
-  Server
+    Server
 } from '@andes/shared';
 
 import {
-  ITurno
+    ITurno
 } from './../interfaces/ITurno';
 
 
 @Injectable()
 export class TurnoService extends BaseService {
 
-  private turnosMatriculacionURL = this.turnosURL + 'matriculacion/';
-  private turnosRenovacionURL = this.turnosURL + 'renovacion/';
-  private turnosProximosURL = this.turnosURL + 'proximos/';
-  private turnosSolicitados = this.turnosSolicidatosURL;
+    private turnosMatriculacionURL = this.turnosURL + 'matriculacion/';
+    private turnosRenovacionURL = this.turnosURL + 'renovacion/';
+    private turnosProximosURL = this.turnosURL + 'proximos/';
+    private turnosSolicitados = this.turnosSolicidatosURL;
 
-  constructor(_http: HttpClient, private _server: Server) {
-    super(_http);
-  }
+    constructor(_http: HttpClient, private _server: Server) {
+        super(_http);
+    }
 
-  getTurnosProximos(search: any): Observable<any> {
+    getTurnosProximos(search: any): Observable<any> {
     // return this._http.get(this.turnosProximosURL, search);
-    return this.getTurnos(this.turnosProximosURL, search);
-  }
-
-  getTurnosMatriculacion(fecha: Date, searchParams: any): Observable<any[]> {
-    return this.getTurnos(this.turnosMatriculacionURL, searchParams);
-  }
-
-  getTurnosRenovacion(fecha: Date, searchParams: any): Observable<any[]> {
-    return this.getTurnos(this.turnosRenovacionURL, searchParams);
-  }
-
-  saveTurnoMatriculacion(turnoModel: any): Observable<any> {
-    return this._server.post(this.turnosMatriculacionURL + turnoModel.turno.profesional, turnoModel);
-  }
-
-  saveTurno(turnoModel): Observable<any> {
-    return this._server.post(this.turnosURL + 'save/' + turnoModel._id, turnoModel);
-  }
-
-  saveTurnoSolicitados(turnoSolicitado: any) {
-    return this._server.post(this.turnosSolicitados, turnoSolicitado);
-  }
-  getTurnoSolicitados(dni: any): Observable<any> {
-    return this._server.get(this.turnosSolicitados + 'traePDni/' + dni);
-  }
-
-  getTurnoPorDni(params): Observable<any> {
-    return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true });
-  }
-  getTurnos(url: string, searchParams: any): Observable<any> {
-    const parametros: any = {
-      anio: null,
-      mes: null,
-      dia: null,
-      offset: null,
-      size: null,
-      nombre: null,
-      apellido: null,
-      fecha: null,
-      documento: null
-    };
-
-    if (searchParams.anio) {
-      parametros.anio = searchParams.anio;
+        return this.getTurnos(this.turnosProximosURL, search);
     }
 
-    if (searchParams.mes) {
-      parametros.mes = searchParams.mes;
+    getTurnosMatriculacion(fecha: Date, searchParams: any): Observable<any[]> {
+        return this.getTurnos(this.turnosMatriculacionURL, searchParams);
     }
 
-    if (searchParams.dia) {
-      parametros.dia = searchParams.dia;
+    getTurnosRenovacion(fecha: Date, searchParams: any): Observable<any[]> {
+        return this.getTurnos(this.turnosRenovacionURL, searchParams);
     }
 
-    if (searchParams.offset) {
-      parametros.offset = searchParams.offset;
+    saveTurnoMatriculacion(turnoModel: any): Observable<any> {
+        return this._server.post(this.turnosMatriculacionURL + turnoModel.turno.profesional, turnoModel);
     }
 
-    if (searchParams.size) {
-      parametros.size = searchParams.size;
+    saveTurno(turnoModel): Observable<any> {
+        return this._server.post(this.turnosURL + 'save/' + turnoModel._id, turnoModel);
     }
 
-    if (searchParams.nombre) {
-      parametros.nombre = searchParams.nombre;
+    saveTurnoSolicitados(turnoSolicitado: any) {
+        return this._server.post(this.turnosSolicitados, turnoSolicitado);
+    }
+    getTurnoSolicitados(dni: any): Observable<any> {
+        return this._server.get(this.turnosSolicitados + 'traePDni/' + dni);
     }
 
-    if (searchParams.apellido) {
-      parametros.apellido = searchParams.apellido;
+    getTurnoPorDni(params): Observable<any> {
+        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true });
+    }
+    getTurnos(url: string, searchParams: any): Observable<any> {
+        const parametros: any = {
+            anio: null,
+            mes: null,
+            dia: null,
+            offset: null,
+            size: null,
+            nombre: null,
+            apellido: null,
+            fecha: null,
+            documento: null
+        };
+
+        if (searchParams.anio) {
+            parametros.anio = searchParams.anio;
+        }
+
+        if (searchParams.mes) {
+            parametros.mes = searchParams.mes;
+        }
+
+        if (searchParams.dia) {
+            parametros.dia = searchParams.dia;
+        }
+
+        if (searchParams.offset) {
+            parametros.offset = searchParams.offset;
+        }
+
+        if (searchParams.size) {
+            parametros.size = searchParams.size;
+        }
+
+        if (searchParams.nombre) {
+            parametros.nombre = searchParams.nombre;
+        }
+
+        if (searchParams.apellido) {
+            parametros.apellido = searchParams.apellido;
+        }
+
+        if (searchParams.fecha) {
+            parametros.fecha = searchParams.fecha;
+        }
+
+        if (searchParams.documento) {
+            parametros.documento = searchParams.documento;
+        }
+
+        return this._server.get(url, { params: parametros });
     }
 
-    if (searchParams.fecha) {
-      parametros.fecha = searchParams.fecha;
+    patchTurnos(id: string, cambios): Observable<any> {
+        return this._server.patch(this.turnosURL + id, cambios);
     }
 
-    if (searchParams.documento) {
-      parametros.documento = searchParams.documento;
+    getTurnosPorDocumento(params) {
+        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true });
     }
 
-    return this._server.get(url, { params: parametros });
-  }
-
-  patchTurnos(id: string, cambios): Observable<any> {
-    return this._server.patch(this.turnosURL + id, cambios);
-  }
-
-  getTurnosPorDocumento(params) {
-    return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true });
-  }
-
-  getTurnosMes(params) {
-    return this._server.get(this.turnosURL + 'matriculaciones', { params: params, showError: true });
-  }
+    getTurnosMes(params) {
+        return this._server.get(this.turnosURL + 'matriculaciones', { params: params, showError: true });
+    }
 
 }

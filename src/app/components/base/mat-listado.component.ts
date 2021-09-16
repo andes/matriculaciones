@@ -58,9 +58,9 @@ export class ListadoComponent implements OnInit {
     @Output() clearSelected = new EventEmitter();
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
-        private _profesionService: ProfesionService,
-        private _formBuilder: FormBuilder,
-        private _router: Router) {
+                private _profesionService: ProfesionService,
+                private _formBuilder: FormBuilder,
+                private _router: Router) {
 
         this.pageSize = 10;
         this.data = [];

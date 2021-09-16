@@ -14,11 +14,11 @@ import { Server } from '@andes/shared';
 @Injectable()
 export class EntidadFormadoraService extends BaseService {
 
-  // private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
-  constructor(_http: HttpClient, private server: Server) {
-    super(_http);
-  }
-  getEntidadesFormadoras(): Observable<IEntidadFormadora[]> {
-    return this.server.get(this.entidadFormadoraURL);
-  }
+    // private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
+    constructor(_http: HttpClient, private server: Server) {
+        super(_http);
+    }
+    getEntidadesFormadoras(): Observable<IEntidadFormadora[]> {
+        return this.server.get(this.entidadFormadoraURL);
+    }
 }

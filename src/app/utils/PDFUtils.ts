@@ -11,23 +11,23 @@ export class PDFUtils {
         const doc = new jsPDF('p', 'mm', 'a4');
         doc.setFontSize(6);
         doc.setFontStyle('bold');
-        doc.text(/*'Argentina'*/ profesional.nacionalidad.nombre, 14, 14);
-        doc.text(/*'TEC. EN LABORATORIO CLINICO E HISTOPATOLOGIA'*/profesional.formacionGrado[grado].titulo, 20, 17);
+        doc.text(/* 'Argentina'*/ profesional.nacionalidad.nombre, 14, 14);
+        doc.text(/* 'TEC. EN LABORATORIO CLINICO E HISTOPATOLOGIA'*/profesional.formacionGrado[grado].titulo, 20, 17);
         const splitTitle = doc.splitTextToSize(profesional.formacionGrado[grado].entidadFormadora.nombre, 60);
         let textoEntidad = 20;
         splitTitle.forEach(element => {
 
-            doc.text(/*'UNIV. NAC. DE CORDOBA'*/element, 15, textoEntidad);
+            doc.text(/* 'UNIV. NAC. DE CORDOBA'*/element, 15, textoEntidad);
             textoEntidad = textoEntidad + 3;
         });
-        doc.text(/*'01/12/1999'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 24, 28);
+        doc.text(/* '01/12/1999'*/ this.getDateStr(profesional.formacionGrado[grado].fechaEgreso), 24, 28);
         doc.addImage(firmaAdmin.firma, 'jpg', 38, 25, 30, 14);
         if (firmaAdmin.administracion === null) {
             doc.text('', 42, 41);
         } else {
             doc.text(firmaAdmin.administracion, 42, 41);
         }
-        doc.text(/*'15/07/2010'*/ this.getDateStr(fechaImpresion), 50, 48);
+        doc.text(/* '15/07/2010'*/ this.getDateStr(fechaImpresion), 50, 48);
         doc.addPage();
         if (profesional.formacionGrado[grado].profesion.tipoDeFormacion === 'Tecnicatura') {
             doc.setFillColor(255, 0, 0);
@@ -44,17 +44,17 @@ export class PDFUtils {
         if (copia) {
             doc.text(copia.nombre, 18, 43, 0, 50);
         }
-        doc.text(/*'BO TEC. EN LABORATORIO'*/ nombreProf.toUpperCase(), 43, 13);
-        doc.text(/*'PINO'*/profesional.apellido, 43, 18);
-        doc.text(/*'JORGE PABLO'*/profesional.nombre, 43, 23);
-        doc.text(/*'Masculino'*/ profesional.sexo, 74, 23);
+        doc.text(/* 'BO TEC. EN LABORATORIO'*/ nombreProf.toUpperCase(), 43, 13);
+        doc.text(/* 'PINO'*/profesional.apellido, 43, 18);
+        doc.text(/* 'JORGE PABLO'*/profesional.nombre, 43, 23);
+        doc.text(/* 'Masculino'*/ profesional.sexo, 74, 23);
         doc.text('DNI ' + profesional.documento, 43, 28);
-        doc.text(/*'29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
-        doc.text(/*'15/07/2010'*/ this.getDateStr(profesional.formacionGrado[grado].fechaDeInscripcion), 43, 40);
-        doc.text(/*'29/01/2015'*/ this.getDateStr(ultimaRenovacion.fin), 66, 40);
+        doc.text(/* '29/01/1970'*/ this.getDateStr(profesional.fechaNacimiento), 43, 34);
+        doc.text(/* '15/07/2010'*/ this.getDateStr(profesional.formacionGrado[grado].fechaDeInscripcion), 43, 40);
+        doc.text(/* '29/01/2015'*/ this.getDateStr(ultimaRenovacion.fin), 66, 40);
         doc.addImage(firmaProfesional, 'jpg', 54, 41, 31, 10);
         doc.setFontSize(8);
-        doc.text(/*'82'*/ultimaRenovacion.matriculaNumero.toString(), 74, 13);
+        doc.text(/* '82'*/ultimaRenovacion.matriculaNumero.toString(), 74, 13);
 
         return doc;
     }
@@ -240,7 +240,7 @@ export class PDFUtils {
         let textoEntidad = 123;
         splitTitle.forEach(element => {
 
-            doc.text(/*'UNIV. NAC. DE CORDOBA'*/element, 65, textoEntidad);
+            doc.text(/* 'UNIV. NAC. DE CORDOBA'*/element, 65, textoEntidad);
             textoEntidad = textoEntidad + 4;
         });
         doc.text(65, 131, this.getSimpleFormatedDate(turno.formacionGrado[grado].fechaEgreso));

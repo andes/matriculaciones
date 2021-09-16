@@ -47,7 +47,7 @@ export class ScrollComponent implements OnInit {
 
     onScroll(event: any) {
 
-        /*this.currentPage++;
+        /* this.currentPage++;
         this.updateListado();*/
     }
 
@@ -61,7 +61,7 @@ export class ScrollComponent implements OnInit {
             this.updateListado();
         }
     */
-    /*showInfo(selected: any) {
+    /* showInfo(selected: any) {
         this.selectedItem = selected;
     }
 */

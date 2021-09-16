@@ -20,7 +20,7 @@ import * as enumerados from './../../utils/enumerados';
 export class ConfiguracionAgendaComponent implements OnInit {
 
 
-    @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     currentAgenda: IAgendaMatriculaciones = {
         id: null,
         diasHabilitados: null,
@@ -51,17 +51,17 @@ export class ConfiguracionAgendaComponent implements OnInit {
         this.dias = enumerados.getObjDias();
 
         // Busco la config actual.
-        /*this.agendaService.get()
-            .subscribe(datos => {
-                this.currentAgenda = datos[0];
-                this.loadFormulario(this.currentAgenda);
-            });
+    /* this.agendaService.get()
+        .subscribe(datos => {
+            this.currentAgenda = datos[0];
+            this.loadFormulario(this.currentAgenda);
+        });
 
-        // Inicio el formulario.
-        this.loadFormulario();
-    }
+    // Inicio el formulario.
+    this.loadFormulario();
+}
 
-        */
+    */
     }
 
     agregarFeriado() {
@@ -81,9 +81,7 @@ export class ConfiguracionAgendaComponent implements OnInit {
                 this.currentAgenda.fechasExcluidas = [];
             }
             this.currentAgenda.fechasExcluidas = this.feriados;
-            let agendaOperation: Observable<IAgendaMatriculaciones>;
-
-            agendaOperation = this.agendaService.save(this.currentAgenda);
+            const agendaOperation = this.agendaService.save(this.currentAgenda);
             agendaOperation.subscribe(resultado => {
                 this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
             });

@@ -12,11 +12,11 @@ import { Server } from '@andes/shared';
 @Injectable()
 export class ModalidadesCertificacionService extends BaseService {
 
-  // private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
-  constructor(_http: HttpClient, private server: Server) {
-    super(_http);
-  }
-  getModalidadesCertificacion() {
-    return this.server.get(this.modalidadesCertificacionURL);
-  }
+    // private entidadesFormadorasUrl = this.siisaURL + '/entidadesFormadoras';
+    constructor(_http: HttpClient, private server: Server) {
+        super(_http);
+    }
+    getModalidadesCertificacion() {
+        return this.server.get(this.modalidadesCertificacionURL);
+    }
 }

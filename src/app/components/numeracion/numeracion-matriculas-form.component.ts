@@ -23,10 +23,10 @@ export class NumeracionMatriculasFormComponent implements OnInit {
 
 
     constructor(private _numeracionesService: NumeracionMatriculasService,
-        private _profesionService: ProfesionService,
-        private _formBuilder: FormBuilder,
-        private plex: Plex,
-        private _siisaSrv: SIISAService) {
+                private _profesionService: ProfesionService,
+                private _formBuilder: FormBuilder,
+                private plex: Plex,
+                private _siisaSrv: SIISAService) {
 
     }
 

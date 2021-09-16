@@ -18,101 +18,101 @@ import { ProfesionalService } from '../../../services/profesional.service';
 const jsPDF = require('jspdf');
 
 @Component({
-  selector: 'app-cambio-dni',
-  templateUrl: 'listado-cambio-dni.html',
-  styles: ['.margenBadge { position: relative; top: 24px; }']
+    selector: 'app-cambio-dni',
+    templateUrl: 'listado-cambio-dni.html',
+    styles: ['.margenBadge { position: relative; top: 24px; }']
 
 })
 export class ListadoCambioDniComponent implements OnInit {
-  @HostBinding('class.plex-layout') layout = true;  // Permite el uso de flex-box en el componente
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
 
-  public cambioDNI: any = {
-    nombre: null,
-    apellido: null,
-    idProfesional: null,
-    nacionalidad: null,
-    dniActual: null,
-    dniNuevo: null
-  };
-  public sexos;
-  public solicitudesDeCambio = [];
-  public solicitudElegida;
-  public Match = true;
-
-
-
-  constructor(private _formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private _paisService: PaisService,
-    private _cambioDniService: CambioDniService,
-    private plex: Plex,
-    private _profesionalService: ProfesionalService) {
+    public cambioDNI: any = {
+        nombre: null,
+        apellido: null,
+        idProfesional: null,
+        nacionalidad: null,
+        dniActual: null,
+        dniNuevo: null
+    };
+    public sexos;
+    public solicitudesDeCambio = [];
+    public solicitudElegida;
+    public Match = true;
 
 
 
-  }
-
-  ngOnInit() {
-    this.sexos = enumerados.getObjSexos();
-    this.traeListado();
-
-  }
-
-  loadPaises(event) {
-    this._paisService.getPaises({}).subscribe(event.callback);
-  }
+    constructor(private _formBuilder: FormBuilder,
+                private route: ActivatedRoute,
+                private _paisService: PaisService,
+                private _cambioDniService: CambioDniService,
+                private plex: Plex,
+                private _profesionalService: ProfesionalService) {
 
 
-  traeListado() {
-    const contenedor = [];
-    this._cambioDniService.get().subscribe(data => {
-      for (let _n = 0; _n < data.length; _n++) {
-        if (data[_n].atendida === false) {
-          contenedor.push(data[_n]);
-        }
-      }
-      this.solicitudesDeCambio = contenedor;
 
-    });
-  }
+    }
 
-  seleccionar(solicitud: any) {
-    this.solicitudElegida = solicitud;
-    this.Match = true;
-  }
+    ngOnInit() {
+        this.sexos = enumerados.getObjSexos();
+        this.traeListado();
 
-  cerrarResumenSolicitud() {
-    this.solicitudElegida = null;
-  }
+    }
 
-  aprobar() {
+    loadPaises(event) {
+        this._paisService.getPaises({}).subscribe(event.callback);
+    }
 
 
-    this._profesionalService.getProfesional({ id: this.solicitudElegida.idProfesional }).subscribe(profesional => {
-      if (profesional.length === 0) {
-        this.plex.info('info', 'No existe ningun profesional con este DNI');
-        this.Match = false;
-      } else {
-        profesional[0].documento = this.solicitudElegida.dniNuevo;
-        profesional[0].documentoViejo = this.solicitudElegida.dniActual;
-        this._profesionalService.putProfesional(profesional[0]).subscribe(newProf => {
-          this.solicitudElegida.atendida = true;
-          this._cambioDniService.saveCambio(this.solicitudElegida).subscribe();
-          this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
-          this.traeListado();
-          this.cerrarResumenSolicitud();
+    traeListado() {
+        const contenedor = [];
+        this._cambioDniService.get().subscribe(data => {
+            for (let _n = 0; _n < data.length; _n++) {
+                if (data[_n].atendida === false) {
+                    contenedor.push(data[_n]);
+                }
+            }
+            this.solicitudesDeCambio = contenedor;
+
         });
-      }
-    });
-  }
+    }
 
-  eliminar() {
-    this.solicitudElegida.atendida = true;
-    this._cambioDniService.saveCambio(this.solicitudElegida).subscribe();
-    this.traeListado();
-    this.cerrarResumenSolicitud();
-    this.Match = true;
-  }
+    seleccionar(solicitud: any) {
+        this.solicitudElegida = solicitud;
+        this.Match = true;
+    }
+
+    cerrarResumenSolicitud() {
+        this.solicitudElegida = null;
+    }
+
+    aprobar() {
+
+
+        this._profesionalService.getProfesional({ id: this.solicitudElegida.idProfesional }).subscribe(profesional => {
+            if (profesional.length === 0) {
+                this.plex.info('info', 'No existe ningun profesional con este DNI');
+                this.Match = false;
+            } else {
+                profesional[0].documento = this.solicitudElegida.dniNuevo;
+                profesional[0].documentoViejo = this.solicitudElegida.dniActual;
+                this._profesionalService.putProfesional(profesional[0]).subscribe(newProf => {
+                    this.solicitudElegida.atendida = true;
+                    this._cambioDniService.saveCambio(this.solicitudElegida).subscribe();
+                    this.plex.toast('success', 'la solicitud se envio con exito!', 'informacion', 1000);
+                    this.traeListado();
+                    this.cerrarResumenSolicitud();
+                });
+            }
+        });
+    }
+
+    eliminar() {
+        this.solicitudElegida.atendida = true;
+        this._cambioDniService.saveCambio(this.solicitudElegida).subscribe();
+        this.traeListado();
+        this.cerrarResumenSolicitud();
+        this.Match = true;
+    }
 
 }
 

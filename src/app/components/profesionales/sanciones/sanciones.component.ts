@@ -30,7 +30,7 @@ export class SancionesComponent implements OnInit {
     @Input() profesional: IProfesional;
     @Output() updateProfesional = new EventEmitter();
 
-    constructor(/*private _formBuilder: FormBuilder*/) {}
+    constructor(/* private _formBuilder: FormBuilder*/) {}
 
     ngOnInit() {
         // this.initForm();
@@ -46,7 +46,7 @@ export class SancionesComponent implements OnInit {
         this.updateProfesional.emit(this.profesional);
     }
 
-    /*initForm() {
+    /* initForm() {
         this.formSancion = this._formBuilder.group({
             numero: [null, Validators.required],
             sancion: [null],
@@ -57,14 +57,14 @@ export class SancionesComponent implements OnInit {
         });
     }*/
 
-    /*guardar(sancionModel: any) {
+    /* guardar(sancionModel: any) {
         sancionModel.sancion = sancionModel.sancion.nombre;
         // validaciones
         this.onSaved.emit(sancionModel);
         this.initForm();
     }*/
 
-    /*loadTipoSanciones(event: any) {
+    /* loadTipoSanciones(event: any) {
         const sanciones = [{
             nombre: 'Apercibimiento',
             id: 1

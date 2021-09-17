@@ -25,12 +25,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     public edit = true;
     hoy = new Date();
     public showBtnSinVencimiento = false;
-    public columnasFechas = [
-        {
-            key: 'fecha',
-            sort: (a: any, b: any) => a.fecha.getTime() - b.fecha.getTime()
-        }
-    ];
+    public columnasFechas = [];
     public matricula = [
         {
             key: 'matriculaNumero',
@@ -80,9 +75,9 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         }
     }
 
-    matricularProfesional(formacion: any, index) {
+    renovarProfesional(formacion: any) {
         let texto;
-        if (this.estaVencida(this.index) || !formacion.matriculacion[index].tieneVencimiento) {
+        if (this.estaVencida(this.index) || !formacion.tieneVencimiento) {
             texto = '¿Desea agregar una nueva reválida?';
         } else {
             texto = '¿Desea revalidar antes de la fecha de vencimiento?';
@@ -171,25 +166,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         });
     }
 
-    renovar() {
-        this.formacion.papelesVerificados = false;
-        this.formacion.revalida = true;
-        this.profesional.formacionPosgrado[this.index] = this.formacion;
-        this.actualizar();
-    }
-
-    renovarAntesVencimiento() {
-        this.plex.confirm('¿Desea renovar antes de la fecha del vencimiento??').then((resultado) => {
-            if (resultado) {
-                this.formacion.papelesVerificados = false;
-                this.formacion.revalida = true;
-                this.profesional.formacionPosgrado[this.index].matriculado = false;
-                this.profesional.formacionPosgrado[this.index] = this.formacion;
-                this.actualizar();
-            }
-        });
-    }
-
     cerrar() {
         this.cerrarDetalle.emit(false);
     }
@@ -223,7 +199,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     estaVencida(i) {
-        let formacionPosgrado = this.profesional.formacionPosgrado[i];
+        let formacionPosgrado = this.profesional.formacionPosgrado[this.profesional.formacionPosgrado.length - 1];
         return ((this.hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
     }
 

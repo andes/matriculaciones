@@ -11,8 +11,8 @@
       1].matriculaNumero }}
     </div>
     <div subtitle>{{formacion.institucionFormadora?.nombre}}</div>
-    <plex-badge size="lg" type="info">
-      ALTA: {{formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1].fecha |
+    <plex-badge *ngIf="formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1]?.fecha" size="lg" type="info">
+      ALTA: {{formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1]?.fecha |
       date:'dd/MM/yyyy'}}
     </plex-badge>
 
@@ -54,7 +54,7 @@
         <tr>
           <td>{{ formacion.matriculacion[0].matriculaNumero }}</td>
           <td>
-            <plex-badge size="lg" type="info">
+            <plex-badge *ngIf="formacion.matriculacion[0].inicio" size="lg" type="info">
               {{ formacion.matriculacion[0].inicio | date: 'dd/MM/yyyy'}}
             </plex-badge>
           </td>
@@ -72,7 +72,7 @@
   </div>
 
   <plex-title titulo="Revalidaciones" size="lg">
-    <plex-button type="success" size="sm" label="Renovar" (click)="matricularProfesional(formacion,index)">
+    <plex-button type="success" size="sm" label="Renovar" (click)="renovarProfesional(formacion)">
     </plex-button>
 
   </plex-title>
@@ -99,7 +99,7 @@
               </plex-badge>
             </td>
             <td>
-              <plex-badge *ngIf='(i === (formacion.matriculacion.length - 1) && formacion.matriculado) ' size="lg"
+              <plex-badge *ngIf='(i === (formacion.matriculacion.length - 1) && formacion.matriculado)' size="lg"
                           type="{{(matriculacion.fin >= hoy || !estaVencida(i))?'success':'danger'}}">
                 {{!estaVencida(i)? 'Vigente' :'Vencida'}} </plex-badge>
 

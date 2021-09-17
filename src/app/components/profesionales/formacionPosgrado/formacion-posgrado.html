@@ -3,14 +3,14 @@
     <plex-button type="success" size="md" (click)="cargarPosgrado()"> AGREGAR POSGRADO</plex-button>
 </plex-title>
 
-<div *ngIf="profesional.formacionPosgrado === null">
+<div *ngIf="profesional.formacionPosgrado === null || profesional.formacionPosgrado.length < 1">
     <plex-badge type="warning">El profesional no posee un posgrado</plex-badge>
 </div>
-<div *ngIf="profesional.formacionPosgrado">
+<div *ngIf="profesional.formacionPosgrado && profesional.formacionPosgrado.length">
     <plex-table [columns]="columns" #table="plTable">
         <plex-table-columns>
         </plex-table-columns>
-        <tr *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;" (click)="showPosgrado(i)">
+        <tr *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;" (click)="showPosgrado(i)" class="selectable">
             <td>
                 <plex-label icon="estetoscopio" type="info" case="capitalize" size="lg"
                             titulo="{{ formacionPosgrado.especialidad?.nombre }}"
@@ -24,9 +24,10 @@
                 </plex-label>
             </td>
             <td>
-                <plex-badge size="lg" type="info">
+                <plex-badge *ngIf="formacionPosgrado.fechasDeAltas[formacionPosgrado.fechasDeAltas.length - 1]?.fecha" size="lg" type="info">
                     {{formacionPosgrado.fechasDeAltas[formacionPosgrado.fechasDeAltas.length - 1]?.fecha |
                     date:'dd/MM/yyyy'}}</plex-badge>
+
             </td>
             <td class="column-right my-3">
                 <plex-badge *ngIf="verificarFecha(i) === 'vencida'" type="{{estaVencida(i)?'danger':'info'}}">

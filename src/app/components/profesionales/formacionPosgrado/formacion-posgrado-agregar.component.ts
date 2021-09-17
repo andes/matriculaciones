@@ -1,5 +1,4 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { Plex } from '@andes/plex';
 import { IProfesional } from './../../../interfaces/IProfesional';
 import { SIISAService } from './../../../services/siisa.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
@@ -12,8 +11,8 @@ import { ModalidadesCertificacionService } from '../../../services/modalidadesCe
 
 export class FormacionPosgradoAgregarComponent implements OnInit {
     @Output() cancelarPosgradoAdd = new EventEmitter();
-    @Input() profesional: IProfesional;
     @Output() agregarPosgrado = new EventEmitter();
+    @Input() profesional: IProfesional;
 
     public cancel = false;
     profesiones: any[] = [];
@@ -54,7 +53,6 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
     constructor(
         private _siisaSrv: SIISAService,
         private _modalidadesCertificacionService: ModalidadesCertificacionService,
-        private plex: Plex,
     ) { }
 
     ngOnInit() {
@@ -80,7 +78,6 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
         if (formulario.form.valid) {
             this.profesionalP.matriculacion.revalidacionNumero++;
             this.agregarPosgrado.emit(this.profesionalP);
-            this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
             this.volver();
         }
     }

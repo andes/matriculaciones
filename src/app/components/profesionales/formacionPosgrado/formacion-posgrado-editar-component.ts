@@ -72,7 +72,7 @@ export class FormacionPosgradoEditarComponent implements OnInit {
         this.matriculaNumero = this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].matriculaNumero;
         this.libro = this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].libro;
         this.folio = this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].folio;
-        this.modalidad = this.profesional.formacionPosgrado[this.indice].certificacion.modalidad;
+        this.modalidad = this.profesional.formacionPosgrado[this.indice].certificacion?.modalidad;
         this.nota = this.profesional.formacionPosgrado[this.indice].notas;
     }
 
@@ -86,7 +86,6 @@ export class FormacionPosgradoEditarComponent implements OnInit {
 
     guardar(event) {
         if (event.form.valid) {
-            // this.formacionSelected.certificacion = this.certificacion;
             const cambio = {
                 'op': 'updateEstadoPosGrado',
                 'data': this.profesional.formacionPosgrado
@@ -96,14 +95,16 @@ export class FormacionPosgradoEditarComponent implements OnInit {
             this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].matriculaNumero = this.matriculaNumero;
             this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].libro = this.libro;
             this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].folio = this.folio;
-            this.profesional.formacionPosgrado[this.indice].certificacion.modalidad = this.modalidad;
-            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-                // this.edit = false;
+            if (this.profesional.formacionPosgrado[this.indice].certificacion) {
+                this.profesional.formacionPosgrado[this.indice].certificacion.modalidad = this.modalidad;
+            } else {
+                this.profesional.formacionPosgrado[this.indice].certificacion = { fecha: new Date, modalidad: this.modalidad, establecimiento: null };
+            }
+            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
                 this.plex.toast('success', 'Los datos han sido editados con éxito!', 'informacion', 1000);
             });
             this.volver();
         }
-
     }
 
     pushFechasAlta() {

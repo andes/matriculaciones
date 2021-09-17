@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, } from '@angular/forms';
 import { Plex } from '@andes/plex';
 import { IProfesional } from './../../../interfaces/IProfesional';
-import { SIISAService } from './../../../services/siisa.service';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
@@ -55,7 +54,6 @@ export class FormacionPosgradoComponent implements OnInit {
         },
     ];
     constructor(private _fb: FormBuilder,
-        private _siisaSrv: SIISAService,
         private _profesionalService: ProfesionalService,
         private _entidadFormadoraService: EntidadFormadoraService,
         private _modalidadesCertificacionService: ModalidadesCertificacionService,
@@ -145,6 +143,7 @@ export class FormacionPosgradoComponent implements OnInit {
                 'data': this.profesional.formacionPosgrado
             };
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+                // this.profesional = data;
                 this.edit = false;
                 this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
             });

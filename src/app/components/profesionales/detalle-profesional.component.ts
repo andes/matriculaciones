@@ -1,6 +1,7 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Location } from '@angular/common';
+import { Plex } from '@andes/plex';
 import { FotoGeneralComponent } from './foto-general.component';
 import { ProfesionalService } from './../../services/profesional.service';
 import { IProfesional } from './../../interfaces/IProfesional';
@@ -142,8 +143,8 @@ export class DetalleProfesionalComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     public auth: Auth,
+    private plex: Plex,
     private location: Location) { }
-
 
   ngOnInit() {
 
@@ -255,7 +256,12 @@ export class DetalleProfesionalComponent implements OnInit {
       'data': posgrado,
       'agente': this.auth.usuario.nombreCompleto
     };
-    this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+    this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((profesionalSaved) => {
+      this.profesional = profesionalSaved;
+      this.plex.toast('success', 'El posgrado se registró con exito!', 'informacion', 1000);
+    }, error => {
+      this.plex.toast('danger', 'Error al cargar posgrado', 'informacion', 1000);
+    });
   }
 
   guardarGrado(fGrado: any) {
@@ -332,6 +338,8 @@ export class DetalleProfesionalComponent implements OnInit {
     this.mostrarGrado = true;
     this.mostrar = false;
     this.indexFormacionPosgradoSelected = posgrado;
+    this.showAdd = false;
+    this.showEdit = false;
   }
 
   mostrarEdicion(mostrarEdit) {
@@ -349,6 +357,7 @@ export class DetalleProfesionalComponent implements OnInit {
     this.showAdd = mostrarAgregar;
     this.showEdit = false;
     this.mostrarGrado = false;
+    this.mostrar = false;
   }
 
   cancelarPosgradoAdd(add) {
@@ -377,6 +386,9 @@ export class DetalleProfesionalComponent implements OnInit {
   editar() {
     this.flag = false;
     this.editable = true;
+    this.mostrar = false;
+    this.mostrarGrado = false;
+    this.showAdd = false;
   }
 
   habilitaPosgrado() {

@@ -15,7 +15,7 @@ export class ProfesionService {
 
     }
 
-    getProfesiones(): Observable<any[]> {
-        return this.server.get(this.profesionesURL);
-    }
+  getProfesiones(params: any): Observable<any[]> {
+    return this.server.get(this.profesionesURL, { params: params, showError: true });
+  }
 }

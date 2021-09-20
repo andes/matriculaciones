@@ -84,9 +84,9 @@ export class FormacionGradoFormComponent implements OnInit {
         this._entidadFormadoraService.getEntidadesFormadoras().pipe(catchError(() => of(null))).subscribe(event.callback);
     }
 
-    loadProfesiones(event) {
-        this._profesionService.getProfesiones().subscribe(event.callback);
-    }
+  loadProfesiones(event) {
+    this._profesionService.getProfesiones({habilitado : true}).subscribe(event.callback);
+  }
 
 
     otraEntidad(f) {

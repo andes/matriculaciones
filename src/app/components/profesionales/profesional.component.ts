@@ -18,6 +18,7 @@ import { TurnoService } from '../../services/turno.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { stringify } from '@angular/compiler/src/util';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-profesional',
@@ -421,33 +422,6 @@ export class ProfesionalComponent implements OnInit {
             this.profesional.domicilios[i].codigoPostal = null;
         }
     }
-    loadProfesiones(event) {
-        this._profesionService.getProfesiones().pipe(catchError(() => of(null))).subscribe(event.callback);
-    }
-
-    loadEntidadesFormadoras(event) {
-        this._entidadFormadoraService.getEntidadesFormadoras().pipe(catchError(() => of(null))).subscribe(event.callback);
-    }
-
-    loadSexos(event) {
-        this._sexoService.getSexos().pipe(catchError(() => of(null))).subscribe(event.callback);
-    }
-    addContacto() {
-        const nuevoContacto = Object.assign({}, {
-            tipo: 'celular',
-            valor: '',
-            rank: 0,
-            activo: true,
-            ultimaActualizacion: new Date()
-        });
-        this.profesional.contactos.push(nuevoContacto);
-    }
-
-    removeContacto(i) {
-        if (i >= 0) {
-            this.profesional.contactos.splice(i, 1);
-        }
-    }
 
     volverProfesional() {
         if (this.editable) {
@@ -489,8 +463,35 @@ export class ProfesionalComponent implements OnInit {
         } else {
             this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
         }
-    }
+  }
+  loadProfesiones(event) {
+    this._profesionService.getProfesiones({habilitado : true}).pipe(catchError(() => of(null))).subscribe(event.callback);
+  }
 
+  loadEntidadesFormadoras(event) {
+    this._entidadFormadoraService.getEntidadesFormadoras().pipe(catchError(() => of(null))).subscribe(event.callback);
+  }
+
+  loadSexos(event) {
+    this._sexoService.getSexos().pipe(catchError(() => of(null))).subscribe(event.callback);
+  }
+  addContacto() {
+    const nuevoContacto = Object.assign({}, {
+      tipo: 'celular',
+      valor: '',
+      rank: 0,
+      activo: true,
+      ultimaActualizacion: new Date()
+    });
+    this.profesional.contactos.push(nuevoContacto);
+  }
+
+  removeContacto(i) {
+    if (i >= 0) {
+      this.profesional.contactos.splice(i, 1);
+    }
+}
+    
     otraEntidad(f) {
         f.entidadFormadora = {
             nombre: null,

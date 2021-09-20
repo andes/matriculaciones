@@ -58,7 +58,7 @@ export class ListadoNumeracionMatriculasComponent implements OnInit {
     }
 
     loadProfesiones(event) {
-        this._profesionService.getProfesiones().subscribe(
+        this._profesionService.getProfesiones({habilitado : true}).subscribe(
             (profesiones) => {
                 const list = [{
                     id: '',

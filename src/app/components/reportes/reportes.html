@@ -9,10 +9,6 @@
       </plex-button>
     </plex-title>
     <plex-wrapper>
-      <plex-select [(ngModel)]="profesion" name="profesion" label="Profesión" [data]="profesiones">
-      </plex-select>
-      <plex-select [(ngModel)]="especialidad" name="especialidad" label="Especialidad" [data]="especialidades">
-      </plex-select>
       <plex-datetime *ngIf="!busquedaMatriculasProxAVencer" type="date" [(ngModel)]="fechaMatriculacionDesde"
                      name="fechaMatriculacionDesde" label="Fecha Matriculación Desde">
       </plex-datetime>
@@ -31,11 +27,15 @@
                    [(ngModel)]="select">
       </plex-select>
       <div collapse>
+        <plex-select [(ngModel)]="profesion" name="profesion" label="Profesión" [data]="profesiones">
+        </plex-select>
+        <plex-select [(ngModel)]="especialidad" name="especialidad" label="Especialidad" [data]="especialidades">
+        </plex-select>
         <plex-bool type="slide" [(ngModel)]="matriculasBaja" name="matriculasBaja" (change)="onChangeBaja($event)"
-                   label="Matrículas dadas de baja">
+                   label="Dadas de baja" align="center">
         </plex-bool>
         <plex-bool type="slide" [(ngModel)]="matriculasVencidas" name="matriculasVencidas"
-                   (change)="onChangeVencidas($event)" label="Matrículas Vencidas">
+                   (change)="onChangeVencidas($event)" label="Vencidas" align="center">
         </plex-bool>
       </div>
     </plex-wrapper>
@@ -44,12 +44,12 @@
                 titulo="Complete los campos y presione 'Generar reporte'"
                 subtitulo="Visualizará el listado de profesionales matriculados, luego podrá exportar el resultado">
     </plex-label>
-    <plex-table [columns]="columns" #table="plTable" [offset]="0" (scroll)="nextPage()" *ngIf="profesionales?.length">
+    <plex-table [columns]="columns" #table="plTable" [offset]="175" (scroll)="nextPage()" *ngIf="profesionales?.length">
       <plex-title titulo="LISTA DE MATRICULADOS">
         <plex-table-columns>
         </plex-table-columns>
       </plex-title>
-      <tr *ngFor="let profesional of profesionales">
+      <tr *ngFor="let profesional of (profesionales$ | plSort:table | async)">
         <td *plTableCol="'profesional'">
           <plex-label titulo="{{ profesional | profesional }}" subtitulo="{{ profesional.documento }}">
           </plex-label>
@@ -86,8 +86,7 @@
           <plex-badge type="info" *ngIf="profesional.ultimaMatricula?.matriculaNumero">
             Matrícula n°
             {{profesional.ultimaMatricula.matriculaNumero}}</plex-badge>
-          <plex-badge type="info"
-                      *ngIf="profesional.ultimaMatriculaPosgrado?.matriculaNumero">
+          <plex-badge type="info" *ngIf="profesional.ultimaMatriculaPosgrado?.matriculaNumero">
             Matrícula n°
             {{profesional.ultimaMatriculaPosgrado.matriculaNumero}}</plex-badge>
         </td>

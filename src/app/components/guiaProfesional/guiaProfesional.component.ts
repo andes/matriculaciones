@@ -1,12 +1,4 @@
-// Angular
-import {
-    Component,
-    OnInit,
-    HostBinding
-} from '@angular/core';
-
-// Plex
-import { Plex } from '@andes/plex';
+import { Component, OnInit } from '@angular/core';
 import { ProfesionalService } from '../../services/profesional.service';
 import * as Enums from './../../utils/enumerados';
 import { ProfesionService } from '../../services/profesion.service';
@@ -16,11 +8,11 @@ import { ProfesionService } from '../../services/profesion.service';
     templateUrl: 'guiaProfesional.html'
 })
 export class GuiaProfesionalComponent implements OnInit {
-    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
 
     public guiaProfesionalEnum;
     public filtro;
-    public profEncontrado;
+    public profesionales = [];
+    public loading = false;
     public mostrarInfo = false;
     public busqueda: any = {
         nombre: null,
@@ -29,35 +21,83 @@ export class GuiaProfesionalComponent implements OnInit {
         formacionGrado: null,
         numeroMatricula: null
     };
+    public columns = [
+        {
+            key: 'profesional',
+            label: 'Profesional',
+            sorteable: false,
+            opcional: false
+        },
+        {
+            key: 'sexo',
+            label: 'sexo',
+            sorteable: false,
+            opcional: true
+        },
+        {
+            key: 'nacionalidad',
+            label: 'Nacionalidad',
+            sorteable: false,
+            opcional: true
+        },
+        {
+            key: 'profesion',
+            label: 'Profesión',
+            sorteable: false,
+            opcional: false
+        },
+        {
+            key: 'matricula',
+            label: 'Matrícula',
+            sorteable: false,
+            opcional: false
+        },
+        {
+            key: 'estado',
+            label: 'Estado',
+            sorteable: false,
+            opcional: false
+        },
+    ];
     constructor(
         private _profesionalService: ProfesionalService,
-        private _profesionService: ProfesionService,
-        private plex: Plex) { }
-
-
+        private _profesionService: ProfesionService) { }
 
     ngOnInit() {
         this.guiaProfesionalEnum = Enums.getObjGuiaProfesional();
     }
 
-
     loadProfesiones(event) {
         this._profesionService.getProfesiones().subscribe(event.callback);
     }
 
-
-    buscar($event) {
-        if ($event.formValid) {
-            if (this.busqueda.formacionGrado) {
-                this.busqueda['codigoProfesion'] = this.busqueda.formacionGrado.codigo;
-            }
-            this._profesionalService.getGuiaProfesional(this.busqueda).subscribe(x => {
-                this.profEncontrado = x;
-                this.mostrarInfo = true;
-            });
+    buscar() {
+        this.loading = true;
+        this.profesionales = [];
+        if (this.busqueda.formacionGrado) {
+            this.busqueda['codigoProfesion'] = this.busqueda.formacionGrado.codigo;
         }
+        this._profesionalService.getGuiaProfesional(this.busqueda).subscribe(resultado => {
+            resultado.forEach(profesional => {
+                profesional.profesiones.forEach(profesion => {
+                    const datos = {
+                        nombre: profesional.nombre,
+                        apellido: profesional.apellido,
+                        sexo: profesional.sexo,
+                        documento: profesional.documento,
+                        nacionalidad: profesional.nacionalidad,
+                        profesion: profesion.profesion.nombre,
+                        matricula: profesion.matriculacion[profesion.matriculacion.length -
+              1].matriculaNumero,
+                        matriculado: profesion.matriculado
+                    };
+                    this.profesionales.push(datos);
+                });
+            });
+            this.loading = false;
+            this.mostrarInfo = true;
+        });
     }
-
 
     limpiaFiltro() {
         this.busqueda = {};

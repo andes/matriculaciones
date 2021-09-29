@@ -85,7 +85,7 @@ export class FormacionGradoFormComponent implements OnInit {
     }
 
   loadProfesiones(event) {
-    this._profesionService.getProfesiones({habilitado : true}).subscribe(event.callback);
+    this._profesionService.getProfesiones().subscribe(event.callback);
   }
 
 

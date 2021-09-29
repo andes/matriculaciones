@@ -114,7 +114,7 @@ export class ListarProfesionalesComponent implements OnInit {
     }
 
   loadProfesiones(event) {
-    this.profesionService.getProfesiones({habilitado : true}).pipe(
+    this.profesionService.getProfesiones().pipe(
       catchError(() => of(null)))
       .subscribe(event.callback);
   }

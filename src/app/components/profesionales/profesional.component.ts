@@ -465,7 +465,7 @@ export class ProfesionalComponent implements OnInit {
         }
   }
   loadProfesiones(event) {
-    this._profesionService.getProfesiones({habilitado : true}).pipe(catchError(() => of(null))).subscribe(event.callback);
+    this._profesionService.getProfesiones().pipe(catchError(() => of(null))).subscribe(event.callback);
   }
 
   loadEntidadesFormadoras(event) {

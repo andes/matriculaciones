@@ -113,11 +113,11 @@ export class ListarProfesionalesComponent implements OnInit {
         this.router.navigate(['/profesional', profesional.id]);
     }
 
-  loadProfesiones(event) {
-    this.profesionService.getProfesiones().pipe(
-      catchError(() => of(null)))
-      .subscribe(event.callback);
-  }
+    loadProfesiones(event) {
+        this.profesionService.getProfesiones({gestionaColegio : false}).pipe(
+            catchError(() => of(null)))
+            .subscribe(event.callback);
+    }
 
     buscar(event?: any) {
         this.verBajas = this.value ? this.value.verBajas : false;

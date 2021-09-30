@@ -104,7 +104,7 @@ export class ReportesComponent implements OnInit {
         if (!this.auth.check('matriculaciones:reportes')) {
             this.router.navigate(['inicio']);
         }
-        this.siisaService.getProfesiones().subscribe(res => {
+        this.siisaService.getProfesiones({gestionaColegio : false}).subscribe(res => {
             this.profesiones = res;
         });
         this.siisaService.getEspecialidades(null).subscribe(res => {

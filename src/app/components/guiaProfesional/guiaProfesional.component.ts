@@ -68,7 +68,7 @@ export class GuiaProfesionalComponent implements OnInit {
     }
 
     loadProfesiones(event) {
-        this._profesionService.getProfesiones().subscribe(event.callback);
+        this._profesionService.getProfesiones({gestionaColegio : false}).subscribe(event.callback);
     }
 
     buscar() {

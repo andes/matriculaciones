@@ -13,18 +13,28 @@ import { Auth } from '@andes/auth';
 export class FormacionPosgradoDetalleComponent implements OnInit {
 
     @Input() formacion: any;
-    @Input() index: any;
+    @Input('index')
+    set _index(value) {
+        this.index = value;
+        this.actualizarIndice();
+    }
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
     @Output() anioDeGraciaOutPut = new EventEmitter();
     @Output() editarEspecialidad = new EventEmitter();
     @Output() indice = new EventEmitter();
+    public index;
     public esSupervisor;
     public edit = true;
+    public matriculaNumero;
+    public inicio;
+    public fin;
     hoy = new Date();
     public showBtnSinVencimiento = false;
     public columnasFechas = [];
+    public editarObtencion = false;
+    public pos;
     public matricula = [
         {
             key: 'matriculaNumero',
@@ -38,6 +48,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             key: 'fin',
             label: 'FIN'
         },
+        {}
     ];
     public revalida = [
         {
@@ -63,6 +74,13 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     ];
     constructor(private _profesionalService: ProfesionalService,
                 private plex: Plex, public auth: Auth) {
+    }
+
+    actualizarIndice() {
+        this.matriculaNumero = this.formacion.matriculacion[0].matriculaNumero;
+        this.editarObtencion = false;
+        this.inicio = this.formacion.matriculacion[0].inicio;
+        this.fin = this.formacion.matriculacion[0].fin;
     }
 
     ngOnInit() {
@@ -218,6 +236,30 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     }
                 }
             }
+        }
+    }
+
+    editarObtencionMatricula() {
+        this.editarObtencion = true;
+    }
+
+    cerrarEditar() {
+        this.editarObtencion = false;
+    }
+
+    guardar(event) {
+        if (event.form.valid) {
+            const cambio = {
+                'op': 'updateEstadoPosGrado',
+                'data': this.profesional.formacionPosgrado
+            };
+            this.formacion.matriculacion[0].matriculaNumero = this.matriculaNumero;
+            this.formacion.matriculacion[0].inicio = this.inicio;
+            this.formacion.matriculacion[0].fin = this.fin;
+            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
+                this.plex.toast('success', 'Los datos se han actualizado con éxito!', 'Mensaje de la confirmación', 1000);
+            });
+            this.cerrarEditar();
         }
     }
 }

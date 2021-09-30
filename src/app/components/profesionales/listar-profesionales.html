@@ -10,42 +10,10 @@
         <plex-button class='ml-2' size="md" type="danger" label="Volver" routerLink="/homeAdministracion">
         </plex-button>
       </plex-title>
-
-      <plex-wrapper [formGroup]="searchForm">
-        <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus"
-                   placeholder="Ingrese documento">
-        </plex-text>
-        <plex-text label="Apellido" formControlName="apellido" placeholder="Ingrese apellido">
-        </plex-text>
-        <plex-text label="Nombre" formControlName="nombre" placeholder="Ingrese nombre">
-        </plex-text>
-        <plex-select label="Profesión" formControlName="profesion" (getData)="loadProfesiones($event)">
-        </plex-select>
-        <plex-int label="N° Matrícula grado" formControlName="numeroMatriculaGrado"
-                  placeholder="Ingrese N° de matrícula">
-        </plex-int>
-        <div collapse>
-          <plex-int label="N° Matrícula Esp." formControlName="numeroMatriculaEspecialidad"
-                    placeholder="Ingrese N° de matrícula">
-          </plex-int>
-          <plex-select label="Mat. de Profesionales" formControlName="estado" [data]="estadosMatriculas">
-          </plex-select>
-          <plex-select label="Mat. de Especialidades" formControlName="estadoEspecialidad" [data]="estadosMatriculas">
-          </plex-select>
-        </div>
-      </plex-wrapper>
+      <filtros-profesional></filtros-profesional>
 
       <plex-table [columns]="columns" #table="plTable">
         <plex-title titulo="Listado de matriculados" size="lg">
-          <div [formGroup]="searchForm">
-            <plex-bool class='ml-2' type="slide" label="Ver bajas de matriculas" formControlName="verBajas"
-                       name="especialidad.activo">
-            </plex-bool>
-
-            <plex-bool class='ml-3' type="slide" label="Deshabilitado" formControlName="verDeshabilitado"
-                       name="especialidad.activo">
-            </plex-bool>
-          </div>
           <plex-button class='ml-2' size="sm" type="success" label='Nuevo profesional'
                        (click)='crearMuevoProfesional()'>
           </plex-button>
@@ -53,8 +21,8 @@
           </plex-table-columns>
         </plex-title>
 
-        <tr *ngFor="let profesional of (profesionales$ | async); let indiceProfesional = index"
-            (click)="seleccionar(profesional)" [class.selectable]="true" [class.selected]="profesional.selected">
+        <tr *ngFor="let profesional of (listado$ | async); let indiceProfesional = index" (click)="seleccionar(profesional)"
+            [class.selectable]="true" [class.selected]="profesional.selected">
           <td>
             <plex-label icon="medico" titulo="{{profesional.apellido + ', ' + profesional.nombre}}">
             </plex-label>

@@ -1,9 +1,9 @@
+import { BusquedaProfesionalService } from './components/profesionales/services/busqueda-profesional.service';
 // Angular
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { LOCALE_ID } from '@angular/core';
 
 // Global
 
@@ -14,6 +14,7 @@ import { RoutingGuard } from './app.routings-guard.class';
 import { PDFUtils } from './utils/PDFUtils';
 import { InfiniteScrollModule } from 'angular2-infinite-scroll';
 import { ImageUploadModule } from 'angular2-image-upload';
+
 // import { Plex } from '@andes/plex';
 import { ScrollComponent } from './components/base/plex-scroll.component';
 
@@ -26,7 +27,6 @@ import { LocalidadService } from './services/localidad.service';
 import { ProfesionService } from './services/profesion.service';
 import { EntidadFormadoraService } from './services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from './services/modalidadesCertificacion.service';
-
 import { TurnoService } from './services/turno.service';
 import { ExcelService } from './services/excel.service';
 import { ProfesionalService } from './services/profesional.service';
@@ -75,6 +75,7 @@ import { FormacionPosgradoEditarComponent } from './components/profesionales/for
 import { FormacionPosgradoAgregarComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-agregar.component';
 import { FormacionGradoFormComponent } from './components/profesionales/formacionGrado/formacion-grado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
+import { FiltrosProfesionalComponent } from './components/profesionales/filtros-profesional.component';
 import { SelectOrganizacionComponent } from './components/home/selectOrganizacion.component';
 import { HomeAdministracionComponent } from './components/home/homeAdministracion.component';
 import { CambioDniComponent } from './components/profesionales/cambioDni/cambio-dni.component';
@@ -109,6 +110,7 @@ const COMPS_PROFESIONAL = [
     FormacionPosgradoDetalleComponent,
     FormacionPosgradoEditarComponent,
     FormacionPosgradoAgregarComponent,
+    FiltrosProfesionalComponent,
     ListarProfesionalesComponent,
     OtroDatosComponent,
     CambioDniComponent,
@@ -128,6 +130,7 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
 import { TituloProfesionalComponent } from './components/profesionales/tituloProfesional/adjunto-titulo-profesional.component';
 import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
 import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
+import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
 @NgModule({
     declarations: [
         AppComponent,
@@ -160,7 +163,8 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
         UploadFileComponent,
         TituloProfesionalComponent,
         SeleccionTurnosComponent,
-        SeleccionProfesionalComponent
+        SeleccionProfesionalComponent,
+        FormAutoSaveDirective
     ],
     imports: [
         BrowserModule,
@@ -181,6 +185,7 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
         Server,
         Auth,
         RoutingGuard,
+        BusquedaProfesionalService,
         AgendaService,
         PaisService,
         ProvinciaService,

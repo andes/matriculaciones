@@ -27,8 +27,8 @@ export class SIISAService {
     getEstablecimientosCertificadores(id: String): Observable<ISiisa> {
         return this.server.get(this.siisaUrl + '/establecimientosCertificadores', null);
     }
-    getProfesiones(params: any): Observable<ISiisa[]> {
-        return this.server.get(this.siisaUrl + '/profesion', { params: params, showError: true });
+    getProfesiones(): Observable<ISiisa[]> {
+        return this.server.get(this.siisaUrl + '/profesion');
     }
 
 }

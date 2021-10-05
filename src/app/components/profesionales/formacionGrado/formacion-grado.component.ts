@@ -94,7 +94,7 @@ export class FormacionGradoComponent implements OnInit {
                                             firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
                                             administracion: this.supervisor.nombreCompleto
                                         };
-                                        this._profesionService.getProfesiones().pipe(catchError(() => of(null))).subscribe(datos => {
+                                        this._profesionService.getProfesiones({gestionaColegio: false}).pipe(catchError(() => of(null))).subscribe(datos => {
                                             const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
                                             if (!seleccionado.length) {
                                                 this.plex.info('warning', 'Error en los datos del profesional');

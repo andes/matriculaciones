@@ -4,9 +4,16 @@
   <plex-badge size="lg" type="{{profesional.habilitado?'success':'danger'}}">
     {{profesional.habilitado?"habilitado":"Deshabilitado"}}
   </plex-badge>
-  <plex-badge size="lg" type="info">
+  <plex-badge *ngIf='profesional.agenteMatriculador' size="lg" type="info">
     <b>Agente:</b> {{profesional.agenteMatriculador?profesional.agenteMatriculador:agenteMatriculador}}
   </plex-badge>
+
+  <plex-badge *ngIf='profesional.supervisor?.nombreCompleto' size="lg" type="info">
+    <b>Supervisor:</b> {{profesional.supervisor.nombreCompleto}}
+  </plex-badge>
+
+  <plex-badge *ngIf='!profesional.supervisor' size="lg" type="info"> No tiene supervisor</plex-badge>
+
   <div subtitle>
     <plex-button type="info" size="sm" (click)="editar()">editar</plex-button>
     <plex-button *ngIf="estaHabilitado" class='ml-2' type="warning" size="sm" (click)="habilitar()">Deshabilitar

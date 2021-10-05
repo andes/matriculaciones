@@ -39,6 +39,7 @@ export class SeleccionProfesionalComponent implements OnInit {
     public profesional: IProfesional = {
         id: null,
         habilitado: true,
+        // profesionalMatriculado: null,
         nombre: null,
         apellido: null,
         tipoDocumento: null,
@@ -71,30 +72,30 @@ export class SeleccionProfesionalComponent implements OnInit {
             ultimaActualizacion: new Date(),
             activo: true
         },
-        {
-            tipo: 'legal',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        },
-        {
-            tipo: 'profesional',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }
+                     {
+                         tipo: 'legal',
+                         valor: null,
+                         codigoPostal: null,
+                         ubicacion: {
+                             localidad: null,
+                             provincia: null,
+                             pais: null,
+                         },
+                         ultimaActualizacion: new Date(),
+                         activo: true
+                     },
+                     {
+                         tipo: 'profesional',
+                         valor: null,
+                         codigoPostal: null,
+                         ubicacion: {
+                             localidad: null,
+                             provincia: null,
+                             pais: null,
+                         },
+                         ultimaActualizacion: new Date(),
+                         activo: true
+                     }
         ],
         fotoArchivo: null,
         firmas: null,
@@ -124,18 +125,19 @@ export class SeleccionProfesionalComponent implements OnInit {
         agenteMatriculador: '',
         OtrosDatos: null,
         idRenovacion: null,
+        // createdAT: null,
         documentoViejo: null
     };
     public profElegido;
     public noEncontrado = false;
 
     constructor(private _formBuilder: FormBuilder,
-        private _turnosService: TurnoService,
-        private route: ActivatedRoute,
-        private _profesionalService: ProfesionalService,
-        private _pdfUtils: PDFUtils,
-        private plex: Plex,
-        private router: Router) {
+                private _turnosService: TurnoService,
+                private route: ActivatedRoute,
+                private _profesionalService: ProfesionalService,
+                private _pdfUtils: PDFUtils,
+                private plex: Plex,
+                private router: Router) {
 
         this.tipoTurno = Enums.TipoTurno.renovacion;
 

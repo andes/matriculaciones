@@ -7,7 +7,7 @@ import { LOCALE_ID } from '@angular/core';
 
 // Global
 
-import { PlexModule, Plex } from '@andes/plex';
+import { PlexModule, Plex, PlexVisualizadorService } from '@andes/plex';
 import { Auth } from '@andes/auth';
 import { Server } from '@andes/shared';
 import { RoutingGuard } from './app.routings-guard.class';
@@ -37,9 +37,9 @@ import { SIISAService } from './services/siisa.service';
 
 // Componentes
 import {
-  RequisitosGeneralesComponent,
-  RequisitosMatriculaUniversitariaComponent,
-  RequisitosMatriculaTecnicaAuxiliarComponent
+    RequisitosGeneralesComponent,
+    RequisitosMatriculaUniversitariaComponent,
+    RequisitosMatriculaTecnicaAuxiliarComponent
 } from './components/requisitos/requisitos.component';
 import { HomeComponent } from './components/home/home.component';
 import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
@@ -93,26 +93,27 @@ import { AppComponent } from './app.component';
 import { routing, appRoutingProviders } from './app.routing';
 
 const COMPS_PROFESIONAL = [
-  ProfesionalComponent,
-  DetalleProfesionalComponent,
-  HeaderProfesionalComponent,
-  ContactoDomiciliosProfesionalComponent,
-  SubirFotoProfesionalComponent,
-  FirmasProfesionalComponent,
-  NotasProfesionalComponent,
-  SancionesComponent,
-  SancionesFormComponent,
-  FormacionGradoComponent,
-  FormacionGradoFormComponent,
-  FormacionGradoDetalleComponent,
-  FormacionPosgradoComponent,
-  FormacionPosgradoDetalleComponent,
-  FormacionPosgradoEditarComponent,
-  FormacionPosgradoAgregarComponent,
-  ListarProfesionalesComponent,
-  OtroDatosComponent,
-  CambioDniComponent,
-  ListadoCambioDniComponent,
+    ProfesionalComponent,
+    DetalleProfesionalComponent,
+    HeaderProfesionalComponent,
+    ContactoDomiciliosProfesionalComponent,
+    SubirFotoProfesionalComponent,
+    FirmasProfesionalComponent,
+    NotasProfesionalComponent,
+    SancionesComponent,
+    SancionesFormComponent,
+    FormacionGradoComponent,
+    FormacionGradoFormComponent,
+    FormacionGradoDetalleComponent,
+    FormacionPosgradoComponent,
+    FormacionPosgradoDetalleComponent,
+    FormacionPosgradoEditarComponent,
+    FormacionPosgradoAgregarComponent,
+    ListarProfesionalesComponent,
+    OtroDatosComponent,
+    CambioDniComponent,
+    ListadoCambioDniComponent,
+    ListarProfesionalesDetalleComponent
 ];
 
 // Pipes
@@ -128,77 +129,78 @@ import { TituloProfesionalComponent } from './components/profesionales/tituloPro
 import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
 import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    HomeProfesionalesComponent,
-    HomeAdministracionComponent,
-    ListadoComponent,
-    RequisitosGeneralesComponent,
-    RequisitosMatriculaUniversitariaComponent,
-    RequisitosMatriculaTecnicaAuxiliarComponent,
-    AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
-    NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent,
-    SolicitarSobreTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent,
-    SolicitarTurnoComponent,
-    ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent, NumeracionMatriculasFormComponent,
-    TurnosComponent,
-    FotoGeneralComponent,
-    EdadPipe,
-    ProfesionalPipe,
-    FechaPipe,
-    TextFilterPipe,
-    SelectOrganizacionComponent,
-    COMPS_PROFESIONAL,
-    RenovacionesProfesionalComponent,
-    GuiaProfesionalComponent,
-    ScrollComponent,
-    SupervisoresComponent,
-    ListadoTurnosPdfComponent,
-    ReportesComponent,
-    UploadFileComponent,
-    TituloProfesionalComponent,
-    SeleccionTurnosComponent,
-    SeleccionProfesionalComponent
-  ],
-  imports: [
-    BrowserModule,
-    ReactiveFormsModule,
-    FormsModule,
-    HttpClientModule,
-    PlexModule.forRoot({ networkLoading: true }),
-    routing,
-    InfiniteScrollModule,
-    Ng2ImgMaxModule,
-    Ng2ImgToolsModule,
-    ImageUploadModule.forRoot(),
-    WebcamModule
+    declarations: [
+        AppComponent,
+        HomeComponent,
+        HomeProfesionalesComponent,
+        HomeAdministracionComponent,
+        ListadoComponent,
+        RequisitosGeneralesComponent,
+        RequisitosMatriculaUniversitariaComponent,
+        RequisitosMatriculaTecnicaAuxiliarComponent,
+        AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
+        NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent,
+        SolicitarSobreTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent,
+        SolicitarTurnoComponent,
+        ListadoTurnosComponent, ListadoNumeracionMatriculasComponent, NumeracionMatriculasComponent, NumeracionMatriculasFormComponent,
+        TurnosComponent,
+        FotoGeneralComponent,
+        EdadPipe,
+        ProfesionalPipe,
+        FechaPipe,
+        TextFilterPipe,
+        SelectOrganizacionComponent,
+        COMPS_PROFESIONAL,
+        RenovacionesProfesionalComponent,
+        GuiaProfesionalComponent,
+        ScrollComponent,
+        SupervisoresComponent,
+        ListadoTurnosPdfComponent,
+        ReportesComponent,
+        UploadFileComponent,
+        TituloProfesionalComponent,
+        SeleccionTurnosComponent,
+        SeleccionProfesionalComponent
+    ],
+    imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        FormsModule,
+        HttpClientModule,
+        PlexModule.forRoot({ networkLoading: true }),
+        routing,
+        InfiniteScrollModule,
+        Ng2ImgMaxModule,
+        Ng2ImgToolsModule,
+        ImageUploadModule.forRoot(),
+        WebcamModule,
 
-  ],
-  providers: [
-    Plex,
-    Server,
-    Auth,
-    RoutingGuard,
-    AgendaService,
-    PaisService,
-    ProvinciaService,
-    LocalidadService,
-    ProfesionService,
-    ExcelService,
-    EntidadFormadoraService,
-    TurnoService,
-    ProfesionalService,
-    SexoService,
-    CambioDniService,
-    PDFUtils,
-    NumeracionMatriculasService,
-    appRoutingProviders,
-    SIISAService,
-    ModalidadesCertificacionService,
-    UsuarioService,
-    ListadoTurnosPdfComponent
-  ],
-  bootstrap: [AppComponent]
+    ],
+    providers: [
+        Plex,
+        Server,
+        Auth,
+        RoutingGuard,
+        AgendaService,
+        PaisService,
+        ProvinciaService,
+        LocalidadService,
+        ProfesionService,
+        ExcelService,
+        EntidadFormadoraService,
+        TurnoService,
+        ProfesionalService,
+        SexoService,
+        CambioDniService,
+        PDFUtils,
+        NumeracionMatriculasService,
+        appRoutingProviders,
+        SIISAService,
+        ModalidadesCertificacionService,
+        UsuarioService,
+        PlexVisualizadorService,
+        ListadoTurnosPdfComponent
+    ],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }

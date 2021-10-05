@@ -88,7 +88,7 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
     }
 
     verificarEstado(i) {
-        let profesionalPosgrado = this.profesional.formacionPosgrado[i];
+        const profesionalPosgrado = this.profesional.formacionPosgrado[i];
         if (profesionalPosgrado.matriculacion?.length) {
             if (!profesionalPosgrado.matriculado) {
                 return 'suspendida';
@@ -111,7 +111,7 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
     }
 
     verificarFecha(i) {
-        let profesionalPosgrado = this.profesional.formacionPosgrado[i];
+        const profesionalPosgrado = this.profesional.formacionPosgrado[i];
         return ((this.hoy.getTime() - profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
     }
 }

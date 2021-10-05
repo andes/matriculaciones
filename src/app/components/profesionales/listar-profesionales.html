@@ -56,63 +56,59 @@
 
         <tr *ngFor="let profesional of (profesionales$ | async); let indiceProfesional = index"
             (click)="seleccionar(profesional)" [class.selectable]="true" [class.selected]="profesional.selected">
-          <td>{{profesional.apellido + ', ' + profesional.nombre}}
+          <td>
+            <plex-label icon="medico" titulo="{{profesional.apellido + ', ' + profesional.nombre}}">
+            </plex-label>
           </td>
-          <td *plTableCol="'documento'">{{profesional.documento}}
+          <td *plTableCol="'documento'">
+            <plex-label titulo="{{profesional.documento}}"></plex-label>
           </td>
-          <td *plTableCol="'profesion'">
-            <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
-              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'vigente' " type="success">
-                <strong>{{profesionalGrado.profesion.nombre}}</strong>: Matrícula N°
-                {{obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
-              </plex-badge>
-
-              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'suspendida' " type="warning">
-                <strong>{{profesionalGrado.profesion?.nombre}}</strong>: Matrícula N°
-                {{obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
-                <strong> - Suspendida</strong>
-              </plex-badge>
-
-              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'vencida' "
-                          type="{{verificarFechaGrado(indiceProfesional,indiceGrado)?'danger':'info'}}">
-                <strong>{{profesionalGrado.profesion.nombre}}</strong>: Matrícula N°
-                {{obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
-                <strong> {{verificarFechaGrado(indiceProfesional,indiceGrado)? ' - Vencida':' - Año de gracia'}}
-                </strong>
-              </plex-badge>
-
-              <!--POSGRADOS-->
-
-              <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado; let indicePosgrado = index">
-                <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'vigente'"
-                            type="success">
-                  <strong>{{profesionalPosgrado.especialidad.nombre}}</strong>: Matrícula N°
-                  {{obtenerMatriculaPosgrado(indiceProfesional, indicePosgrado)}}
-                </plex-badge>
-
-                <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'suspendida'"
-                            type="warning"> <strong>{{profesionalPosgrado.especialidad.nombre}}</strong>: Matrícula N°
-                  {{obtenerMatriculaPosgrado(indiceProfesional, indicePosgrado)}}
-                  <strong> - Suspendida</strong>
-                </plex-badge>
-
-                <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'vencida'"
-                            type="{{verificarFechaPosgrado(indiceProfesional, indicePosgrado)?'danger':'info'}}">
-                  <strong>{{profesionalPosgrado.especialidad.nombre}}</strong>: Matrícula N°
-                  {{obtenerMatriculaPosgrado(indiceProfesional, indicePosgrado)}}
-                  <strong>{{verificarFechaPosgrado(indiceProfesional, indicePosgrado) ?' - Vencida':' - Año de gracia'}}
-                  </strong>
-                </plex-badge>
-              </div>
-            </div>
-          </td>
-
           <td *plTableCol="'fechaNacimiento'">
             <plex-badge type="info">{{profesional.fechaNacimiento | fecha}}</plex-badge>
           </td>
+          <td *plTableCol="'profesion'">
+            <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
+              <plex-label
+                          titulo="{{profesionalGrado.profesion.nombre +' - '+ obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}">
+              </plex-label>
+            </div>
+            <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado; let indicePosgrado = index">
+              <plex-label>{{profesionalPosgrado.especialidad.nombre +' - '+ obtenerMatriculaPosgrado(indiceProfesional,
+                indicePosgrado)}}</plex-label>
+            </div>
+          </td>
+          <td *plTableCol="'matricula'">
+            <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
+              <plex-label titulo="{{obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}"></plex-label>
+            </div>
+            <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado; let indicePosgrado = index">
+              <plex-label>{{obtenerMatriculaPosgrado(indiceProfesional, indicePosgrado)}}</plex-label>
+            </div>
+          </td>
 
-          <td *plTableCol="'ultimoTramite'">
-            <plex-badge type="warning"> {{ getFechaUltimoTramite(profesional) | fecha}}</plex-badge>
+          <td *plTableCol="'estado'">
+            <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
+              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional, indiceGrado) === 'vigente'" type="success">
+                vigente</plex-badge>
+              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'suspendida' " type="warning">
+                suspendida</plex-badge>
+              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'vencida' "
+                          type="{{verificarFechaGrado(indiceProfesional,indiceGrado)?'danger':'info'}}">
+                {{verificarFechaGrado(indiceProfesional,indiceGrado)? ' Vencida':' Año de gracia'}}
+              </plex-badge>
+            </div>
+
+            <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado; let indicePosgrado = index">
+              <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'vigente'"
+                          type="success">vigente</plex-badge>
+              <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'suspendida'"
+                          type="warning">suspendida</plex-badge>
+
+              <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'vencida'"
+                          type="{{verificarFechaPosgrado(indiceProfesional, indicePosgrado)?'danger':'info'}}">
+                {{verificarFechaPosgrado(indiceProfesional, indicePosgrado) ?' Vencida':' Año de gracia'}}
+              </plex-badge>
+            </div>
           </td>
 
           <td class="column-right my-3 d-flex align-items-center">

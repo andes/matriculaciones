@@ -83,6 +83,18 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL + 'formacionPosgrado/titulo', metadata);
     }
 
+  getProfesionalTituloGrado(params): Observable<any> {
+    return this.server.get(this.profesionalesURL + 'formacionGrado/titulo', { params: params, showError: true });
+  }
+
+  getProfesionalTituloPosgrado(params): Observable<any> {
+    return this.server.get(this.profesionalesURL + 'formacionPosgrado/titulo', { params: params, showError: true });
+  }
+
+  deleteProfesionalTituloGrado(metadata): Observable<any> {
+    return this.server.delete(this.profesionalesURL + 'formacionGrado/titulo/eliminar', metadata);
+  }
+
 }
 
 

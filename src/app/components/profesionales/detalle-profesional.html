@@ -72,6 +72,10 @@
           <app-otros-datos [profesional]="profesional" (submitOtrosDatos)="guardarOtrosDatos($event)">
           </app-otros-datos>
         </plex-tab>
+        <plex-tab label="Documentos">
+          <app-documentos-profesional [profesional]="profesional"> </app-documentos-profesional>
+        </plex-tab>
+
       </plex-tabs>
     </ng-container>
     <app-profesional *ngIf="!flag" [profesional]='profesional' [showOtraEntidadFormadora]='tieneOtraEntidad'

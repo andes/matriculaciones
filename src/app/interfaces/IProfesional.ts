@@ -79,6 +79,7 @@ export interface IProfesional {
             codigo: number;
         };
         titulo: string;
+        tituloFileId?: String;
         fechaEgreso: Date;
         fechaTitulo: Date;
         renovacion: boolean;
@@ -112,6 +113,7 @@ export interface IProfesional {
             nombre: string;
             codigo: number;
         };
+        tituloFileId?: String;
         fechaIngreso: Date;
         fechaEgreso: Date;
         observacion: String;

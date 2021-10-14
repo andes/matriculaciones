@@ -46,6 +46,9 @@ export class ProfesionalService extends BaseService {
         return this.server.patch(this.profesionalesURL + id, cambios);
     }
 
+    patchDocumentos(metadata): Observable<any> {
+        return this.server.patch(this.profesionalesURL + 'documentos', metadata);
+    }
 
     getCredencial(idProf: string): any {
         return this.server.get(this.profesionalesURL + 'matricula/' + idProf);
@@ -79,21 +82,25 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL + 'formacionGrado/titulo', metadata);
     }
 
+    saveProfesionalDocumento(metadata): Observable<any> {
+        return this.server.post(this.profesionalesURL + 'documentos', metadata);
+    }
+
     saveProfesionalTituloPosgrado(metadata): Observable<any> {
         return this.server.post(this.profesionalesURL + 'formacionPosgrado/titulo', metadata);
     }
 
-  getProfesionalTituloGrado(params): Observable<any> {
-    return this.server.get(this.profesionalesURL + 'formacionGrado/titulo', { params: params, showError: true });
-  }
+    getProfesionalTituloGrado(params): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'formacionGrado/titulo', { params: params, showError: true });
+    }
 
-  getProfesionalTituloPosgrado(params): Observable<any> {
-    return this.server.get(this.profesionalesURL + 'formacionPosgrado/titulo', { params: params, showError: true });
-  }
+    getProfesionalTituloPosgrado(params): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'formacionPosgrado/titulo', { params: params, showError: true });
+    }
 
-  deleteProfesionalTituloGrado(metadata): Observable<any> {
-    return this.server.delete(this.profesionalesURL + 'formacionGrado/titulo/eliminar', metadata);
-  }
+    getProfesionalCertificado(params): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'certificado', { params: params, showError: true });
+    }
 
 }
 

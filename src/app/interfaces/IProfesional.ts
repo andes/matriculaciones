@@ -146,6 +146,14 @@ export interface IProfesional {
         revalida: boolean;
         notas: string;
     }];
+    documentos?: [{
+        fecha: Date;
+        tipo: string;
+        archivo: {
+            id: string;
+            extension: string;
+        };
+    }];
     origen: String;
     sanciones: [{
         numero: Number;

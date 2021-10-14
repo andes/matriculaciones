@@ -2,57 +2,77 @@
 <plex-title titulo="Documentos del profesional" size="md">
     <plex-button *ngIf="!addDocumento" label="Agregar documento" type="success" size="sm" (click)="agregarDocumento()">
     </plex-button>
-    <plex-button *ngIf="addDocumento" type="danger" size="sm" icon="close" (click)="cerrar()">
+    <plex-button *ngIf="addDocumento" type="danger" size="sm" icon="close" (click)="cerrar()" tooltip="Cerrar">
     </plex-button>
 </plex-title>
+<div *ngIf="!addDocumento && !verificarArreglos()" justify="center" class="mt-4">
+    <plex-label titulo="Comience agregando un nuevo documento" direction="column"
+                subtitulo="Solamente se pueden adjuntar archivos con la extensión .pdf" type="default" icon="arrow-up"
+                size="md">
+    </plex-label>
+</div>
 <ng-container *ngIf="addDocumento">
     <plex-select [(ngModel)]="tipoDocumento" placeholder="Seleccione tipo de documento" labelField="label"
                  [data]="documentos">
     </plex-select>
+    <div *ngIf="tipoDocumento">
+        <upload-file label="Adjuntar Documento" [extensiones]="['pdf']" (onUpload)="onUpload($event)"
+                     [modulo]="'matriculaciones'" disabled=true>
+        </upload-file>
+    </div>
 </ng-container>
 
-<div *ngIf="tipoDocumento !== null">
-    <ng-container *ngIf="tipoDocumento.label === 'Título de grado'">
-        <div *ngFor="let documento of arregloGrado; let i = index">
-            <br>
-            <plex-title titulo="{{documento.formacionGrado.profesion.nombre}}" size="md">
-                <adjunto-titulo-profesional [profesionalId]='profesional.id'
-                                            [formacionSelected]='profesional.formacionGrado[i]' [isPosgrado]=false>
-                </adjunto-titulo-profesional>
-            </plex-title>
-            <plex-list *ngIf="documento.titulo">
-                <plex-item>
-                    <plex-label titulo="{{documento.titulo.originalname}}" icon="documento" type="info"></plex-label>
-                    <plex-button class="ml-2" type="success" size="sm" icon="download" tooltip="Descargar título"
-                                 class='float-right' (click)="descargar(profesional.formacionGrado[i].tituloFileId)">
-                    </plex-button>
-                    <plex-button class="ml-2" type="danger" size="sm" icon="cesto" tooltip="Eliminar"
-                                 class='float-right'
-                                 (click)="eliminarTitulo(profesional.formacionGrado[i].tituloFileId)">
-                    </plex-button>
-                </plex-item>
-            </plex-list>
+<ng-container *ngIf="!addDocumento">
+    <br>
+    <plex-title titulo="Titulos de grado" size="sm"></plex-title>
+    <div *ngFor="let doc of grado; let i=index">
+        <plex-list>
+            <plex-item>
+                <plex-label type="info" icon="documento" titulo="{{doc.nombreDocumento}}"
+                            subtitulo="{{doc.fecha | fecha}}">
+                </plex-label>
+                <plex-button class="ml-2" type="success" size="sm" icon="download" tooltip="Descargar"
+                             class='float-right' (click)="descargar(doc.fileId)">
+                </plex-button>
+                <plex-button class="ml-2" type="danger" size="sm" icon="cesto" tooltip="Eliminar" class='float-right'
+                             (click)="eliminarDocumento(doc, i)">
+                </plex-button>
+            </plex-item>
+        </plex-list>
+    </div>
+    <br>
+    <plex-title titulo="Titulos de posgrado" size="sm"></plex-title>
+    <div *ngFor="let doc of posgrado; let i=index">
+        <plex-list>
+            <plex-item>
+                <plex-label type="info" icon="documento" titulo="{{doc.nombreDocumento}}"
+                            subtitulo="{{doc.fecha | fecha}}">
+                </plex-label>
+                <plex-button class="ml-2" type="success" size="sm" icon="download" tooltip="Descargar"
+                             class='float-right' (click)="descargar(doc.fileId)">
+                </plex-button>
+                <plex-button class="ml-2" type="danger" size="sm" icon="cesto" tooltip="Eliminar" class='float-right'
+                             (click)="eliminarDocumento(doc, i)">
+                </plex-button>
+            </plex-item>
+        </plex-list>
+    </div>
+    <br>
+    <plex-title titulo="Certificados" size="sm"></plex-title>
+    <div *ngFor="let doc of certificado; let i=index">
+        <plex-list>
+            <plex-item>
+                <plex-label type="info" icon="documento" titulo="{{doc.nombreDocumento}}"
+                            subtitulo="{{doc.fecha | fecha}}">
+                </plex-label>
+                <plex-button class="ml-2" type="success" size="sm" icon="download" tooltip="Descargar"
+                             class='float-right' (click)="descargar(doc.fileId)">
+                </plex-button>
+                <plex-button class="ml-2" type="danger" size="sm" icon="cesto" tooltip="Eliminar" class='float-right'
+                             (click)="eliminarDocumento(doc, i)">
+                </plex-button>
+            </plex-item>
+        </plex-list>
+    </div>
 
-            <plex-label *ngIf="!documento.titulo" titulo="No hay documento"></plex-label>
-        </div>
-
-    </ng-container>
-
-    <ng-container *ngIf="tipoDocumento.label === 'Título de posgrado'">
-        <div *ngFor="let documentoP of arregloPosgrado; let i = index">
-            <br>
-            <plex-title titulo="{{documentoP.formacionPosgrado.especialidad.nombre}}" size="md">
-                <adjunto-titulo-profesional [profesionalId]='profesional.id'
-                                            [formacionSelected]='profesional.formacionPosgrado[i]' [isPosgrado]=true>
-                </adjunto-titulo-profesional>
-            </plex-title>
-        </div>
-    </ng-container>
-
-    <ng-container *ngIf="tipoDocumento.label === 'Certificado'">
-        <br>
-        <plex-title titulo="Certificados">
-
-        </plex-title>
-    </ng-container>
-</div>
+</ng-container>

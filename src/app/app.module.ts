@@ -25,13 +25,14 @@ import { LocalidadService } from './services/localidad.service';
 import { ProfesionService } from './services/profesion.service';
 import { EntidadFormadoraService } from './services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from './services/modalidadesCertificacion.service';
+import { DriveService } from './services/drive.service';
+
 import { TurnoService } from './services/turno.service';
 import { ExcelService } from './services/excel.service';
 import { ProfesionalService } from './services/profesional.service';
 import { SexoService } from './services/sexo.service';
 import { NumeracionMatriculasService } from './services/numeracionMatriculas.service';
 import { SIISAService } from './services/siisa.service';
-// import { DataService } from './services/data.service';
 
 // Componentes
 import {
@@ -202,7 +203,8 @@ import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
     SIISAService,
     ModalidadesCertificacionService,
     UsuarioService,
-    ListadoTurnosPdfComponent
+    ListadoTurnosPdfComponent,
+    DriveService
   ],
   bootstrap: [AppComponent]
 })

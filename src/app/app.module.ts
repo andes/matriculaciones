@@ -127,7 +127,6 @@ import { TextFilterPipe } from './pipes/textFilter.pipe';
 import { UsuarioService } from './services/usuario.service';
 import { Ng2ImgMaxModule } from 'ng2-img-max';
 import { Ng2ImgToolsModule } from 'ng2-img-tools';
-import { TituloProfesionalComponent } from './components/profesionales/tituloProfesional/adjunto-titulo-profesional.component';
 import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
 import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
 import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
@@ -161,7 +160,6 @@ import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
     ListadoTurnosPdfComponent,
     ReportesComponent,
     UploadFileComponent,
-    TituloProfesionalComponent,
     SeleccionTurnosComponent,
     SeleccionProfesionalComponent,
     FormAutoSaveDirective,

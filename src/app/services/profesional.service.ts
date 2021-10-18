@@ -38,16 +38,12 @@ export class ProfesionalService extends BaseService {
 
     putProfesional(profesionalModel): Observable<any> {
         return this.server.put(this.profesionalesURL + 'actualizar', profesionalModel);
-    // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+        // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
     }
 
 
     patchProfesional(id: string, cambios): Observable<any> {
         return this.server.patch(this.profesionalesURL + id, cambios);
-    }
-
-    patchDocumentos(metadata): Observable<any> {
-        return this.server.patch(this.profesionalesURL + 'documentos', metadata);
     }
 
     getCredencial(idProf: string): any {
@@ -78,30 +74,13 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.profesionalesURL + 'matching', { params: params, showError: true });
     }
 
-    saveProfesionalTituloGrado(metadata): Observable<any> {
-        return this.server.post(this.profesionalesURL + 'formacionGrado/titulo', metadata);
+    getDocumentos(id: string): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'documentos/' + id);
     }
 
-    saveProfesionalDocumento(metadata): Observable<any> {
-        return this.server.post(this.profesionalesURL + 'documentos', metadata);
+    deleteDocumentos(id: string, params): Observable<any> {
+        return this.server.delete(this.profesionalesURL + 'documentos/' + id, { params: params, showError: true });
     }
-
-    saveProfesionalTituloPosgrado(metadata): Observable<any> {
-        return this.server.post(this.profesionalesURL + 'formacionPosgrado/titulo', metadata);
-    }
-
-    getProfesionalTituloGrado(params): Observable<any> {
-        return this.server.get(this.profesionalesURL + 'formacionGrado/titulo', { params: params, showError: true });
-    }
-
-    getProfesionalTituloPosgrado(params): Observable<any> {
-        return this.server.get(this.profesionalesURL + 'formacionPosgrado/titulo', { params: params, showError: true });
-    }
-
-    getProfesionalCertificado(params): Observable<any> {
-        return this.server.get(this.profesionalesURL + 'certificado', { params: params, showError: true });
-    }
-
 }
 
 

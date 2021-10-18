@@ -60,22 +60,20 @@ export class DocumentoProfesionalComponent implements OnInit {
                     tipo: this.profesional.documentos[index].tipo,
                     fileId: this.profesional.documentos[index].archivo.id
                 };
-                const metadata = {
-                    fileId: this.profesional.documentos[index].archivo.id
-                };
                 if (this.profesional.documentos[index].tipo === 'Título de grado') {
-                    this._profesionalService.getProfesionalTituloGrado(metadata).subscribe(data => {
+                    this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
                         doc.nombreDocumento = data.originalname;
                     });
                     this.grado.push(doc);
+
                 } else {
                     if (this.profesional.documentos[index].tipo === 'Título de posgrado') {
-                        this._profesionalService.getProfesionalTituloPosgrado(metadata).subscribe(data => {
+                        this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
                             doc.nombreDocumento = data.originalname;
                         });
                         this.posgrado.push(doc);
                     } else {
-                        this._profesionalService.getProfesionalCertificado(metadata).subscribe(data => {
+                        this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
                             doc.nombreDocumento = data.originalname;
                         });
                         this.certificado.push(doc);
@@ -102,12 +100,15 @@ export class DocumentoProfesionalComponent implements OnInit {
                 extension: body.ext
             };
             const doc = {
-                profesionalId: this.profesional.id,
                 fecha: new Date(),
                 tipo: this.tipoDocumento,
                 archivo: archivos
             };
-            this._profesionalService.saveProfesionalDocumento(doc).subscribe((data) => {
+            const cambio = {
+                'op': 'updateDocumentos',
+                'data': doc
+            };
+            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
                 this.profesional = data;
                 this.plex.toast('success', 'Se adjuntó correctamente', 'Información', 1000);
                 this.cargarArreglos();
@@ -141,14 +142,9 @@ export class DocumentoProfesionalComponent implements OnInit {
                     }
                 }
 
-                const doc = {
-                    profesionalId: this.profesional.id,
-                    fileId: documento.fileId,
-                    index: this.indice
-                };
-                this._profesionalService.patchDocumentos(doc).subscribe((data) => {
+                this._profesionalService.deleteDocumentos(this.profesional.id, { fileId: documento.fileId }).subscribe((data) => {
                     this.driveService.deleteFile(documento.fileId).subscribe();
-                    this.profesional = data;
+                    this.profesional.documentos = data;
                     this.plex.toast('success', 'El documento se ha eliminado correctamente', 'Información', 1000);
                 });
             }

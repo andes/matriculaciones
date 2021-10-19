@@ -1,90 +1,62 @@
-<form class="plex-layout" #form="ngForm">
-  <section>
-    <plex-box>
-      <div class="row">
-        <div class="col">
-          <plex-box type="primary">
-            <header>
-              <h3>Administración de Supervisores</h3>
-            </header>
-
-            <plex-text [(ngModel)]="textoLibre" name='busqueda' [debounce]="500" (change)="loadUsuarios()"
-                       prefix="<i class='mdi mdi-account-search'></i>" placeholder="Buscar por DNI, nombre o apellido">
-            </plex-text>
-            <!--Loader-->
-            <!-- <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader> -->
-            <div *ngIf="users && !users.length" class="alert alert-danger">
-              <i class="mdi mdi-account-alert"></i> El usuario no se ha encontrado
-            </div>
-            <!--Tabla de resultados por SimpleQuery -->
-            <table *ngIf="users && users.length" class="table table-striped">
-              <thead>
-                <tr>
-                  <th>Usuario</th>
-                  <th>Apellido</th>
-                  <th>Nombre</th>
-                  <th>Seleccionar</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr class="hover" *ngFor="let user of users; let i=index">
-                  <td>{{user.usuario}}</td>
-                  <td *ngIf="user.apellido; else sinDatos">
-                    {{user.apellido}}
-                  </td>
-                  <td *ngIf="user.nombre; else sinDatos">
-                    {{user.nombre}}
-                  </td>
-                  <ng-template #sinDatos>
-                    <td> SIN DATOS</td>
-                  </ng-template>
-
-                  <td>
-                    <plex-button title="Seleccionar Usuario" icon="check-circle" type="link" (click)="selectUser(user)">
-                    </plex-button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </plex-box>
-        </div>
-        <div class="col-4" *ngIf='userSeleccionado'>
-          <plex-box type="primary">
-            <header>
-              <h3>{{userSeleccionado.nombre}} {{userSeleccionado.apellido}}</h3>
-            </header>
-            <plex-bool type="slide" [(ngModel)]="esSupervisor" (change)='modificarPermiso()' label='Es Supervisor?'
-                       name="especialidad"></plex-bool>
-            <div class="col-12">
-              <div class="page-title">{{ urlFirmaAdmin ? 'Firma' : 'Sin Firma'}}</div>
-              <img *ngIf='urlFirmaAdmin' [src]="urlFirmaAdmin" style="width: 300px" />
-              <div class="form-group">
-                <div>
-                  <div>
-                    <label for="filePicker">Seleccione una foto:</label>
-                    <br>
-                    <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
-
-                    <!-- <input type="file" id="filePicker"   accept="image/jpeg"  (change)="handleFileSelectFirmaAdmin($event)"> -->
-                    <input type="file" (change)="onImageChange($event)" accept="image/jpeg">
-
-                  </div>
-                </div>
-              </div>
-              <div class="col-12">
-                <br>
-                <plex-button *ngIf='base64textStringAdmin' label="Guardar" type="success"
-                             (click)="guardarFirmaAdminGrid()"></plex-button>
-              </div>
-            </div>
-          </plex-box>
-        </div>
-      </div>
-      <div class="col-12">
+<plex-layout main="{{ mostrar ? 8 : 12 }}" resizable="true" min="4" max="4">
+  <plex-layout-main>
+    <plex-title titulo="Administración de Supervisores"></plex-title>
+    <plex-text [(ngModel)]="textoLibre" name='busqueda' (change)="loadUsuarios()"
+               placeholder="Buscar por DNI, nombre o apellido">
+    </plex-text>
+    <div *ngIf="users && !users.length" class="alert alert-danger">
+      <i class="mdi mdi-account-alert"></i> El usuario no se ha encontrado
+    </div>
+    <div *ngIf="users && users.length">
+      <plex-table [columns]="columns" #table="plTable">
+        <plex-table-columns>
+        </plex-table-columns>
+        <tr *ngFor="let user of users; let i=index" (click)="selectUser(user)" class="selectable">
+          <td>
+            <plex-label icon="usuario-tilde" type="info" titulo="{{user.apellido}}"></plex-label>
+          </td>
+          <td>
+            <plex-label titulo="{{user.nombre}}"></plex-label>
+          </td>
+          <td>
+            <plex-label titulo="{{user.usuario}}"></plex-label>
+          </td>
+        </tr>
+      </plex-table>
+    </div>
+    <div *ngIf="!mostrarMensaje" justify="center" class="h-75">
+      <plex-label titulo="Comience ingresando un DNI, nombre o apellido" direction="column" subtitulo="" type="info"
+                  size="xl" icon="arrow-up"></plex-label>
+    </div>
+  </plex-layout-main>
+  <plex-layout-sidebar type="invert" *ngIf="mostrar">
+    <plex-title size="md" titulo="Detalle del supervisor">
+      <plex-button type="danger" icon="close" size="sm" tooltip="Cerrar" (click)="cerrar()"></plex-button>
+    </plex-title>
+    <plex-detail size="md" direction="row">
+      <plex-icon name="credencial-usuario" type="info"></plex-icon>
+      <div title>{{userSeleccionado.apellido+' '+userSeleccionado.nombre}}</div>
+      <div subtitle>{{userSeleccionado.usuario}}</div>
+    </plex-detail>
+    <plex-bool type="slide" [(ngModel)]="esSupervisor" (change)='modificarPermiso()' name="especialidad"
+               label="¿Es Supervisor?">
+    </plex-bool>
+    <br>
+    <plex-title titulo="{{urlFirmaAdmin ? 'Firma' : 'Sin Firma'}}"></plex-title>
+    <img *ngIf='urlFirmaAdmin' [src]="urlFirmaAdmin" style="width: 300px" />
+    <div class="form-group">
+      <div>
+        <plex-label><b>Seleccione una foto: </b></plex-label>
         <br>
-        <plex-button *ngIf='base64textStringAdmin' label="Guardar" type="success" (click)="guardarFirmaAdminGrid()">
-        </plex-button>
+        <plex-loader *ngIf="loading" type="ball-pulse"></plex-loader>
+
+        <input type="file" (change)="onImageChange($event)" accept="image/jpeg">
+        <div>
+          <br>
+          <plex-button *ngIf='base64textStringAdmin' label="Guardar" type="success" (click)="guardarFirmaAdminGrid()">
+          </plex-button>
+        </div>
       </div>
-    </plex-box>
-  </section>
-</form>
+    </div>
+  </plex-layout-sidebar>
+</plex-layout>

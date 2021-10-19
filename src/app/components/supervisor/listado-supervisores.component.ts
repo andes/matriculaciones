@@ -16,6 +16,7 @@ export class SupervisoresComponent implements OnDestroy {
     @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     public esSupervisor = false;
     public users;
+    public mostrarMensaje = false;
     public userSeleccionado;
     public binaryString = null;
     public firmas = null;
@@ -29,7 +30,22 @@ export class SupervisoresComponent implements OnDestroy {
     public firmaAdmin = null;
     public textoLibre;
     public loading;
+    public mostrar = false;
     private searchSubscribe = new Subscription();
+    public columns = [
+        {
+            key: 'apellido',
+            label: 'Apellido'
+        },
+        {
+            key: 'nombre',
+            label: 'Nombre'
+        },
+        {
+            key: 'documento',
+            label: 'Documento'
+        },
+    ];
 
     constructor(
         private _profesionalService: ProfesionalService,
@@ -65,19 +81,21 @@ export class SupervisoresComponent implements OnDestroy {
                     this.users = datos;
                 }
             );
+            this.mostrarMensaje = true;
         } else {
             this.users = null;
+            this.mostrarMensaje = false;
         }
     }
 
     selectUser(user) {
+        this.mostrar = true;
         this.userSeleccionado = user;
         this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d.id === this.auth.organizacion.id);
         if (this.indexOrganizacion === -1) {
             this.plex.info('info', 'Este usuario no esta en la organizacion');
             this.userSeleccionado = null;
         } else {
-
 
             // tslint:disable-next-line:max-line-length
             const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar' || x === 'matriculaciones:*');
@@ -114,6 +132,7 @@ export class SupervisoresComponent implements OnDestroy {
         this.base64textStringAdmin = btoa(this.binaryStringAdmin);
         this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textStringAdmin);
         this.firmaAdmin = true;
+
     }
 
 
@@ -125,6 +144,7 @@ export class SupervisoresComponent implements OnDestroy {
         };
         this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
             this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+            this.base64textStringAdmin = '';
         });
     }
 
@@ -193,5 +213,8 @@ export class SupervisoresComponent implements OnDestroy {
         );
     }
 
+    cerrar() {
+        this.mostrar = false;
+    }
 
 }

@@ -4,41 +4,45 @@
       <plex-bool type="slide" [(ngModel)]="busquedaMatriculasProxAVencer" (change)="onChange($event)"
                  name="busquedaMatriculasProxAVencer" label="Buscar Matrículas Próximas a Vencer">
       </plex-bool>
-      <plex-button type="warning" label="EXPORTAR" class="ml-4" (click)="generarReporte(true)"></plex-button>
-      <plex-button type="success" label="GENERAR REPORTE" class="ml-2" (click)="generarReporte(false)">
+      <plex-button type="warning" label="EXPORTAR" class="ml-4" [disabled]="formulario.invalid" (click)="generarReporte(true)"></plex-button>
+      <plex-button type="success" label="GENERAR REPORTE" class="ml-2" [disabled]="formulario.invalid" (click)="generarReporte(false)">
       </plex-button>
     </plex-title>
-    <plex-wrapper>
-      <plex-datetime *ngIf="!busquedaMatriculasProxAVencer" type="date" [(ngModel)]="fechaMatriculacionDesde"
-                     name="fechaMatriculacionDesde" label="Fecha Matriculación Desde">
-      </plex-datetime>
-      <plex-datetime *ngIf="!busquedaMatriculasProxAVencer" type="date" [(ngModel)]="fechaMatriculacionHasta"
-                     name="fechaMatriculacionHasta" label="Fecha Matriculación Hasta">
-      </plex-datetime>
-      <plex-datetime *ngIf="(busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja)" type="date"
-                     [(ngModel)]="fechaVencimientoDesde" name="fechaVencimientoDesde"
-                     label="Fecha Vencimiento Matrícula Desde">
-      </plex-datetime>
-      <plex-datetime *ngIf="busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja" type="date"
-                     [(ngModel)]="fechaVencimientoHasta" name="fechaVencimientoHasta"
-                     label="Fecha Vencimiento Matrícula Hasta">
-      </plex-datetime>
-      <plex-select label="Tipo de Matrícula" [required]="true" name="selectMatriculas" [data]="selectData"
-                   [(ngModel)]="select">
-      </plex-select>
-      <div collapse>
-        <plex-select [(ngModel)]="profesion" name="profesion" label="Profesión" [data]="profesiones">
+    <form #formulario="ngForm">
+      <plex-wrapper>
+        <plex-datetime *ngIf="!busquedaMatriculasProxAVencer" type="date" [(ngModel)]="fechaMatriculacionDesde"
+                      name="fechaMatriculacionDesde" label="Fecha Matriculación Desde">
+        </plex-datetime>
+        <plex-datetime *ngIf="!busquedaMatriculasProxAVencer" type="date" [(ngModel)]="fechaMatriculacionHasta"
+                      name="fechaMatriculacionHasta" label="Fecha Matriculación Hasta">
+        </plex-datetime>
+        <plex-datetime *ngIf="(busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja)" type="date"
+                      [(ngModel)]="fechaVencimientoDesde" name="fechaVencimientoDesde"
+                      label="Fecha Vencimiento Matrícula Desde">
+        </plex-datetime>
+        <plex-datetime *ngIf="busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja" type="date"
+                      [(ngModel)]="fechaVencimientoHasta" name="fechaVencimientoHasta"
+                      label="Fecha Vencimiento Matrícula Hasta">
+        </plex-datetime>
+        <plex-select label="Tipo" [required]="true" name="selectMatriculas" [data]="selectData"
+                    [(ngModel)]="select">
         </plex-select>
-        <plex-select [(ngModel)]="especialidad" name="especialidad" label="Especialidad" [data]="especialidades">
+        <plex-select label="Estado" [required]="true" [(ngModel)]="estado" [data]="estadosMatriculas" name="estadoMatricula">
         </plex-select>
-        <plex-bool type="slide" [(ngModel)]="matriculasBaja" name="matriculasBaja" (change)="onChangeBaja($event)"
-                   label="Dadas de baja" align="center">
-        </plex-bool>
-        <plex-bool type="slide" [(ngModel)]="matriculasVencidas" name="matriculasVencidas"
-                   (change)="onChangeVencidas($event)" label="Vencidas" align="center">
-        </plex-bool>
-      </div>
-    </plex-wrapper>
+        <div collapse>
+          <plex-select [(ngModel)]="profesion" name="profesion" label="Profesión" [data]="profesiones">
+          </plex-select>
+          <plex-select [(ngModel)]="especialidad" name="especialidad" label="Especialidad" [data]="especialidades">
+          </plex-select>
+          <plex-bool type="slide" [(ngModel)]="matriculasBaja" name="matriculasBaja" (change)="onChangeBaja($event)"
+                    label="Dadas de baja" align="center">
+          </plex-bool>
+          <plex-bool type="slide" [(ngModel)]="matriculasVencidas" name="matriculasVencidas"
+                    (change)="onChangeVencidas($event)" label="Vencidas" align="center">
+          </plex-bool>
+        </div>
+      </plex-wrapper>
+    </form>
     <plex-loader *ngIf="loader" type="ball-beat" class=""></plex-loader>
     <plex-label direction="column" type="info" *ngIf="!profesionales?.length && !loader" size="xl" icon="magnify"
                 titulo="Complete los campos y presione 'Generar reporte'"

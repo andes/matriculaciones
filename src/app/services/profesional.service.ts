@@ -25,6 +25,10 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.profesionalesURL + 'firma/', { params: params });
     }
 
+    getPendienteRenovacion(params: any): Observable<any> {
+        return this.server.get(this.profesionalesURL + 'renovacion', { params, showError: true});
+    }
+
     saveProfesional(profesionalModel: any) {
         return this.server.post(this.profesionalesURL, profesionalModel);
     }
@@ -38,7 +42,6 @@ export class ProfesionalService extends BaseService {
 
     putProfesional(profesionalModel): Observable<any> {
         return this.server.put(this.profesionalesURL + 'actualizar', profesionalModel);
-    // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
     }
 
 

@@ -7,7 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 // Global
 
-import { PlexModule, Plex } from '@andes/plex';
+import { PlexModule } from '@andes/plex';
 import { Auth } from '@andes/auth';
 import { Server } from '@andes/shared';
 import { RoutingGuard } from './app.routings-guard.class';
@@ -130,6 +130,7 @@ import { Ng2ImgToolsModule } from 'ng2-img-tools';
 import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/seleccion-turnos.component';
 import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
 import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
+import { ZonaSanitariaService } from './services/zonaSanitaria.service';
 @NgModule({
     declarations: [
         AppComponent,
@@ -179,7 +180,6 @@ import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
         WebcamModule
     ],
     providers: [
-        Plex,
         Server,
         Auth,
         RoutingGuard,
@@ -202,6 +202,7 @@ import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
         ModalidadesCertificacionService,
         UsuarioService,
         ListadoTurnosPdfComponent,
+        ZonaSanitariaService,
         DriveService
     ],
     bootstrap: [AppComponent]

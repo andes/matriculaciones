@@ -10,6 +10,7 @@ import { ISubscription } from 'rxjs/Subscription';
 import { Plex } from '@andes/plex';
 import { of, Observable } from 'rxjs';
 import * as moment from 'moment';
+import { getObjEstadosMatriculas } from './../../utils/enumerados';
 
 const limit = 20;
 @Component({
@@ -40,6 +41,8 @@ export class ReportesComponent implements OnInit {
     public finScroll = false;
     public resultado = [];
     private lastRequest: ISubscription;
+    public estadosMatriculas;
+    public estado;
     public columns = [
         {
             key: 'profesional',
@@ -110,6 +113,8 @@ export class ReportesComponent implements OnInit {
         this.siisaService.getEspecialidades(null).subscribe(res => {
             this.especialidades = res;
         });
+        this.estadosMatriculas = getObjEstadosMatriculas();
+        this.estado = this.estadosMatriculas[0];
     }
 
     public onChange(event) {
@@ -178,6 +183,7 @@ export class ReportesComponent implements OnInit {
                 fechaDesde: this.busquedaMatriculasProxAVencer ? this.fechaVencimientoDesde : this.fechaMatriculacionDesde,
                 fechaHasta: this.busquedaMatriculasProxAVencer ? this.fechaVencimientoHasta : this.fechaMatriculacionHasta,
                 tipoMatricula: this.select.id,
+                estado: this.estado.nombre,
                 matriculacion: true,
                 exportarPlanillaCalculo: exportarPlantilla,
                 skip: this.skip,

@@ -1,4 +1,6 @@
+// General
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { ProfesionalService } from './../../services/profesional.service';
@@ -7,6 +9,11 @@ import { ExcelService } from '../../services/excel.service';
 import { Observable } from 'rxjs';
 import { BusquedaProfesionalService } from './services/busqueda-profesional.service';
 import { map } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { debounceTime, catchError } from 'rxjs/operators';
+import { ProfesionService } from '../../services/profesion.service';
+import { ZonaSanitariaService } from 'src/app/services/zonaSanitaria.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-listar-profesionales',
@@ -18,14 +25,19 @@ export class ListarProfesionalesComponent implements OnInit {
     private listadoActual: any[];
     public profesionalElegido: IProfesional;
     public tienePermisos;
+
+    public dni: string = null;
+    public apellido: string = null;
+    public nombre: string = null;
     public totalProfesionales = null;
     public nuevoProfesional = false;
     public totalProfesionalesRematriculados = null;
     public totalProfesionalesMatriculados = null;
-    public hoy = null;
+    public hoy: any = {};
     public confirmar = false;
     public verExportador = false;
     public expSisa = false;
+    public limit = 50;
     public editar = false;
     public seleccionado = false;
     public profesionalSeleccionado;
@@ -34,7 +46,11 @@ export class ListarProfesionalesComponent implements OnInit {
         fechaDesde: '',
         fechaHasta: ''
     };
-    value;
+    public searchForm: FormGroup;
+    public filtrosRenovacion = false;
+    private value;
+    public zonasSanitarias = [];
+    public esSupervisor;
     public columns = [
         {
             key: 'profesional',
@@ -64,11 +80,42 @@ export class ListarProfesionalesComponent implements OnInit {
         private excelService: ExcelService,
         private router: Router,
         public auth: Auth,
-        private busquedaProfesionalService: BusquedaProfesionalService
+        private busquedaProfesionalService: BusquedaProfesionalService,
+        private formBuilder: FormBuilder,
+        private profesionService: ProfesionService,
+        private zonaSanitariaService: ZonaSanitariaService
     ) { }
 
+
     ngOnInit() {
-        this.hoy = new Date();
+        this.hoy = {
+            inicio: moment().startOf('day').toDate(),
+            fin: moment().endOf('day').toDate()
+        };
+        this.searchForm = this.formBuilder.group({
+            apellido: '',
+            nombre: '',
+            documento: '',
+            profesion: '',
+            zonaSanitaria: '',
+            fechaDesde: this.hoy.inicio,
+            fechaHasta: this.hoy.fin,
+            numeroMatriculaGrado: '',
+        });
+
+        this.searchForm.valueChanges.pipe(debounceTime(900)).subscribe(
+            (value) => {
+                this.value = value;
+                if(!value.fechaDesde) {
+                    this.value.fechaDesde = this.hoy.inicio;
+                }
+                if (!value.fechaHasta) {
+                    this.value.fechaHasta = this.hoy.fin;
+                }
+                this.buscar();
+            });
+
+        this.buscar();
         this._profesionalService.getEstadisticas().subscribe((data) => {
             this.totalProfesionales = data.total;
             this.totalProfesionalesMatriculados = data.totalMatriculados;
@@ -78,6 +125,43 @@ export class ListarProfesionalesComponent implements OnInit {
             map(resp => this.listadoActual = resp)
         );
         this.tienePermisos = this.auth.check('matriculaciones:profesionales:getProfesional');
+        this.esSupervisor = this.auth.check('matriculaciones:supervisor:?');
+        this.zonaSanitariaService.search().subscribe(data => this.zonasSanitarias = data);
+    }
+
+    buscar() {
+        this.profesionalElegido = null;
+        let query;
+        const params: any = {
+            documento: this.value?.documento || '',
+            apellido: this.value?.apellido || '',
+            nombre: this.value?.nombre || '',
+            profesion: this.value?.profesion?.codigo || '',
+            numeroMatriculaGrado: this.value?.numeroMatriculaGrado || '',
+            matriculacion: true,
+            limit: this.limit
+        };
+
+        if(this.filtrosRenovacion){
+            params.fechaDesde = this.value?.fechaDesde || this.hoy.inicio;
+            params.fechaHasta = this.value?.fechaHasta || this.hoy.fin;
+            params.zonaSanitaria = this.value?.zonaSanitaria?.id || '';
+            query = this._profesionalService.getPendienteRenovacion(params);
+        } else {
+            query = this._profesionalService.getProfesional(params);
+        }
+        // query.subscribe(data => {
+        //     this.profesionales = data;
+        // });
+    }
+
+    showFiltrosRenovacion(){
+        if(!this.filtrosRenovacion){
+            this.searchForm.value.fechaDesde = this.hoy.inicio;
+            this.searchForm.value.fechaHasta = this.hoy.fin;
+            this.searchForm.value.zonaSanitaria = '';
+        }
+        this.buscar();
     }
 
     setDropDown(profesional) {
@@ -145,11 +229,6 @@ export class ListarProfesionalesComponent implements OnInit {
         } else {
             this.expSisa = false;
         }
-    }
-
-    getFechaUltimoTramite(profesional: IProfesional) {
-        const fechasEgreso = profesional.formacionGrado.map(grado => grado.fechaEgreso);
-        return Math.max.apply(null, fechasEgreso);
     }
 
     crearMuevoProfesional() {

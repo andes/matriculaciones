@@ -1,25 +1,17 @@
-import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex';
-// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
-import * as Enums from './../../utils/enumerados';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { FormBuilder } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
-import 'rxjs/add/operator/switchMap';
-import { Observable } from 'rxjs/Observable';
-import { environment } from './../../../environments/environment';
 
 // Services
 import { TurnoService } from './../../services/turno.service';
-
 import { PDFUtils } from './../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
 import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
 import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
 import { Subject } from 'rxjs/Rx';
-
-const jsPDF = require('jspdf');
 
 @Component({
     selector: 'app-turnos',
@@ -74,9 +66,6 @@ export class TurnosComponent implements OnInit {
             });
     }
 
-    onScroll() {
-    }
-
     ngOnInit() {
 
         /**
@@ -103,10 +92,6 @@ export class TurnosComponent implements OnInit {
 
         this.buscar();
         this.contadorDeCambiosDni();
-
-        if (environment.production === true) {
-            // this.avisoTurno();
-        }
     }
 
     showTurno(turno: any) {
@@ -151,7 +136,6 @@ export class TurnosComponent implements OnInit {
                         }
                     });
             });
-
     }
 
     saveFecha() {
@@ -166,14 +150,15 @@ export class TurnosComponent implements OnInit {
         if (turno.tipo === 'renovacion') {
             this.router.navigate(['/profesional', turno.profesional.idRenovacion]);
         }
-
     }
 
     cambiarEstado(presente) {
         this.turnoElegido.sePresento = presente;
-        this._turnoService.saveTurno(this.turnoElegido)
-            .subscribe(resp => {
-            });
+        this.turnoElegido.updatedBy = {
+            usuario: this.auth.usuario,
+            organizacion: this.auth.organizacion
+        };
+        this._turnoService.saveTurno(this.turnoElegido).subscribe();
     }
 
     generarComprobante(turno: any) {
@@ -189,8 +174,6 @@ export class TurnosComponent implements OnInit {
     onModalScrollDown() {
         this.limit = this.limit + 5;
         this.buscar();
-    // this.modalTitle = 'updated on ' + (new Date()).toString();
-    // this.modalBody += modalText;
     }
 
 
@@ -219,7 +202,6 @@ export class TurnosComponent implements OnInit {
                 this.turnosParaListado = nuevo;
                 this.componentPrint = true;
             });
-
     }
 
     anularTurno() {
@@ -236,75 +218,4 @@ export class TurnosComponent implements OnInit {
             }
         });
     }
-
-
-    // avisoTurno(event?: any) {
-    //     const tieneCelular = false;
-    //     const numeroCelular;
-
-    //     if (!event) {
-    //         this.turnoElegido = null;
-    //     }
-
-    //     const consulta = this.formBuscarTurno.value;
-    //     consulta.offset = event ? event.query.offset : this.offset;
-    //     consulta.size = event ? event.query.size : this.limit;
-
-
-    //     this._turnoService.getTurnosProximos(consulta)
-
-    //         .subscribe((resp) => {
-    //             for (let _i = 0; _i < resp.data.length; _i++) {
-    //                 const fechaFin = moment(resp.data[_i].fecha);
-    //                 const hoy = moment(new Date());
-    //                 if (resp.data[_i].notificado === false && fechaFin.diff(hoy, 'days') <= 3) {
-
-    //                     // tslint:disable-next-line:max-line-length
-    //                     this._profesionalService.getProfesional({ id: resp.data[_i].profesional.idRenovacion }).subscribe((profesional: any) => {
-    //                         const contactos = resp.data[_i].profesional.contactos;
-
-    //                         // contactos.forEach(element => {
-    //                         //     if (element.tipo === 'celular') {
-    //                         //         tieneCelular = true;
-    //                         //         numeroCelular = Number(element.valor);
-    //                         //     }
-    //                         // });
-    //                         // if (resp.data[_i].tipo === 'renovacion') {
-    //                         //     contactos = profesional[0].contactos;
-    //                         //     contactos.forEach(element => {
-    //                         //         if (element.tipo === 'celular') {
-    //                         //             tieneCelular = true;
-    //                         //             numeroCelular = Number(element.valor);
-    //                         //         }
-    //                         //     });
-    //                         // }
-    //                         if (fechaFin.diff(hoy, 'days') <= 3 && tieneCelular === true && resp.data[_i].notificado === false) {
-    //                             const nombreCompleto = resp.data[_i].profesional.nombreCompleto;
-    //                             const smsParams = {
-    //                                 telefono: numeroCelular,
-    //                                 // tslint:disable-next-line:max-line-length
-    //                                 mensaje: 'Estimado ' + nombreCompleto + ', le recordamos que usted tiene el turno para realizar el tramite de matriculacion el dia ' + moment(fechaFin).format('l') + ' a las ' + moment(fechaFin).format('LT') + ' '
-    //                             };
-    //                             this._profesionalService.enviarSms(smsParams).subscribe(dataSms => {
-
-    //                                 const cambio = {
-    //                                     'op': 'updateNotificado',
-    //                                     'data': true,
-    //                                 };
-
-    //                                 this._turnoService.patchTurnos(resp.data[_i].id, cambio).subscribe((data) => {
-
-    //                                 });
-    //                             });
-
-
-    //                         }
-    //                     });
-
-    //                 }
-    //             }
-    //         });
-    // }
-
-
 }

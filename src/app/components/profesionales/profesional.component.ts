@@ -1,6 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { Plex } from '@andes/plex';
 import * as enumerados from './../../utils/enumerados';
 import { Matching } from '@andes/match';
@@ -17,7 +17,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { stringify } from '@angular/compiler/src/util';
 import * as moment from 'moment';
 
 @Component({
@@ -48,6 +47,7 @@ export class ProfesionalComponent implements OnInit {
     @Input() confirmar = false;
     @Input() editable = false;
     @Output() editado = new EventEmitter();
+    @Output() guardar = new EventEmitter();
     public noPoseedomicilioProfesional = false;
     // public estadosCiviles: any[];
     @Input() showOtraEntidadFormadora: Boolean = false;
@@ -86,38 +86,35 @@ export class ProfesionalComponent implements OnInit {
             },
             ultimaActualizacion: new Date(),
             activo: true
-        },
-                     {
-                         tipo: 'legal',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     },
-                     {
-                         tipo: 'profesional',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     }
-        ],
+        },{
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: {
+                    'id': '57f3b5c469fe79a598e6281f',
+                    'nombre': 'Argentina'
+                },
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },{
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: {
+                    'id': '57f3b5c469fe79a598e6281f',
+                    'nombre': 'Argentina'
+                },
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }],
         fotoArchivo: null,
         firmas: null,
         formacionGrado: [{
@@ -192,31 +189,29 @@ export class ProfesionalComponent implements OnInit {
                     },
                     ultimaActualizacion: new Date(),
                     activo: true
-                },
-                                               {
-                                                   tipo: 'legal',
-                                                   valor: null,
-                                                   codigoPostal: null,
-                                                   ubicacion: {
-                                                       localidad: null,
-                                                       provincia: null,
-                                                       pais: null,
-                                                   },
-                                                   ultimaActualizacion: new Date(),
-                                                   activo: true
-                                               },
-                                               {
-                                                   tipo: 'profesional',
-                                                   valor: null,
-                                                   codigoPostal: null,
-                                                   ubicacion: {
-                                                       localidad: null,
-                                                       provincia: null,
-                                                       pais: null,
-                                                   },
-                                                   ultimaActualizacion: new Date(),
-                                                   activo: true
-                                               }
+                },{
+                    tipo: 'legal',
+                    valor: null,
+                    codigoPostal: null,
+                    ubicacion: {
+                        localidad: null,
+                        provincia: null,
+                        pais: null,
+                    },
+                    ultimaActualizacion: new Date(),
+                    activo: true
+                },{
+                    tipo: 'profesional',
+                    valor: null,
+                    codigoPostal: null,
+                    ubicacion: {
+                        localidad: null,
+                        provincia: null,
+                        pais: null,
+                    },
+                    ultimaActualizacion: new Date(),
+                    activo: true
+                }
                 ];
             }
         }
@@ -239,7 +234,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     showOtra(entidadFormadora) {
-        if (entidadFormadora.value) {
+        if (entidadFormadora?.value) {
             this.showOtraEntidadFormadora = entidadFormadora.value.nombre === 'Otra';
         }
     }
@@ -247,18 +242,13 @@ export class ProfesionalComponent implements OnInit {
     confirmarDatos($event) {
         if ($event.formValid) {
             let matcheo = false;
-            // tslint:disable-next-line:max-line-length
-            // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
-            // tslint:disable-next-line:max-line-length
-
             this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
             this.profesional.contactos.map(elem => {
                 elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
                 return elem;
             });
             this.matching();
-
 
             this._profesionalService.getProfesionalesMatching({ documento: this.profesional.documento })
                 .subscribe(
@@ -333,7 +323,7 @@ export class ProfesionalComponent implements OnInit {
                             this._profesionalService.getProfesional({ sexo: this.profesional.sexo, documento: this.profesional.documento })
                                 .subscribe(buscarProfesional => {
                                     if (buscarProfesional.length) {
-                                        if (buscarProfesional[0].profesionalMatriculado === false) {
+                                        if (!buscarProfesional[0].profesionalMatriculado) {
                                             this.profesional.id = buscarProfesional[0].id;
                                             this.profesional.profesionalMatriculado = true;
                                             this.actualizar($event);
@@ -344,7 +334,6 @@ export class ProfesionalComponent implements OnInit {
                                         this._profesionalService.saveProfesional({ profesional: this.profesional })
                                             .subscribe(nuevoProfesional => {
                                                 this.plex.toast('success', 'Se registro con exito!', 'informacion', 1000);
-                                                this.editado.emit(true);
                                                 if (this.nuevoProf) {
                                                     this._turnosService.saveTurnoSolicitados(nuevoProfesional)
                                                         .subscribe((nuevoProfesional2) => {
@@ -354,19 +343,15 @@ export class ProfesionalComponent implements OnInit {
                                                                 profesional: nuevoProfesional._id
                                                             };
                                                             this._turnosService.saveTurnoMatriculacion({ turno: turno })
-                                                                .subscribe(_turno => {
-                                                                    this.router.navigate(['/profesional', nuevoProfesional._id]);
-                                                                });
+                                                                .subscribe();
                                                         });
                                                 }
-
                                             });
+                                        this.guardar.emit(true);
                                     }
                                 });
                         }
-
                     });
-
         } else {
             this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
         }
@@ -438,7 +423,7 @@ export class ProfesionalComponent implements OnInit {
         }
     }
     loadProfesiones(event) {
-        this._profesionService.getProfesiones({gestionaColegio : false}).pipe(catchError(() => of(null))).subscribe(event.callback);
+        this._profesionService.getProfesiones({ gestionaColegio: false }).pipe(catchError(() => of(null))).subscribe(event.callback);
     }
 
     loadEntidadesFormadoras(event) {

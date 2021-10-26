@@ -106,21 +106,24 @@
 												<plex-badge *ngIf="profesionalGrado.matriculado === true  && profesionalGrado.matriculacion !== null  && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo  "
 															type="info">
 													{{profesionalGrado.profesion.nombre}}: Matricula n°
-													{{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
-                                        1].matriculaNumero}}
+													{{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length
+													-
+													1].matriculaNumero}}
 												</plex-badge>
 												<plex-badge *ngIf="profesionalGrado.matriculado===false && profesionalGrado.matriculacion !==null
                                     && !profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
                                     1].baja.motivo" type="danger">
 													{{profesionalGrado.profesion.nombre}}: Matricula n°
-													{{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
-                                        1].matriculaNumero}} vencida
+													{{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length
+													-
+													1].matriculaNumero}} vencida
 												</plex-badge>
 												<plex-badge *ngIf="profesionalGrado.matriculado === false && profesionalGrado.matriculacion !== null  && profesionalGrado.matriculacion[profesionalGrado.matriculacion.length - 1].baja.motivo"
 															type="warning">
 													{{profesionalGrado.profesion.nombre}}: Matricula n°
-													{{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length -
-                                        1].matriculaNumero}} suspendida
+													{{profesionalGrado.matriculacion[profesionalGrado.matriculacion.length
+													-
+													1].matriculaNumero}} suspendida
 												</plex-badge>
 											</div>
 											<div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado"
@@ -128,14 +131,16 @@
 												<plex-badge *ngIf="profesionalPosgrado.matriculado === true && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin "
 															type="info">
 													{{profesionalPosgrado.especialidad.nombre}}: Matricula n°
-													{{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
-                                        1].matriculaNumero}}
+													{{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length
+													-
+													1].matriculaNumero}}
 												</plex-badge>
 												<plex-badge *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy <= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin"
 															type="warning">{{profesionalPosgrado.especialidad.nombre}}:
 													Matricula n°
-													{{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length -
-                                        1].matriculaNumero}} suspendida
+													{{profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length
+													-
+													1].matriculaNumero}} suspendida
 												</plex-badge>
 												<plex-badge *ngIf="profesionalPosgrado.matriculado === false && profesionalPosgrado.matriculacion.length > 0 && profesionalPosgrado.especialidad.nombre !== null && hoy >= profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin"
 															type="danger">{{profesionalPosgrado.especialidad.nombre}}:
@@ -168,7 +173,8 @@
 			</div>
 		</div>
 		<div *ngIf="nuevoProfesional">
-			<app-profesional [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
+			<app-profesional [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'
+							 (guardar)="guardarProfesional($event)"></app-profesional>
 		</div>
 	</plex-layout-main>
 	<plex-layout-sidebar type="invert">

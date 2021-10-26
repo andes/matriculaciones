@@ -218,6 +218,12 @@ export class ListarProfesionalesComponent implements OnInit {
         }
     }
 
+    guardarProfesional(valor) {
+        if (valor) {
+            this.nuevoProfesional = false;
+        }
+    }
+
     onScroll() {
         this.limit = this.limit + 15;
         this.buscar();

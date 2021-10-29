@@ -1,206 +1,196 @@
 <plex-layout main="{{ seleccionado || verExportador  ? '8' : (nuevoProfesional || editar? '12' : '10') }}">
-  <plex-layout-main>
-    <div *ngIf="!nuevoProfesional && !editar">
-      <header *ngIf="!nuevoProfesional">
-        <plex-title titulo="Buscar profesional" size="lg">
+    <plex-layout-main>
+        <div *ngIf="!nuevoProfesional && !editar">
+            <header *ngIf="!nuevoProfesional">
+                <plex-title titulo="Buscar profesional" size="lg">
 
-          <plex-button class='ml-2' size="md" type="primary" label="Numeraciones" routerLink="/listadoNumeraciones">
-          </plex-button>
-          <plex-button class='ml-2' size="md" type="primary" label="Exportar SISA" (click)='exportarSISA()'>
-          </plex-button>
-          <plex-button class='ml-2' size="md" type="danger" label="Volver" routerLink="/homeAdministracion">
-          </plex-button>
-        </plex-title>
+                    <plex-button class='ml-2' size="md" type="primary" label="Numeraciones"
+                                 routerLink="/listadoNumeraciones">
+                    </plex-button>
+                    <plex-button class='ml-2' size="md" type="primary" label="Exportar SISA" (click)='exportarSISA()'>
+                    </plex-button>
+                    <plex-button class='ml-2' size="md" type="danger" label="Volver" routerLink="/homeAdministracion">
+                    </plex-button>
+                </plex-title>
 
-        <plex-wrapper [formGroup]="searchForm">
-          <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus"
-                     placeholder="Ingrese documento">
-          </plex-text>
-          <plex-text label="Apellido" formControlName="apellido" placeholder="Ingrese apellido">
-          </plex-text>
-          <plex-text label="Nombre" formControlName="nombre" placeholder="Ingrese nombre">
-          </plex-text>
-          <plex-int label="N° Matrícula grado" formControlName="numeroMatriculaGrado"
-                    placeholder="Ingrese N° de matrícula">
-          </plex-int>
-          <div collapse>
-            <plex-int label="N° Matrícula Esp." formControlName="numeroMatriculaEspecialidad"
-                      placeholder="Ingrese N° de matrícula">
-            </plex-int>
-            <plex-select label="Mat. de Profesionales" formControlName="estado" [data]="estadosMatriculas">
-            </plex-select>
-            <plex-select label="Mat. de Especialidades" formControlName="estadoEspecialidad" [data]="estadosMatriculas">
-            </plex-select>
+                <plex-wrapper [formGroup]="searchForm">
+                    <plex-text label="Documento" formControlName="documento" [autoFocus]="autoFocus"
+                               placeholder="Ingrese documento">
+                    </plex-text>
+                    <plex-text label="Apellido" formControlName="apellido" placeholder="Ingrese apellido">
+                    </plex-text>
+                    <plex-text label="Nombre" formControlName="nombre" placeholder="Ingrese nombre">
+                    </plex-text>
+                    <plex-int label="N° Matrícula grado" formControlName="numeroMatriculaGrado"
+                              placeholder="Ingrese N° de matrícula">
+                    </plex-int>
+                    <div collapse>
+                        <plex-int label="N° Matrícula Esp." formControlName="numeroMatriculaEspecialidad"
+                                  placeholder="Ingrese N° de matrícula">
+                        </plex-int>
+                        <plex-select label="Mat. de Profesionales" formControlName="estado" [data]="estadosMatriculas">
+                        </plex-select>
+                        <plex-select label="Mat. de Especialidades" formControlName="estadoEspecialidad"
+                                     [data]="estadosMatriculas">
+                        </plex-select>
 
-          </div>
-        </plex-wrapper>
+                    </div>
+                </plex-wrapper>
 
-      </header>
-      <plex-table [columns]="columns" #table="plTable">
-        <plex-title titulo="Listado de matriculados" size="lg">
-          <div [formGroup]="searchForm">
-            <plex-bool class='ml-2' type="slide" label="Ver bajas de matriculas" formControlName="verBajas"
-                       name="especialidad.activo">
-            </plex-bool>
+            </header>
+            <plex-table [columns]="columns" #table="plTable">
+                <plex-title titulo="Listado de matriculados" size="lg">
+                    <div [formGroup]="searchForm">
+                        <plex-bool class='ml-2' type="slide" label="Ver bajas de matriculas" formControlName="verBajas"
+                                   name="especialidad.activo">
+                        </plex-bool>
 
-            <plex-bool class='ml-3' type="slide" label="Deshabilitado" formControlName="verDeshabilitado"
-                       name="especialidad.activo">
-            </plex-bool>
-          </div>
-          <plex-button class='ml-2' size="sm" type="success" label='Nuevo profesional'
-                       (click)='crearMuevoProfesional()'>
-          </plex-button>
-          <plex-table-columns>
-          </plex-table-columns>
-        </plex-title>
+                        <plex-bool class='ml-3' type="slide" label="Deshabilitado" formControlName="verDeshabilitado"
+                                   name="especialidad.activo">
+                        </plex-bool>
+                    </div>
+                    <plex-button class='ml-2' size="sm" type="success" label='Nuevo profesional'
+                                 (click)='crearMuevoProfesional()'>
+                    </plex-button>
+                    <plex-table-columns>
+                    </plex-table-columns>
+                </plex-title>
 
-        <tr *ngFor="let profesional of (profesionales$ | async); let indiceProfesional = index"
-            (click)="seleccionar(profesional)" [class.selectable]="true" [class.selected]="profesional.selected">
-          <td>
-            <plex-label icon="medico" titulo="{{profesional.apellido + ', ' + profesional.nombre}}">
-            </plex-label>
-          </td>
-          <td *plTableCol="'documento'">
-            <plex-label titulo="{{profesional.documento}}"></plex-label>
-          </td>
-          <td *plTableCol="'fechaNacimiento'">
-            <plex-badge type="info">{{profesional.fechaNacimiento | fecha}}</plex-badge>
-          </td>
-          <td *plTableCol="'profesion'">
-            <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
-              <plex-label
-                          titulo="{{profesionalGrado.profesion.nombre +' - '+ obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}">
-              </plex-label>
-            </div>
-            <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado; let indicePosgrado = index">
-              <plex-label>{{profesionalPosgrado.especialidad.nombre +' - '+ obtenerMatriculaPosgrado(indiceProfesional,
-                indicePosgrado)}}</plex-label>
-            </div>
-          </td>
-          <td *plTableCol="'matricula'">
-            <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
-              <plex-label titulo="{{obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}"></plex-label>
-            </div>
-            <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado; let indicePosgrado = index">
-              <plex-label>{{obtenerMatriculaPosgrado(indiceProfesional, indicePosgrado)}}</plex-label>
-            </div>
-          </td>
+                <tr *ngFor="let profesional of (profesionales$ | async); let indiceProfesional = index"
+                    (click)="seleccionar(profesional)" [class.selectable]="true"
+                    [class.selected]="profesional.selected">
+                    <td>
+                        <plex-label icon="medico" titulo="{{profesional.apellido + ', ' + profesional.nombre}}">
+                        </plex-label>
+                    </td>
+                    <td *plTableCol="'documento'">
+                        <plex-label titulo="{{profesional.documento}}"></plex-label>
+                    </td>
+                    <td *plTableCol="'profesion'">
+                        <plex-grid size="sm" cols="2" type="auto" justify="start"
+                                   *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
+                            <plex-label titulo="{{profesionalGrado.profesion?.nombre +' - '+obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}"
+                                        subtitulo="">
+                            </plex-label>
+                            <plex-badge size="sm" type="info">{{profesional.formacionPosgrado ?
+                                profesional.formacionPosgrado?.length + ' posgrados':'0 posgrados' }}
+                            </plex-badge>
+                        </plex-grid>
 
-          <td *plTableCol="'estado'">
-            <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
-              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional, indiceGrado) === 'vigente'" type="success">
-                vigente</plex-badge>
-              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'suspendida' " type="warning">
-                suspendida</plex-badge>
-              <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'vencida' "
-                          type="{{verificarFechaGrado(indiceProfesional,indiceGrado)?'danger':'info'}}">
-                {{verificarFechaGrado(indiceProfesional,indiceGrado)? ' Vencida':' Año de gracia'}}
-              </plex-badge>
-            </div>
+                    </td>
+                    <td *plTableCol="'matricula'">
+                        <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
+                            <plex-label titulo="{{obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}"></plex-label>
+                        </div>
+                    </td>
 
-            <div *ngFor="let profesionalPosgrado of profesional.formacionPosgrado; let indicePosgrado = index">
-              <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'vigente'"
-                          type="success">vigente</plex-badge>
-              <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'suspendida'"
-                          type="warning">suspendida</plex-badge>
+                    <td *plTableCol="'estado'">
+                        <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
+                            <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional, indiceGrado) === 'vigente'"
+                                        type="success">
+                                vigente</plex-badge>
+                            <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'suspendida' "
+                                        type="warning">
+                                suspendida</plex-badge>
+                            <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'vencida' "
+                                        type="{{verificarFechaGrado(indiceProfesional,indiceGrado)?'danger':'info'}}">
+                                {{verificarFechaGrado(indiceProfesional,indiceGrado)? ' Vencida':' Año de gracia'}}
+                            </plex-badge>
+                            <br>
+                        </div>
+                    </td>
 
-              <plex-badge *ngIf="verificarEstadoPosgrado(indiceProfesional, indicePosgrado) === 'vencida'"
-                          type="{{verificarFechaPosgrado(indiceProfesional, indicePosgrado)?'danger':'info'}}">
-                {{verificarFechaPosgrado(indiceProfesional, indicePosgrado) ?' Vencida':' Año de gracia'}}
-              </plex-badge>
-            </div>
-          </td>
-
-          <td class="column-right my-3 d-flex align-items-center">
-            <plex-button type="info" icon="eye" size="sm" (click)="showProfesional(profesional)"
-                         tooltip="Ver profesional">
-            </plex-button>
-            <plex-dropdown type="link" right="true" size="sm" icon="dots-vertical" [items]="itemsDropdown"
-                           (onOpen)="setDropDown(profesional)"></plex-dropdown>
-          </td>
-        </tr>
-      </plex-table>
-    </div>
-
-    <div *ngIf="nuevoProfesional">
-      <plex-title titulo="Nuevo profesional" size="lg" *ngIf="nuevoProfesional">
-        <plex-button *ngIf="nuevoProfesional" label="Volver" type="danger" (click)="verNuevoProfesional(false)">
-        </plex-button>
-      </plex-title>
-      <app-profesional [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
-    </div>
-    <div *ngIf="editar">
-      <app-profesional [profesional]='profesionalSeleccionado' [showOtraEntidadFormadora]='false'
-                       [confirmar]='confirmar' (editado)="editar=false" [desdeListaProfesionales]="true"
-                       [editable]='true'>
-      </app-profesional>
-    </div>
-  </plex-layout-main>
-
-  <plex-layout-sidebar type="invert">
-    <div *ngIf='seleccionado'>
-      <app-listar-profesionales-detalle [profesionalSeleccionado]="profesionalSeleccionado"
-                                        (cancelar)="cancelarDetalle($event)" (editarSidebar)="editarProfesional($event)"
-                                        [idProfesional]="profesionalSeleccionado.id">
-      </app-listar-profesionales-detalle>
-    </div>
-    <div *ngIf='!seleccionado && !verExportador'>
-      <plex-title titulo="Estadísticas" size="md">
-      </plex-title>
-      <div class="row text-center mt-3">
-        <div class="col-12">
-          <plex-grid type="full">
-            <plex-card>
-              <plex-badge type="info mt-3">
-                Total Profesionales <h3>{{totalProfesionales}}</h3>
-              </plex-badge>
-
-            </plex-card>
-            <plex-card>
-              <plex-badge type="warning mt-3">
-                Total Rematriculados <h3>{{totalProfesionalesRematriculados}}</h3>
-              </plex-badge>
-            </plex-card>
-            <plex-card>
-              <plex-badge type="success mt-3">
-                Total Matriculados <h3>{{totalProfesionalesMatriculados}}</h3>
-              </plex-badge>
-            </plex-card>
-
-          </plex-grid>
+                    <td class="column-right my-3 d-flex align-items-center">
+                        <plex-button type="info" icon="eye" size="sm" (click)="showProfesional(profesional)"
+                                     tooltip="Ver profesional">
+                        </plex-button>
+                        <plex-dropdown type="link" right="true" size="sm" icon="dots-vertical" [items]="itemsDropdown"
+                                       (onOpen)="setDropDown(profesional)"></plex-dropdown>
+                    </td>
+                </tr>
+            </plex-table>
         </div>
-      </div>
-      <div class="row" *ngIf='mostrarRestablecer === true'>
-        <div class="col-12 text-center" style="margin-top:30px">
-          <plex-button type="primary" label='Restablecer' (click)='filtrarTodos()'></plex-button>
 
+        <div *ngIf="nuevoProfesional">
+            <plex-title titulo="Nuevo profesional" size="lg" *ngIf="nuevoProfesional">
+                <plex-button *ngIf="nuevoProfesional" label="Volver" type="danger" (click)="verNuevoProfesional(false)">
+                </plex-button>
+            </plex-title>
+            <app-profesional [confirmar]='confirmar' [nuevoProf]='true' [editable]='false'></app-profesional>
         </div>
-      </div>
-    </div>
-    <div *ngIf='verExportador'>
-      <plex-title titulo="Exportar a SISA" size="md">
-        <plex-button type="danger" size="sm" icon="close" (click)="verExportador = false;">
-        </plex-button>
-      </plex-title>
-      <div class="row">
-        <div class="col-6">
-          <plex-datetime label="Fecha desde" type="date" [(ngModel)]="exportSisa.fechaDesde" (change)="checkExpSisa()"
-                         name='fechaDesde'>
-          </plex-datetime>
+        <div *ngIf="editar">
+            <app-profesional [profesional]='profesionalSeleccionado' [showOtraEntidadFormadora]='false'
+                             [confirmar]='confirmar' (editado)="editar=false" [desdeListaProfesionales]="true"
+                             [editable]='true'>
+            </app-profesional>
         </div>
-        <div class="col-6">
-          <plex-datetime label="Fecha hasta" type="date" [(ngModel)]="exportSisa.fechaHasta" (change)="checkExpSisa()"
-                         name='fechaDesde'>
-          </plex-datetime>
+    </plex-layout-main>
+
+    <plex-layout-sidebar type="invert">
+        <div *ngIf='seleccionado'>
+            <app-listar-profesionales-detalle [profesionalSeleccionado]="profesionalSeleccionado"
+                                              (cancelar)="cancelarDetalle($event)"
+                                              (editarSidebar)="editarProfesional($event)"
+                                              [idProfesional]="profesionalSeleccionado.id">
+            </app-listar-profesionales-detalle>
         </div>
-        <div class="col-12">
-          <br>
-          <div class="float-right">
-            <plex-button [disabled]="!expSisa" label="Exportar" type="success" (click)='exportarSisa()'>
-            </plex-button>
-          </div>
+        <div *ngIf='!seleccionado && !verExportador'>
+            <plex-title titulo="Estadísticas" size="md">
+            </plex-title>
+            <div class="row text-center mt-3">
+                <div class="col-12">
+                    <plex-grid type="full">
+                        <plex-card>
+                            <plex-badge type="info mt-3">
+                                Total Profesionales <h3>{{totalProfesionales}}</h3>
+                            </plex-badge>
+
+                        </plex-card>
+                        <plex-card>
+                            <plex-badge type="warning mt-3">
+                                Total Rematriculados <h3>{{totalProfesionalesRematriculados}}</h3>
+                            </plex-badge>
+                        </plex-card>
+                        <plex-card>
+                            <plex-badge type="success mt-3">
+                                Total Matriculados <h3>{{totalProfesionalesMatriculados}}</h3>
+                            </plex-badge>
+                        </plex-card>
+
+                    </plex-grid>
+                </div>
+            </div>
+            <div class="row" *ngIf='mostrarRestablecer === true'>
+                <div class="col-12 text-center" style="margin-top:30px">
+                    <plex-button type="primary" label='Restablecer' (click)='filtrarTodos()'></plex-button>
+
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </plex-layout-sidebar>
+        <div *ngIf='verExportador'>
+            <plex-title titulo="Exportar a SISA" size="md">
+                <plex-button type="danger" size="sm" icon="close" (click)="verExportador = false;">
+                </plex-button>
+            </plex-title>
+            <div class="row">
+                <div class="col-6">
+                    <plex-datetime label="Fecha desde" type="date" [(ngModel)]="exportSisa.fechaDesde"
+                                   (change)="checkExpSisa()" name='fechaDesde'>
+                    </plex-datetime>
+                </div>
+                <div class="col-6">
+                    <plex-datetime label="Fecha hasta" type="date" [(ngModel)]="exportSisa.fechaHasta"
+                                   (change)="checkExpSisa()" name='fechaDesde'>
+                    </plex-datetime>
+                </div>
+                <div class="col-12">
+                    <br>
+                    <div class="float-right">
+                        <plex-button [disabled]="!expSisa" label="Exportar" type="success" (click)='exportarSisa()'>
+                        </plex-button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </plex-layout-sidebar>
 </plex-layout>

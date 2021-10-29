@@ -70,31 +70,15 @@ export class ListarProfesionalesComponent implements OnInit {
             opcional: true,
         },
         {
-            key: 'fechaNacimiento',
-            label: 'Fecha nacimiento',
-            opcional: true,
-        },
-        {
             key: 'profesion',
             label: 'Profesión',
             opcional: true,
         },
-        // {
-        //   key: 'matricula',
-        //   label: 'Matrícula',
-        //   opcional: true,
-        // },
         {
             key: 'estado',
             label: 'Estado',
             opcional: true,
         },
-
-        // {
-        //   key: 'ultimoTramite',
-        //   label: 'Fecha último trámite',
-        //   opcional: true,
-        // },
         {
             key: ''
         }
@@ -285,13 +269,12 @@ export class ListarProfesionalesComponent implements OnInit {
 
     obtenerMatriculaGrado(iProfesional, iGrado) {
         const profesional = this.listadoProfesionales[iProfesional].formacionGrado[iGrado];
-        if (profesional.matriculacion !== null) {
-            if (profesional.matriculacion[profesional.matriculacion.length - 1].matriculaNumero !== undefined) {
+        if (profesional.matriculacion) {
+            if (profesional.matriculacion[profesional.matriculacion.length - 1].matriculaNumero) {
                 return profesional.matriculacion[profesional.matriculacion.length - 1].matriculaNumero;
-            } else {
-                return '';
             }
         }
+        return '';
     }
 
     verificarFechaGrado(iProfesional, iGrado) {

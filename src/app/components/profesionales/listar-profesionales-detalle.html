@@ -17,10 +17,6 @@
         <plex-label titulo="CUIT" subtitulo="{{profesional.cuit}}"></plex-label>
         <plex-label titulo="Naciolalidad" subtitulo="{{profesional.nacionalidad.nombre}}"></plex-label>
     </plex-detail>
-    <plex-title titulo="Notas" size="md">
-    </plex-title>
-    <plex-label *ngIf="profesional.notas">{{profesional.notas[0]}}</plex-label>
-    <br>
     <plex-title titulo="Posgrados" size="md">
     </plex-title>
     <plex-label *ngIf="!profesional.formacionPosgrado">Sin posgrado</plex-label>
@@ -58,4 +54,8 @@
             </td>
         </tr>
     </plex-table>
+    <br>
+    <plex-title titulo="Notas" size="md">
+    </plex-title>
+    <plex-label *ngIf="profesional.notas">{{profesional.notas[0]}}</plex-label>
 </plex-box>

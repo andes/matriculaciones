@@ -76,7 +76,7 @@ export class ListarProfesionalesComponent implements OnInit {
         },
         {
             key: 'estado',
-            label: 'Estado',
+            label: 'Posgrados/Estados',
             opcional: true,
         },
         {
@@ -156,7 +156,7 @@ export class ListarProfesionalesComponent implements OnInit {
     }
 
     loadProfesiones(event) {
-        this.profesionService.getProfesiones({gestionaColegio : false}).pipe(
+        this.profesionService.getProfesiones({ gestionaColegio: false }).pipe(
             catchError(() => of(null)))
             .subscribe(event.callback);
     }
@@ -315,5 +315,36 @@ export class ListarProfesionalesComponent implements OnInit {
     verificarFechaPosgrado(iProfesional, iGrado) {
         const profesionalPosgrado = this.listadoProfesionales[iProfesional].formacionPosgrado[iGrado];
         return ((this.hoy.getTime() - profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+    }
+
+    contarTiposDePosgrados(iProfesional, tipo) {
+        const profesionalPosgrado = this.listadoProfesionales[iProfesional].formacionPosgrado;
+        let anioGracia = 0, suspendidas = 0, vencidas = 0;
+        profesionalPosgrado.forEach(element => {
+            if (tipo === 'anioDeGracia' && element.tieneVencimiento &&
+                element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 0 &&
+                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365))) {
+                anioGracia++;
+            } else {
+                if (tipo === 'vencida' && element.tieneVencimiento &&
+                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
+                    vencidas++;
+                } else {
+                    if (tipo === 'suspendida' && !element.matriculado) {
+                        suspendidas++;
+                    }
+                }
+            }
+        });
+
+        if (tipo === 'anioDeGracia') {
+            return anioGracia;
+        } else {
+            if (tipo === 'suspendida') {
+                return suspendidas;
+            } else {
+                return vencidas;
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
-<plex-layout main="{{ seleccionado || verExportador  ? '8' : (nuevoProfesional || editar? '12' : '10') }}">
+<plex-layout main="{{ seleccionado || verExportador  ? '8' : (nuevoProfesional || editar? '12' : '10') }}"
+             resizable="true" min="4" max="4">
     <plex-layout-main>
         <div *ngIf="!nuevoProfesional && !editar">
             <header *ngIf="!nuevoProfesional">
@@ -67,37 +68,50 @@
                         <plex-label titulo="{{profesional.documento}}"></plex-label>
                     </td>
                     <td *plTableCol="'profesion'">
-                        <plex-grid size="sm" cols="2" type="auto" justify="start"
-                                   *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
-                            <plex-label titulo="{{profesionalGrado.profesion?.nombre +' - '+obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}"
-                                        subtitulo="">
-                            </plex-label>
-                            <plex-badge size="sm" type="info">{{profesional.formacionPosgrado ?
-                                profesional.formacionPosgrado?.length + ' posgrados':'0 posgrados' }}
-                            </plex-badge>
-                        </plex-grid>
-
-                    </td>
-                    <td *plTableCol="'matricula'">
-                        <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
-                            <plex-label titulo="{{obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}"></plex-label>
-                        </div>
-                    </td>
-
-                    <td *plTableCol="'estado'">
                         <div *ngFor="let profesionalGrado of profesional.formacionGrado; let indiceGrado = index">
                             <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional, indiceGrado) === 'vigente'"
                                         type="success">
-                                vigente</plex-badge>
+                                {{profesionalGrado.profesion?.nombre +' - ' +
+                                obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
+                            </plex-badge>
                             <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'suspendida' "
                                         type="warning">
-                                suspendida</plex-badge>
+                                {{profesionalGrado.profesion?.nombre +' - ' +
+                                obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
+                            </plex-badge>
                             <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'vencida' "
                                         type="{{verificarFechaGrado(indiceProfesional,indiceGrado)?'danger':'info'}}">
-                                {{verificarFechaGrado(indiceProfesional,indiceGrado)? ' Vencida':' Año de gracia'}}
+                                {{profesionalGrado.profesion?.nombre +' - ' +
+                                obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
                             </plex-badge>
-                            <br>
                         </div>
+
+                    </td>
+
+                    <td *plTableCol="'estado'">
+                        <plex-badge *ngIf="profesional.formacionPosgrado?.length === 0 || profesional.formacionPosgrado === null"
+                                    size="sm" type="info">
+                            SIN POSGRADO
+                        </plex-badge>
+
+                        <plex-badge class="mr-1" *ngIf="profesional.formacionPosgrado?.length" size="sm" type="info">
+                            {{(profesional.formacionPosgrado.length === 1) ? profesional.formacionPosgrado.length + '
+                            POSGRADO': profesional.formacionPosgrado.length + ' POSGRADOS'}}
+                        </plex-badge>
+
+                        <plex-badge class="mr-1" type="info" tooltip="Año de gracia"
+                                    *ngIf="profesional.formacionPosgrado?.length && contarTiposDePosgrados(indiceProfesional, 'anioDeGracia')">
+                            {{contarTiposDePosgrados(indiceProfesional, 'anioDeGracia')}}
+                        </plex-badge>
+                        <plex-badge class="mr-1" type="danger" tooltip="Vencidas"
+                                    *ngIf="profesional.formacionPosgrado?.length && contarTiposDePosgrados(indiceProfesional, 'vencida')">
+                            {{contarTiposDePosgrados(indiceProfesional, 'vencida')}}
+                        </plex-badge>
+                        <plex-badge class="mr-1" type="warning" tooltip="Suspendida"
+                                    *ngIf="profesional.formacionPosgrado?.length && contarTiposDePosgrados(indiceProfesional, 'suspendida')">
+                            {{contarTiposDePosgrados(indiceProfesional, 'suspendida')}}
+                        </plex-badge>
+
                     </td>
 
                     <td class="column-right my-3 d-flex align-items-center">

@@ -1,61 +1,70 @@
-<plex-box type="invert">
-    <plex-title titulo="Detalle del profesional" size="md">
-        <plex-button class='ml-2' size="sm" label="editar" type="warning" (click)="editarProfesional()">
-        </plex-button>
-        <plex-button class='ml-2' size="sm" icon="close" type="danger" (click)="volver()"></plex-button>
-    </plex-title>
+<plex-title titulo="Detalle del profesional" size="md">
+    <plex-button class='ml-2' size="sm" label="editar" type="warning" (click)="editarProfesional()">
+    </plex-button>
+    <plex-button class='ml-2' size="sm" icon="close" type="danger" (click)="volver()"></plex-button>
+</plex-title>
 
-    <plex-detail size="md">
-        <img *ngIf='tieneFoto' [src]="foto" class="img-circle" />
-        <plex-badge size="lg" type="{{profesional.profesionalMatriculado?'success':'danger'}}">{{
-            profesional.profesionalMatriculado?'MATRICULADO':'NO MATRICULADO' }}</plex-badge>
-        <div title> {{ profesional.apellido + ', '+ profesional.nombre}} </div>
-        <div subtitle> {{ profesional.documento }} </div>
-        <plex-label titulo="Fecha de nacimiento" subtitulo="{{profesional.fechaNacimiento | fecha}}"></plex-label>
-        <plex-label titulo="Edad" subtitulo="{{profesional | edad}}"></plex-label>
-        <plex-label titulo="Sexo" subtitulo="{{profesional.sexo}}"></plex-label>
-        <plex-label titulo="CUIT" subtitulo="{{profesional.cuit}}"></plex-label>
-        <plex-label titulo="Naciolalidad" subtitulo="{{profesional.nacionalidad.nombre}}"></plex-label>
-    </plex-detail>
-    <plex-title titulo="Posgrados" size="md">
-    </plex-title>
-    <plex-label *ngIf="!profesional.formacionPosgrado">Sin posgrado</plex-label>
-    <plex-table *ngIf="profesional.formacionPosgrado" [columns]="columns" #table="plTable">
-        <plex-table-columns>
-        </plex-table-columns>
-        <tr *ngFor="let posgrados of profesional.formacionPosgrado; let i = index">
-            <td>
-                <plex-label titulo="{{posgrados.especialidad.nombre}}" subtitulo="{{posgrados.profesion.nombre}}">
-                </plex-label>
-            </td>
-            <td>
-                <plex-label titulo="{{posgrados.matriculacion[posgrados.matriculacion.length-1].matriculaNumero}}">
-                </plex-label>
-            </td>
-            <td>
-                <plex-badge *ngIf="verificarEstado(i) === 'vencida'" type="{{verificarFecha(i)?'danger':'info'}}">
-                    {{verificarFecha(i)?'Vencida':'Año de gracia'}}
-                </plex-badge>
+<plex-detail size="md">
+    <img *ngIf='tieneFoto' [src]="foto" class="img-circle" />
+    <plex-badge size="lg" type="{{profesional.profesionalMatriculado?'success':'danger'}}">{{
+        profesional.profesionalMatriculado?'MATRICULADO':'NO MATRICULADO' }}</plex-badge>
+    <div title> {{ profesional.apellido + ', '+ profesional.nombre}} </div>
+    <div subtitle> {{ profesional.documento }} </div>
+    <plex-label titulo="Fecha de nacimiento" subtitulo="{{profesional.fechaNacimiento | fecha}}"></plex-label>
+    <plex-label titulo="Edad" subtitulo="{{profesional | edad}}"></plex-label>
+    <plex-label titulo="Sexo" subtitulo="{{profesional.sexo}}"></plex-label>
+    <plex-label titulo="CUIT" subtitulo="{{profesional.cuit}}"></plex-label>
+    <plex-label titulo="Naciolalidad" subtitulo="{{profesional.nacionalidad.nombre}}"></plex-label>
+</plex-detail>
+<plex-title titulo="Posgrados" size="md">
+</plex-title>
 
-                <plex-badge *ngIf="verificarEstado(i) === 'vigente'" type="success"> vigente
-                </plex-badge>
+<div class="d-flex justify-content-start align-items-center">
+    <plex-label *ngIf="!profesional.formacionPosgrado" icon="informacion" type="warning" size="md" direction="row"
+                titulo="No hay ningun posgrado aún" subtitulo="Para agregar un posgrado, diríjase a la edición 
+                de datos del matriculado en la pestaña FORMACIÓN DE POSGRADO"></plex-label>
+</div>
 
-                <plex-badge *ngIf="verificarEstado(i) === 'suspendida'" type="warning"> Suspendida
-                </plex-badge>
+<plex-table *ngIf="profesional.formacionPosgrado" [columns]="columns" #table="plTable">
+    <plex-table-columns>
+    </plex-table-columns>
+    <tr *ngFor="let posgrados of profesional.formacionPosgrado; let i = index">
+        <td>
+            <plex-label titulo="{{posgrados.especialidad.nombre}}" subtitulo="{{posgrados.profesion.nombre}}">
+            </plex-label>
+        </td>
+        <td>
+            <plex-label titulo="{{posgrados.matriculacion[posgrados.matriculacion.length-1].matriculaNumero}}">
+            </plex-label>
+        </td>
+        <td>
+            <plex-badge *ngIf="verificarEstado(i) === 'vencida'" type="{{verificarFecha(i)?'danger':'info'}}">
+                {{verificarFecha(i)?'Vencida':'Año de gracia'}}
+            </plex-badge>
 
-                <plex-badge *ngIf="verificarEstado(i) === 'verificarPapeles'"
-                            type="{{posgrados.papelesVerificados?'info':'warning'}}">
-                    {{posgrados.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
-                </plex-badge>
+            <plex-badge *ngIf="verificarEstado(i) === 'vigente'" type="success"> vigente
+            </plex-badge>
 
-                <plex-badge *ngIf="verificarEstado(i) === 'sinVencimiento'" type="warning">
-                    Sin vencimiento
-                </plex-badge>
-            </td>
-        </tr>
-    </plex-table>
-    <br>
-    <plex-title titulo="Notas" size="md">
-    </plex-title>
-    <plex-label *ngIf="profesional.notas">{{profesional.notas[0]}}</plex-label>
-</plex-box>
+            <plex-badge *ngIf="verificarEstado(i) === 'suspendida'" type="warning"> Suspendida
+            </plex-badge>
+
+            <plex-badge *ngIf="verificarEstado(i) === 'verificarPapeles'"
+                        type="{{posgrados.papelesVerificados?'info':'warning'}}">
+                {{posgrados.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+            </plex-badge>
+
+            <plex-badge *ngIf="verificarEstado(i) === 'sinVencimiento'" type="warning">
+                Sin vencimiento
+            </plex-badge>
+        </td>
+    </tr>
+</plex-table>
+<br>
+<plex-title titulo="Notas" size="md">
+</plex-title>
+<div class="d-flex justify-content-start align-items-center">
+    <plex-label *ngIf="!profesional.notas || profesional.notas[0].length === 0" icon="informacion" type="warning"
+                size="md" direction="row" titulo="No hay ninguna nota aún" subtitulo="Para agregar una nota, dirijase a la edición 
+                de datos del matriculado en la pestaña NOTAS"></plex-label>
+    <plex-label *ngIf="profesional.notas && profesional.notas[0].length">{{profesional.notas[0]}}</plex-label>
+</div>

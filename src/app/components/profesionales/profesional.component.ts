@@ -49,12 +49,10 @@ export class ProfesionalComponent implements OnInit {
     @Input() desdeListaProfesionales: any;
     @Output() editado = new EventEmitter();
     public noPoseedomicilioProfesional = false;
-    // public estadosCiviles: any[];
     @Input() showOtraEntidadFormadora: Boolean = false;
     @Input() public profesional: IProfesional = {
         id: null,
         habilitado: true,
-        // profesionalMatriculado: null,
         nombre: null,
         apellido: null,
         tipoDocumento: null,
@@ -141,8 +139,6 @@ export class ProfesionalComponent implements OnInit {
         agenteMatriculador: '',
         OtrosDatos: null,
         idRenovacion: null,
-        // createdAT: null
-
     };
     localidadesReal: any[] = [];
     localidadesLegal: any[] = [];
@@ -178,47 +174,46 @@ export class ProfesionalComponent implements OnInit {
         const cargaLocalidad = {
             id: null
         };
-        // this.loadLocalidades(cargaLocalidad);
         if (this.editable) {
             this.profesional.sexo = (this.profesional.sexo as any).toLowerCase();
             if ((this.profesional.domicilios as any).length === 0) {
-                // para que no tire palos
-                this.profesional.domicilios = [{
-                    tipo: 'real',
-                    valor: null,
-                    codigoPostal: null,
-                    ubicacion: {
-                        localidad: null,
-                        provincia: null,
-                        pais: null,
+                this.profesional.domicilios = [
+                    {
+                        tipo: 'real',
+                        valor: null,
+                        codigoPostal: null,
+                        ubicacion: {
+                            localidad: null,
+                            provincia: null,
+                            pais: null,
+                        },
+                        ultimaActualizacion: new Date(),
+                        activo: true
                     },
-                    ultimaActualizacion: new Date(),
-                    activo: true
-                },
-                                               {
-                                                   tipo: 'legal',
-                                                   valor: null,
-                                                   codigoPostal: null,
-                                                   ubicacion: {
-                                                       localidad: null,
-                                                       provincia: null,
-                                                       pais: null,
-                                                   },
-                                                   ultimaActualizacion: new Date(),
-                                                   activo: true
-                                               },
-                                               {
-                                                   tipo: 'profesional',
-                                                   valor: null,
-                                                   codigoPostal: null,
-                                                   ubicacion: {
-                                                       localidad: null,
-                                                       provincia: null,
-                                                       pais: null,
-                                                   },
-                                                   ultimaActualizacion: new Date(),
-                                                   activo: true
-                                               }
+                    {
+                        tipo: 'legal',
+                        valor: null,
+                        codigoPostal: null,
+                        ubicacion: {
+                            localidad: null,
+                            provincia: null,
+                            pais: null,
+                        },
+                        ultimaActualizacion: new Date(),
+                        activo: true
+                    },
+                    {
+                        tipo: 'profesional',
+                        valor: null,
+                        codigoPostal: null,
+                        ubicacion: {
+                            localidad: null,
+                            provincia: null,
+                            pais: null,
+                        },
+                        ultimaActualizacion: new Date(),
+                        activo: true
+                    }
                 ];
             }
         }
@@ -249,10 +244,7 @@ export class ProfesionalComponent implements OnInit {
     confirmarDatos($event) {
         if ($event.formValid) {
             let matcheo = false;
-            // tslint:disable-next-line:max-line-length
-            // this.profesional.estadoCivil = this.profesional.estadoCivil ? ((typeof this.profesional.estadoCivil === 'string')) ? this.profesional.estadoCivil : (Object(this.profesional.estadoCivil).id) : null;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
-            // tslint:disable-next-line:max-line-length
 
             this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
             this.profesional.contactos.map(elem => {
@@ -430,7 +422,7 @@ export class ProfesionalComponent implements OnInit {
         }
     }
     loadProfesiones(event) {
-        this._profesionService.getProfesiones({gestionaColegio : false}).pipe(catchError(() => of(null))).subscribe(event.callback);
+        this._profesionService.getProfesiones({ gestionaColegio: false }).pipe(catchError(() => of(null))).subscribe(event.callback);
     }
 
     loadEntidadesFormadoras(event) {
@@ -552,23 +544,4 @@ export class ProfesionalComponent implements OnInit {
 
                 });
     }
-
-    // guardarTurnoNuevoProf(profesional) {
-    //   profesional.idRenovacion = this.profesional.id;
-    //   profesional.id = null;
-    //   delete profesional._id;
-    //   this._turnosService.saveTurnoSolicitados(profesional)
-    //     .subscribe((nuevoProfesional) => {
-    //      const turnoObj = {
-    //         fecha: new Date(),
-    //         tipo: 'matriculacion',
-    //         profesional: nuevoProfesional._id
-    //       };
-
-    //       this._turnosService.saveTurnoMatriculacion({ turno: turnoObj })
-    //         .subscribe(turno => {
-    //           this.router.navigate(['/profesional', nuevoProfesional._id]);
-    //         });
-    //     });
-    // }
 }

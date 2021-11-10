@@ -7,7 +7,7 @@ import { IProfesional } from '../../interfaces/IProfesional';
 import { ProfesionalService } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
-import { Subject, of } from 'rxjs';
+import { of } from 'rxjs';
 import { debounceTime, catchError, map } from 'rxjs/operators';
 import { ProfesionService } from '../../services/profesion.service';
 import { Observable } from 'rxjs';
@@ -45,7 +45,6 @@ export class ListarProfesionalesComponent implements OnInit {
     public verExportador = false;
     public estaRematriculado;
     public estaMatriculado;
-    public mostrarRestablecer;
     public expSisa = false;
     public limit = 50;
     public editar = false;
@@ -168,7 +167,7 @@ export class ListarProfesionalesComponent implements OnInit {
             documento: this.value ? this.value.documento : '',
             apellido: this.value ? this.value.apellido : '',
             nombre: this.value ? this.value.nombre : '',
-            profesion: this.value ? this.value.profesion?.codigo : '',
+            profesion: this.value ? this.value.profesion ?.codigo : '',
             estado: this.value && this.value.estado ? this.value.estado.nombre : '',
             estadoE: this.value ? this.value.estadoEspecialidad.nombre : '',
             bajaMatricula: this.value ? this.value.verBajas : false,
@@ -193,7 +192,6 @@ export class ListarProfesionalesComponent implements OnInit {
     filtrarTodos() {
         this.estaMatriculado = false;
         this.estaRematriculado = false;
-        this.mostrarRestablecer = false;
         this.buscar();
     }
 
@@ -305,7 +303,7 @@ export class ListarProfesionalesComponent implements OnInit {
     obtenerMatriculaPosgrado(iProfesional, iGrado) {
         const profesionalPosgrado = this.listadoProfesionales[iProfesional].formacionPosgrado[iGrado];
         if (profesionalPosgrado.matriculacion !== null) {
-            if (profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1]?.matriculaNumero !== undefined) {
+            if (profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1] ?.matriculaNumero !== undefined) {
                 return profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].matriculaNumero;
             } else {
                 return '';
@@ -322,12 +320,12 @@ export class ListarProfesionalesComponent implements OnInit {
         let anioGracia = 0, suspendidas = 0, vencidas = 0;
         profesionalPosgrado.forEach(element => {
             if (tipo === 'anioDeGracia' && element.tieneVencimiento &&
-                element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 0 &&
-                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365))) {
+        element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion ?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 0 &&
+          element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion ?.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365))) {
                 anioGracia++;
             } else {
                 if (tipo === 'vencida' && element.tieneVencimiento &&
-                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
+          element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion ?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
                     vencidas++;
                 } else {
                     if (tipo === 'suspendida' && !element.matriculado) {

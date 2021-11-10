@@ -1,19 +1,13 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex';
 import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-
-// Services
 import { ProfesionalService } from './../../../services/profesional.service';
 import { TurnoService } from './../../../services/turno.service';
-
-// Utils
 import { PDFUtils } from './../../../utils/PDFUtils';
 import * as Enums from './../../../utils/enumerados';
 import { IProfesional } from './../../../interfaces/IProfesional';
-import { Params, ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
-
-import { jsPDF } from 'jspdf';
 import { catchError } from 'rxjs/operators';
 @Component({
     selector: 'app-seleccion-profesional',
@@ -39,7 +33,6 @@ export class SeleccionProfesionalComponent implements OnInit {
     public profesional: IProfesional = {
         id: null,
         habilitado: true,
-        // profesionalMatriculado: null,
         nombre: null,
         apellido: null,
         tipoDocumento: null,
@@ -60,42 +53,43 @@ export class SeleccionProfesionalComponent implements OnInit {
             activo: true,
             ultimaActualizacion: new Date()
         }],
-        domicilios: [{
-            tipo: 'real',
-            valor: '',
-            codigoPostal: '',
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
+        domicilios: [
+            {
+                tipo: 'real',
+                valor: '',
+                codigoPostal: '',
+                ubicacion: {
+                    localidad: null,
+                    provincia: null,
+                    pais: null,
+                },
+                ultimaActualizacion: new Date(),
+                activo: true
             },
-            ultimaActualizacion: new Date(),
-            activo: true
-        },
-                     {
-                         tipo: 'legal',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: null,
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     },
-                     {
-                         tipo: 'profesional',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: null,
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     }
+            {
+                tipo: 'legal',
+                valor: null,
+                codigoPostal: null,
+                ubicacion: {
+                    localidad: null,
+                    provincia: null,
+                    pais: null,
+                },
+                ultimaActualizacion: new Date(),
+                activo: true
+            },
+            {
+                tipo: 'profesional',
+                valor: null,
+                codigoPostal: null,
+                ubicacion: {
+                    localidad: null,
+                    provincia: null,
+                    pais: null,
+                },
+                ultimaActualizacion: new Date(),
+                activo: true
+            }
         ],
         fotoArchivo: null,
         firmas: null,
@@ -125,7 +119,6 @@ export class SeleccionProfesionalComponent implements OnInit {
         agenteMatriculador: '',
         OtrosDatos: null,
         idRenovacion: null,
-        // createdAT: null,
         documentoViejo: null
     };
     public profElegido;

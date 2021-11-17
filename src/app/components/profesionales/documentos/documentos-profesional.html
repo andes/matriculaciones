@@ -1,16 +1,10 @@
-<br>
 <plex-title titulo="Documentos del profesional" size="md">
     <plex-button *ngIf="!addDocumento" label="Agregar documento" type="success" size="sm" (click)="agregarDocumento()">
     </plex-button>
     <plex-button *ngIf="addDocumento" type="danger" size="sm" icon="close" (click)="cerrar()" tooltip="Cerrar">
     </plex-button>
 </plex-title>
-<!-- <div *ngIf="!addDocumento && !verificarArreglos()" justify="center" class="mt-4">
-    <plex-label titulo="Comience agregando un nuevo documento" direction="column"
-                subtitulo="Solamente se pueden adjuntar archivos con la extensión .pdf" type="default" icon="arrow-up"
-                size="md">
-    </plex-label>
-</div> -->
+
 <ng-container *ngIf="addDocumento">
     <plex-select [(ngModel)]="tipoDocumento" placeholder="Seleccione tipo de documento" labelField="label"
                  [data]="documentos">
@@ -23,10 +17,9 @@
 </ng-container>
 
 <ng-container *ngIf="!addDocumento">
-    <br>
     <plex-title titulo="Titulos de grado" size="sm"></plex-title>
     <plex-label *ngIf="!grado.length">No se cargó ningún título de grado</plex-label>
-    <div *ngFor="let doc of grado; let i=index">
+    <div *ngFor="let doc of grado; let i=index" class="mb-2">
         <plex-list>
             <plex-item>
                 <plex-label type="info" icon="documento" titulo="{{doc.nombreDocumento}}"
@@ -41,10 +34,10 @@
             </plex-item>
         </plex-list>
     </div>
-    <br>
+
     <plex-title titulo="Titulos de posgrado" size="sm"></plex-title>
     <plex-label *ngIf="!posgrado.length">No se cargó ningún título de posgrado</plex-label>
-    <div *ngFor="let doc of posgrado; let i=index">
+    <div *ngFor="let doc of posgrado; let i=index" class="mb-2">
         <plex-list>
             <plex-item>
                 <plex-label type="info" icon="documento" titulo="{{doc.nombreDocumento}}"
@@ -59,7 +52,6 @@
             </plex-item>
         </plex-list>
     </div>
-    <br>
     <plex-title titulo="Certificados" size="sm"></plex-title>
     <plex-label *ngIf="!certificado.length">No se cargó ningún certificado</plex-label>
     <div *ngFor="let doc of certificado; let i=index">

@@ -38,15 +38,15 @@ export class ProfesionalService extends BaseService {
 
     putProfesional(profesionalModel): Observable<any> {
         return this.server.put(this.profesionalesURL + 'actualizar', profesionalModel);
-        // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+    // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
     }
 
 
-    patchProfesional(id: string, cambios): Observable<any> {
+    patchProfesional(id: String, cambios): Observable<any> {
         return this.server.patch(this.profesionalesURL + id, cambios);
     }
 
-    getCredencial(idProf: string): any {
+    getCredencial(idProf: String): any {
         return this.server.get(this.profesionalesURL + 'matricula/' + idProf);
     }
 
@@ -74,12 +74,12 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.profesionalesURL + 'matching', { params: params, showError: true });
     }
 
-    getDocumentos(id: string): Observable<any> {
+    getDocumentos(id: String): Observable<any> {
         return this.server.get(this.profesionalesURL + 'documentos/' + id);
     }
 
-    deleteDocumentos(id: string, params): Observable<any> {
-        return this.server.delete(this.profesionalesURL + 'documentos/' + id, { params: params, showError: true });
+    deleteDocumentos(id: String, fileId: String): Observable<any> {
+        return this.server.delete(this.profesionalesURL + id + '/documentos/' + fileId, { showError: true });
     }
 }
 

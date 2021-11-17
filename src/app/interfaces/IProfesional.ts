@@ -6,32 +6,32 @@ import {
 } from './../utils/enumerados';
 
 export interface IProfesional {
-    id: string;
+    id: String;
     habilitado: Boolean;
-    nombre: string;
-    apellido: string;
-    tipoDocumento: string;
-    documento: string;
+    nombre: String;
+    apellido: String;
+    tipoDocumento: String;
+    documento: String;
     documentoVencimiento: Date;
-    cuit: string;
+    cuit: String;
     fechaNacimiento: Date;
-    lugarNacimiento: string;
+    lugarNacimiento: String;
     nacionalidad: {
-        nombre: string;
+        nombre: String;
         codigo: number;
     };
     sexo: Sexo;
     contactos: [{
-        tipo: string;
-        valor: string;
+        tipo: String;
+        valor: String;
         rank: number;
         ultimaActualizacion: Date;
         activo: boolean;
     }];
     domicilios: [{
-        tipo: string;
-        valor: string;
-        codigoPostal: string;
+        tipo: String;
+        valor: String;
+        codigoPostal: String;
         ubicacion: {
             localidad: any;
             provincia: any;
@@ -40,9 +40,9 @@ export interface IProfesional {
         ultimaActualizacion: Date;
         activo: boolean;
     }, {
-        tipo: string;
-        valor: string;
-        codigoPostal: string;
+        tipo: String;
+        valor: String;
+        codigoPostal: String;
         ubicacion: {
             localidad: any;
             provincia: any;
@@ -51,9 +51,9 @@ export interface IProfesional {
         ultimaActualizacion: Date;
         activo: boolean;
     }, {
-        tipo: string;
-        valor: string;
-        codigoPostal: string;
+        tipo: String;
+        valor: String;
+        codigoPostal: String;
         ubicacion: {
             localidad: any;
             provincia: any;
@@ -62,23 +62,23 @@ export interface IProfesional {
         ultimaActualizacion: Date;
         activo: boolean;
     }];
-    fotoArchivo: string;
+    fotoArchivo: String;
     firmas: [{
-        imgArchivo: string;
+        imgArchivo: String;
         fecha: Date;
     }];
     formacionGrado: [{
         exportadoSisa?: Boolean;
         profesion: {
-            nombre: string;
+            nombre: String;
             codigo: number;
             tipoDeFormacion: String;
         };
         entidadFormadora: {
-            nombre: string;
+            nombre: String;
             codigo: number;
         };
-        titulo: string;
+        titulo: String;
         tituloFileId?: String;
         fechaEgreso: Date;
         fechaTitulo: Date;
@@ -102,15 +102,15 @@ export interface IProfesional {
     }];
     formacionPosgrado: [{
         profesion: {
-            nombre: string;
+            nombre: String;
             codigo: number;
         };
         institucionFormadora: {
-            nombre: string;
+            nombre: String;
             codigo: number;
         };
         especialidad: {
-            nombre: string;
+            nombre: String;
             codigo: number;
         };
         tituloFileId?: String;
@@ -120,11 +120,11 @@ export interface IProfesional {
         certificacion: {
             fecha: Date;
             modalidad: {
-                nombre: string;
+                nombre: String;
                 codigo: number;
             };
             establecimiento: {
-                nombre: string;
+                nombre: String;
                 codigo: number;
             };
         };
@@ -144,14 +144,14 @@ export interface IProfesional {
         papelesVerificados: boolean;
         matriculado: boolean;
         revalida: boolean;
-        notas: string;
+        notas: String;
     }];
     documentos?: [{
         fecha: Date;
-        tipo: string;
+        tipo: String;
         archivo: {
-            id: string;
-            extension: string;
+            id: String;
+            extension: String;
         };
     }];
     origen: String;

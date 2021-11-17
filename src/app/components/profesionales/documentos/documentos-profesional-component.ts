@@ -123,7 +123,7 @@ export class DocumentoProfesionalComponent implements OnInit {
     }
 
     eliminarDocumento(documento, i) {
-        this.plex.confirm('¿Desea eliminar el documento??').then((resultado) => {
+        this.plex.confirm('¿Desea eliminar el documento?').then((resultado) => {
             if (resultado) {
                 if (documento.tipo === 'Título de grado') {
                     this.grado.splice(i, 1);
@@ -142,7 +142,7 @@ export class DocumentoProfesionalComponent implements OnInit {
                     }
                 }
 
-                this._profesionalService.deleteDocumentos(this.profesional.id, { fileId: documento.fileId }).subscribe((data) => {
+                this._profesionalService.deleteDocumentos(this.profesional.id, documento.fileId).subscribe((data) => {
                     this.driveService.deleteFile(documento.fileId).subscribe();
                     this.profesional.documentos = data;
                     this.plex.toast('success', 'El documento se ha eliminado correctamente', 'Información', 1000);

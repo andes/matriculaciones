@@ -6,17 +6,16 @@ import { Auth } from '@andes/auth';
 import { Ng2ImgMaxService } from 'ng2-img-max';
 import { Plex } from '@andes/plex';
 import { catchError } from 'rxjs/operators';
-import { of, Subscription } from 'rxjs';
+import { of } from 'rxjs';
+import { ISubscription } from 'rxjs/Subscription';
 
 @Component({
     selector: 'app-supervisores',
     templateUrl: 'listado-supervisores.html'
 })
 export class SupervisoresComponent implements OnDestroy {
-    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     public esSupervisor = false;
     public users;
-    public mostrarMensaje = false;
     public userSeleccionado;
     public binaryString = null;
     public firmas = null;
@@ -30,8 +29,9 @@ export class SupervisoresComponent implements OnDestroy {
     public firmaAdmin = null;
     public textoLibre;
     public loading;
-    public mostrar = false;
-    private searchSubscribe = new Subscription();
+    public showSidebar = false;
+    private searchSubscribe: ISubscription;
+    public disabledCargar = false;
     public columns = [
         {
             key: 'apellido',
@@ -54,10 +54,7 @@ export class SupervisoresComponent implements OnDestroy {
         public auth: Auth,
         private plex: Plex,
         private ng2ImgMax: Ng2ImgMaxService
-    ) {
-
-
-    }
+    ) { }
 
     ngOnDestroy() {
         if (this.searchSubscribe) {
@@ -75,31 +72,27 @@ export class SupervisoresComponent implements OnDestroy {
             if (this.searchSubscribe) {
                 this.searchSubscribe.unsubscribe();
             }
-
-            this.usuarioService.find({ search: '^' + searchTerm, organizacion: this.auth.organizacion.id, fields: '-password -permisosGlobales -disclaimers', limit: 50 }).subscribe(
-                datos => {
-                    this.users = datos;
-                }
-            );
-            this.mostrarMensaje = true;
+            this.searchSubscribe = this.usuarioService.find({
+                search: '^' + searchTerm,
+                organizacion: this.auth.organizacion.id,
+                fields: '-password -permisosGlobales -disclaimers',
+                limit: 50
+            })
+                .subscribe(datos => this.users = datos);
         } else {
             this.users = null;
-            this.mostrarMensaje = false;
         }
     }
 
     selectUser(user) {
-        this.mostrar = true;
+        this.showSidebar = true;
         this.userSeleccionado = user;
         this.indexOrganizacion = this.userSeleccionado.organizaciones.findIndex(d => d.id === this.auth.organizacion.id);
         if (this.indexOrganizacion === -1) {
             this.plex.info('info', 'Este usuario no esta en la organizacion');
             this.userSeleccionado = null;
         } else {
-
-            // tslint:disable-next-line:max-line-length
             const permisoSupervisor = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos.find(x => x === 'matriculaciones:supervisor:aprobar' || x === 'matriculaciones:*');
-            // const p = organizaciones.permisos.find(x => x === 'matriculaciones:supervisor:aprobar');
             if (permisoSupervisor) {
                 this.esSupervisor = true;
             } else {
@@ -117,7 +110,6 @@ export class SupervisoresComponent implements OnDestroy {
         }
     }
 
-
     handleFileSelectFirmaAdmin(evt) {
         const files = evt.target.files;
         const file = files[0];
@@ -132,11 +124,9 @@ export class SupervisoresComponent implements OnDestroy {
         this.base64textStringAdmin = btoa(this.binaryStringAdmin);
         this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textStringAdmin);
         this.firmaAdmin = true;
-
     }
 
-
-    guardarFirmaAdminGrid(oFirma) {
+    guardarFirmaAdminGrid() {
         const firmaADmin = {
             'firma': this.base64textStringAdmin,
             'nombreCompleto': 'asda',
@@ -154,7 +144,6 @@ export class SupervisoresComponent implements OnDestroy {
         if (this.esSupervisor) {
             permisosUss.push('matriculaciones:supervisor:aprobar');
         } else {
-            // tslint:disable-next-line:max-line-length
             const index = permisosUss.findIndex(d => d === 'matriculaciones:supervisor:aprobar');
             permisosUss.splice(index, 1);
         }
@@ -166,55 +155,32 @@ export class SupervisoresComponent implements OnDestroy {
         });
     }
 
-
-
-
-    // upload() {
-    //     this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
-    //     this.onFileUploaded.emit(this.base64textString);
-    //     this.tieneFirma.emit(true);
-    //     this.urlFirma = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + this.base64textString);
-
-    // }
-
-    // uploadFirmaAdmin() {
-    //     let firmaAdministracion = this.base64textStringAdmin;
-    //     if (this.base64textStringAdmin === '') {
-    //         firmaAdministracion = this.firmaAdmin;
-
-    //     }
-
-    //     const administracion = {
-    //         firma: firmaAdministracion,
-    //         nombreCompleto : this.nombreAdministrativo
-    //     };
-    //      this.plex.toast('success', 'Realizado con exito', 'informacion', 1000);
-    //      this.onFileUploadedFirmaAdmin.emit(administracion);
-    //     this.tieneFirmaAdmin.emit(true);
-    //     this.urlFirmaAdmin = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + firmaAdministracion);
-    // }
-
-
     onImageChange(event) {
+        this.disabledCargar = true;
         const image = event.target.files[0];
         if (image) {
             this.loading = true;
+            this.ng2ImgMax.resizeImage(image, 400, 300).subscribe(
+                result => {
+                    this.loading = false;
+                    const reader = new FileReader();
+                    reader.onload = this._handleReaderLoadedFirmaAdmin.bind(this);
+                    reader.readAsBinaryString(result);
+                    this.disabledCargar = false;
+                },
+                error => {
+                    this.disabledCargar = false;
+                    this.plex.toast('danger', 'Ha ocurrido un error realizando la operación.');
+                }
+            );
+        } else {
+            this.urlFirmaAdmin = this.urlFirmaAdmin || '';
+            this.disabledCargar = false;
         }
-
-        this.ng2ImgMax.resizeImage(image, 400, 300).subscribe(
-            result => {
-                this.loading = false;
-                const reader = new FileReader();
-                reader.onload = this._handleReaderLoadedFirmaAdmin.bind(this);
-                reader.readAsBinaryString(result);
-            },
-            error => {
-            }
-        );
     }
 
     cerrar() {
-        this.mostrar = false;
+        this.showSidebar = false;
     }
 
 }

@@ -111,6 +111,7 @@ const COMPS_PROFESIONAL = [
     FormacionPosgradoEditarComponent,
     FormacionPosgradoAgregarComponent,
     FiltrosProfesionalComponent,
+    FiltrosRenovacionComponent,
     ListarProfesionalesComponent,
     OtroDatosComponent,
     CambioDniComponent,
@@ -131,6 +132,7 @@ import { SeleccionTurnosComponent } from './components/turnos/seleccion-turnos/s
 import { SeleccionProfesionalComponent } from './components/turnos/seleccion-profesional/seleccion-profesional.component';
 import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
 import { ZonaSanitariaService } from './services/zonaSanitaria.service';
+import { FiltrosRenovacionComponent } from './components/profesionales/filtros-renovacion.component';
 @NgModule({
     declarations: [
         AppComponent,

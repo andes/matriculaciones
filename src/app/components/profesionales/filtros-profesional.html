@@ -1,36 +1,19 @@
 <form autosave="filtros-profesional" (restore)="filtrar()">
-  <plex-wrapper>
-    <plex-text (change)="filtrar()" label="Documento" [(ngModel)]="filtro.documento" name="documento"
-               placeholder="Ingrese documento">
-    </plex-text>
-    <plex-text (change)="filtrar()" label="Apellido" [(ngModel)]="filtro.apellido" name="apellido"
-               placeholder="Ingrese apellido">
-    </plex-text>
-    <plex-text (change)="filtrar()" label="Nombre" [(ngModel)]="filtro.nombre" name="nombre"
-               placeholder="Ingrese nombre">
-    </plex-text>
-    <plex-select (change)="filtrar()" label="Profesión" [(ngModel)]="filtro.profesion" name="profesion"
-                 [data]="profesiones$ | async">
-    </plex-select>
-    <plex-int (change)="filtrar()" label="N° Matrícula grado" [(ngModel)]="filtro.numeroMatriculaGrado" name="numeroMatriculaGrado"
-              placeholder="Ingrese N° de matrícula">
-    </plex-int>
-    <div collapse>
-      <plex-int (change)="filtrar()" label="N° Matrícula Esp." [(ngModel)]="filtro.numeroMatriculaEspecialidad" name="numeroMatriculaEspecialidad"
-                placeholder="Ingrese N° de matrícula">
-      </plex-int>
-      <plex-select (change)="filtrar()" label="Mat. de Profesionales" [(ngModel)]="filtro.estado" name="estado"
-                   [data]="estadosMatriculas">
-      </plex-select>
-      <plex-select (change)="filtrar()" label="Mat. de Especialidades" [(ngModel)]="filtro.estadoEspecialidad" name="estadoEspecialidad"
-                   [data]="estadosMatriculas">
-      </plex-select>
-      <plex-bool (change)="filtrar()" type="slide" label="Ver dadas de baja" align="center" [(ngModel)]="filtro.verBajas" name="verBajas"
-                 name="verBajas">
-      </plex-bool>
-      <plex-bool (change)="filtrar()" type="slide" label="Deshabilitados" align="center" [(ngModel)]="filtro.verDeshabilitados" name="verDeshabilitados"
-                 name="verDeshabilitados">
-      </plex-bool>
-    </div>
-  </plex-wrapper>
+    <plex-wrapper>
+        <plex-int (change)="filtrar()" label="Documento" [(ngModel)]="filtro.documento" name="documento"
+                    placeholder="Ingrese documento">
+        </plex-int>
+        <plex-text (change)="filtrar()" label="Apellido" [(ngModel)]="filtro.apellido" name="apellido"
+                    placeholder="Ingrese apellido">
+        </plex-text>
+        <plex-text (change)="filtrar()" label="Nombre" [(ngModel)]="filtro.nombre" name="nombre"
+                    placeholder="Ingrese nombre">
+        </plex-text>
+        <plex-select (change)="filtrar()" label="Profesión" [(ngModel)]="filtro.profesion" name="profesion"
+                    [data]="profesiones$ | async">
+        </plex-select>
+        <plex-int (change)="filtrar()" label="N° Matrícula grado" [(ngModel)]="filtro.numeroMatriculaGrado" name="numeroMatriculaGrado"
+                    placeholder="Ingrese N° de matrícula">
+        </plex-int>
+    </plex-wrapper>
 </form>

@@ -12,7 +12,7 @@
               1].matriculaNumero }}
             </span>
             <plex-button *ngIf="!formacionGrado.matriculacion?.matriculacionNumero" type="primary"
-                         class="float-right btnGrado" icon="information-outline" (click)="showFormacion(i)">
+                         class="float-right btnGrado" icon="information-outline" tooltip="Información" (click)="showFormacion(i)">
             </plex-button>
             <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                          title="Generar credencial" type="success" class="float-right btnGrado"
@@ -25,7 +25,7 @@
             <plex-button *ngIf="profesional.habilitado" title="Editar" type="success" class="float-right btnGrado"
                          icon="lapiz" (click)="editar(formacionGrado,i)">
             </plex-button>
-            <plex-button class="float-right btnGrado" type="danger" title="Imprimir datos del profesional"
+            <plex-button class="float-right btnGrado" type="danger" title="Imprimir"
                          (click)="pdf(i)" icon='impresora'> </plex-button>
           </div>
         </div>
@@ -62,7 +62,7 @@
         </plex-badge>
 
         <plex-badge *ngIf='formacionGrado.matriculacion.length  && formacionGrado.renovacion'
-                    type="{{formacionGrado.papelesVerificados?'info':'warning'}}">
+                    type="{{formacionGrado.papelesVerificados ? 'success' : 'warning' }}">
           {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
         </plex-badge>
       </div>

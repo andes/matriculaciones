@@ -1,0 +1,13 @@
+<form autosave="filtros-renovacion" (restore)="filtrar()">
+    <plex-wrapper justify="start">
+        <plex-datetime (change)="filtrar()" label="Fecha desde" name="fechaDesde" type="date" [(ngModel)]="filtro.fechaDesde" [max]="finDelDia"
+                    placeholder="{{ inicioDelDia | fecha }}">
+        </plex-datetime>
+        <plex-datetime (change)="filtrar()" label="Fecha hasta" name="fechaHasta" type="date" [(ngModel)]="filtro.fechaHasta" [max]="finDelDia"
+                    placeholder="{{ finDelDia | fecha }}">
+        </plex-datetime>
+        <plex-select (change)="filtrar()" label="Zona sanitaria" name="zonas" placeholder="Seleccione zona sanitaria" [(ngModel)]="filtro.zonaSanitaria"
+                    [data]="zonasSanitarias">
+        </plex-select>
+    </plex-wrapper>
+</form>

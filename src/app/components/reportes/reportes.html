@@ -1,11 +1,13 @@
 <plex-layout>
-  <plex-layout-main>
+  <plex-layout-main class="h-100">
     <plex-title main titulo="BÚSQUEDA DE MATRÍCULAS">
       <plex-bool type="slide" [(ngModel)]="busquedaMatriculasProxAVencer" (change)="onChange($event)"
                  name="busquedaMatriculasProxAVencer" label="Buscar Matrículas Próximas a Vencer">
       </plex-bool>
-      <plex-button type="warning" label="EXPORTAR" class="ml-4" [disabled]="formulario.invalid" (click)="generarReporte(true)"></plex-button>
-      <plex-button type="success" label="GENERAR REPORTE" class="ml-2" [disabled]="formulario.invalid" (click)="generarReporte(false)">
+      <plex-button class='ml-3' size="md" type="danger" label="Volver" routerLink="/homeAdministracion">
+      </plex-button>
+      <plex-button type="warning" label="EXPORTAR" class="ml-1" [disabled]="formulario.invalid" (click)="generarReporte(true)"></plex-button>
+      <plex-button type="success" label="GENERAR REPORTE" class="ml-1" [disabled]="formulario.invalid" (click)="generarReporte(false)">
       </plex-button>
     </plex-title>
     <form #formulario="ngForm">
@@ -27,8 +29,6 @@
         <plex-select label="Tipo" [required]="true" name="selectMatriculas" [data]="selectData"
                     [(ngModel)]="select">
         </plex-select>
-        <plex-select label="Estado" [required]="true" [(ngModel)]="estado" [data]="estadosMatriculas" name="estadoMatricula">
-        </plex-select>
         <div collapse>
           <plex-select [(ngModel)]="profesion" name="profesion" label="Profesión" [data]="profesiones">
           </plex-select>
@@ -44,10 +44,12 @@
       </plex-wrapper>
     </form>
     <plex-loader *ngIf="loader" type="ball-beat" class=""></plex-loader>
-    <plex-label direction="column" type="info" *ngIf="!profesionales?.length && !loader" size="xl" icon="magnify"
-                titulo="Complete los campos y presione 'Generar reporte'"
-                subtitulo="Visualizará el listado de profesionales matriculados, luego podrá exportar el resultado">
-    </plex-label>
+    <div class="h-50" justify="center" *ngIf="!profesionales?.length && !loader">
+      <plex-label direction="column" type="info" size="xl" icon="magnify"
+                  titulo="Complete los campos y presione 'Generar reporte'"
+                  subtitulo="Visualizará el listado de profesionales matriculados, luego podrá exportar el resultado">
+      </plex-label>
+    </div>
     <plex-table [columns]="columns" #table="plTable" [offset]="175" (scroll)="nextPage()" *ngIf="profesionales?.length">
       <plex-title titulo="LISTA DE MATRICULADOS">
         <plex-table-columns>

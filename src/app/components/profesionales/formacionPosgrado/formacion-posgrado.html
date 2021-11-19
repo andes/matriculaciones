@@ -40,8 +40,8 @@
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'revalida'"
-                            type="{{formacionPosgrado.papelesVerificados?'info':'warning'}}">
-                    {{formacionPosgrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+                            type="{{formacionPosgrado.papelesVerificados ? 'success' : 'warning' }}">
+                    {{formacionPosgrado.papelesVerificados ? 'Papeles verificados' : 'Papeles sin verificar'}}
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'sinVencimiento'" type="warning">

@@ -1,6 +1,6 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, Input, EventEmitter, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormGroup, NgForm } from '@angular/forms';
 import { Plex } from '@andes/plex';
 import * as enumerados from './../../utils/enumerados';
 import { Matching } from '@andes/match';
@@ -17,13 +17,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { stringify } from '@angular/compiler/src/util';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-profesional',
     templateUrl: 'profesional.html'
 })
 export class ProfesionalComponent implements OnInit {
+    @ViewChild('formNuevoProf', { static: true }) formProf: NgForm;
     public formProfesionalComp: FormGroup;
     public sexos: any;
     match = new Matching();
@@ -241,8 +242,8 @@ export class ProfesionalComponent implements OnInit {
         }
     }
 
-    confirmarDatos($event) {
-        if ($event.formValid) {
+    confirmarDatos() {
+        if (this.formProf.valid) {
             let matcheo = false;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
 
@@ -288,8 +289,8 @@ export class ProfesionalComponent implements OnInit {
 
     }
 
-    confirmarDatosAdmin($event) {
-        if ($event.formValid) {
+    confirmarDatosAdmin() {
+        if (this.formProf.valid) {
             let matcheo = false;
             this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
             this.profesional.formacionGrado[0].exportadoSisa = false;
@@ -474,8 +475,8 @@ export class ProfesionalComponent implements OnInit {
         this.loadLocalidadesProfesional(this.profesional.domicilios[2].ubicacion.provincia, true);
     }
 
-    actualizar($event) {
-        if ($event.formValid) {
+    actualizar() {
+        if (this.formProf.valid) {
 
             this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;

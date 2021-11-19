@@ -154,10 +154,6 @@ export class TurnosComponent implements OnInit {
 
     cambiarEstado(presente) {
         this.turnoElegido.sePresento = presente;
-        this.turnoElegido.updatedBy = {
-            usuario: this.auth.usuario,
-            organizacion: this.auth.organizacion
-        };
         this._turnoService.saveTurno(this.turnoElegido).subscribe();
     }
 

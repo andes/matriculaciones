@@ -48,16 +48,6 @@ export class FiltrosProfesionalComponent implements OnInit {
         } else {
             this.busquedaProfesionalService.profesionSelected.next(null);
         }
-        if (this.filtro.estado && this.filtro.estado.nombre !== 'Todos') {
-            this.busquedaProfesionalService.estado.next(this.filtro.estado);
-        } else {
-            this.busquedaProfesionalService.estado.next(null);
-        }
-        if (this.filtro.estadoEspecialidad && this.filtro.estadoEspecialidad.nombre !== 'Todos') {
-            this.busquedaProfesionalService.estadoEspecialidad.next(this.filtro.estadoEspecialidad);
-        } else {
-            this.busquedaProfesionalService.estadoEspecialidad.next(null);
-        }
         if (this.filtro.numeroMatriculaGrado) {
             this.busquedaProfesionalService.numeroMatriculaGrado.next(this.filtro.numeroMatriculaGrado);
         } else {
@@ -68,7 +58,5 @@ export class FiltrosProfesionalComponent implements OnInit {
         } else {
             this.busquedaProfesionalService.numeroMatriculaEspecialidad.next(null);
         }
-        this.busquedaProfesionalService.verBajas.next(this.filtro.verBajas);
-        this.busquedaProfesionalService.verDeshabilitados.next(this.filtro.verDeshabilitados);
     }
 }

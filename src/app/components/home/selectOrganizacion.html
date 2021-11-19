@@ -1,21 +1,18 @@
-<form class="plex-layout" #form="ngForm">
-    <section>
-        <plex-box>
-            <header>
-                <div class="page-title">Seleccione una organización</div>
+<plex-layout>
+    <plex-layout-main>
+        <form #form="ngForm">
+            <header class="mb-3">
+                <plex-title titulo="Seleccione una organización"></plex-title>
             </header>
-            <fieldset>
-                <div class="row">&nbsp;</div>
-                <ul class="list-group">
-                    <li class="list-group-item boton color-rosa" *ngFor="let _unaOrg of organizaciones">
-                        <div class="row">
-                            <div class="col-11">
-                                <div (click)=seleccionar(_unaOrg)> {{_unaOrg.nombre}} </div>
-                            </div>
+            <ul class="list-group">
+                <li class="list-group-item boton color-rosa" *ngFor="let _unaOrg of organizaciones">
+                    <div class="row">
+                        <div class="col-11">
+                            <div (click)=seleccionar(_unaOrg)> {{_unaOrg.nombre}} </div>
                         </div>
-                    </li>
-                </ul>
-            </fieldset>
-        </plex-box>
-    </section>
-</form>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </plex-layout-main>
+</plex-layout>

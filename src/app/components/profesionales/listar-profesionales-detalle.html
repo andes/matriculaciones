@@ -21,7 +21,7 @@
 
 <div class="d-flex justify-content-start align-items-center">
     <plex-label *ngIf="!profesional.formacionPosgrado" icon="informacion" type="warning" size="md" direction="row"
-                titulo="No hay ningun posgrado aún" subtitulo="Para agregar un posgrado, diríjase a la edición 
+                titulo="No hay ningún posgrado aún" subtitulo="Para agregar un posgrado, diríjase a la edición 
                 de datos del matriculado en la pestaña FORMACIÓN DE POSGRADO"></plex-label>
 </div>
 
@@ -49,7 +49,7 @@
             </plex-badge>
 
             <plex-badge *ngIf="verificarEstado(i) === 'verificarPapeles'"
-                        type="{{posgrados.papelesVerificados?'info':'warning'}}">
+                        type="{{posgrados.papelesVerificados ? 'success' : 'warning'}}">
                 {{posgrados.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
             </plex-badge>
 

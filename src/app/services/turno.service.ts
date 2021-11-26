@@ -25,16 +25,11 @@ export class TurnoService extends BaseService {
     }
 
     getTurnosProximos(search: any): Observable<any> {
-    // return this._http.get(this.turnosProximosURL, search);
         return this.getTurnos(this.turnosProximosURL, search);
     }
 
     getTurnosMatriculacion(fecha: Date, searchParams: any): Observable<any[]> {
         return this.getTurnos(this.turnosMatriculacionURL, searchParams);
-    }
-
-    getTurnosRenovacion(fecha: Date, searchParams: any): Observable<any[]> {
-        return this.getTurnos(this.turnosRenovacionURL, searchParams);
     }
 
     saveTurnoMatriculacion(turnoModel: any): Observable<any> {
@@ -52,9 +47,6 @@ export class TurnoService extends BaseService {
         return this._server.get(this.turnosSolicitados + 'traePDni/' + dni);
     }
 
-    getTurnoPorDni(params): Observable<any> {
-        return this._server.get(this.turnosURL + 'turnosPorDocumentos', { params: params, showError: true });
-    }
     getTurnos(url: string, searchParams: any): Observable<any> {
         const parametros: any = {
             anio: null,
@@ -105,10 +97,6 @@ export class TurnoService extends BaseService {
         }
 
         return this._server.get(url, { params: parametros });
-    }
-
-    patchTurnos(id: string, cambios): Observable<any> {
-        return this._server.patch(this.turnosURL + id, cambios);
     }
 
     getTurnosPorDocumento(params) {

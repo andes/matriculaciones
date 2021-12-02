@@ -64,6 +64,7 @@
         </td>
         </tr>
     </plex-table>
+    <br>
 </div>
 
 <div *ngIf="editarObtencion">
@@ -86,6 +87,7 @@
         </plex-datetime>
     </plex-grid>
     </form>
+    <br>
 </div>
 
 <plex-title titulo="Revalidaciones" size="sm">
@@ -113,7 +115,7 @@
             <td>
                 <plex-badge *ngIf='(i === (formacion.matriculacion.length - 1) && formacion.matriculado)' size="lg"
                         type="{{(matriculacion.fin >= hoy || !estaVencida(i))?'success':'danger'}}">
-                        {{!estaVencida(i)? 'Vigente' :'Vencida'}} </plex-badge>
+                        {{!estaVencida(i)?'Vigente' :'Vencida'}} </plex-badge>
 
                 <plex-badge *ngIf='i !== (formacion.matriculacion.length - 1) || !formacion.matriculado' size="lg"
                         type="danger"> NO VIGENTE

@@ -39,12 +39,12 @@ export class FiltrosRenovacionComponent implements OnInit {
         if (this.filtro.fechaDesde) {
             this.busquedaProfesionalService.fechaDesde.next(this.filtro.fechaDesde);
         } else {
-            this.busquedaProfesionalService.fechaDesde.next(this.inicioDelDia);
+            this.busquedaProfesionalService.fechaDesde.next(null);
         }
         if (this.filtro.fechaHasta) {
             this.busquedaProfesionalService.fechaHasta.next(this.filtro.fechaHasta);
         } else {
-            this.busquedaProfesionalService.fechaHasta.next(this.finDelDia);
+            this.busquedaProfesionalService.fechaHasta.next(null);
         }
         if (this.filtro.zonaSanitaria) {
             this.busquedaProfesionalService.zonaSanitaria.next(this.filtro.zonaSanitaria);

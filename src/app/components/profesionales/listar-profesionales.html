@@ -4,7 +4,7 @@
     	<div *ngIf="!nuevoProfesional && !editar">
 			<plex-title titulo="Buscar profesional" size="lg">
 				<plex-bool *ngIf="permisos.supervisor" class="mr-3" [(ngModel)]="filtrosRenovacion" label="Papeles sin verificar" type="slide"
-							(change)="showFiltrosRenovacion()"></plex-bool>
+							(change)="changeFiltroRenovacionValue()"></plex-bool>
 				<plex-button class='mr-1' size="md" type="primary" label="Numeraciones" routerLink="/listadoNumeraciones">
 				</plex-button>
 				<plex-button class='mr-1' size="md" type="primary" label="Exportar SISA" (click)='exportarSISA()'>

@@ -8,6 +8,7 @@ import { IProfesion } from '../../../interfaces/IProfesion';
 export class BusquedaProfesionalService {
     // URL to web api
     protected url = '/core/tm/profesionales/';
+    public filtroRenovacionActivo = new BehaviorSubject<boolean>(false);
     // Filtros de profesional
     public documentoText = new BehaviorSubject<string>(null);
     public apellidoText = new BehaviorSubject<string>(null);

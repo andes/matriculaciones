@@ -7,7 +7,7 @@ import { Auth } from '@andes/auth';
 import { ExcelService } from '../../services/excel.service';
 import { Observable } from 'rxjs';
 import { BusquedaProfesionalService } from './services/busqueda-profesional.service';
-import { map, tap } from 'rxjs/operators';
+import { map, tap, take } from 'rxjs/operators';
 
 @Component({
     selector: 'app-listar-profesionales',
@@ -35,7 +35,7 @@ export class ListarProfesionalesComponent implements OnInit {
         fechaHasta: ''
     };
     public permisos: any = {};
-    public filtrosRenovacion = false;
+    public filtrosRenovacion;
     public columns = [
         {
             key: 'profesional',
@@ -66,20 +66,28 @@ export class ListarProfesionalesComponent implements OnInit {
 
 
     ngOnInit() {
+        this.listadoActual = [];
         this.profesionalService.getEstadisticas().subscribe((data) => {
             this.totalProfesionales = data.total;
             this.totalProfesionalesMatriculados = data.totalMatriculados;
             this.totalProfesionalesRematriculados = data.totalRematriculados;
         });
-        this.listado$ = this.busquedaProfesionalService.profesionalesFiltrados$.pipe(
-            map(resp => this.listadoActual = resp)
+        // para que recuerde valor del filtro al volver a la pantalla de profesionales
+        this.busquedaProfesionalService.filtroRenovacionActivo.subscribe(
+            value => this.filtrosRenovacion = value
         );
+        this.getListado();
         this.permisos.verProfesional = this.auth.check('matriculaciones:profesionales:getProfesional');
         this.permisos.supervisor = this.auth.check('matriculaciones:supervisor:?');
         this.permisos.crearProfesional = this.auth.check('matriculaciones:profesionales:postProfesional');
     }
 
-    showFiltrosRenovacion(){
+    changeFiltroRenovacionValue(){
+        this.busquedaProfesionalService.filtroRenovacionActivo.next(this.filtrosRenovacion);
+        this.getListado();
+    }
+
+    getListado(){
         const query = this.filtrosRenovacion ? this.busquedaProfesionalService.profesionalesRenovacionFiltrados$ : this.busquedaProfesionalService.profesionalesFiltrados$;
         this.listado$ = query.pipe(
             tap(data => this.listadoActual = data)
@@ -169,7 +177,7 @@ export class ListarProfesionalesComponent implements OnInit {
         if (!this.listadoActual?.length) {
             return;
         }
-        const profesionalGrado = this.listadoActual[iProfesional].formacionGrado[iGrado];
+        const profesionalGrado = this.listadoActual[iProfesional]?.formacionGrado[iGrado];
         if (profesionalGrado) {
             if (!profesionalGrado.matriculado) {
                 return 'suspendida';
@@ -253,9 +261,9 @@ export class ListarProfesionalesComponent implements OnInit {
         if (!this.listadoActual?.length) {
             return;
         }
-        const profesionalPosgrado = this.listadoActual[iProfesional].formacionPosgrado;
+        const profesionalPosgrado = this.listadoActual[iProfesional]?.formacionPosgrado;
         let anioGracia = 0, suspendidas = 0, vencidas = 0;
-        profesionalPosgrado.forEach(element => {
+        profesionalPosgrado?.forEach(element => {
             if (tipo === 'anioDeGracia' && element.tieneVencimiento &&
         element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 0 &&
           element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365))) {

@@ -66,7 +66,7 @@ export class ProfesionalComponent implements OnInit {
         nacionalidad: null,
         sexo: undefined,
         contactos: [{
-            tipo: 'celular',
+            tipo: 'email',
             valor: '',
             rank: 0,
             activo: true,
@@ -147,8 +147,10 @@ export class ProfesionalComponent implements OnInit {
     localidadesProfesional: any[] = [];
     matcheo = false;
 
-    @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
+    patronContactoNumerico = /^[0-9]{3,4}[0-9]{6}$/;
+    patronContactoAlfabetico = /^[-\w.%+]{1,61}@[a-z]+(.[a-z]+)+$/;
 
+    @Output() public onProfesionalCompleto: EventEmitter<IProfesional> = new EventEmitter<IProfesional>();
 
     constructor(
         private _sexoService: SexoService,
@@ -435,14 +437,19 @@ export class ProfesionalComponent implements OnInit {
         this._sexoService.getSexos().pipe(catchError(() => of(null))).subscribe(event.callback);
     }
     addContacto() {
-        const nuevoContacto = Object.assign({}, {
-            tipo: 'celular',
-            valor: '',
-            rank: 0,
-            activo: true,
-            ultimaActualizacion: new Date()
-        });
-        this.profesional.contactos.push(nuevoContacto);
+        const indexUltimo = this.profesional.contactos.length - 1;
+        if(this.profesional.contactos[indexUltimo].valor){
+            const nuevoContacto = Object.assign({}, {
+                tipo: 'email',
+                valor: '',
+                rank: 0,
+                activo: true,
+                ultimaActualizacion: new Date()
+            });
+            this.profesional.contactos.push(nuevoContacto);
+        }else{
+            this.plex.toast('info', 'Debe completar los contactos anteriores.');
+        }
     }
 
     removeContacto(i) {

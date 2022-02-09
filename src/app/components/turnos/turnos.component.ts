@@ -27,6 +27,8 @@ export class TurnosComponent implements OnInit {
     public showListado: Boolean = true;
     public solicitudesDeCambio;
     public muestraAusente = false;
+    public fechaTurno;
+    public horarioTurno;
     offset = 0;
     limit = 30;
     turnosTotal = null;
@@ -45,20 +47,19 @@ export class TurnosComponent implements OnInit {
         fechaHoy: new Date()
     };
 
-    public main = 12;
     public componentPrint = false;
     turnosParaListado: any;
-    constructor(private _turnoService: TurnoService,
-                private _formBuilder: FormBuilder,
-                private _pdfUtils: PDFUtils,
-                private route: ActivatedRoute,
-                private router: Router,
-                private _cambioDniService: CambioDniService,
-                public auth: Auth,
-                public listadoPdf: ListadoTurnosPdfComponent,
-                private _profesionalService: ProfesionalService,
-                private plex: Plex) {
-
+    constructor(
+        private _turnoService: TurnoService,
+        private _formBuilder: FormBuilder,
+        private _pdfUtils: PDFUtils,
+        private route: ActivatedRoute,
+        private router: Router,
+        private _cambioDniService: CambioDniService,
+        public auth: Auth,
+        public listadoPdf: ListadoTurnosPdfComponent,
+        private _profesionalService: ProfesionalService,
+        private plex: Plex) {
         this.mySubject
             .debounceTime(1000)
             .subscribe(val => {
@@ -69,11 +70,11 @@ export class TurnosComponent implements OnInit {
     ngOnInit() {
 
         /**
-     * 1) Cada vez que inicia fechaSDesde y fechaShoy(fechas ubicadas en el localStorage) se encuentran en null.
-     * 2) Cuando se hace un filtro en la fechaDesde (En "fechaSDesde" guarda dicha fecha filtrada y en "fechaSHoy" guarda la fecha de hoy).
-     * 3) Mientras que la "fechaSHoy" del localStorage siga siendo la misma que la fecha de hoy, se va a filtrar por la fecha "fechaSDesde".
-     * 4) Cuando la "fechaSHoy" no coincida con el dia de hoy, se remueve lo que esta guardado en el localStorage y se filtra por fecha de hoy".
-     */
+            * 1) Cada vez que inicia fechaSDesde y fechaShoy(fechas ubicadas en el localStorage) se encuentran en null.
+            * 2) Cuando se hace un filtro en la fechaDesde (En "fechaSDesde" guarda dicha fecha filtrada y en "fechaSHoy" guarda la fecha de hoy).
+            * 3) Mientras que la "fechaSHoy" del localStorage siga siendo la misma que la fecha de hoy, se va a filtrar por la fecha "fechaSDesde".
+            * 4) Cuando la "fechaSHoy" no coincida con el dia de hoy, se remueve lo que esta guardado en el localStorage y se filtra por fecha de hoy".
+            */
 
         const fechaSDesde: any = JSON.parse(localStorage.getItem('fechaDesde'));
         const fechaSHoy: any = JSON.parse(localStorage.getItem('fechaHoy'));
@@ -92,16 +93,17 @@ export class TurnosComponent implements OnInit {
 
         this.buscar();
         this.contadorDeCambiosDni();
+
     }
 
     showTurno(turno: any) {
-        this.main = 8;
         this.muestraAusente = false;
         this.turnoElegido = turno;
+        this.fechaTurno = moment(turno.fecha).format('dddd L');
+        this.horarioTurno = moment(turno.fecha).format('LT');
         if (moment(this.hoy).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')) {
             this.muestraAusente = true;
         }
-
     }
 
     isSelected(turno: any) {
@@ -163,7 +165,6 @@ export class TurnosComponent implements OnInit {
     }
 
     cerrarDetalleTurno() {
-        this.main = 12;
         this.turnoElegido = null;
     }
 

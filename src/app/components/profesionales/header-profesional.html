@@ -1,31 +1,63 @@
-<plex-detail>
-  <img *ngIf='tieneFoto' [src]="foto" class="img-circle" />
-  <div title>{{profesional.apellido + ', '+ profesional.nombre}}</div>
-  <plex-badge size="lg" type="{{profesional.habilitado?'success':'danger'}}">
-    {{profesional.habilitado?"habilitado":"Deshabilitado"}}
-  </plex-badge>
-  <plex-badge *ngIf='profesional.agenteMatriculador' size="lg" type="info">
-    <b>Agente:</b> {{profesional.agenteMatriculador?profesional.agenteMatriculador:agenteMatriculador}}
-  </plex-badge>
+<plex-detail *mobile="false">
+    <img *ngIf='tieneFoto' [src]="foto" class="img-circle" />
+    <div title>{{profesional.apellido + ', '+ profesional.nombre}}</div>
+    <plex-badge type="{{profesional.habilitado?'success':'danger'}}">
+        {{profesional.habilitado?"habilitado":"Deshabilitado"}}
+    </plex-badge>
+    <plex-badge *ngIf='profesional.agenteMatriculador' type="info">
+        <b>Agente:</b> {{profesional.agenteMatriculador?profesional.agenteMatriculador:agenteMatriculador}}
+    </plex-badge>
 
-  <plex-badge *ngIf='profesional.supervisor?.nombreCompleto' size="lg" type="info">
-    <b>Supervisor:</b> {{profesional.supervisor.nombreCompleto}}
-  </plex-badge>
+    <plex-badge *ngIf='profesional.supervisor?.nombreCompleto' type="info">
+        <b>Supervisor:</b> {{profesional.supervisor.nombreCompleto}}
+    </plex-badge>
 
-  <plex-badge *ngIf='!profesional.supervisor' size="lg" type="info"> No tiene supervisor</plex-badge>
+    <plex-badge *ngIf='!profesional.supervisor' type="info"> No tiene supervisor</plex-badge>
 
-  <div subtitle>
-    <plex-button type="info" size="sm" (click)="editar()">editar</plex-button>
-    <plex-button *ngIf="estaHabilitado" class='ml-2' type="warning" size="sm" (click)="habilitar()">Deshabilitar
-    </plex-button>
-    <plex-button *ngIf="!estaHabilitado" class='ml-2' type="success" size="sm" (click)="habilitar()">Habilitar
-    </plex-button>
-  </div>
-  <plex-label titulo="Documento" subtitulo="{{profesional.documento}}"></plex-label>
-  <plex-label titulo="Fecha de Nacimiento" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">
-  </plex-label>
-  <plex-label titulo="Edad" subtitulo="{{profesional | edad}}"></plex-label>
-  <plex-label titulo="Sexo" subtitulo="{{profesional.sexo}}"></plex-label>
-  <plex-label titulo="CUIT" subtitulo="{{profesional.cuit}}"></plex-label>
-  <plex-label titulo="Nacionalidad" subtitulo="{{profesional.nacionalidad?.nombre}}"></plex-label>
+    <div subtitle>
+        <plex-button type="info" size="sm" (click)="editar()">editar</plex-button>
+        <plex-button *ngIf="estaHabilitado" class='ml-2' type="warning" size="sm" (click)="habilitar()">Deshabilitar
+        </plex-button>
+        <plex-button *ngIf="!estaHabilitado" class='ml-2' type="success" size="sm" (click)="habilitar()">Habilitar
+        </plex-button>
+    </div>
+    <plex-label titulo="Documento" subtitulo="{{profesional.documento}}"></plex-label>
+    <plex-label titulo="Fecha de Nacimiento" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">
+    </plex-label>
+    <plex-label titulo="Edad" subtitulo="{{profesional | edad}}"></plex-label>
+    <plex-label titulo="Sexo" subtitulo="{{profesional.sexo}}"></plex-label>
+    <plex-label titulo="CUIT" subtitulo="{{profesional.cuit}}"></plex-label>
+    <plex-label titulo="Nacionalidad" subtitulo="{{profesional.nacionalidad?.nombre}}"></plex-label>
+</plex-detail>
+
+<plex-detail *mobile size="md" direction="column" justify="center">
+    <img *ngIf='tieneFoto' [src]="foto" class="img-circle" />
+    <div title>{{profesional.apellido + ', '+ profesional.nombre}}</div>
+    <plex-badge type="{{profesional.habilitado?'success':'danger'}}">
+        {{profesional.habilitado?"habilitado":"Deshabilitado"}}
+    </plex-badge>
+    <plex-badge *ngIf='profesional.agenteMatriculador' type="info">
+        <b>Agente:</b> {{profesional.agenteMatriculador?profesional.agenteMatriculador:agenteMatriculador}}
+    </plex-badge>
+
+    <plex-badge *ngIf='profesional.supervisor?.nombreCompleto' type="info">
+        <b>Supervisor:</b> {{profesional.supervisor.nombreCompleto}}
+    </plex-badge>
+
+    <plex-badge *ngIf='!profesional.supervisor' type="info"> No tiene supervisor</plex-badge>
+
+    <div subtitle>
+        <plex-button type="info" size="sm" (click)="editar()">editar</plex-button>
+        <plex-button *ngIf="estaHabilitado" class='ml-2' type="warning" size="sm" (click)="habilitar()">Deshabilitar
+        </plex-button>
+        <plex-button *ngIf="!estaHabilitado" class='ml-2' type="success" size="sm" (click)="habilitar()">Habilitar
+        </plex-button>
+    </div>
+    <plex-label titulo="Documento" subtitulo="{{profesional.documento}}"></plex-label>
+    <plex-label titulo="Fecha de Nacimiento" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">
+    </plex-label>
+    <plex-label titulo="Edad" subtitulo="{{profesional | edad}}"></plex-label>
+    <plex-label titulo="Sexo" subtitulo="{{profesional.sexo}}"></plex-label>
+    <plex-label titulo="CUIT" subtitulo="{{profesional.cuit}}"></plex-label>
+    <plex-label titulo="Nacionalidad" subtitulo="{{profesional.nacionalidad?.nombre}}"></plex-label>
 </plex-detail>

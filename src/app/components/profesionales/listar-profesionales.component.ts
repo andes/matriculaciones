@@ -8,6 +8,7 @@ import { ExcelService } from '../../services/excel.service';
 import { Observable } from 'rxjs';
 import { BusquedaProfesionalService } from './services/busqueda-profesional.service';
 import { map, tap, take } from 'rxjs/operators';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
     selector: 'app-listar-profesionales',
@@ -28,6 +29,7 @@ export class ListarProfesionalesComponent implements OnInit {
     public verExportador = false;
     public expSisa = false;
     public editar = false;
+    public movil = false;
     public seleccionado = false;
     public itemsDropdown: any = [];
     public exportSisa = {
@@ -61,7 +63,8 @@ export class ListarProfesionalesComponent implements OnInit {
         private excelService: ExcelService,
         private router: Router,
         public auth: Auth,
-        private busquedaProfesionalService: BusquedaProfesionalService
+        private busquedaProfesionalService: BusquedaProfesionalService,
+        private breakpointObserver: BreakpointObserver
     ) { }
 
 
@@ -80,14 +83,19 @@ export class ListarProfesionalesComponent implements OnInit {
         this.permisos.verProfesional = this.auth.check('matriculaciones:profesionales:getProfesional');
         this.permisos.supervisor = this.auth.check('matriculaciones:supervisor:?');
         this.permisos.crearProfesional = this.auth.check('matriculaciones:profesionales:postProfesional');
+
+
     }
 
-    changeFiltroRenovacionValue(){
+    isMobile() {
+        return this.breakpointObserver.isMatched('(max-width: 599px)');
+    }
+    changeFiltroRenovacionValue() {
         this.busquedaProfesionalService.filtroRenovacionActivo.next(this.filtrosRenovacion);
         this.getListado();
     }
 
-    getListado(){
+    getListado() {
         const query = this.filtrosRenovacion ? this.busquedaProfesionalService.profesionalesRenovacionFiltrados$ : this.busquedaProfesionalService.profesionalesFiltrados$;
         this.listado$ = query.pipe(
             tap(data => this.listadoActual = data)
@@ -242,7 +250,7 @@ export class ListarProfesionalesComponent implements OnInit {
         }
         const profesionalPosgrado = this.listadoActual[iProfesional].formacionPosgrado[iGrado];
         if (profesionalPosgrado.matriculacion !== null) {
-            if (profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1] ?.matriculaNumero !== undefined) {
+            if (profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1]?.matriculaNumero !== undefined) {
                 return profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].matriculaNumero;
             } else {
                 return '';
@@ -265,12 +273,12 @@ export class ListarProfesionalesComponent implements OnInit {
         let anioGracia = 0, suspendidas = 0, vencidas = 0;
         profesionalPosgrado?.forEach(element => {
             if (tipo === 'anioDeGracia' && element.tieneVencimiento &&
-        element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 0 &&
-          element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365))) {
+                element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 0 &&
+                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365))) {
                 anioGracia++;
             } else {
                 if (tipo === 'vencida' && element.tieneVencimiento &&
-          element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
+                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
                     vencidas++;
                 } else {
                     if (tipo === 'suspendida' && !element.matriculado) {

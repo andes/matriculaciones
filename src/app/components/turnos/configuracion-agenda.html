@@ -1,5 +1,4 @@
-<section>
-  <plex-title justify titulo="Agenda" class="w-100">
+<plex-title titulo="Agenda">
     <plex-button *ngIf='!mostrar && agendaActual' label="Volver" type="danger" routerLink="/homeAdministracion">
     </plex-button>
     <plex-button *ngIf="!agendaActual && !mostrar" type="danger" label="Volver" (click)="mostrarAgendaActual()">
@@ -8,40 +7,30 @@
     </plex-button>
     <plex-button *ngIf="agendaActual" type="primary" label="Agendas" class="ml-2" (click)="mostrarAgendaActual()">
     </plex-button>
-  </plex-title>
-  <div *ngIf='!mostrar'>
+</plex-title>
+<div *ngIf='!mostrar'>
     <div *ngIf="agendaActual">
-      <app-agenda-form (emitAgenda)='insertar($event)'></app-agenda-form>
+        <app-agenda-form (emitAgenda)='insertar($event)'></app-agenda-form>
     </div>
     <div *ngIf="!agendaActual">
-      <plex-title justify titulo="Agenda actual" size="sm">
-      </plex-title>
-      <ul *ngFor="let agenda of agendas,let i = index">
-        <ng-container>
-          <li justify class="flex-wrap">
-            <div class="mt-4">
-              <h3 class="d-inline mr-4 mt-4 flex-wrap" *ngFor="let dias of agenda.diasHabilitados,let n = index">
-                {{dias.nombre}}</h3>
-              <br>
-              <p>{{agenda.horarioInicioTurnos | date: 'HH:mm'}} | {{agenda.horarioFinTurnos | date: 'HH:mm'}} |
-                {{agenda.duracionTurno}} minutos</p>
-            </div>
-            <div>
-              <plex-badge *ngIf='agendasFeriados === null' type="info">No hay fechas excluidas</plex-badge>
-              <plex-badge class="mr-2" *ngFor="let feriados of agenda.fechasExcluidas,let m = index" type="warning">
-                {{feriados | date: 'dd/MM/yyyy'}}</plex-badge>
-            </div>
-            <div>
-              <plex-button type="warning" size="sm" icon="pencil" (click)="showEditar(agenda)"></plex-button>
-            </div>
-          </li>
-          <hr>
-        </ng-container>
-      </ul>
+        <plex-title justify titulo="Agenda actual" size="sm">
+        </plex-title>
+        <plex-list [selectable]="false">
+            <plex-item *ngFor="let agenda of agendas,let i = index">
+                <div *ngFor="let dias of agenda.diasHabilitados,let n = index">
+                    <plex-label titulo="{{dias.nombre | uppercase}}" subtitulo="{{agenda.horarioInicioTurnos | date: 'HH:mm'}} | {{agenda.horarioFinTurnos | date:
+              'HH:mm'}} |
+              {{agenda.duracionTurno}} minutos" size="xl"></plex-label>
+                </div>
+                <plex-badge *ngIf="agenda?.fechasExcluidas?.length===0" type="info">No hay fechas excluidas</plex-badge>
+                <plex-badge *ngFor="let feriados of agenda.fechasExcluidas,let m = index" type="warning">
+                    {{feriados | date: 'dd/MM/yyyy'}}</plex-badge>
+                <plex-button type="warning" size="sm" icon="pencil" (click)="showEditar(agenda)"></plex-button>
+            </plex-item>
+        </plex-list>
     </div>
-  </div>
-  <div *ngIf='mostrar'>
+</div>
+<div *ngIf='mostrar'>
     <plex-title titulo="Modificar agenda" size="sm"></plex-title>
     <app-agenda-form [agendaAmodificar]='agendaSelect'></app-agenda-form>
-  </div>
-</section>
+</div>

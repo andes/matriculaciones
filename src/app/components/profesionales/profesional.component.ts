@@ -43,7 +43,6 @@ export class ProfesionalComponent implements OnInit {
     public tipoComunicacion: any[];
     public vacio = [];
     public fecha: Date;
-    public ocultarBtn = false;
     public lblTurno: string;
     @Input() nuevoProf = false;
     @Input() confirmar = false;
@@ -165,7 +164,8 @@ export class ProfesionalComponent implements OnInit {
         public auth: Auth,
         private router: Router,
         private route: ActivatedRoute,
-        private location: Location) { }
+        private location: Location
+    ) { }
 
     ngOnInit() {
         this.estadoCivil = enumerados.getObjsEstadoCivil();
@@ -220,7 +220,7 @@ export class ProfesionalComponent implements OnInit {
             }
         }
         if (this.confirmar) {
-            if (this.profesional.formacionGrado[0].entidadFormadora && this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
+            if (this.profesional.formacionGrado.length && this.profesional.formacionGrado[0].entidadFormadora?.codigo === null) {
                 this.showOtraEntidadFormadora = true;
             } else {
                 this.showOtraEntidadFormadora = false;
@@ -447,15 +447,10 @@ export class ProfesionalComponent implements OnInit {
     }
 
     volverProfesional() {
-        if (this.editable) {
-            if (this.desdeListaProfesionales) {
-                this.editado.emit();
-            } else {
-                this.location.back();
-            }
-        } else {
+        if (this.location.path().includes('solicitarTurnoMatriculacion/nuevoProfesional')) {
             this.router.navigate(['/solicitarTurnoMatriculacion']);
         }
+        this.editable ? this.editado.emit() : this.location.back();
     }
 
     completar() {

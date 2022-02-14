@@ -1,297 +1,271 @@
 <plex-layout [aspect]=8>
     <plex-layout-main>
         <header>
-            <plex-title titulo="{{ editable ? 'Editar profesional' : ocultarBtn ? 'Nuevo profesional' : 'Registro de profesional' }}"
-                        size="md">
+            <plex-title justify titulo="{{ editable ? 'Editar profesional' : 'Registro de profesional' }}">
                 <ng-content></ng-content>
+                <plex-button *ngIf="!nuevoProf" class="mr-1" type="danger" label="volver" (click)="volverProfesional()"></plex-button>
                 <ng-container *ngIf="editable">
                     <!-- Cuando se edita los datos del profesional-->
-                    <plex-button class="mr-1" type="danger" label="volver" (click)="volverProfesional()"></plex-button>
-                    <plex-button type="success" label="Confirmar Datos" (click)="actualizar()" class="pull-right"
-                                 [disabled]="false" [validateForm]="formNuevoProf">
+                    <plex-button *mobile="false" type="success" label="Confirmar Datos" (click)="actualizar()" class="pull-right"
+                                    [disabled]="formNuevoProf.invalid">
+                    </plex-button>
+                    <plex-button *mobile justify="end" type="success" size="sm" label="Confirmar Datos" (click)="actualizar()" class="pull-right"
+                                    [disabled]="formNuevoProf.invalid">
                     </plex-button>
                 </ng-container>
-                <plex-button *ngIf="!editable && confirmar" type="success" label="Confirmar Datos"
-                             (click)="confirmarDatosAdmin()" class="pull-right" justify="end"
-                             [disabled]="formNuevoProf.invalid">
-                </plex-button>
-                <ng-container *ngIf="!editable && !confirmar && !ocultarBtn">
-                    <plex-badge *ngIf="!confirmar && !ocultarBtn" size="sm" type="success">
-                        Turno: {{ lblTurno }}
-                    </plex-badge>
-                    <div *mobile="false">
-                        <plex-button *ngIf="!confirmar && !ocultarBtn" size="md" label="volver" type="danger"
-                                     (click)="volverProfesional()">
+                <ng-container *ngIf="!editable">
+                    <ng-container *ngIf="confirmar">
+                        <plex-button *mobile="false" type="success" label="Confirmar Datos" (click)="confirmarDatosAdmin()" class="pull-right"
+                                    [disabled]="formNuevoProf.invalid">
                         </plex-button>
-                        <plex-button *ngIf="!confirmar && !ocultarBtn" type="success" size="md" label="Confirmar"
-                                     (click)="confirmarDatos()" [disabled]="formNuevoProf.invalid">
+                        <plex-button *mobile justify="end" size="sm" type="success" label="Confirmar Datos" (click)="confirmarDatosAdmin()" class="pull-right"
+                                    [disabled]="formNuevoProf.invalid">
                         </plex-button>
-                    </div>
-                    <div *mobile justify="end">
-                        <plex-button *ngIf="!confirmar && !ocultarBtn" size="sm" label="volver" type="danger"
-                                     (click)="volverProfesional()">
+                    </ng-container>
+                    <ng-container *ngIf="!confirmar">
+                        <plex-badge size="lg" type="success mr-1">
+                                    TURNO: {{ lblTurno }}.
+                        </plex-badge>
+                        <plex-button *mobile="false" type="success" label="Confirmar Turno" (click)="confirmarDatos()" justify="end" class="pull-right"
+                                    [disabled]="formNuevoProf.invalid">
                         </plex-button>
-                        <plex-button *ngIf="!confirmar && !ocultarBtn" type="success" size="sm" label="confirmar"
-                                     (click)="confirmarDatos()" [disabled]="formNuevoProf.invalid">
+                        <plex-button *mobile justify="end" size="sm" type="success" label="Confirmar Turno" (click)="confirmarDatos()" class="pull-right"
+                                    [disabled]="formNuevoProf.invalid">
                         </plex-button>
-                    </div>
+                    </ng-container>
                 </ng-container>
             </plex-title>
         </header>
 
         <form #formNuevoProf='ngForm'>
-            <fieldset>
-                <plex-title class="mt-3" titulo="Datos generales" size="sm"></plex-title>
-                <!-- contacto -->
-                <div class="row">
+            <ng-container *ngIf="profesional">
+                <fieldset>
+                    <plex-title class="mt-3" titulo="Datos generales" size="sm"></plex-title>
+                    <!-- contacto -->
+                    <div class="row">
                     <div class="col-md-6">
-                        <plex-text label="Apellido" [(ngModel)]="profesional.apellido" name="apellido"
-                                   [required]="true">
+                        <plex-text label="Apellido" [(ngModel)]="profesional.apellido" name="apellido" [required]="true">
                         </plex-text>
                     </div>
                     <div class="col-md-6">
-                        <plex-text label="Nombre" [(ngModel)]="profesional.nombre" name="nombre" [required]="true">
-                        </plex-text>
+                        <plex-text label="Nombre" [(ngModel)]="profesional.nombre" name="nombre" [required]="true"></plex-text>
                     </div>
-                </div>
-                <div class="row">
+                    </div>
+                    <div class="row">
                     <div class="col-md-4">
-                        <plex-select label="Sexo" [(ngModel)]="profesional.sexo" name="sexo" [data]="sexos"
-                                     [required]="true">
+                        <plex-select label="Sexo" [(ngModel)]="profesional.sexo" name="sexo" [data]="sexos" [required]="true">
                         </plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-select label="Nacionalidad" [(ngModel)]="profesional.nacionalidad" name="nacionalidad"
-                                     (getData)="loadPaises($event)" [required]="true"></plex-select>
+                                    (getData)="loadPaises($event)" [required]="true"></plex-select>
                     </div>
                     <div class="col-md-4">
                         <plex-datetime type="date" label="Fecha de nacimiento" [(ngModel)]="profesional.fechaNacimiento"
-                                       name="fechaNacimiento" [required]="true"></plex-datetime>
+                                    name="fechaNacimiento" [required]="true"></plex-datetime>
                     </div>
                     <div class="col-md-4">
-                        <plex-text label="Lugar de Nacimiento" [(ngModel)]="profesional.lugarNacimiento"
-                                   name="lugarNacimiento" [required]="true"></plex-text>
+                        <plex-text label="Lugar de Nacimiento" [(ngModel)]="profesional.lugarNacimiento" name="lugarNacimiento"
+                                [required]="true"></plex-text>
                     </div>
                     <div class="col-md-4">
-                        <plex-int label="C.U.I.T. / C.U.I.L." [(ngModel)]="profesional.cuit" name="cuit"
-                                  [required]="true">
+                        <plex-int label="C.U.I.T. / C.U.I.L." [(ngModel)]="profesional.cuit" name="cuit" [required]="true">
                         </plex-int>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
-                        <plex-select label="Tipo de documento" [(ngModel)]="profesional.tipoDocumento"
-                                     name="tipoDocumento" [data]="tipoDocumento" [required]="true"></plex-select>
                     </div>
-                    <div class="col-md-4">
-                        <plex-int label="Nº de documento" [(ngModel)]="profesional.documento" name="documento"
-                                  [required]="true">
-                        </plex-int>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <plex-select label="Tipo de documento" [(ngModel)]="profesional.tipoDocumento" name="tipoDocumento"
+                                        [data]="tipoDocumento" [required]="true"></plex-select>
+                        </div>
+                        <div class="col-md-4">
+                            <plex-int label="Nº de documento" [(ngModel)]="profesional.documento" name="documento" [required]="true">
+                            </plex-int>
 
+                        </div>
+                        <div class="col-md-4">
+                            <plex-datetime type="date" label="Vencimiento del documento" [(ngModel)]="profesional.documentoVencimiento"
+                                        name="documentoVencimiento"></plex-datetime>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <plex-datetime type="date" label="Vencimiento del documento"
-                                       [(ngModel)]="profesional.documentoVencimiento" name="documentoVencimiento">
-                        </plex-datetime>
-                    </div>
-                </div>
-            </fieldset>
-            <!-- contacto -->
-            <plex-title titulo="Datos de contacto" size="sm"></plex-title>
-            <plex-grid type="full" cols="1" size="lg" responsive>
-                <div class="pr-1" grow="1">
-                    <plex-wrapper *ngFor="let _unContacto of profesional.contactos; let i = index">
-                        <plex-select [(ngModel)]="_unContacto.tipo" [data]="tipoComunicacion" name="tipo-{{i}}"
-                                     [required]="i <= 0" placeholder="Seleccione un tipo" label="Tipo:"
-                                     (change)="_unContacto.valor = ''">
-                        </plex-select>
-                        <ng-container *ngIf="_unContacto.tipo && _unContacto.tipo.id">
-                            <plex-text *ngIf="_unContacto.tipo.id === 'email'" label="Dirección:"
-                                       [(ngModel)]="_unContacto.valor" name="valor-{{i}}"
-                                       [required]="!noPoseeContacto && (i <= 0)" placeholder="Ej: ejemplo@email.com"
-                                       [pattern]="patronContactoAlfabetico">
-                            </plex-text>
-                            <plex-phone label="Número:" *ngIf="_unContacto.tipo.id !== 'email'"
-                                        [(ngModel)]="_unContacto.valor" placeholder="Ej: 2990000000"
-                                        [required]="!noPoseeContacto && (i <= 0)" name="valor-{{i}}"
-                                        [pattern]="patronContactoNumerico">
-                            </plex-phone>
-                        </ng-container>
-                        <ng-container *ngIf="_unContacto.tipo && !_unContacto.tipo.id">
-                            <plex-text *ngIf="_unContacto.tipo === 'email'" label="Dirección:"
-                                       [(ngModel)]="_unContacto.valor" name="valor-{{i}}"
-                                       [required]="!noPoseeContacto && (i <= 0)" placeholder="Ej: ejemplo@email.com"
-                                       [pattern]="patronContactoAlfabetico">
-                            </plex-text>
-                            <plex-phone label="Número:" *ngIf="_unContacto.tipo !== 'email'"
-                                        [(ngModel)]="_unContacto.valor" placeholder="Ej: 2990000000"
-                                        [required]="!noPoseeContacto && (i <= 0)" name="valor-{{i}}"
-                                        [pattern]="patronContactoNumerico">
-                            </plex-phone>
-                        </ng-container>
-                        <plex-button *ngIf="i === 0 && _unContacto.tipo" title="Agregar contacto" titlePosition="left"
-                                     type="info" icon="plus" (click)="addContacto()">
-                        </plex-button>
-                        <plex-button *ngIf="i > 0" label="" type="danger" icon="close" (click)="removeContacto(i)">
-                        </plex-button>
-                    </plex-wrapper>
-                </div>
-            </plex-grid>
-            <!-- domicilios -->
-            <fieldset>
-                <div class="row">
-                    <div class="col-md-12">
-                        <plex-title titulo="Domicilio {{profesional.domicilios[0].tipo}}" size="sm">
-                            <plex-button title="Completa los siguientes domicilios con los mismos datos" type="success"
-                                         label="completar domicilios" type="primary btn-sm" (click)="completar()"
-                                         class="pull-right">
+                </fieldset>
+                <!-- contacto -->
+                <plex-title titulo="Datos de contacto" size="sm"></plex-title>
+                <plex-grid type="full" cols="1" size="lg" responsive>
+                    <div class="pr-1" grow="1">
+                        <plex-wrapper *ngFor="let _unContacto of profesional.contactos; let i = index">
+                            <plex-select [(ngModel)]="_unContacto.tipo" [data]="tipoComunicacion" name="tipo-{{i}}"
+                                        [required]="i <= 0" placeholder="Seleccione un tipo" label="Tipo:"
+                                        (change)="_unContacto.valor = ''">
+                            </plex-select>
+                            <ng-container *ngIf="_unContacto.tipo && _unContacto.tipo.id">
+                                <plex-text *ngIf="_unContacto.tipo.id === 'email'" label="Dirección:"
+                                        [(ngModel)]="_unContacto.valor" name="valor-{{i}}"
+                                        [required]="!noPoseeContacto && (i <= 0)" placeholder="Ej: ejemplo@email.com"
+                                        [pattern]="patronContactoAlfabetico">
+                                </plex-text>
+                                <plex-phone label="Número:" *ngIf="_unContacto.tipo.id !== 'email'"
+                                            [(ngModel)]="_unContacto.valor" placeholder="Ej: 2990000000"
+                                            [required]="!noPoseeContacto && (i <= 0)" name="valor-{{i}}"
+                                            [pattern]="patronContactoNumerico">
+                                </plex-phone>
+                            </ng-container>
+                            <ng-container *ngIf="_unContacto.tipo && !_unContacto.tipo.id">
+                                <plex-text *ngIf="_unContacto.tipo === 'email'" label="Dirección:"
+                                        [(ngModel)]="_unContacto.valor" name="valor-{{i}}"
+                                        [required]="!noPoseeContacto && (i <= 0)" placeholder="Ej: ejemplo@email.com"
+                                        [pattern]="patronContactoAlfabetico">
+                                </plex-text>
+                                <plex-phone label="Número:" *ngIf="_unContacto.tipo !== 'email'"
+                                            [(ngModel)]="_unContacto.valor" placeholder="Ej: 2990000000"
+                                            [required]="!noPoseeContacto && (i <= 0)" name="valor-{{i}}"
+                                            [pattern]="patronContactoNumerico">
+                                </plex-phone>
+                            </ng-container>
+                            <plex-button *ngIf="i === 0 && _unContacto.tipo" title="Agregar contacto" titlePosition="left"
+                                        type="info" icon="plus" (click)="addContacto()">
                             </plex-button>
-                        </plex-title>
-                        <plex-text label="Dirección" name="direccionReal" [(ngModel)]="profesional.domicilios[0].valor"
-                                   [required]="profesional.domicilios[0].tipo !== 'profesional'"></plex-text>
+                            <plex-button *ngIf="i > 0" label="" type="danger" icon="close" (click)="removeContacto(i)">
+                            </plex-button>
+                        </plex-wrapper>
                     </div>
-                    <div class="col-md-4">
-                        <plex-select label="Provincia" [required]="
-                                    profesional.domicilios[0].tipo !=='profesional'"
-                                     [(ngModel)]="profesional.domicilios[0].ubicacion.provincia" name="provinciaReal"
-                                     [data]="provincias" labelField="nombre"
-                                     (change)="loadLocalidadesReal(profesional.domicilios[0].ubicacion.provincia)">
-                        </plex-select>
+                </plex-grid>
+
+                <!-- domicilios -->
+                <fieldset>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <plex-title titulo="Domicilio {{profesional.domicilios[0].tipo}}" size="sm">
+                                <plex-button title="Completa los siguientes domicilios con los mismos datos" type="success"
+                                            label="completar domicilios" type="primary btn-sm" (click)="completar()" class="pull-right">
+                                </plex-button>
+                            </plex-title>
+                            <plex-text label="Dirección" name="direccionReal" [(ngModel)]="profesional.domicilios[0].valor"
+                                    [required]="profesional.domicilios[0].tipo.localeCompare('profesional') !== 0"></plex-text>
+                        </div>
+                        <div class="col-md-4">
+                            <plex-select label="Provincia" [required]="profesional.domicilios[0].tipo.localeCompare('profesional') !== 0"
+                                        [(ngModel)]="profesional.domicilios[0].ubicacion.provincia" name="provinciaReal"
+                                        [data]="provincias" labelField="nombre"
+                                        (change)="loadLocalidadesReal(profesional.domicilios[0].ubicacion.provincia)">
+                            </plex-select>
+                        </div>
+                        <div class="col-md-4">
+                            <plex-select label="Localidad" name="localidadReal" (change)='cp($event, 0)'
+                                        [(ngModel)]="profesional.domicilios[0].ubicacion.localidad" [data]="localidadesReal"
+                                        [required]="profesional.domicilios[0].tipo.localeCompare('profesional') !== 0">
+                            </plex-select>
+                        </div>
+                        <div class="col-md-2">
+                            <plex-int label="Código Postal" name="codigoPostalReal" [(ngModel)]="profesional.domicilios[0].codigoPostal"
+                                    [required]="profesional.domicilios[0].tipo.localeCompare('profesional') !== 0"></plex-int>
+                        </div>
                     </div>
-                    <div class="col-md-4">
-                        <plex-select label="Localidad" name="localidadReal" (change)='cp($event, 0)'
-                                     [(ngModel)]="profesional.domicilios[0].ubicacion.localidad"
-                                     [data]="localidadesReal"
-                                     [required]="profesional.domicilios[0].tipo !== 'profesional'">
-                        </plex-select>
-                    </div>
-                    <div class="col-md-2">
-                        <plex-int label="Código Postal" name="codigoPostalReal"
-                                  [(ngModel)]="profesional.domicilios[0].codigoPostal"
-                                  [required]="profesional.domicilios[0].tipo !== 'profesional'"></plex-int>
-                    </div>
-                </div>
-                <div class="row pt-3">
-                    <div class="col-md-12">
-                        <plex-title titulo="Domicilio {{profesional.domicilios[1].tipo}}" size="sm">
-                        </plex-title>
-                        <div class="row">
+                    <div class="row pt-3">
+                        <div class="col-md-12">
+                            <plex-title titulo="Domicilio {{profesional.domicilios[1].tipo}}" size="sm">
+                            </plex-title>
+                            <div class="row">
                             <div class="col-md-12">
-                                <plex-text label="Dirección" name="direccionLegal"
-                                           [(ngModel)]="profesional.domicilios[1].valor"
-                                           [required]="profesional.domicilios[1].tipo !== 'profesional'"></plex-text>
+                                <plex-text label="Dirección" name="direccionLegal" [(ngModel)]="profesional.domicilios[1].valor"
+                                        [required]="profesional.domicilios[1].tipo.localeCompare('profesional') !== 0"></plex-text>
                             </div>
                             <div class="col-md-4">
-                                <plex-select label="Provincia"
-                                             [(ngModel)]="profesional.domicilios[1].ubicacion.provincia"
-                                             name="provinciaLegal" [data]="provincias" labelField="nombre"
-                                             (change)="loadLocalidadesLegal(profesional.domicilios[1].ubicacion.provincia)"
-                                             [required]="
-                                        profesional.domicilios[1].tipo !=='profesional'">
+                                <plex-select label="Provincia" [(ngModel)]="profesional.domicilios[1].ubicacion.provincia"
+                                            name="provinciaLegal" [data]="provincias" labelField="nombre"
+                                            (change)="loadLocalidadesLegal(profesional.domicilios[1].ubicacion.provincia)" [required]="
+                                            profesional.domicilios[1].tipo.localeCompare('profesional') !== 0">
                                 </plex-select>
                             </div>
                             <div class=" col-md-4">
                                 <plex-select label="Localidad" name="localidadLegal" (change)='cp($event, 1)'
-                                             [(ngModel)]="profesional.domicilios[1].ubicacion.localidad"
-                                             [data]="localidadesLegal"
-                                             [required]="profesional.domicilios[1].tipo !== 'profesional'">
+                                            [(ngModel)]="profesional.domicilios[1].ubicacion.localidad" [data]="localidadesLegal"
+                                            [required]="profesional.domicilios[1].tipo.localeCompare('profesional') !== 0">
                                 </plex-select>
                             </div>
                             <div class="col-md-2">
                                 <plex-int label="Código Postal" name="codigoPostalLegal"
-                                          [(ngModel)]="profesional.domicilios[1].codigoPostal"
-                                          [required]="profesional.domicilios[1].tipo !== 'profesional'"></plex-int>
+                                        [(ngModel)]="profesional.domicilios[1].codigoPostal"
+                                        [required]="profesional.domicilios[1].tipo.localeCompare('profesional') !== 0"></plex-int>
+                            </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row pt-3" *ngIf='!noPoseedomicilioProfesional'>
-                    <div class="col-md-12">
-                        <plex-title titulo="Domicilio {{profesional.domicilios[2].tipo}}" size="sm">
-                        </plex-title>
-                        <div class="row">
+                    <div class="row pt-3" *ngIf='!noPoseedomicilioProfesional'>
+                        <div class="col-md-12">
+                            <plex-title titulo="Domicilio {{profesional.domicilios[2].tipo}}" size="sm">
+                            </plex-title>
+                            <div class="row">
                             <div class="col-md-12">
-                                <plex-text label="Dirección" name="direccion"
-                                           [(ngModel)]="profesional.domicilios[2].valor"
-                                           [required]="profesional.domicilios[2].tipo !== 'profesional'"></plex-text>
+                                <plex-text label="Dirección" name="direccion" [(ngModel)]="profesional.domicilios[2].valor"
+                                        [required]="profesional.domicilios[2].tipo.localeCompare('profesional') !== 0"></plex-text>
                             </div>
                             <div class="col-md-4">
-                                <plex-select label="Provincia"
-                                             [(ngModel)]="profesional.domicilios[2].ubicacion.provincia"
-                                             name="provincia" [data]="provincias" labelField="nombre"
-                                             (change)="loadLocalidadesProfesional(profesional.domicilios[2].ubicacion.provincia)"
-                                             [required]="
-                                                    profesional.domicilios[2].tipo !=='profesional'">
+                                <plex-select label="Provincia" [(ngModel)]="profesional.domicilios[2].ubicacion.provincia"
+                                            name="provincia" [data]="provincias" labelField="nombre"
+                                            (change)="loadLocalidadesProfesional(profesional.domicilios[2].ubicacion.provincia)"
+                                            [required]="profesional.domicilios[2].tipo.localeCompare('profesional') !== 0">
                                 </plex-select>
                             </div>
                             <div class=" col-md-4">
                                 <plex-select label="Localidad" name="localidad" (change)='cp($event, 2)'
-                                             [(ngModel)]="profesional.domicilios[2].ubicacion.localidad"
-                                             [data]="localidadesProfesional"
-                                             [required]="profesional.domicilios[2].tipo !== 'profesional'">
+                                            [(ngModel)]="profesional.domicilios[2].ubicacion.localidad" [data]="localidadesProfesional"
+                                            [required]="profesional.domicilios[2].tipo.localeCompare('profesional') !== 0">
                                 </plex-select>
                             </div>
                             <div class="col-md-2">
-                                <plex-int label="Código Postal" name="codigoPostal"
-                                          [(ngModel)]="profesional.domicilios[2].codigoPostal"
-                                          [required]="profesional.domicilios[2].tipo !== 'profesional'"></plex-int>
+                                <plex-int label="Código Postal" name="codigoPostal" [(ngModel)]="profesional.domicilios[2].codigoPostal"
+                                        [required]="profesional.domicilios[2].tipo.localeCompare('profesional') !== 0"></plex-int>
+                            </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </fieldset>
-            <!-- profesion -->
-            <fieldset *ngIf='editable !== true' class="pt-3">
-                <plex-title titulo="Datos de profesión" size="sm">
-                </plex-title>
-                <div class="row">
-                    <div class="col-md-4">
-                        <plex-select label="Profesión" [(ngModel)]="profesional.formacionGrado[0].profesion"
-                                     name='formacionPosgrado' (getData)="loadProfesiones($event)" [required]="true">
-                        </plex-select>
-                    </div>
-                    <div class="col-md-4">
-                        <plex-text label="Título" [(ngModel)]="profesional.formacionGrado[0].titulo" name='titulo'
-                                   [required]="true">
-                        </plex-text>
-                    </div>
-                    <div class="col-md-4">
-                        <plex-datetime label="Fecha de egreso" type="date"
-                                       [(ngModel)]="profesional.formacionGrado[0].fechaEgreso" name='fechaEgreso'
-                                       [required]="true"></plex-datetime>
-                    </div>
-                    <div class="col-md-4">
-                        <div *ngIf='!confirmar'>
-                            <plex-select *ngIf="!showOtraEntidadFormadora" label="Entidad formadora"
-                                         [(ngModel)]="profesional.formacionGrado[0].entidadFormadora"
-                                         name='entidadFormadora'
-                                         (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)"
-                                         (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
-                            <plex-text *ngIf="showOtraEntidadFormadora" name='otraEntidad'
-                                       label="Otra Entidad Formadora"
-                                       [(ngModel)]="profesional.formacionGrado[0].entidadFormadora.nombre"
-                                       [required]="true">
+                </fieldset>
+                <!-- profesion -->
+                <fieldset *ngIf='editable !== true' class="pt-3">
+                    <plex-title titulo="Datos de profesión" size="sm">
+                    </plex-title>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <plex-select label="Profesión" [(ngModel)]="profesional.formacionGrado[0].profesion"
+                                        name='formacionPosgrado' (getData)="loadProfesiones($event)" [required]="true"></plex-select>
+                        </div>
+                        <div class="col-md-4">
+                            <plex-text label="Título" [(ngModel)]="profesional.formacionGrado[0].titulo" name='titulo'
+                                    [required]="true">
                             </plex-text>
                         </div>
-                        <div *ngIf='confirmar'>
+                        <div class="col-md-4">
+                            <plex-datetime label="Fecha de egreso" type="date" [(ngModel)]="profesional.formacionGrado[0].fechaEgreso"
+                                        name='fechaEgreso' [required]="true"></plex-datetime>
+                        </div>
+                        <div class="col-md-4">
+                            <div *ngIf='!confirmar'>
                             <plex-select *ngIf="!showOtraEntidadFormadora" label="Entidad formadora"
-                                         [(ngModel)]="profesional.formacionGrado[0].entidadFormadora"
-                                         name='entidadFormadora'
-                                         (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)"
-                                         (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
-                            <plex-text *ngIf="showOtraEntidadFormadora" name='otraEntidad'
-                                       label="Otra Entidad Formadora"
-                                       [(ngModel)]="profesional.formacionGrado[0].entidadFormadora.nombre"
-                                       [required]="true">
+                                        [(ngModel)]="profesional.formacionGrado[0].entidadFormadora" name='entidadFormadora'
+                                        (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)"
+                                        (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
+                            <plex-text *ngIf="showOtraEntidadFormadora" name='otraEntidad' label="Otra Entidad Formadora"
+                                        [(ngModel)]="profesional.formacionGrado[0].entidadFormadora.nombre" [required]="true">
                             </plex-text>
+                            </div>
+                            <div *ngIf='confirmar'>
+                            <plex-select *ngIf="!showOtraEntidadFormadora" label="Entidad formadora"
+                                        [(ngModel)]="profesional.formacionGrado[0].entidadFormadora" name='entidadFormadora'
+                                        (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)"
+                                        (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
+                            <plex-text *ngIf="showOtraEntidadFormadora" name='otraEntidad' label="Otra Entidad Formadora"
+                                        [(ngModel)]="profesional.formacionGrado[0].entidadFormadora.nombre" [required]="true">
+                            </plex-text>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora"
+                                    (change)='otraEntidad(profesional.formacionGrado[0])' name="otra"></plex-bool>
                         </div>
                     </div>
-                    <div class="col">
-                        <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora"
-                                   (change)='otraEntidad(profesional.formacionGrado[0])' name="otra"></plex-bool>
-                    </div>
-                </div>
-            </fieldset>
+                </fieldset>
+            </ng-container>
         </form>
     </plex-layout-main>
 </plex-layout>

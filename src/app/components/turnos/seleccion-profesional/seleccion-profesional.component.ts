@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { TurnoService } from './../../../services/turno.service';
 import { PDFUtils } from './../../../utils/PDFUtils';
@@ -9,6 +9,7 @@ import { IProfesional } from './../../../interfaces/IProfesional';
 import { ActivatedRoute, Router } from '@angular/router';
 import * as moment from 'moment';
 import { catchError } from 'rxjs/operators';
+import { Location } from '@angular/common';
 @Component({
     selector: 'app-seleccion-profesional',
     templateUrl: './seleccion-profesional.component.html'
@@ -124,13 +125,16 @@ export class SeleccionProfesionalComponent implements OnInit {
     public profElegido;
     public noEncontrado = false;
 
-    constructor(private _formBuilder: FormBuilder,
-                private _turnosService: TurnoService,
-                private route: ActivatedRoute,
-                private _profesionalService: ProfesionalService,
-                private _pdfUtils: PDFUtils,
-                private plex: Plex,
-                private router: Router) {
+    constructor(
+        private _formBuilder: FormBuilder,
+        private _turnosService: TurnoService,
+        private route: ActivatedRoute,
+        private _profesionalService: ProfesionalService,
+        private _pdfUtils: PDFUtils,
+        private plex: Plex,
+        private router: Router,
+        private location: Location
+    ) {
 
         this.tipoTurno = Enums.TipoTurno.renovacion;
 
@@ -178,6 +182,10 @@ export class SeleccionProfesionalComponent implements OnInit {
                 this.router.navigate(['requisitosGenerales']);
             }
         });
+    }
+
+    volver() {
+        this.location.back();
     }
 
     isSelected() {

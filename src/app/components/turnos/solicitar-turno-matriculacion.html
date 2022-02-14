@@ -1,12 +1,15 @@
 <plex-layout [aspect]="8">
-  <plex-layout-main>
-    <header justify>
-      <plex-title *ngIf="!turnoSeleccionado" titulo="Selección de fecha para matriculación" size="md"></plex-title>
-    </header>
-    <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno" [tipoMatricula]="tipoMatricula"
-                     (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
-  </plex-layout-main>
-  <plex-layout-sidebar type="invert">
-    <router-outlet></router-outlet>
-  </plex-layout-sidebar>
+    <plex-layout-main>
+        <header>
+        <plex-title *ngIf="!turnoSeleccionado" titulo="Selección de fecha para matriculación">
+            <plex-button label="Volver" type="danger" routerLink="{{ this.tipoMatricula === 'universitaria' ? '/requisitosMatriculaUniversitaria' : '/requisitosMatriculaTecnicaAuxiliar'}}">
+            </plex-button>
+        </plex-title>
+        </header>
+        <app-nuevo-turno *ngIf="!turnoSeleccionado" [tipoTurno]="tipoTurno" [tipoMatricula]="tipoMatricula"
+                        (onTurnoSeleccionado)="onTurnoSeleccionado($event)"></app-nuevo-turno>
+    </plex-layout-main>
+    <plex-layout-sidebar type="invert">
+        <router-outlet></router-outlet>
+    </plex-layout-sidebar>
 </plex-layout>

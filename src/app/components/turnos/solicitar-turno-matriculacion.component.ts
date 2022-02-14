@@ -1,15 +1,6 @@
-import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex';
-// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
-
-// Services
-import { PaisService } from './../../services/pais.service';
-import { ProvinciaService } from './../../services/provincia.service';
-import { LocalidadService } from './../../services/localidad.service';
-import { ProfesionService } from './../../services/profesion.service';
-import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
-import { ProfesionalService } from './../../services/profesional.service';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { TurnoService } from './../../services/turno.service';
 import * as moment from 'moment';
 
@@ -19,17 +10,13 @@ import * as Enums from './../../utils/enumerados';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError } from 'rxjs/operators';
 
-const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
-const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-const jsPDF = require('jspdf');
-
 @Component({
     selector: 'app-solicitar-turno-matriculacion',
     templateUrl: 'solicitar-turno-matriculacion.html'
 })
 export class SolicitarTurnoMatriculacionComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
-    public tipoTurno: Enums.TipoTurno;
+    public tipoTurno: string;
     public tipoMatricula: string;
     public fecha = null;
     public profesionalRegistrado = null;
@@ -40,19 +27,19 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
     private _turnoSeleccionado: Date;
     public _nuevoProfesional: any;
     public horarioElegido: string;
-    constructor(private _formBuilder: FormBuilder,
-                private _turnosService: TurnoService,
-                private router: Router,
-                private route: ActivatedRoute,
-                private _pdfUtils: PDFUtils,
-                private plex: Plex) {
+    constructor(
+        private _formBuilder: FormBuilder,
+        private _turnosService: TurnoService,
+        private router: Router,
+        private route: ActivatedRoute,
+        private _pdfUtils: PDFUtils,
+        private plex: Plex) {
 
-        this.tipoTurno = Enums.TipoTurno.matriculacion;
+        this.tipoTurno = Enums.TipoTurno.matriculacion.toString();
     }
 
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
-
             if (params['tipoMatricula']) {
                 if (params['tipoMatricula'] === 'universitaria') {
                     this.tipoMatricula = 'universitaria';
@@ -98,8 +85,6 @@ export class SolicitarTurnoMatriculacionComponent implements OnInit {
                 this.router.navigate(['requisitosGenerales']);
             }
         });
-
-
     }
 
     onProfesionalCompleto(profesional: any) {

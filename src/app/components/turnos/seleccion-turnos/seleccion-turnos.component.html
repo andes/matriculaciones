@@ -1,10 +1,8 @@
 <header id="sticky">
-    <plex-title titulo="Dar turno">
+    <plex-title titulo="Dar turno" size="md">
         <plex-badge type="info">{{fechaElegida | date: 'dd/MM/yyyy'}} {{horarioElegido}}</plex-badge>
         <plex-button class="ml-2" label="Continuar" type="success" size="sm" id="#btn-continue" [disabled]="!horarioSi"
                      (click)="confirmTurno()"></plex-button>
-        <plex-button class="ml-2 " title="Volver" icon="arrow-left" type="danger" size="sm" (click)="volverInicio()">
-        </plex-button>
     </plex-title>
 </header>
 <plex-label titulo="{{fechaElegida | date: 'dd/MM/yyyy'}}" subtitulo="{{horarioElegido}}" type="success" size="lg"

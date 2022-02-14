@@ -4,6 +4,7 @@ import { AgendaService } from '../../../services/agenda.service';
 import { Plex } from '@andes/plex';
 import { TurnoService } from '../../../services/turno.service';
 import { NuevoTurnoComponent } from '../nuevo-turno.component';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-seleccion-turnos',
@@ -24,9 +25,9 @@ export class SeleccionTurnosComponent implements OnInit {
     public boxType: string;
     public horarioSi = false;
     public horario = new Date();
-    public horarioElegido: Date;
+    public horarioElegido: string;
     public fecha = new Date();
-    public fechaComparacion: Date;
+    public fechaComparacion: string;
     public sinTurnos = false;
 
     @Output() onTurnoSeleccionado = new EventEmitter<Date>();
@@ -60,8 +61,8 @@ export class SeleccionTurnosComponent implements OnInit {
         const minutosFin = parseInt(moment(this.fin).format('mm'), 10);
         const horaInicio = parseInt(moment(this.inicio).format('HH'), 10);
         const horaFin = parseInt(moment(this.fin).format('HH'), 10);
-        const horaActual = parseInt(new moment().format('HH'), 10);
-        const minutosActual = parseInt(new moment().format('mm'), 10);
+        const horaActual = parseInt(moment().format('HH'), 10);
+        const minutosActual = parseInt(moment().format('mm'), 10);
         const fechaActual = new Date();
         let n = horaInicio;
         let i = horaInicio;
@@ -197,18 +198,6 @@ export class SeleccionTurnosComponent implements OnInit {
             const temp = this.fechaElegida ? moment(this.fechaElegida).format(this.format) : null;
             if (this.$input) {
                 this.$input.val(temp);
-            }
-        }
-    }
-
-    volverInicio() {
-        if (this.tipoTurno === 'renovacion') {
-            this.router.navigate(['/requisitosGenerales']);
-        } else {
-            if (this.tipoMatricula === 'universitaria') {
-                this.router.navigate(['/requisitosMatriculaUniversitaria']);
-            } else {
-                this.router.navigate(['/requisitosMatriculaTecnicaAuxiliar']);
             }
         }
     }

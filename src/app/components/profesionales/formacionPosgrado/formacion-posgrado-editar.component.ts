@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Plex } from '@andes/plex';
-import { IProfesional } from './../../../interfaces/IProfesional';
+import { IProfesional } from '../../../interfaces/IProfesional';
 import * as moment from 'moment';
-import { ProfesionalService } from './../../../services/profesional.service';
-import { SIISAService } from './../../../services/siisa.service';
+import { ProfesionalService } from '../../../services/profesional.service';
+import { SIISAService } from '../../../services/siisa.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
 
 @Component({

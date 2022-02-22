@@ -33,6 +33,7 @@ import { ProfesionalService } from './services/profesional.service';
 import { SexoService } from './services/sexo.service';
 import { NumeracionMatriculasService } from './services/numeracionMatriculas.service';
 import { SIISAService } from './services/siisa.service';
+import { PdfService } from './services/pdf.service';
 
 // Componentes
 import {
@@ -70,7 +71,7 @@ import { SancionesComponent } from './components/profesionales/sanciones/sancion
 import { SancionesFormComponent } from './components/profesionales/sanciones/sanciones-form.component';
 import { HeaderProfesionalComponent } from './components/profesionales/header-profesional.component';
 import { FormacionPosgradoComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado.component';
-import { FormacionPosgradoEditarComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-editar-component';
+import { FormacionPosgradoEditarComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-editar.component';
 import { FormacionPosgradoAgregarComponent } from './components/profesionales/formacionPosgrado/formacion-posgrado-agregar.component';
 import { FormacionGradoFormComponent } from './components/profesionales/formacionGrado/formacion-grado-form.component';
 import { ListarProfesionalesComponent } from './components/profesionales/listar-profesionales.component';
@@ -87,7 +88,7 @@ import { ListadoTurnosPdfComponent } from './components/turnos/listado-turnos-pd
 import { ReportesComponent } from './components/reportes/reportes.component';
 import { UploadFileComponent } from './shared/components/upload-file.component';
 import { ListarProfesionalesDetalleComponent } from './components/profesionales/listar-profesionales-detalle.component';
-import { DocumentoProfesionalComponent } from './components/profesionales/documentos/documentos-profesional-component';
+import { DocumentoProfesionalComponent } from './components/profesionales/documentos/documentos-profesional.component';
 
 // Locales
 import { AppComponent } from './app.component';
@@ -133,6 +134,7 @@ import { SeleccionProfesionalComponent } from './components/turnos/seleccion-pro
 import { FormAutoSaveDirective } from './shared/directives/autosave.directives';
 import { ZonaSanitariaService } from './services/zonaSanitaria.service';
 import { FiltrosRenovacionComponent } from './components/profesionales/filtros-renovacion.component';
+
 @NgModule({
     declarations: [
         AppComponent,
@@ -205,7 +207,8 @@ import { FiltrosRenovacionComponent } from './components/profesionales/filtros-r
         UsuarioService,
         ListadoTurnosPdfComponent,
         ZonaSanitariaService,
-        DriveService
+        DriveService,
+        PdfService
     ],
     bootstrap: [AppComponent]
 })

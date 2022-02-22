@@ -3,7 +3,7 @@ import { Plex } from '@andes/plex';
 import { ProfesionalService } from '../../../services/profesional.service';
 import { environment } from '../../../../environments/environment';
 import { Auth } from '@andes/auth';
-import { IProfesional } from './../../../interfaces/IProfesional';
+import { IProfesional } from '../../../interfaces/IProfesional';
 import { DriveService } from '../../../services/drive.service';
 @Component({
     selector: 'app-documentos-profesional',

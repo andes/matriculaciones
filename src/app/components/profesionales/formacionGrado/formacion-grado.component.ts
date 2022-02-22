@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Plex } from '@andes/plex';
 import { IProfesional } from './../../../interfaces/IProfesional';
 import { ProfesionalService } from './../../../services/profesional.service';
@@ -11,6 +11,7 @@ import * as enumerados from './../../../utils/enumerados';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
+import { PdfService } from '../../../services/pdf.service';
 @Component({
     selector: 'app-formacion-grado',
     templateUrl: 'formacion-grado.html',
@@ -38,10 +39,16 @@ export class FormacionGradoComponent implements OnInit {
     public copias;
     public indexGrado;
     public fechaImpresion = new Date();
-    constructor(private _profesionalService: ProfesionalService,
-                public sanitizer: DomSanitizer,
-                private _profesionService: ProfesionService,
-                private _pdfUtils: PDFUtils, public auth: Auth, private _entidadFormadoraService: EntidadFormadoraService, private plex: Plex) { }
+    constructor(
+        private _profesionalService: ProfesionalService,
+        public sanitizer: DomSanitizer,
+        private _profesionService: ProfesionService,
+        private _pdfUtils: PDFUtils,
+        public auth: Auth,
+        private _entidadFormadoraService: EntidadFormadoraService,
+        private plex: Plex,
+        private pdfService: PdfService
+    ) { }
 
     ngOnInit() {
         this.copiasObj = enumerados.getCopiasCredencial();
@@ -131,22 +138,42 @@ export class FormacionGradoComponent implements OnInit {
 
     generarCertificadoEtica(i) {
         const grado = this.profesional.formacionGrado[i];
-        if (this.profesional.formacionPosgrado && this.profesional.formacionPosgrado.length > 0) {
-            const tienePosgrado = this.profesional.formacionPosgrado.findIndex(x => x.profesion.codigo === grado.profesion.codigo && x.matriculado === true);
-            if (tienePosgrado !== -1) {
-                const pdf = this._pdfUtils.certificadoDeEticaConEspecialidad(this.profesional, grado);
-                pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-
-            } else {
-                const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
-                pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
-
+        const profesional = {
+            apellido: this.profesional.apellido,
+            nombre: this.profesional.nombre,
+            documento: this.profesional.documento
+        };
+        const matricula: any = {
+            grado: {
+                titulo: grado.titulo,
+                matriculaNumero: grado.matriculacion[grado.matriculacion.length - 1].matriculaNumero,
+                fechaAlta: grado.fechaDeInscripcion
             }
-        } else {
-            const pdf = this._pdfUtils.certificadoDeEtica(this.profesional, grado);
-            pdf.save('Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf');
+        };
+        const tienePosgrado = this.profesional.formacionPosgrado?.findIndex(x => x.profesion.codigo === grado.profesion.codigo && x.matriculado);
+        if (tienePosgrado > -1) {
+            // Si tiene posgrados, agregamos los datos principales de cada uno
+            const hoy = new Date();
+            const posgrados = [];
+            this.profesional.formacionPosgrado.forEach(formacion => {
+                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida && (hoy <= formacion.matriculacion[formacion.matriculacion.length - 1].fin || ((hoy.getTime() - formacion.matriculacion[formacion.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365) || !formacion.tieneVencimiento)) {
+                    posgrados.push({
+                        titulo: formacion.especialidad.nombre,
+                        matriculaNumero: formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero,
+                        fechaAlta: formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1].fecha || null
+                    });
+                }
+            });
+            if(posgrados.length){
+                matricula.posgrados = posgrados;
+            }
         }
-
+        this.pdfService.descargarCertificadoEtica({
+            profesional,
+            matricula
+        },
+        'Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf'
+        ).subscribe();
     }
 
     actualizar($event) {

@@ -3,6 +3,7 @@
         <header>
             <plex-title titulo="{{ editable ? 'Editar profesional' : ocultarBtn ? 'Nuevo profesional' : 'Registro de profesional' }}"
                         size="md">
+                <ng-content></ng-content>
                 <ng-container *ngIf="editable">
                     <!-- Cuando se edita los datos del profesional-->
                     <plex-button class="mr-1" type="danger" label="volver" (click)="volverProfesional()"></plex-button>

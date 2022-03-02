@@ -1,5 +1,5 @@
-<plex-layout main="{{turnoElegido ? '8' : '12'}}" foco="{{turnoElegido ? 'sidebar' : 'main'}}" resizable="true"
-             [min]="2" [max]="4" [steps]="2">
+<plex-layout main="{{turnoElegido ? '8' : '12'}}" foco="{{this.turnoElegido? 'sidebar' : (isMobile()?'main':'')}}" resizable="true"
+             [min]="4" [max]="4" [steps]="2">
     <plex-layout-main *ngIf='componentPrint'>
         <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
         </app-listado-turnos-pdf>
@@ -20,118 +20,83 @@
                            (change)="mySubject.next();saveFecha()"></plex-datetime>
         </plex-wrapper>
 
-
-        <div class="row" style='max-height: 100%;
-                overflow-y: scroll;' infinite-scroll [infiniteScrollDistance]="modalScrollDistance"
-             [infiniteScrollThrottle]="modalScrollThrottle" [scrollWindow]="false" (scrolled)="onModalScrollDown()">
-            <div class="col-12" *ngIf="turnos.length === 0" class="alert alert-danger">
-                No se encontró ningún turno
-            </div>
-            <div class="col-12">
-                <ul class="list-group w-100">
-                    <li justify class="list-group-item" *ngFor="let turno of turnos; let i = index;"
-                        (click)="showTurno(turno)" [ngClass]="{'active': isSelected(turno)}">
-                        <div>
-                            <h5 class="mb-0">
-                                <b>{{ (turno.profesional ? turno.profesional.apellido + ', ' + turno.profesional.nombre
-                                    : '' ) }}</b>
-                            </h5>
-                            <p class="text-secondary mb-0">{{ (turno.profesional ? 'DNI ' + turno.profesional.documento
-                                : '') }}
-                                <span *ngIf="turno.profesional.fechaNacimiento">
-                                    {{ turno.profesional.fechaNacimiento | fecha}} {{turno.profesional | edad }}
-                                </span>
-                                <span *ngIf="!turno.profesional.fechaNacimiento" class="text-danger">
-                                    Sin fecha de nacimiento
-                                </span>
-                            </p>
-                            <p class="text-primary">{{ turno['fecha'] | date:'dd/MM/yyyy' }} {{ turno.fecha |
-                                date:'HH:mm' }} hs</p>
-                        </div>
-                        <div *ngFor="let grado of turno.profesional.formacionGrado">
-                            <plex-badge *ngIf="grado.profesion?.nombre" class="ml-2" type="info">
-                                {{grado.profesion.nombre}}
-                            </plex-badge>
-                            <plex-badge *ngIf="grado.matriculacion?.length" class="ml-2" type="info">
-                                Matricula n°
-                                {{grado.matriculacion[grado.matriculacion.length -
-                                1].matriculaNumero}}
-                            </plex-badge>
-                            <plex-badge *ngIf="grado.matriculacion?.length && !grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo"
-                                        class="ml-2" type="danger">
-                                VENCIDA
-                            </plex-badge>
-                            <plex-badge *ngIf="grado.matriculacion?.length && grado.matriculacion[grado.matriculacion.length - 1]?.baja?.motivo"
-                                        class="ml-2" type="danger">
-                                SUSPENDIDA
-                            </plex-badge>
-                            <ng-container *ngFor="let posgrado of turno.profesional.formacionPosgrado">
-                                <plex-badge *ngIf="posgrado.especialidad?.nombre" class="ml-2" type="info">
-                                    {{posgrado.especialidad.nombre}}
-                                </plex-badge>
-                                <plex-badge *ngIf="posgrado.matriculacion?.length" class="ml-2" type="info">
-                                    Matricula n°
-                                    {{posgrado.matriculacion[posgrado.matriculacion.length -
-                                    1].matriculaNumero}}
-                                </plex-badge>
-                                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
-                      hoy >= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="ml-2"
-                                            type="danger">
-                                    VENCIDA
-                                </plex-badge>
-                                <plex-badge *ngIf="posgrado.matriculacion?.length && posgrado.especialidad.nombre &&
-                    hoy <= posgrado.matriculacion[posgrado.matriculacion.length - 1]?.fin" class="ml-2" type="danger">
-                                    SUSPENDIDA
-                                </plex-badge>
-                            </ng-container>
-                            <plex-badge class="ml-2" type="info">{{ turno.tipo }}</plex-badge>
-                            <plex-badge *ngIf='turno.sePresento === true;' class="ml-2" type="success">Presente
-                            </plex-badge>
-                            <plex-badge *ngIf='turno.sePresento === false;' class="ml-2" type="warning">Ausente
-                            </plex-badge>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+        <plex-table [columns]="columns" #table="plTable" [offset]="120">
+            <plex-title titulo="Listado de turnos" size="md">
+                <plex-table-columns>
+                </plex-table-columns>
+            </plex-title>
+            <tr *ngFor="let turno of turnos; let indiceTurno = index" (click)="showTurno(turno)" [class.selectable]="true">
+                <td>
+                    <plex-label icon="medico" titulo="{{turno.profesional.apellido + ', ' + turno.profesional.nombre}}"
+                                    subtitulo="{{ (turno.profesional.documento | number) || '' }}">
+                    </plex-label>
+                </td>
+                <td *plTableCol="'profesion'">
+                    <div *ngFor="let grado of turno.profesional.formacionGrado; let indiceGrado = index">
+                        <plex-badge type="info">
+                            {{grado.profesion.nombre +' - ' +
+                            obtenerMatriculaGrado(indiceTurno,indiceGrado)}}
+                        </plex-badge>
+                    </div>
+                </td>
+                <td *plTableCol="'tipo'">
+                    <plex-badge type="info">{{ turno.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</plex-badge>
+                </td>
+                <td>
+                    <plex-badge *ngIf='turno.sePresento === true;' type="success" class="ml-2">Presente</plex-badge>
+                    <plex-badge *ngIf='turno.sePresento === false;' type="warning" class="ml-2">Ausente</plex-badge>
+                </td>
+            </tr>
+        </plex-table>
+        <div *ngIf="turnos.length === 0" class="h-50" justify="center">
+            <plex-label class="flex-column" icon="magnify" type="info" size="xl" direction="column"
+                        titulo="Realice una busqueda"
+                        subtitulo="Completando los filtros, podrás visualizar el listado de turnos otorgados.">
+            </plex-label>
         </div>
     </plex-layout-main>
-    <plex-layout-sidebar *ngIf="turnoElegido">
-        <plex-title titulo="Detalle del Turno">
-            <plex-button type="danger" size="md" icon="close" (click)="cerrarDetalleTurno()">
+    <plex-layout-sidebar *ngIf="turnoElegido" type="invert">
+        <plex-title titulo="Detalles del Turno">
+            <plex-button type="danger" size="sm" icon="close" (click)="cerrarDetalleTurno()">
             </plex-button>
         </plex-title>
 
         <plex-detail size="md">
-            <plex-icon type="info" name="account"></plex-icon>
+            <img *ngIf='tieneFoto' [src]="foto" />
             <div title> {{turnoElegido.profesional.apellido + ', '+turnoElegido.profesional.nombre}} </div>
             <div subtitle>Dni: {{turnoElegido.profesional.documento }}
-                <plex-button type="primary" icon='eye' size="sm" [disabled]="!turnoElegido.sePresento"
-                             (click)="showProfesional(turnoElegido)">
+                <plex-button class="ml-2" type="primary" icon='eye' size="sm" [disabled]="!turnoElegido.sePresento"
+                             (click)="showProfesional(turnoElegido)" tooltip="Ver profesional" tooltipPosition="bottom">
                 </plex-button>
             </div>
         </plex-detail>
 
-        <plex-title titulo="Fecha y hora" size="sm"></plex-title>
+        <plex-title titulo="Datos del turno" size="sm"></plex-title>
         <plex-list>
             <plex-item>
-                <plex-icon name="calendario-fecha" size="lg" type="info"></plex-icon>
-                <plex-label case="capitalize" titulo="{{ fechaTurno }}" subtitulo="{{horarioTurno}}hs" size="lg">
-                </plex-label>
-                <plex-badge type="info">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}
-                </plex-badge>
-                <plex-badge *ngIf='turnoElegido.sePresento === true;' type="success" class="ml-2">Presente</plex-badge>
-                <plex-badge *ngIf='turnoElegido.sePresento === false;' type="warning" class="ml-2">Ausente</plex-badge>
+                    <plex-label type="info" icon ="calendario-fecha" case="capitalize" titulo="{{ fechaTurno }}" subtitulo="{{horarioTurno}}hs" size="lg">
+                    </plex-label>
+                    <plex-badge type="info" size="sm">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}
+                    </plex-badge>
+                    <plex-badge *ngIf='turnoElegido.sePresento === true;' type="success"  size="sm">Presente</plex-badge>
+                    <plex-badge *ngIf='turnoElegido.sePresento === false;' type="warning" size="sm">Ausente</plex-badge>
+                    <plex-button type="danger" icon="close" size="sm" tooltip="Anular" (click)="anularTurno()"
+                         *ngIf="!turnoElegido.sePresento && !turnoElegido.anulado"></plex-button>
+                    <plex-button type="success" icon="check"size="sm" tooltip="Asistió" (click)="cambiarEstado(true)"
+                         *ngIf="!turnoElegido.sePresento">
+                    </plex-button>
+                    <plex-button type="warning" label="Ausente" size="sm" (click)="cambiarEstado(false)" *ngIf="turnoElegido.sePresento">
+                    </plex-button>
             </plex-item>
         </plex-list>
-
-        <plex-grid justify="between" type="full" cols="2">
-            <plex-button type="danger" label="Anular turno" (click)="anularTurno()"
-                         *ngIf="!turnoElegido.sePresento && !turnoElegido.anulado"></plex-button>
-            <plex-button type="success" label="Se presentó" (click)="cambiarEstado(true)"
-                         *ngIf="!turnoElegido.sePresento">
-            </plex-button>
-            <plex-button type="warning" label="Ausente" (click)="cambiarEstado(false)" *ngIf="turnoElegido.sePresento">
-            </plex-button>
-        </plex-grid>
+        <br>
+        <plex-title titulo="Notas" size="sm">
+        </plex-title>
+        <div class="d-flex justify-content-start align-items-center">
+            <plex-label *ngIf="!turnoElegido.profesional.notas || turnoElegido.profesional.notas[0].length === 0" icon="informacion" type="warning"
+                        size="md" direction="row" titulo="No hay ninguna nota aún" subtitulo="Para agregar una nota, dirijase a la edición 
+                        de datos del matriculado en la pestaña NOTAS"></plex-label>
+            <plex-label *ngIf="turnoElegido.profesional.notas && turnoElegido.profesional.notas[0].length">{{turnoElegido.profesional.notas[0]}}</plex-label>
+        </div>
     </plex-layout-sidebar>
 </plex-layout>

@@ -1,8 +1,9 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, HostBinding} from '@angular/core';
 import { Plex } from '@andes/plex';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
+import { DomSanitizer } from '@angular/platform-browser';
 
 // Services
 import { TurnoService } from './../../services/turno.service';
@@ -12,6 +13,9 @@ import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
 import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
 import { Subject } from 'rxjs/Rx';
+import { catchError } from 'rxjs/operators';
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { of } from 'rxjs';
 
 @Component({
     selector: 'app-turnos',
@@ -21,6 +25,9 @@ import { Subject } from 'rxjs/Rx';
 export class TurnosComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
     public turnos: any[] = [];
+    public tieneFoto = false;
+    public img64 = null;
+    public foto: any;
     public turnosDelDia: any[] = [];
     public turnoElegido: any;
     public lblTurnos: String;
@@ -49,6 +56,26 @@ export class TurnosComponent implements OnInit {
 
     public componentPrint = false;
     turnosParaListado: any;
+    public columns = [
+        {
+            key: 'profesional',
+            label: 'profesional',
+        },
+        {
+            key: 'profesion',
+            label: 'Profesión',
+            opcional: true,
+        },
+        {
+            key: 'tipo',
+            label: 'Tipo',
+            opcional: true,
+        },
+        {
+            key: 'asistencia',
+            label: 'Asistencia',
+        }
+    ];
     constructor(
         private _turnoService: TurnoService,
         private _formBuilder: FormBuilder,
@@ -59,6 +86,8 @@ export class TurnosComponent implements OnInit {
         public auth: Auth,
         public listadoPdf: ListadoTurnosPdfComponent,
         private _profesionalService: ProfesionalService,
+        public sanitizer: DomSanitizer,
+        private breakpointObserver: BreakpointObserver,
         private plex: Plex) {
         this.mySubject
             .debounceTime(1000)
@@ -93,7 +122,6 @@ export class TurnosComponent implements OnInit {
 
         this.buscar();
         this.contadorDeCambiosDni();
-
     }
 
     showTurno(turno: any) {
@@ -104,10 +132,20 @@ export class TurnosComponent implements OnInit {
         if (moment(this.hoy).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')) {
             this.muestraAusente = true;
         }
+        this._profesionalService.getProfesionalFoto({ id: this.turnoElegido.profesional._id }).pipe(catchError(() => of(null))).subscribe(resp => {
+            if (resp) {
+                this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
+                this.tieneFoto = true;
+            }
+        });
     }
 
     isSelected(turno: any) {
         return this.turnoElegido && turno.id === this.turnoElegido.id;
+    }
+
+    isMobile() {
+        return this.breakpointObserver.isMatched('(max-width: 599px)');
     }
 
     buscar(event?: any) {
@@ -214,5 +252,22 @@ export class TurnosComponent implements OnInit {
                     });
             }
         });
+    }
+
+    obtenerMatriculaGrado(iProfesional, iGrado) {
+        if (!this.turnos?.length) {
+            return;
+        }
+        const profesional = this.turnos[iProfesional].profesional.formacionGrado[iGrado];
+        if (profesional.matriculacion) {
+            if (profesional.matriculacion[profesional.matriculacion.length - 1].matriculaNumero) {
+                return profesional.matriculacion[profesional.matriculacion.length - 1].matriculaNumero;
+            }
+        }
+        return '';
+    }
+
+    back(){
+        this.router.navigate(['/homeAdministracion']);
     }
 }

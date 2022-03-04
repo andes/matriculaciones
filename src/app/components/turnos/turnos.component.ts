@@ -36,6 +36,7 @@ export class TurnosComponent implements OnInit {
     public muestraAusente = false;
     public fechaTurno;
     public horarioTurno;
+    public notas;
     offset = 0;
     limit = 30;
     turnosTotal = null;
@@ -137,6 +138,9 @@ export class TurnosComponent implements OnInit {
                 this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
                 this.tieneFoto = true;
             }
+        });
+        this._profesionalService.getProfesional({documento: this.turnoElegido.profesional.documento}).subscribe(profesional =>{
+            this.notas=profesional[profesional?.length-1]?.notas;
         });
     }
 

@@ -1,56 +1,58 @@
 <plex-layout main="{{turnoElegido ? '8' : '12'}}" foco="{{this.turnoElegido? 'sidebar' : (isMobile()?'main':'')}}" resizable="true"
              [min]="4" [max]="4" [steps]="2">
-    <plex-layout-main *ngIf='componentPrint'>
-        <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
-        </app-listado-turnos-pdf>
-    </plex-layout-main>
-    <plex-layout-main *ngIf='!componentPrint'>
-        <plex-title titulo="Turnos">
-            <plex-button *ngIf="turnosDelDia.length > 0" type="primary" (click)="imprimir()" icon='file-pdf'
-                         [label]="lblTurnos">
-            </plex-button>
-            <plex-button class="ml-2" label="Volver" type="danger" routerLink="/homeAdministracion">
-            </plex-button>
-        </plex-title>
-        <plex-wrapper>
-            <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="mySubject.next()"></plex-text>
-            <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="mySubject.next()"></plex-text>
-            <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
-            <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
-                           (change)="mySubject.next();saveFecha()"></plex-datetime>
-        </plex-wrapper>
-
-        <plex-table [columns]="columns" #table="plTable" [offset]="120">
-            <plex-title titulo="Listado de turnos" size="md">
-                <plex-table-columns>
-                </plex-table-columns>
+    <plex-layout-main>
+        <div *ngIf='componentPrint'>
+            <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
+            </app-listado-turnos-pdf>
+        </div>
+        <div *ngIf='!componentPrint'>
+            <plex-title titulo="Turnos">
+                <plex-button class="mr-1" label="Volver" type="danger" routerLink="/homeAdministracion">
+                </plex-button>
+                <plex-button class="mr-1" *ngIf="turnosDelDia.length > 0" type="primary" (click)="imprimir()" icon='file-pdf'
+                             [label]="lblTurnos">
+                </plex-button>
             </plex-title>
-            <tr *ngFor="let turno of turnos; let indiceTurno = index" (click)="showTurno(turno)" [class.selectable]="true">
-                <td>
-                    <plex-label icon="medico" titulo="{{turno.profesional.apellido + ', ' + turno.profesional.nombre}}"
-                                    subtitulo="{{ (turno.profesional.documento | number) || '' }}">
-                    </plex-label>
-                </td>
-                <td *plTableCol="'profesion'">
-                    <div *ngFor="let grado of turno.profesional.formacionGrado; let indiceGrado = index">
-                        <plex-badge type="info">
-                            {{grado.profesion.nombre +' - ' +
-                            obtenerMatriculaGrado(indiceTurno,indiceGrado)}}
-                        </plex-badge>
-                    </div>
-                </td>
-                <td *plTableCol="'tipo'">
-                    <plex-badge type="info">{{ turno.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</plex-badge>
-                </td>
-                <td>
-                    <plex-badge *ngIf='turno.sePresento === true;' type="success" class="ml-2">Presente</plex-badge>
-                    <plex-badge *ngIf='turno.sePresento === false;' type="warning" class="ml-2">Ausente</plex-badge>
-                </td>
-            </tr>
-        </plex-table>
+            <plex-wrapper>
+                <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="mySubject.next()"></plex-text>
+                <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="mySubject.next()"></plex-text>
+                <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
+                <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
+                               (change)="mySubject.next();saveFecha()"></plex-datetime>
+            </plex-wrapper>
+    
+            <plex-table [columns]="columns" #table="plTable" [offset]="120">
+                <plex-title titulo="Listado de turnos" size="md">
+                    <plex-table-columns>
+                    </plex-table-columns>
+                </plex-title>
+                <tr *ngFor="let turno of turnos; let indiceTurno = index" (click)="showTurno(turno)" [class.selectable]="true">
+                    <td>
+                        <plex-label icon="medico" titulo="{{turno.profesional.apellido + ', ' + turno.profesional.nombre}}"
+                                        subtitulo="{{ (turno.profesional.documento | number) || '' }}">
+                        </plex-label>
+                    </td>
+                    <td *plTableCol="'profesion'">
+                        <div *ngFor="let grado of turno.profesional.formacionGrado; let indiceGrado = index">
+                            <plex-badge type="info">
+                                {{grado.profesion.nombre +' - ' +
+                                obtenerMatriculaGrado(indiceTurno,indiceGrado)}}
+                            </plex-badge>
+                        </div>
+                    </td>
+                    <td *plTableCol="'tipo'">
+                        <plex-badge type="info">{{ turno.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</plex-badge>
+                    </td>
+                    <td>
+                        <plex-badge *ngIf='turno.sePresento === true;' type="success" class="ml-2">Presente</plex-badge>
+                        <plex-badge *ngIf='turno.sePresento === false;' type="warning" class="ml-2">Ausente</plex-badge>
+                    </td>
+                </tr>
+            </plex-table>
+        </div>        
         <div *ngIf="turnos.length === 0" class="h-50" justify="center">
             <plex-label class="flex-column" icon="magnify" type="info" size="xl" direction="column"
-                        titulo="Realice una busqueda"
+                        titulo="Realice una búsqueda"
                         subtitulo="Completando los filtros, podrás visualizar el listado de turnos otorgados.">
             </plex-label>
         </div>
@@ -93,10 +95,10 @@
         <plex-title titulo="Notas" size="sm">
         </plex-title>
         <div class="d-flex justify-content-start align-items-center">
-            <plex-label *ngIf="!turnoElegido.profesional.notas || turnoElegido.profesional.notas[0].length === 0" icon="informacion" type="warning"
+            <plex-label *ngIf="!notas || !notas[0]?.length || notas[0] === ''" icon="informacion" type="warning"
                         size="md" direction="row" titulo="No hay ninguna nota aún" subtitulo="Para agregar una nota, dirijase a la edición 
                         de datos del matriculado en la pestaña NOTAS"></plex-label>
-            <plex-label *ngIf="turnoElegido.profesional.notas && turnoElegido.profesional.notas[0].length">{{turnoElegido.profesional.notas[0]}}</plex-label>
+            <plex-label *ngIf="notas && notas[0]?.length">{{notas[0]}}</plex-label>
         </div>
     </plex-layout-sidebar>
 </plex-layout>

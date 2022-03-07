@@ -1,28 +1,18 @@
-import { Component, OnInit, Output, Input, EventEmitter, HostBinding } from '@angular/core';
-import { Plex } from '@andes/plex';
-// import { PlexValidator } from 'andes-plex/src/lib/core/validator.service';
-import { FormBuilder, FormGroup, Validators, FormArray } from '@angular/forms';
+import { Component, OnInit, Input, HostBinding } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 
 // Services
-import { PaisService } from './../../services/pais.service';
-import { ProvinciaService } from './../../services/provincia.service';
-import { LocalidadService } from './../../services/localidad.service';
-import { ProfesionService } from './../../services/profesion.service';
-import { EntidadFormadoraService } from './../../services/entidadFormadora.service';
 import { ProfesionalService } from './../../services/profesional.service';
 import { TurnoService } from './../../services/turno.service';
 
 // Utils
-import { PDFUtils } from './../../utils/PDFUtils';
 import * as Enums from './../../utils/enumerados';
 import { IProfesional } from '../../interfaces/IProfesional';
-import { Params, ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as moment from 'moment';
 
 const diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sabado'];
 const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
-
-const jsPDF = require('jspdf');
 
 @Component({
     selector: 'app-solicitar-turno-renovacion',
@@ -139,21 +129,13 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     public noEncontrado = false;
 
 
-    constructor(private _formBuilder: FormBuilder,
-                private _turnosService: TurnoService,
-                private _paisService: PaisService,
-                private route: ActivatedRoute,
-                private _provinciaService: ProvinciaService,
-                private _localidadService: LocalidadService,
-                private _profesionService: ProfesionService,
-                private _profesionalService: ProfesionalService,
-                private _entidadFormadoraService: EntidadFormadoraService,
-                private _pdfUtils: PDFUtils,
-                private plex: Plex,
-                private router: Router) {
-
+    constructor(
+        private _formBuilder: FormBuilder,
+        private _turnosService: TurnoService,
+        private route: ActivatedRoute,
+        private _profesionalService: ProfesionalService
+    ) {
         this.tipoTurno = Enums.TipoTurno.renovacion;
-
     }
 
     ngOnInit() {
@@ -167,10 +149,10 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
         this.turnoSeleccionado = true;
         this.lblTurno = moment(this._turnoSeleccionado).format('llll');
         this.lblTurno = diasSemana[this._turnoSeleccionado.getDay()] + ' '
-      + this._turnoSeleccionado.getDate().toString() + ' de '
-      + meses[this._turnoSeleccionado.getMonth()] + ' de '
-      + this._turnoSeleccionado.getFullYear() + ', '
-      + this._turnoSeleccionado.getHours();
+            + this._turnoSeleccionado.getDate().toString() + ' de '
+            + meses[this._turnoSeleccionado.getMonth()] + ' de '
+            + this._turnoSeleccionado.getFullYear() + ', '
+            + this._turnoSeleccionado.getHours();
 
         if (this._turnoSeleccionado.getMinutes() > 0) {
             this.lblTurno += ':' + this._turnoSeleccionado.getMinutes();

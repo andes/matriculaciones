@@ -1,13 +1,5 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { AppSettings } from './../app.settings';
-import { ITurno } from './../interfaces/ITurno';
 import { Injectable } from '@angular/core';
-import { environment } from './../../environments/environment';
-
-import {
-    Server
-} from '@andes/shared';
-
 
 // Import RxJs required methods
 import { Observable } from 'rxjs/Rx';

@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Output, Input, EventEmitter, ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
 import { FormGroup, NgForm } from '@angular/forms';
@@ -16,7 +17,7 @@ import { Auth } from '@andes/auth';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TurnoService } from '../../services/turno.service';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { of, Observable, forkJoin } from 'rxjs';
+import { of, Observable } from 'rxjs';
 import * as moment from 'moment';
 
 @Component({
@@ -116,10 +117,10 @@ export class ProfesionalComponent implements OnInit {
                          },
                          ultimaActualizacion: new Date(),
                          activo: true
-                     }
-        ],
+                     }],
         fotoArchivo: null,
         firmas: null,
+        profesionalMatriculado: false,
         formacionGrado: [{
             exportadoSisa: null,
             profesion: null,
@@ -243,7 +244,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     confirmarDatos() {
-        // Carga de datos de profesionales matriculados por primera vez
+        // Carga de datos de profesionales matriculados por primera vez (profesional sin loguearse)
         if (this.formProf.valid) {
             const matcheo = false;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
@@ -257,7 +258,7 @@ export class ProfesionalComponent implements OnInit {
             this.matchingCandidatos(this.profesional.documento, this.profesional.sexo).pipe(
                 map(resp => resp)
             ).subscribe(candidatos => {
-                if(candidatos.length){
+                if (candidatos.length) {
                     this.plex.info('info', 'Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
                 } else {
                     const stringProfesional = JSON.stringify(this.profesional);
@@ -277,6 +278,7 @@ export class ProfesionalComponent implements OnInit {
             this.profesional.formacionGrado[0].exportadoSisa = false;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
             this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
+            this.profesional.profesionalMatriculado = true;
             this.profesional.contactos.map(elem => {
                 elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
                 return elem;
@@ -284,49 +286,55 @@ export class ProfesionalComponent implements OnInit {
 
             this.matchingCandidatos(this.profesional.documento, this.profesional.sexo).pipe(
                 switchMap(candidatos => {
-                    // existe candidato?
-                    if(candidatos.length){
+                    // El matching que interesa es por profesionales matriculados (profesionalMatriculado: true)
+                    const candidatosMatriculados = candidatos.filter(c => c.profesional.profesionalMatriculado);
+                    if (candidatosMatriculados.length) {
                         return this.plex.confirm('El profesional ingresado ya existe. Si continúa sus datos serán actualizados', '¿Deséa continuar?').then(response => {
-                            if(response) {
-                                this.profesional.id = candidatos[0].profesional.id;
+                            if (response) {
+                                this.profesional.id = candidatosMatriculados[0].profesional.id;
                             }
                             return response;
                         });
+                    } else if (candidatos.length) {
+                        // candidatos con matricula externa o similares (profesionalMatriculado: false) se le agrega la informacion de grado, etc
+                        this.profesional.id = candidatos[0].profesional.id;
+                        return of(true);
                     }
                     return of(null);
                 }),
                 switchMap(responseActualizar => {
-                    if(responseActualizar !== null){
+                    if (responseActualizar !== null) {
+                        // hubo match
                         if (responseActualizar) {
+                            // actualizar candidato
                             return this._profesionalService.patchProfesional(this.profesional.id, this.profesional);
                         }
-                        return of(null);
+                        this.profesional.id = undefined;
+                        return of(null); // no actualiza
                     }
+                    // no hubo match
                     return this._profesionalService.saveProfesional({ profesional: this.profesional });
                 }),
                 switchMap(profesionalSaved => {
                     this.profesional = profesionalSaved;
-                    if(this.nuevoProf) {
+                    if (this.nuevoProf) {
                         // cuando se crea a partir del boton 'nuevo profesional' (sin turno previo)
                         const turno = {
                             fecha: new Date(),
                             tipo: 'matriculacion',
                             profesional: profesionalSaved._id
                         };
-                        return forkJoin([
-                            this._turnosService.saveTurnoSolicitados(profesionalSaved),
-                            this._turnosService.saveTurnoMatriculacion({ turno: turno })
-                        ]);
+                        return this._turnosService.saveTurnoSolicitados(profesionalSaved).pipe(
+                            switchMap(() => this._turnosService.saveTurnoMatriculacion({ turno: turno }))
+                        );
                     }
                     return of(profesionalSaved);
                 }),
             ).subscribe(response => {
-                if(response) { // puede ser response del patch o post
+                if (response) { // puede ser response del patch o post
                     this.plex.toast('success', 'Profesional guardado exitosamente', 'informacion', 1000);
                     this.editado.emit(true);
-                    if ((response as any).length === 2) { // es response del post ?
-                        this.router.navigate(['/profesional', this.profesional.id]);
-                    }
+                    this.router.navigate(['/profesional', this.profesional.id]);
                 }
             });
         } else {
@@ -504,13 +512,13 @@ export class ProfesionalComponent implements OnInit {
 
 
     /**
-     * Busca profesionales similares a partir de documento y sexo
-     * @param documento string
-     * @param sexo string
-     * @returns { number, IProfesional }[]
-     */
+ * Busca profesionales similares a partir de documento y sexo
+ * @param documento string
+ * @param sexo string
+ * @returns { number, IProfesional }[]
+ */
     matchingCandidatos(documento, sexo): Observable<any[]> {
-        return this._profesionalService.getProfesionalesMatching({documento, sexo}).pipe(
+        return this._profesionalService.getProfesionalesMatching({ documento, sexo }).pipe(
             map(datos => {
                 const candidatos = [];
                 if (datos.length) {
@@ -520,7 +528,7 @@ export class ProfesionalComponent implements OnInit {
                             matching: porcentajeMatching ? porcentajeMatching * 100 : 0,
                             profesional: porcentajeMatching ? profCandidato : null
                         };
-                        if(profesionalMatch.matching >= 94){
+                        if (profesionalMatch.matching >= 94) {
                             candidatos.push(profesionalMatch);
                         }
                     });

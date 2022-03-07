@@ -1,9 +1,4 @@
-import {
-    Sexo,
-    EstadoCivil,
-    TipoContacto,
-    TipoDomicilio
-} from './../utils/enumerados';
+import { Sexo } from './../utils/enumerados';
 
 export interface IProfesional {
     id: String;
@@ -67,6 +62,7 @@ export interface IProfesional {
         imgArchivo: String;
         fecha: Date;
     }];
+    profesionalMatriculado?: boolean;
     formacionGrado: [{
         exportadoSisa?: Boolean;
         profesion: {

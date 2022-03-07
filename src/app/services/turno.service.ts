@@ -7,16 +7,10 @@ import {
     Server
 } from '@andes/shared';
 
-import {
-    ITurno
-} from './../interfaces/ITurno';
-
-
 @Injectable()
 export class TurnoService extends BaseService {
 
     private turnosMatriculacionURL = this.turnosURL + 'matriculacion/';
-    private turnosRenovacionURL = this.turnosURL + 'renovacion/';
     private turnosProximosURL = this.turnosURL + 'proximos/';
     private turnosSolicitados = this.turnosSolicidatosURL;
 

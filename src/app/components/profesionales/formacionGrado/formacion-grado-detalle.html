@@ -5,7 +5,7 @@
                  type="success" icon="check" (click)="matricularProfesional(formacion,true)" size="sm">
     </plex-button>
     <plex-button class="pr-1" type="primary" icon="plus" tooltip="Agregar nueva matricula"
-                 *ngIf='formacion.papelesVerificados && this.profesional.formacionGrado[index].matriculado === false'
+                 *ngIf='formacion.papelesVerificados && this.profesional.formacionGrado[index].matriculado === false && !this.profesional.formacionGrado[index].matriculacion'
                  (click)="matricularProfesional(formacion,false)" size="sm">
     </plex-button>
     <plex-button class="pr-1" tooltip="Renovar antes de la fecha del vencimiento" type="info"

@@ -65,7 +65,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
     matricularProfesional(formacion: any, mantenerNumero) {
         let texto = '¿Desea agregar una nueva matricula?';
         if (mantenerNumero) {
-            texto = '¿Desea mantener el numero de la matricula?';
+            texto = '¿Desea renovar la matricula?';
         }
 
         this.plex.confirm(texto).then((resultado) => {

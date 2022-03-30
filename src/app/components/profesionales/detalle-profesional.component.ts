@@ -332,6 +332,7 @@ export class DetalleProfesionalComponent implements OnInit {
         this.mostrar = true;
         this.mostrarGrado = false;
         this.indexFormacionGradoSelected = formacion;
+        this.showAdd = false;
     }
 
     formacionPosgradoSelected(posgrado: any) {

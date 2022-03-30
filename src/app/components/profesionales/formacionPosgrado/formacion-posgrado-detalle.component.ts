@@ -29,9 +29,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     public edit = true;
     public matriculaNumero;
     public inicio;
+    public inicioRevalida;
     public fin;
     hoy = new Date();
     public showBtnSinVencimiento = false;
+    public revalidacion = false;
     public columnasFechas = [];
     public editarObtencion = false;
     public pos;
@@ -71,6 +73,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             key: 'estado',
             label: 'ESTADO'
         },
+        {}
     ];
     constructor(private _profesionalService: ProfesionalService,
                 private plex: Plex, public auth: Auth) {
@@ -80,6 +83,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.matriculaNumero = this.formacion.matriculacion[0].matriculaNumero;
         this.editarObtencion = false;
         this.inicio = this.formacion.matriculacion[0].inicio;
+        this.inicioRevalida = this.formacion.matriculacion[this.formacion.matriculacion.length-1].inicio;
         this.fin = this.formacion.matriculacion[0].fin;
     }
 
@@ -93,7 +97,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     renovarProfesional(formacion: any) {
         let texto;
-        if (this.estaVencida(this.index) || !formacion.tieneVencimiento) {
+        if (this.estaVencida() || !formacion.tieneVencimiento) {
             texto = '¿Desea agregar una nueva reválida?';
         } else {
             texto = '¿Desea revalidar antes de la fecha de vencimiento?';
@@ -211,7 +215,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         });
     }
 
-    estaVencida(i) {
+    estaVencida() {
         const formacionPosgrado = this.profesional.formacionPosgrado[this.profesional.formacionPosgrado.length - 1];
         return ((this.hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
     }
@@ -243,23 +247,32 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.editarObtencion = true;
     }
 
-    cerrarEditar() {
-        this.editarObtencion = false;
+    cerrarEditar(tipo) {
+        if(tipo === 'matricula'){
+            this.editarObtencion = !this.editarObtencion;
+        }else{
+            this.revalidacion = !this.revalidacion;
+        }
     }
 
-    guardar(event) {
+    guardar(event, tipo) {
         if (event.form.valid) {
             const cambio = {
                 'op': 'updateEstadoPosGrado',
                 'data': this.profesional.formacionPosgrado
             };
-            this.formacion.matriculacion[0].matriculaNumero = this.matriculaNumero;
-            this.formacion.matriculacion[0].inicio = this.inicio;
-            this.formacion.matriculacion[0].fin = this.fin;
+            if(tipo === 'matricula'){
+                this.formacion.matriculacion[0].matriculaNumero = this.matriculaNumero;
+                this.formacion.matriculacion[0].inicio = this.inicio;
+                this.formacion.matriculacion[0].fin = moment(this.inicio).add(5, 'years');;
+            } else{
+                this.formacion.matriculacion[this.formacion.matriculacion.length-1].inicio = this.inicioRevalida;
+                this.formacion.matriculacion[this.formacion.matriculacion.length-1].fin = moment(this.inicioRevalida).add(5, 'years');
+            }
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
                 this.plex.toast('success', 'Los datos se han actualizado con éxito!', 'Mensaje de la confirmación', 1000);
             });
-            this.cerrarEditar();
+            this.cerrarEditar(tipo);
         }
     }
 }

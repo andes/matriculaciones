@@ -87,6 +87,7 @@
         <app-formacion-posgrado-detalle *ngIf="mostrarGrado && flag && !showEdit"
                                         [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"
                                         [index]="indexFormacionPosgradoSelected" [profesional]="profesional"
+                                        [nota]="profesional.formacionPosgrado[indexFormacionPosgradoSelected].notas"
                                         (matriculacion)="matricularProfesionalEspecialidad($event)"
                                         (anioDeGraciaOutPut)="anioDeGracia($event)" (cerrarDetalle)='cerrar(false)'
                                         (editarEspecialidad)="editarEspecialidad($event)"

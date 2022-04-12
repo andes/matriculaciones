@@ -46,22 +46,23 @@
     <plex-table [columns]="matricula" #table="plTable">
         <tr>
             <td>{{ formacion.matriculacion[0].matriculaNumero }}</td>
-            <td>
-            <plex-badge *ngIf="formacion.matriculacion[0].inicio" size="lg" type="info">
-                    {{ formacion.matriculacion[0].inicio | date: 'dd/MM/yyyy'}}
-            </plex-badge>
+            <td class="colum-fechas">
+                <div>
+                    <plex-badge class="mb-1" *ngIf="formacion.matriculacion[0].inicio" size="lg" type="info">
+                        {{ formacion.matriculacion[0].inicio | date: 'dd/MM/yyyy'}}
+                    </plex-badge>
+                </div>
+                <div>
+                    <plex-badge *ngIf='formacion.tieneVencimiento ' size="lg" type="warning">{{ formacion.matriculacion[0].fin |
+                        date: 'dd/MM/yyyy'}}
+                    </plex-badge>
+                    <plex-badge *ngIf='!formacion.tieneVencimiento' size="lg" type="warning"> Sin vencimiento</plex-badge>
+                </div>
             </td>
-            <td>
-            <plex-badge *ngIf='formacion.tieneVencimiento ' size="lg" type="warning">{{ formacion.matriculacion[0].fin |
-                    date: 'dd/MM/yyyy'}}
-            </plex-badge>
-            <plex-badge *ngIf='!formacion.tieneVencimiento' size="lg" type="warning"> Sin vencimiento
-            </plex-badge>
-            </td>
-            <td>
-            <plex-button class="pr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
+            <td class="colum-editar">
+                    <plex-button class="pr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
                         (click)="editarObtencionMatricula()"></plex-button>
-        </td>
+            </td>
         </tr>
     </plex-table>
     <br>
@@ -89,7 +90,7 @@
 
 <div class="mt-3" *ngIf="!revalidacion">
     <plex-title titulo="Revalidaciones" size="sm">
-        <plex-button type="success" size="sm" label="Renovar" (click)="renovarProfesional(formacion)">
+        <plex-button class="mr-1" type="success" size="sm" label="Renovar" (click)="renovarProfesional(formacion)">
         </plex-button>
     </plex-title>
     <plex-table *ngIf="formacion.matriculacion[1]" [columns]="revalida" #table="plTable">
@@ -98,17 +99,19 @@
                 <td>{{ matriculacion.revalidacionNumero-1 }}</td>
                 <td>{{ matriculacion.matriculaNumero }}</td>
                 <td>
-                    <plex-badge size="lg" type="info">
-                        {{ matriculacion.inicio | date: 'dd/MM/yyyy'}}
-                    </plex-badge>
-                </td>
-                <td>
-                    <plex-badge *ngIf='i !== (formacion.matriculacion.length - 1) || formacion.tieneVencimiento ' size="lg"
+                    <div>
+                        <plex-badge class="mb-1"size="lg" type="info">
+                            {{ matriculacion.inicio | date: 'dd/MM/yyyy'}}
+                        </plex-badge>
+                    </div>
+                    <div>
+                        <plex-badge *ngIf='i !== (formacion.matriculacion.length - 1) || formacion.tieneVencimiento ' size="lg"
                             type="warning">{{ matriculacion.fin | date: 'dd/MM/yyyy'}}
-                    </plex-badge>
-                    <plex-badge *ngIf='i === (formacion.matriculacion.length - 1) && !formacion.tieneVencimiento' size="lg"
+                        </plex-badge>
+                        <plex-badge *ngIf='i === (formacion.matriculacion.length - 1) && !formacion.tieneVencimiento' size="lg"
                             type="warning"> Sin vencimiento
-                    </plex-badge>
+                        </plex-badge>
+                    </div>
                 </td>
                 <td>
                     <plex-badge *ngIf='(i === (formacion.matriculacion.length - 1) && formacion.matriculado)' size="lg"
@@ -131,7 +134,7 @@
 
 <div class="mt-3" *ngIf="revalidacion">
     <plex-title titulo="Editar revalidaciones" size="sm">
-        <plex-button type="success" size="sm" icon="plus" [disabled]="!formulario.valid" tooltip="Guardar" (click)="guardar(formulario,'revalida')"></plex-button>
+        <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar" (click)="guardar(formulario,'revalida')"></plex-button>
         <plex-button class="ml-1" type="danger" size="sm" icon="close" (click)="cerrarEditar('renovacion')" tooltip="Cancelar"></plex-button>
     </plex-title>
     <form #formulario='ngForm'>
@@ -155,6 +158,31 @@
 </div>
 
 <div class="mt-3">
-    <plex-title titulo="Notas" size="sm"></plex-title>
-    <plex-label *ngIf="formacion.notas">{{formacion.notas}}</plex-label>
+    <plex-title titulo="Notas" size="sm">
+        <plex-button *ngIf="!notas && !formacion.notas?.length" class="ml-1" type="success" size="sm" label="AGREGAR NOTA" (click)="agregarNota('agregar')"></plex-button>
+        <plex-button class="mr-2" *ngIf="notas" type="success" size="sm" icon="check" tooltip="Guardar" (click)="guardarNota()"
+        [disabled]="!formularioNota?.valid"></plex-button>
+        <plex-button *ngIf="notas" type="danger" size="sm" icon="close" tooltip="Cancelar" (click)="cancelarNota()"></plex-button>
+    </plex-title>
+    <!-- <plex-label *ngIf="formacion.notas">{{formacion.notas}}</plex-label> -->
+    <form #formularioNota="ngForm" class="mr-1">
+        <plex-table *ngIf="!notas && formacion.notas.length">
+            <tr>
+                <td>
+                    <plex-label icon="documento" size="md" titulo="{{notaEditada}}"></plex-label>
+                </td>
+                <td>
+                    <plex-button size="sm" type="danger" icon="cesto" class="float-right" tooltip="Eliminar"
+                             (click)="eliminarNota()">
+                    </plex-button>
+                    <plex-button size="sm" type="warning" icon="pencil" class="float-right" tooltip="Editar"
+                             (click)="agregarNota('editar')">
+                    </plex-button>
+                </td>
+            </tr>
+        </plex-table>
+        <plex-label *ngIf="!notas && !formacion.notas.length" icon="informacion" type="warning"
+                size="md" direction="row" titulo="No hay ninguna nota aún" subtitulo="Para agregar una nota, presione el botón AGREGAR NOTA"></plex-label>
+        <plex-text *ngIf="notas" label="Ingrese nota" [(ngModel)]="notaEditada" name="notaText" grow="full" [required]="true" multiline="true"></plex-text>
+    </form>
 </div>

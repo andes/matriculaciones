@@ -19,6 +19,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.actualizarIndice();
     }
     @Input() profesional: IProfesional;
+    @Input('nota')
+    set nota(value: any){
+        this.notaEditada = value;
+    }
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
     @Output() anioDeGraciaOutPut = new EventEmitter();
@@ -31,6 +35,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     public inicio;
     public inicioRevalida;
     public fin;
+    public notas = false;
+    public _nota = null;
+    public notaEditada: any = null;
+    public accion = '';
     hoy = new Date();
     public showBtnSinVencimiento = false;
     public revalidacion = false;
@@ -40,15 +48,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     public matricula = [
         {
             key: 'matriculaNumero',
-            label: 'MATRÍCULA NRO.'
+            label: 'MATRÍCULA NRO'
         },
         {
             key: 'inicio',
-            label: 'INICIO'
-        },
-        {
-            key: 'fin',
-            label: 'FIN'
+            label: 'INICIO/FIN'
         },
         {}
     ];
@@ -59,15 +63,11 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         },
         {
             key: 'matriculaNumero',
-            label: 'MATRÍCULA NRO.'
+            label: 'MAT NRO.'
         },
         {
             key: 'inicio',
-            label: 'INICIO'
-        },
-        {
-            key: 'fin',
-            label: 'FIN'
+            label: 'INICIO/FIN'
         },
         {
             key: 'estado',
@@ -97,7 +97,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     renovarProfesional(formacion: any) {
         let texto;
-        if (this.estaVencida() || !formacion.tieneVencimiento) {
+        if (!formacion.tieneVencimiento || this.estaVencida()) {
             texto = '¿Desea agregar una nueva reválida?';
         } else {
             texto = '¿Desea revalidar antes de la fecha de vencimiento?';
@@ -274,5 +274,40 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             });
             this.cerrarEditar(tipo);
         }
+    }
+
+    agregarNota(tipo){
+        this.notas = !this.notas;
+        this.accion = tipo;
+    }
+
+    guardarNota(eliminar = false){
+        const cambio = {
+            'op': 'updateEstadoPosGrado',
+            'data': this.profesional.formacionPosgrado
+        };
+        if(eliminar === false){
+            this.formacion.notas[0] = this.notaEditada;
+        }
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
+            if(this.formacion.notas.length){
+                const mensaje = this.accion === 'agregar' ? 'Nota agregada con éxito!' : 'Nota editada con éxito!';
+                this.plex.toast('success', mensaje);
+                this.notas = !this.notas;
+            }else{
+                this.plex.toast('success', 'Nota eliminada con éxito!');
+            }
+        }, error => {
+            this.plex.toast('danger', 'La nota no pudo ser actualizada');
+        });
+    }
+
+    cancelarNota() {
+        this.notaEditada = this.formacion.notas[0];
+        this.notas = !this.notas;
+    }
+    eliminarNota(){
+        this.formacion.notas.splice(0,1);
+        this.guardarNota(true);
     }
 }

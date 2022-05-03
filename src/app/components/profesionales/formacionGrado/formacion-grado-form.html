@@ -1,6 +1,6 @@
 <plex-accordion>
-  <plex-panel tituloPrincipal="Nuevo Grado" icon="plus-circle-outline" [active]="activeAcc">
-    <div class="row">
+  <plex-panel tituloPrincipal="Nuevo Grado" icon="plus-circle" [active]="activeAcc" (toggle)="activarPanel($event)" >
+    <div *ngIf="activeAcc" class="row">
       <div class="col">
         <form #posgrado='ngForm'>
           <div class="row">
@@ -13,30 +13,23 @@
             <div class="col-md-4">
               <plex-datetime label="Fecha de Egreso" type="date" [(ngModel)]="profesionalGrado.fechaEgreso" name='fechaEgreso' [required]="true" [readonly]="!profesional.habilitado"></plex-datetime>
             </div>
-            <!-- <div class="col-md-4">
-                            <plex-datetime label="Fecha del Título" type="date" [(ngModel)]="profesionalGrado.fechaTitulo" name='fechaTitulo' [required]="true"></plex-datetime>
-                        </div> -->
             <div class="col-6">
               <plex-select label="Institucion Formadora" *ngIf="!showOtraEntidadFormadora" [(ngModel)]="profesionalGrado.entidadFormadora" name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)" [required]="true" [readonly]="!profesional.habilitado"></plex-select>
               <plex-text *ngIf="showOtraEntidadFormadora" name='entidad' label="Otra Entidad Formadora" [(ngModel)]="profesionalGrado.entidadFormadora.nombre" [required]="true" [readonly]="!profesional.habilitado"></plex-text>
             </div>
-            <div class="col">
+            <div class="col d-flex align-items-end my-1">
               <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora" (change)='otraEntidad(profesionalGrado)' name="noPoseDNI" [readonly]="!profesional.habilitado"></plex-bool>
             </div>
           </div>
-
-          <hr>
-
           <div class="row">
             <div class="col">
               <plex-button *ngIf="profesional.habilitado" label="Guardar" type="success" class="float-right" (click)="onSubmit($event,posgrado)" validateForm="true"></plex-button>
+              <plex-button label="Cancelar" type="danger" class="float-right mr-1" (click)="cerrar(posgrado)"></plex-button>
               <plex-button *ngIf="!profesional.habilitado" disabled="true" label="Guardar" type="success" class="float-right" (click)="onSubmit($event,posgrado)" validateForm="true"></plex-button>
-
             </div>
           </div>
         </form>
       </div>
     </div>
-
   </plex-panel>
 </plex-accordion>

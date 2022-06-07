@@ -22,7 +22,8 @@ import * as moment from 'moment';
 
 @Component({
     selector: 'app-profesional',
-    templateUrl: 'profesional.html'
+    templateUrl: 'profesional.html',
+    styleUrls: ['profesional.scss']
 })
 export class ProfesionalComponent implements OnInit {
     @ViewChild('formNuevoProf', { static: true }) formProf: NgForm;
@@ -234,7 +235,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     onTurnoSeleccionado() {
-        this.lblTurno = moment(this.fecha).format('llll');
+        this.lblTurno = moment(this.fecha).format('DD/MM/YYYY, h:mm a');
     }
 
     showOtra(entidadFormadora) {
@@ -314,7 +315,7 @@ export class ProfesionalComponent implements OnInit {
                     return this._profesionalService.saveProfesional({ profesional: this.profesional });
                 }),
                 switchMap(profesionalSaved => {
-                    if(!profesionalSaved) {
+                    if (!profesionalSaved) {
                         return of(null);
                     }
                     this.profesional = profesionalSaved;
@@ -426,7 +427,7 @@ export class ProfesionalComponent implements OnInit {
     }
     addContacto() {
         const indexUltimo = this.profesional.contactos.length - 1;
-        if(this.profesional.contactos[indexUltimo].valor){
+        if (this.profesional.contactos[indexUltimo].valor) {
             const nuevoContacto = Object.assign({}, {
                 tipo: 'email',
                 valor: '',
@@ -435,7 +436,7 @@ export class ProfesionalComponent implements OnInit {
                 ultimaActualizacion: new Date()
             });
             this.profesional.contactos.push(nuevoContacto);
-        }else{
+        } else {
             this.plex.toast('info', 'Debe completar los contactos anteriores.');
         }
     }

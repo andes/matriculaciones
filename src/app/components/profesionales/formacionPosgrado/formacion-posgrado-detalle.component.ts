@@ -217,7 +217,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
 
     estaVencida() {
         const formacionPosgrado = this.profesional.formacionPosgrado[this.profesional.formacionPosgrado.length - 1];
-        return ((this.hoy.getTime() - formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+        return (moment().diff(moment(formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin, 'DD-MM-YYYY'), 'days') > 365);
     }
 
     verificarFecha(i) {

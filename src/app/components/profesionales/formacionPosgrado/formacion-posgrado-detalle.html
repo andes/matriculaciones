@@ -14,8 +14,8 @@
                 date:'dd/MM/yyyy'}}
     </plex-badge>
 
-    <plex-badge *ngIf="verificarFecha(index) == 'vencida'" type="{{estaVencida(index)?'danger':'info'}}">
-                {{estaVencida(index)?'Vencida':'Año de gracia'}}
+    <plex-badge *ngIf="verificarFecha(index) == 'vencida'" type="{{estaVencida()?'danger':'info'}}">
+                {{estaVencida()?'Vencida':'Año de gracia'}}
     </plex-badge>
 
       <plex-badge *ngIf="verificarFecha(index) == 'vigente'" type="success">

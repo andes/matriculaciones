@@ -269,6 +269,8 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 this.formacion.matriculacion[this.formacion.matriculacion.length-1].inicio = this.inicioRevalida;
                 this.formacion.matriculacion[this.formacion.matriculacion.length-1].fin = moment(this.inicioRevalida).add(5, 'years');
             }
+            this.formacion.revalida = false;
+            this.formacion.matriculado = true;
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
                 this.plex.toast('success', 'Los datos se han actualizado con éxito!', 'Mensaje de la confirmación', 1000);
             });

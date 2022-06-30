@@ -17,7 +17,29 @@ export class AgendaComponent implements OnInit{
         fechasExcluidas: null,
         duracionTurno: null,
     };
-    public columnasFeriados = [];
+    public columnasFechas = [
+        {
+            key: 'dias',
+            label: 'DÍAS'
+        },
+        {
+            key: 'horario',
+            label: 'HORARIO'
+        },
+        {
+            key: 'duracion',
+            label: 'DURACIÓN'
+        },
+        {}
+    ];
+
+    public columnasFeriados = [
+        {
+            key: 'fechas',
+            label: 'FECHAS'
+        },
+        {}
+    ];
     dias: any[];
     diasHabiles = '';
     feriados: Array<any>;
@@ -69,7 +91,7 @@ export class AgendaComponent implements OnInit{
     traeListado() {
         this.agendaService.get().subscribe((datos) => {
             this.diasHabiles='';
-            datos[0].diasHabilitados.forEach(dh => {this.diasHabiles = this.diasHabiles + dh.nombre+'|';});
+            datos[0].diasHabilitados.forEach((dia: any) => this.diasHabiles = this.diasHabiles + dia.nombre + '|');
             this.diasHabiles=this.diasHabiles.slice(0, -1);
             this.agendas = datos;
             this.currentAgenda = datos[0];

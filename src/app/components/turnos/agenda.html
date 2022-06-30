@@ -5,23 +5,22 @@
             <plex-button label="Volver" type="danger" routerLink="/homeAdministracion" size="md">
             </plex-button>
         </plex-title>
-        <plex-table [columns]="columnasFeriados" #table="plTable" [offset]="45">
+        <plex-table [columns]="columnasFechas" #table="plTable" [offset]="45">
             <plex-table-columns>
             </plex-table-columns>
             <tr *ngFor="let agenda of agendas,let i = index">
                <td>
-                    <plex-label type="info" icon="calendarios" titulo="Días" subtitulo="{{diasHabiles | uppercase}}" size="md"></plex-label>
+                    <plex-label type="info" icon="calendarios" titulo="{{diasHabiles | uppercase}}" size="lg"></plex-label>
                </td>
                <td>
-                    <plex-label titulo="Horario"
-                        subtitulo="De {{agenda.horarioInicioTurnos | date: 'HH:mm'}} a {{agenda.horarioFinTurnos | date:'HH:mm'}} hs."
-                        size="md"></plex-label>
+                    <plex-label titulo="De {{agenda.horarioInicioTurnos | date: 'HH:mm'}} a {{agenda.horarioFinTurnos | date:'HH:mm'}} hs."
+                        size="lg"></plex-label>
                </td>
                <td>
-                    <plex-label titulo="Duración" subtitulo="{{agenda.duracionTurno}} minutos" size="md"></plex-label>
+                    <plex-label titulo="{{agenda.duracionTurno}} minutos" size="lg"></plex-label>
                </td>
-               <td class="column-right my-3 d-flex align-items-center">
-                    <plex-button type="warning" size="sm" icon="pencil" tooltip="Editar" titlePosition="left" (click)="showEditar()">
+               <td>
+                    <plex-button class="float-right" type="warning" size="md" icon="pencil" tooltip="Editar" titlePosition="left" (click)="showEditar()">
                     </plex-button>
                </td> 
             </tr>
@@ -30,7 +29,7 @@
 
     <plex-layout-sidebar type="invert">
         <plex-title titulo="Editar agenda">
-            <plex-button type="success" icon="plus" tooltip="Guardar" size="sm" [disabled]="!formulario.valid" (click)="guardarConfiguracion(formulario)"></plex-button>
+            <plex-button type="success" icon="check" tooltip="Guardar" size="sm" [disabled]="!formulario.valid" (click)="guardarConfiguracion(formulario)"></plex-button>
             <plex-button class="ml-2" type="danger" icon="close" tooltip="Cerrar" size="sm" (click)="showEditar()"></plex-button>
         </plex-title>
 
@@ -61,7 +60,7 @@
                 </plex-table-columns>
                     <tr *ngFor="let feriados of currentAgenda.fechasExcluidas,let m = index">
                         <td>
-                            <plex-label icon="calendarios" titulo="{{feriados | date: 'dd/MM/yyyy'}}" size="sm"></plex-label>
+                            <plex-label icon="calendarios" titulo="{{feriados | date: 'dd/MM/yyyy'}}" size="md"></plex-label>
                         </td>
                         <td class="column-right my-1 d-flex align-items-center">
                             <plex-button type="danger" icon="delete" size="sm" (click)="eliminarFeriado(m)"></plex-button>

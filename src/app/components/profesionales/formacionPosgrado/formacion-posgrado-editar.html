@@ -3,7 +3,6 @@
         <plex-button class='ml-2' size="sm" type="danger" label="Cancelar" (click)="volver()"></plex-button>
         <plex-button class='ml-2' size="sm" type="success" label="Guardar" (click)="guardar(formulario)"
                      [disabled]="!formulario.valid"></plex-button>
-        <plex-dropdown icon="dots-vertical" size="sm" type="link" [right]="true" [items]="dropitems"></plex-dropdown>
     </plex-title>
 
     <form #formulario='ngForm'>

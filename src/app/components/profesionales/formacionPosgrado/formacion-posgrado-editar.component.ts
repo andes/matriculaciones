@@ -54,17 +54,6 @@ export class FormacionPosgradoEditarComponent implements OnInit {
         }
     }
 
-    dropitems = [
-        {
-            label: 'DAR DE BAJA',
-            icon: 'cesto',
-            handler: ($event: Event) => {
-                $event.stopPropagation();
-                this.darDeBaja();
-            }
-        },
-    ];
-
     actualizarIndice() {
         this.pos = this.profesional.formacionPosgrado[this.indice].matriculacion.length - 1;
         this.profesion = this.profesional.formacionPosgrado[this.indice].profesion;

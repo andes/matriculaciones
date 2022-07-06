@@ -1,4 +1,4 @@
-<plex-layout main="{{ !mostrar || isMobile()? 12 : 8 }}" resizable="true" [min]="4" [max]="4" [steps]="2"
+<plex-layout main="{{ !mostrar || isMobile()? 12 : 8 }}"
             foco="{{mostrar? 'sidebar' : (isMobile()?'main':'')}}">
     <plex-layout-main>
         <plex-title titulo="Agenda actual">
@@ -8,19 +8,19 @@
         <plex-table [columns]="columnasFechas" #table="plTable" [offset]="45">
             <plex-table-columns>
             </plex-table-columns>
-            <tr *ngFor="let agenda of agendas,let i = index">
+            <tr>
                <td>
-                    <plex-label type="info" icon="calendarios" titulo="{{diasHabiles | uppercase}}" size="lg"></plex-label>
+                    <plex-label icon="calendarios" titulo="{{diasHabiles | uppercase}}" size="md"></plex-label>
                </td>
                <td>
-                    <plex-label titulo="De {{agenda.horarioInicioTurnos | date: 'HH:mm'}} a {{agenda.horarioFinTurnos | date:'HH:mm'}} hs."
-                        size="lg"></plex-label>
+                    <plex-label titulo="De {{horaInicioTurno | date: 'HH:mm'}} a {{horaFinTurno | date:'HH:mm'}} hs."
+                        size="md"></plex-label>
                </td>
                <td>
-                    <plex-label titulo="{{agenda.duracionTurno}} minutos" size="lg"></plex-label>
+                    <plex-label titulo="{{minutos}} minutos" size="md"></plex-label>
                </td>
                <td>
-                    <plex-button class="float-right" type="warning" size="md" icon="pencil" tooltip="Editar" titlePosition="left" (click)="showEditar()">
+                    <plex-button class="float-right" type="warning" size="sm" icon="pencil" tooltip="Editar" titlePosition="left" (click)="showEditar()">
                     </plex-button>
                </td> 
             </tr>
@@ -71,7 +71,7 @@
 
             <ng-container *ngIf="!mostrarFechas">
                 <plex-title titulo="Agregar feriados">
-                    <plex-button type="success" icon="plus" tooltip="Guardar" size="sm" [disabled]="!formulario.valid" (click)="agregarFeriado(formulario)" ></plex-button>
+                    <plex-button type="success" icon="check" tooltip="Guardar" size="sm" [disabled]="!formulario.valid" (click)="agregarFeriado(formulario)" ></plex-button>
                     <plex-button class="ml-2" type="danger" icon="close" tooltip="Cerrar" size="sm" (click)="addFeriados()"></plex-button>
                 </plex-title>
                 <form #formulario='ngForm'>

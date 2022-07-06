@@ -42,6 +42,9 @@ export class AgendaComponent implements OnInit{
     ];
     dias: any[];
     diasHabiles = '';
+    horaInicioTurno = '';
+    horaFinTurno = '';
+    minutos: number;
     feriados: Array<any>;
     feriadoNuevo;
     mostrarFechas = true;
@@ -93,14 +96,18 @@ export class AgendaComponent implements OnInit{
             this.diasHabiles='';
             datos[0].diasHabilitados.forEach((dia: any) => this.diasHabiles = this.diasHabiles + dia.nombre + '|');
             this.diasHabiles=this.diasHabiles.slice(0, -1);
-            this.agendas = datos;
+            this.horaInicioTurno = datos[0].horarioInicioTurnos;
+            this.horaFinTurno = datos[0].horarioFinTurnos;
+            this.minutos = datos[0].duracionTurno;
             this.currentAgenda = datos[0];
-            this.agendasDiasHabilitados = datos;
         });
     }
 
     showEditar() {
         this.mostrar = !this.mostrar;
+        if (this.mostrar){
+            this.traeListado();
+        }
     }
 
     addFeriados(){

@@ -22,21 +22,24 @@
         </plex-title>
         <form #formulario="ngForm">
             <plex-wrapper>
-                <plex-datetime *ngIf="!busquedaMatriculasProxAVencer" type="date" [(ngModel)]="fechaMatriculacionDesde"
-                               name="fechaMatriculacionDesde" label="Fecha Matriculación Desde">
+                <plex-datetime grow="4" *ngIf="!busquedaMatriculasProxAVencer" type="date"
+                               [(ngModel)]="fechaMatriculacionDesde" name="fechaMatriculacionDesde"
+                               label="Fecha Matriculación Desde">
                 </plex-datetime>
-                <plex-datetime *ngIf="!busquedaMatriculasProxAVencer" type="date" [(ngModel)]="fechaMatriculacionHasta"
-                               name="fechaMatriculacionHasta" label="Fecha Matriculación Hasta">
+                <plex-datetime grow="4" *ngIf="!busquedaMatriculasProxAVencer" type="date"
+                               [(ngModel)]="fechaMatriculacionHasta" name="fechaMatriculacionHasta"
+                               label="Fecha Matriculación Hasta">
                 </plex-datetime>
-                <plex-datetime *ngIf="(busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja)"
+                <plex-datetime grow="4"
+                               *ngIf="(busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja)"
                                type="date" [(ngModel)]="fechaVencimientoDesde" name="fechaVencimientoDesde"
                                label="Fecha Vencimiento Matrícula Desde">
                 </plex-datetime>
-                <plex-datetime *ngIf="busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja"
+                <plex-datetime grow="4" *ngIf="busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja"
                                type="date" [(ngModel)]="fechaVencimientoHasta" name="fechaVencimientoHasta"
                                label="Fecha Vencimiento Matrícula Hasta">
                 </plex-datetime>
-                <plex-select label="Tipo" [required]="true" name="selectMatriculas" [data]="selectData"
+                <plex-select grow="4" label="Tipo" [required]="true" name="selectMatriculas" [data]="selectData"
                              [(ngModel)]="select">
                 </plex-select>
                 <div collapse>

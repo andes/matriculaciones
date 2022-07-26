@@ -258,6 +258,8 @@ export class ProfesionalComponent implements OnInit {
             this.matchingCandidatos(this.profesional.documento, this.profesional.sexo).pipe(
                 map(resp => resp)
             ).subscribe(candidatos => {
+                // se filtra por profesionales preexistentes en el sistema (se excluyen los no matriculados y/o con matricula externa)
+                candidatos = candidatos.filter(c => c.profesional.profesionalMatriculado);
                 if (candidatos.length) {
                     this.plex.info('info', 'Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
                 } else {
@@ -285,22 +287,18 @@ export class ProfesionalComponent implements OnInit {
             });
 
             this.matchingCandidatos(this.profesional.documento, this.profesional.sexo).pipe(
-                switchMap(candidatos => {
+                map(candidatos => {
                     // El matching que interesa es por profesionales matriculados (profesionalMatriculado: true)
                     const candidatosMatriculados = candidatos.filter(c => c.profesional.profesionalMatriculado);
                     if (candidatosMatriculados.length) {
-                        return this.plex.confirm('El profesional ingresado ya existe. Si continúa sus datos serán actualizados', '¿Deséa continuar?').then(response => {
-                            if (response) {
-                                this.profesional.id = candidatosMatriculados[0].profesional.id;
-                            }
-                            return response;
-                        });
+                        this.plex.info('warning', 'Los datos ingresados corresponden a un profesional ya existente.', 'Profesional existente');
+                        return false;
                     } else if (candidatos.length) {
                         // candidatos con matricula externa o similares (profesionalMatriculado: false) se le agrega la informacion de grado, etc
                         this.profesional.id = candidatos[0].profesional.id;
-                        return of(true);
+                        return true;
                     }
-                    return of(null);
+                    return null;
                 }),
                 switchMap(responseActualizar => {
                     if (responseActualizar !== null) {
@@ -316,6 +314,9 @@ export class ProfesionalComponent implements OnInit {
                     return this._profesionalService.saveProfesional({ profesional: this.profesional });
                 }),
                 switchMap(profesionalSaved => {
+                    if(!profesionalSaved) {
+                        return of(null);
+                    }
                     this.profesional = profesionalSaved;
                     if (this.nuevoProf) {
                         // cuando se crea a partir del boton 'nuevo profesional' (sin turno previo)
@@ -336,7 +337,11 @@ export class ProfesionalComponent implements OnInit {
                     this.editado.emit(true);
                     this.router.navigate(['/profesional', this.profesional.id]);
                 }
-            });
+            }, error => {
+                const mensaje = error === 'error-turno' ? 'Ha ocurrido un error asignando el turno. Asegurese que el profesional aún no posee uno.' : error.message;
+                this.plex.info('danger', mensaje);
+            }
+            );
         } else {
             this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
         }

@@ -3,7 +3,6 @@ import { Component, OnInit, Output, EventEmitter, Input, ViewEncapsulation } fro
 @Component({
     selector: 'app-listado-turnos-pdf',
     templateUrl: './listado-turnos-pdf.component.html',
-    styleUrls: ['turnos.scss'],
     encapsulation: ViewEncapsulation.None // Use to disable CSS Encapsulation for this component
 
 })

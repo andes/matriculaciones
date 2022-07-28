@@ -1,5 +1,5 @@
-<plex-layout main="{{turnoElegido ? '8' : '12'}}" foco="{{this.turnoElegido? 'sidebar' : (isMobile()?'main':'')}}" resizable="true"
-             [min]="4" [max]="4" [steps]="2">
+<plex-layout main="{{turnoElegido ? '8' : '12'}}" foco="{{this.turnoElegido? 'sidebar' : (isMobile()?'main':'')}}"
+             resizable="true" [min]="4" [max]="4" [steps]="2">
     <plex-layout-main>
         <div *ngIf='componentPrint'>
             <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
@@ -9,8 +9,8 @@
             <plex-title titulo="Turnos">
                 <plex-button class="mr-1" label="Volver" type="danger" routerLink="/homeAdministracion">
                 </plex-button>
-                <plex-button class="mr-1" *ngIf="turnosDelDia.length > 0" type="primary" (click)="imprimir()" icon='file-pdf'
-                             [label]="lblTurnos">
+                <plex-button class="mr-1" *ngIf="turnosDelDia.length > 0" type="primary" (click)="imprimir()"
+                             icon='file-pdf' [label]="lblTurnos">
                 </plex-button>
             </plex-title>
             <plex-wrapper>
@@ -20,18 +20,21 @@
                 <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
                                (change)="mySubject.next();saveFecha()"></plex-datetime>
             </plex-wrapper>
-    
+
             <plex-table [columns]="columns" #table="plTable" [offset]="120">
                 <plex-title titulo="Listado de turnos" size="md">
                     <plex-table-columns>
                     </plex-table-columns>
                 </plex-title>
-                <tr *ngFor="let turno of turnos; let indiceTurno = index" (click)="showTurno(turno)" [class.selectable]="true">
-                    <td>
-                        <plex-label icon="medico" titulo="{{turno.profesional.apellido + ', ' + turno.profesional.nombre}}"
-                                        subtitulo="{{ (turno.profesional.documento | number) || '' }}">
+                <tr *ngFor="let turno of turnos; let indiceTurno = index" (click)="showTurno(turno)"
+                    [class.selectable]="true">
+                    <td *plTableCol="'profesional'">
+                        <plex-label icon="medico"
+                                    titulo="{{turno.profesional.apellido + ', ' + turno.profesional.nombre}}"
+                                    subtitulo="{{ (turno.profesional.documento | number) || '' }}">
                         </plex-label>
                     </td>
+                    <td *plTableCol="'horario'">{{turno.fecha | date:'dd/MM/yyyy HH:mm'}}</td>
                     <td *plTableCol="'profesion'">
                         <div *ngFor="let grado of turno.profesional.formacionGrado; let indiceGrado = index">
                             <plex-badge type="info">
@@ -41,15 +44,16 @@
                         </div>
                     </td>
                     <td *plTableCol="'tipo'">
-                        <plex-badge type="info">{{ turno.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}</plex-badge>
+                        <plex-badge type="info">{{ turno.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}
+                        </plex-badge>
                     </td>
-                    <td>
+                    <td *plTableCol="'asistencia'">
                         <plex-badge *ngIf='turno.sePresento === true;' type="success" class="ml-2">Presente</plex-badge>
                         <plex-badge *ngIf='turno.sePresento === false;' type="warning" class="ml-2">Ausente</plex-badge>
                     </td>
                 </tr>
             </plex-table>
-        </div>        
+        </div>
         <div *ngIf="turnos.length === 0" class="h-50" justify="center">
             <plex-label class="flex-column" icon="magnify" type="info" size="xl" direction="column"
                         titulo="Realice una búsqueda"
@@ -76,19 +80,22 @@
         <plex-title titulo="Datos del turno" size="sm"></plex-title>
         <plex-list>
             <plex-item>
-                    <plex-label type="info" icon ="calendario-fecha" case="capitalize" titulo="{{ fechaTurno }}" subtitulo="{{horarioTurno}}hs" size="lg">
-                    </plex-label>
-                    <plex-badge type="info" size="sm">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' : 'Renovación' }}
-                    </plex-badge>
-                    <plex-badge *ngIf='turnoElegido.sePresento === true;' type="success"  size="sm">Presente</plex-badge>
-                    <plex-badge *ngIf='turnoElegido.sePresento === false;' type="warning" size="sm">Ausente</plex-badge>
-                    <plex-button type="danger" icon="close" size="sm" tooltip="Anular" (click)="anularTurno()"
-                         *ngIf="!turnoElegido.sePresento && !turnoElegido.anulado"></plex-button>
-                    <plex-button type="success" icon="check"size="sm" tooltip="Asistió" (click)="cambiarEstado(true)"
-                         *ngIf="!turnoElegido.sePresento">
-                    </plex-button>
-                    <plex-button type="warning" label="Ausente" size="sm" (click)="cambiarEstado(false)" *ngIf="turnoElegido.sePresento">
-                    </plex-button>
+                <plex-label type="info" icon="calendario-fecha" case="capitalize" titulo="{{ fechaTurno }}"
+                            subtitulo="{{horarioTurno}}hs" size="lg">
+                </plex-label>
+                <plex-badge type="info" size="sm">{{ turnoElegido.tipo === 'matriculacion' ? 'Matriculación' :
+                    'Renovación' }}
+                </plex-badge>
+                <plex-badge *ngIf='turnoElegido.sePresento === true;' type="success" size="sm">Presente</plex-badge>
+                <plex-badge *ngIf='turnoElegido.sePresento === false;' type="warning" size="sm">Ausente</plex-badge>
+                <plex-button type="danger" icon="close" size="sm" tooltip="Anular" (click)="anularTurno()"
+                             *ngIf="!turnoElegido.sePresento && !turnoElegido.anulado"></plex-button>
+                <plex-button type="success" icon="check" size="sm" tooltip="Asistió" (click)="cambiarEstado(true)"
+                             *ngIf="!turnoElegido.sePresento">
+                </plex-button>
+                <plex-button type="warning" label="Ausente" size="sm" (click)="cambiarEstado(false)"
+                             *ngIf="turnoElegido.sePresento">
+                </plex-button>
             </plex-item>
         </plex-list>
         <br>

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding} from '@angular/core';
+import { Component, OnInit, HostBinding } from '@angular/core';
 import { Plex } from '@andes/plex';
 import { FormBuilder } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -19,8 +19,7 @@ import { of } from 'rxjs';
 
 @Component({
     selector: 'app-turnos',
-    templateUrl: 'turnos.html',
-    styleUrls: ['turnos.scss']
+    templateUrl: 'turnos.html'
 })
 export class TurnosComponent implements OnInit {
     @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
@@ -61,6 +60,10 @@ export class TurnosComponent implements OnInit {
         {
             key: 'profesional',
             label: 'profesional',
+        },
+        {
+            key: 'horario',
+            label: 'horario',
         },
         {
             key: 'profesion',
@@ -139,8 +142,8 @@ export class TurnosComponent implements OnInit {
                 this.tieneFoto = true;
             }
         });
-        this._profesionalService.getProfesional({documento: this.turnoElegido.profesional.documento}).subscribe(profesional =>{
-            this.notas=profesional[profesional?.length-1]?.notas;
+        this._profesionalService.getProfesional({ documento: this.turnoElegido.profesional.documento }).subscribe(profesional => {
+            this.notas = profesional[profesional?.length - 1]?.notas;
         });
     }
 
@@ -271,7 +274,7 @@ export class TurnosComponent implements OnInit {
         return '';
     }
 
-    back(){
+    back() {
         this.router.navigate(['/homeAdministracion']);
     }
 }

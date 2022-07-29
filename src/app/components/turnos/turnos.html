@@ -18,7 +18,7 @@
                 <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="mySubject.next()"></plex-text>
                 <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
                 <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
-                               (change)="mySubject.next();saveFecha()"></plex-datetime>
+                               (change)="mySubject.next();saveFecha()" grow="1"></plex-datetime>
             </plex-wrapper>
 
             <plex-table [columns]="columns" #table="plTable" [offset]="120">

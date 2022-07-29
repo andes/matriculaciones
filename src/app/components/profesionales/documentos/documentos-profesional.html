@@ -18,7 +18,7 @@
 
 <ng-container *ngIf="!addDocumento">
     <plex-title titulo="Titulos de grado" size="sm"></plex-title>
-    <plex-label *ngIf="!grado.length">No se cargó ningún título de grado</plex-label>
+    <plex-label *ngIf="!grado?.length">No se cargó ningún título de grado</plex-label>
     <div *ngFor="let doc of grado; let i=index" class="mb-2">
         <plex-list>
             <plex-item>
@@ -36,7 +36,7 @@
     </div>
 
     <plex-title titulo="Titulos de posgrado" size="sm"></plex-title>
-    <plex-label *ngIf="!posgrado.length">No se cargó ningún título de posgrado</plex-label>
+    <plex-label *ngIf="!posgrado?.length">No se cargó ningún título de posgrado</plex-label>
     <div *ngFor="let doc of posgrado; let i=index" class="mb-2">
         <plex-list>
             <plex-item>
@@ -53,7 +53,7 @@
         </plex-list>
     </div>
     <plex-title titulo="Certificados" size="sm"></plex-title>
-    <plex-label *ngIf="!certificado.length">No se cargó ningún certificado</plex-label>
+    <plex-label *ngIf="!certificado?.length">No se cargó ningún certificado</plex-label>
     <div *ngFor="let doc of certificado; let i=index">
         <plex-list>
             <plex-item>

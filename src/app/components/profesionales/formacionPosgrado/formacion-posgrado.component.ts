@@ -81,19 +81,18 @@ export class FormacionPosgradoComponent implements OnInit {
         this.openedDropDown = drop;
         this.itemsDropdown = [];
         let pos = 0;
-        this.itemsDropdown[pos] = { icon: 'lapiz', label: ' EDITAR', handler: () => { this.editarPosgrado(i); } };
         if (this.profesional.formacionPosgrado[i].matriculado && !this.profesional.formacionPosgrado[i].revalida) {
             if (!this.profesional.formacionPosgrado[i].tieneVencimiento) {
-                pos++;
                 this.itemsDropdown[pos] = { icon: 'calendarios', label: ' ACTIVAR VENCIMIENTO', handler: () => { this.sinVencimiento(i); } };
-            } else {
                 pos++;
+            } else {
                 this.itemsDropdown[pos] = { icon: 'calendarios', label: ' DESACTIVAR VENCIMIENTO', handler: () => { this.sinVencimiento(i); } };
+                pos++;
             }
         }
         if (this.profesional.formacionPosgrado[i].matriculado) {
-            pos++;
             this.itemsDropdown[pos] = { icon: 'cesto', label: ' DAR DE BAJA', handler: () => { this.darDeBaja(i); } };
+            pos++;
         }
     }
 

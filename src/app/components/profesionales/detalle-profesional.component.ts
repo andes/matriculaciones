@@ -350,7 +350,6 @@ export class DetalleProfesionalComponent implements OnInit {
 
     cancelarPosgradoEdit(edit) {
         this.showEdit = edit;
-        this.mostrarGrado = false;
         this.showAdd = false;
     }
 

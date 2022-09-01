@@ -33,6 +33,7 @@ export class DocumentoProfesionalComponent implements OnInit {
     public posgrado;
     public certificado;
     public indice;
+    public comprobante;
 
     constructor(
         private _profesionalService: ProfesionalService,
@@ -53,6 +54,8 @@ export class DocumentoProfesionalComponent implements OnInit {
             this.grado = [];
             this.posgrado = [];
             this.certificado = [];
+            this.comprobante = [];
+
             for (let index = 0; index < this.profesional.documentos.length; index++) {
                 const doc = {
                     nombreDocumento: '',
@@ -73,10 +76,17 @@ export class DocumentoProfesionalComponent implements OnInit {
                         });
                         this.posgrado.push(doc);
                     } else {
-                        this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
-                            doc.nombreDocumento = data.originalname;
-                        });
-                        this.certificado.push(doc);
+                        if (this.profesional.documentos[index].tipo === 'Comprobante de pago') {
+                            this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
+                                doc.nombreDocumento = data.originalname;
+                            });
+                            this.comprobante.push(doc);
+                        } else {
+                            this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
+                                doc.nombreDocumento = data.originalname;
+                            });
+                            this.certificado.push(doc);
+                        }
                     }
                 }
             }

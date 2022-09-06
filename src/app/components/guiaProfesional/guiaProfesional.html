@@ -9,8 +9,8 @@
       <plex-wrapper>
         <plex-select label="Seleccione una opción" (change)='limpiaFiltro()' [(ngModel)]="filtro" name="seleccionOpcion"
                      [data]="guiaProfesionalEnum" [required]="true"></plex-select>
-        <plex-text *ngIf=' filtro && filtro.id === 0' label="Documento" [(ngModel)]="busqueda.documento"
-                   name='documento' placeholder="Ingrese un documento" [required]="true">
+        <plex-text *ngIf='filtro && filtro.id === 0' label="Documento" [(ngModel)]="busqueda.documento" name='documento'
+                   placeholder="Ingrese un documento" [required]="true">
         </plex-text>
         <plex-select *ngIf=' filtro && filtro.id === 1' label="profesión" [(ngModel)]="busqueda.formacionGrado"
                      name='formacionGrado' (getData)="loadProfesiones($event)" placeholder="Seleccione una profesión"
@@ -31,8 +31,8 @@
       </plex-wrapper>
     </form>
     <plex-loader *ngIf="loading" type="ball-pulse-sync"></plex-loader>
-    <plex-label *ngIf="profesionales.length === 0 && mostrarInfo && !loading" type="warning" size="xl" direction="column"
-                titulo='Sin resultados'
+    <plex-label *ngIf="profesionales.length === 0 && mostrarInfo && !loading" type="warning" size="xl"
+                direction="column" titulo='Sin resultados'
                 subtitulo="No se encontró ningún profesional que coincida con los criterios de búsqueda">
     </plex-label>
     <plex-table [columns]="columns" #table="plTable" *ngIf="profesionales.length > 0 && !loading">

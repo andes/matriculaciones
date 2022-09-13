@@ -138,40 +138,42 @@ export class DetalleProfesionalComponent implements OnInit {
     @Output() showFoto = new EventEmitter();
     public tieneOtraEntidad;
 
-    constructor(private _profesionalService: ProfesionalService,
-                private _turnoService: TurnoService,
-                private route: ActivatedRoute,
-                private router: Router,
-                public auth: Auth,
-                private plex: Plex,
-                private location: Location) { }
+    constructor(
+        private _profesionalService: ProfesionalService,
+        private _turnoService: TurnoService,
+        private route: ActivatedRoute,
+        private router: Router,
+        public auth: Auth,
+        private plex: Plex,
+        private location: Location) { }
 
     ngOnInit() {
-
         this.vieneDeDetalle = true;
-        this.route.params.subscribe(params => {
+        const parametrosRuta = this.route.params;
+        parametrosRuta.subscribe(params => {
             if (params && params['id']) {
                 this._profesionalService.getProfesional({ id: params['id'] }).subscribe(profesional => {
-                    this.profesional = profesional[0];
-                    if (profesional.length === 0) {
-
-                        this.route.params
+                    if (!profesional.length) {
+                        parametrosRuta
                             .switchMap((paramsTemporal: Params) =>
                                 this._turnoService.getTurnoSolicitados(paramsTemporal['id']).pipe(catchError(() => of(null)))
                             ).subscribe(
                                 (profesionalTemporal: any) => {
                                     this.profesional = profesionalTemporal;
-                                    if (this.profesional.formacionGrado[0].entidadFormadora.codigo === null) {
-                                        this.tieneOtraEntidad = true;
-                                    } else {
-                                        this.tieneOtraEntidad = false;
-                                    }
+                                    this.tieneOtraEntidad = (!this.profesional.formacionGrado[0].entidadFormadora.codigo) ? true : false;
                                     this.habilitaPosgrado();
                                     this.flag = false;
                                 }
                             );
                     } else {
                         this.profesional = profesional[0];
+                        if (!this.profesional.profesionalMatriculado) {
+                            this.flag = false;
+                            this._turnoService.getTurnoSolicitados(this.profesional.documento).subscribe((prof) => {
+                                this.flag = false;
+                                this.profesional = prof;
+                            });
+                        }
                         this.flag = true;
                         this.habilitaPosgrado();
                     }

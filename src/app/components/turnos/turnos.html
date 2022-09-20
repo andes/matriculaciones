@@ -1,27 +1,25 @@
 <plex-layout main="{{turnoElegido ? '8' : '12'}}" foco="{{this.turnoElegido? 'sidebar' : (isMobile()?'main':'')}}"
-             resizable="true" [min]="4" [max]="4" [steps]="2">
+                resizable="true" [min]="4" [max]="4" [steps]="2">
     <plex-layout-main>
         <div *ngIf='componentPrint'>
             <app-listado-turnos-pdf [arrayTurnos]='turnosParaListado' (volverATurnos)="componentPrint=false">
             </app-listado-turnos-pdf>
         </div>
-        <div *ngIf='!componentPrint'>
+        <ng-container *ngIf='!componentPrint'>
             <plex-title titulo="Turnos">
                 <plex-button class="mr-1" label="Volver" type="danger" routerLink="/homeAdministracion">
                 </plex-button>
-                <plex-button class="mr-1" *ngIf="turnosDelDia.length > 0" type="primary" (click)="imprimir()"
-                             icon='file-pdf' [label]="lblTurnos">
-                </plex-button>
+                <plex-button class="mr-1" *ngIf="turnos.length" type="warning" label="PDF" icon="download" tooltip="Descargar PDF" (click)="descargarPDF()"></plex-button>
             </plex-title>
             <plex-wrapper>
-                <plex-text label="Apellido" [(ngModel)]="filtroBuscar.apellido" (change)="mySubject.next()"></plex-text>
-                <plex-text label="Nombre" [(ngModel)]="filtroBuscar.nombre" (change)="mySubject.next()"></plex-text>
-                <plex-int label="Documento" [(ngModel)]="filtroBuscar.documento" (change)="mySubject.next()"></plex-int>
-                <plex-datetime type="date" label="Fecha desde" [(ngModel)]="filtroBuscar.fecha"
-                               (change)="mySubject.next();saveFecha()" grow="1"></plex-datetime>
+                <plex-text label="Apellido" [(ngModel)]="apellido" (change)="mySubject.next('apellido')"></plex-text>
+                <plex-text label="Nombre" [(ngModel)]="nombre" (change)="mySubject.next('nombre')"></plex-text>
+                <plex-int label="Documento" [(ngModel)]="documento" (change)="mySubject.next('documento')"></plex-int>
+                <plex-datetime type="date" label="Fecha desde" [(ngModel)]="fechaDesde"
+                               (change)="mySubject.next('fecha'); saveFecha()" grow="1"></plex-datetime>
             </plex-wrapper>
 
-            <plex-table [columns]="columns" #table="plTable" [offset]="120">
+            <plex-table *ngIf="turnos.length"[columns]="columns" #table="plTable" [offset]="160" (scroll)="onScroll()">
                 <plex-title titulo="Listado de turnos" size="md">
                     <plex-table-columns>
                     </plex-table-columns>
@@ -53,7 +51,7 @@
                     </td>
                 </tr>
             </plex-table>
-        </div>
+        </ng-container>
         <div *ngIf="turnos.length === 0" class="h-50" justify="center">
             <plex-label class="flex-column" icon="magnify" type="info" size="xl" direction="column"
                         titulo="Realice una búsqueda"

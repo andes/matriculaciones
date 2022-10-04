@@ -9,7 +9,9 @@
             <plex-title titulo="Turnos">
                 <plex-button class="mr-1" label="Volver" type="danger" routerLink="/homeAdministracion">
                 </plex-button>
-                <plex-button class="mr-1" *ngIf="turnos.length" type="warning" label="PDF" icon="download" tooltip="Descargar PDF" (click)="descargarPDF()"></plex-button>
+                <plex-button class="mr-1" *ngIf="turnosDelDia.length > 0" type="primary" (click)="descargarPDF()" icon='file-pdf'
+                             [label]="lblTurnos">
+                </plex-button>
             </plex-title>
             <plex-wrapper>
                 <plex-text label="Apellido" [(ngModel)]="apellido" (change)="mySubject.next('apellido')"></plex-text>

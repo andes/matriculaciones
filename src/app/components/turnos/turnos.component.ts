@@ -14,7 +14,7 @@ import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
 import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
 import { Subject } from 'rxjs/Rx';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { of } from 'rxjs';
 
@@ -46,7 +46,7 @@ export class TurnosComponent implements OnInit {
     limit = 15;
     turnosTotal = null;
     private scrollEnd = false;
-    public hoy = new Date();
+    public hoy = moment();
     mySubject = new Subject();
 
     public filtroBuscar = {
@@ -56,7 +56,8 @@ export class TurnosComponent implements OnInit {
         fecha: moment(),
         offset: 0,
         size: 15,
-        fechaHoy: new Date()
+        fechaHoy: moment(),
+        delDia: false
     };
 
     public componentPrint = false;
@@ -100,26 +101,23 @@ export class TurnosComponent implements OnInit {
         this.mySubject
             .debounceTime(1000)
             .subscribe(val => {
-                if(val === 'fecha'){
-                    const fecha = moment(this.fechaDesde).startOf('day');
-                    if(fecha.isValid()){
-                        this.filtroBuscar['fecha'] = moment(this.fechaDesde).startOf('day');
+                if (val === 'fecha') {
+                    const fecha = (this.fechaDesde) ? moment(this.fechaDesde).startOf('day') : moment().startOf('day');
+                    if (fecha.isValid()) {
+                        this.filtroBuscar['fecha'] = fecha;
                         this.fechaValida = true;
-                    }else{
+                    } else {
                         this.fechaValida = false;
                     }
-                }else{
+                } else {
                     if (val === 'documento') {
                         this.filtroBuscar['documento'] = this.documento;
-                    } else {
-                        if (val === 'apellido') {
-                            this.filtroBuscar['apellido'] = this.apellido;
-                        } else {
-                            if (val === 'nombre') {
-                                this.filtroBuscar['nombre'] = this.nombre;
-                            }
-                        }
+                    } else if (val === 'apellido') {
+                        this.filtroBuscar['apellido'] = this.apellido;
+                    } else if (val === 'nombre') {
+                        this.filtroBuscar['nombre'] = this.nombre;
                     }
+
                 }
                 this.filtroBuscar.offset = 0;
                 this.scrollEnd = false;
@@ -187,14 +185,16 @@ export class TurnosComponent implements OnInit {
         if (!event) {
             this.turnoElegido = null;
         }
-        if(this.filtroBuscar.offset === 0){
+        if (this.filtroBuscar.offset === 0) {
             this.turnos = [];
         }
-        if(this.fechaValida){
+        if (this.fechaValida) {
             this._turnoService.getTurnosProximos(this.filtroBuscar).subscribe((resp) => {
+                this.lblTurnos = `Turnos del ${moment(this.filtroBuscar.fecha).format('DD/MM/YYYY')}`;
                 resp.data.forEach(turno => {
                     this.turnos.push(turno);
                 });
+                this.turnosDelDia = this.turnos.filter(turno => { return (moment(this.filtroBuscar.fecha).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')); });
                 if (event) {
                     event.callback(resp);
                 }
@@ -252,22 +252,25 @@ export class TurnosComponent implements OnInit {
         });
     }
 
-    descargarPDF(){
+    descargarPDF() {
         const filtrosTurno = {
             nombre: this.filtroBuscar.nombre || '',
             apellido: this.filtroBuscar.apellido || '',
-            documento: this.filtroBuscar.documento ||'',
+            documento: this.filtroBuscar.documento || '',
             fecha: this.filtroBuscar.fecha || null,
+            delDia: true,
             offset: 0,
             size: 0
         };
-        this._turnoService.getTurnosProximos(filtrosTurno).subscribe(resp => {
-            const filtrosPDF = {
-                fecha: this.filtroBuscar.fecha,
-                turnos: resp.data
-            };
-            this.pdfService.listadoTurnos(filtrosPDF, 'listadoTurnos').subscribe();
-        });
+        this._turnoService.getTurnosProximos(filtrosTurno).pipe(
+            switchMap(resp => {
+                const filtrosPDF = {
+                    fecha: this.filtroBuscar.fecha,
+                    turnos: resp.data
+                };
+                return this.pdfService.listadoTurnos(filtrosPDF, 'listadoTurnos');
+            })
+        ).subscribe();
     }
 
     anularTurno() {

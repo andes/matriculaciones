@@ -1,29 +1,11 @@
 // Angular
-import {
-    Component,
-    Input,
-    Output,
-    EventEmitter,
-    OnInit
-} from '@angular/core';
-// Plex
-import {
-    Plex
-} from '@andes/plex';
-
-// Interfaces
-import {
-    IProfesional
-} from './../../../interfaces/IProfesional';
-
-// Services
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import {Plex} from '@andes/plex';
+import {IProfesional} from './../../../interfaces/IProfesional';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
-
-// Utils
-import { PDFUtils } from './../../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
-
+import * as moment from 'moment';
 @Component({
     selector: 'app-formacion-grado-detalle',
     templateUrl: 'formacion-grado-detalle.html',
@@ -39,20 +21,20 @@ export class FormacionGradoDetalleComponent implements OnInit {
     public esSupervisor;
     public motivoBaja;
     edit = false;
-    private hoy = null;
     public edicionBajas = false;
     public edicionGestion = false;
     public indexGestion;
     public indexBaja;
     public tieneBajas = false;
-    constructor(private _profesionalService: ProfesionalService,
-                private _numeracionesService: NumeracionMatriculasService,
-                private _pdfUtils: PDFUtils, private plex: Plex, public auth: Auth) { }
 
-
+    constructor(
+        private _profesionalService: ProfesionalService,
+        private _numeracionesService: NumeracionMatriculasService,
+        private plex: Plex,
+        public auth: Auth
+    ) { }
 
     ngOnInit() {
-        this.hoy = new Date();
         this.compruebaBajas();
         this.esSupervisor = this.auth.check('matriculaciones:supervisor:aprobar');
     }
@@ -60,7 +42,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
     cerrar() {
         this.cerrarDetalle.emit(false);
     }
-
 
     matricularProfesional(formacion: any, mantenerNumero) {
         let texto = '¿Desea agregar una nueva matricula?';
@@ -91,28 +72,27 @@ export class FormacionGradoDetalleComponent implements OnInit {
                             if (!mantenerNumero) {
                                 matriculaNumero = num[0].proximoNumero;
                                 num[0].proximoNumero = matriculaNumero + 1;
-                                this.formacion.fechaDeInscripcion = new Date();
+                                this.formacion.fechaDeInscripcion = moment().toDate();
                             }
 
                             if (mantenerNumero) {
                                 matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
                             }
-                            const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
                             const oMatriculacion = {
                                 matriculaNumero: matriculaNumero,
                                 libro: '',
                                 folio: '',
-                                inicio: new Date(),
+                                inicio: moment().toDate(),
                                 baja: {
                                     motivo: '',
                                     fecha: ''
                                 },
                                 notificacionVencimiento: false,
-                                fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
+                                fin: moment().add(5, 'years').toDate(),
                                 revalidacionNumero: revNumero + 1
                             };
                             this._numeracionesService.putNumeracion(num[0])
-                                .subscribe(newNum => {
+                                .subscribe(() => {
                                     this.formacion.renovacion = false;
                                     this.formacion.matriculado = true;
                                     this.profesional.formacionGrado[this.index] = this.formacion;
@@ -125,7 +105,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
                                 });
                         }
                     });
-
             }
         });
     }
@@ -142,7 +121,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
             .subscribe(resp => {
                 this.profesional = resp;
             });
-
     }
 
     renovar() {
@@ -168,9 +146,9 @@ export class FormacionGradoDetalleComponent implements OnInit {
     }
 
     guardarGestion() {
-        const vencimientoAnio = (new Date(this.formacion.matriculacion[this.indexGestion].inicio)).getUTCFullYear() + 5;
-        this.formacion.matriculacion[this.indexGestion].fin = new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio));
+        this.formacion.matriculacion[this.indexGestion].fin = moment(this.formacion.matriculacion[this.indexGestion].inicio).add(5, 'years').toDate();
         this.actualizar();
+        this.plex.toast('success', 'Matrícula editada exitosamente', 'informacion', 1000);
         this.edicionGestion = false;
     }
 
@@ -190,13 +168,11 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 this.profesional.formacionGrado[this.index].matriculado = false;
                 this.profesional.formacionGrado[this.index].papelesVerificados = false;
                 this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.motivo = this.motivoBaja;
-                this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.fecha = new Date();
+                this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.fecha = moment().toDate();
                 this.actualizar();
                 this.compruebaBajas();
             }
         });
-
-
     }
 
     renovarAntesVencimiento() {
@@ -219,7 +195,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
             this.profesional = data;
         });
-
     }
 
     compruebaBajas() {
@@ -235,7 +210,4 @@ export class FormacionGradoDetalleComponent implements OnInit {
             }
         }
     }
-
-
-
 }

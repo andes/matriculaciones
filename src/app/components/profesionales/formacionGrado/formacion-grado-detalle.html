@@ -123,7 +123,7 @@
                     <td *ngIf='i !== 0'>{{ matriculacion.inicio  | date: 'dd/MM/yyyy'}}</td>
                     <td>{{ matriculacion.fin | date: 'dd/MM/yyyy'}}</td>
                     <td>
-                      <plex-button *ngIf="!edicionGestion && i !== 0" tooltip="Editar fecha" icon="pencil" type="primary"
+                      <plex-button *ngIf="!edicionGestion && i !== 0" tooltip="Editar fecha" icon="pencil" type="warning" size="sm"
                                    (click)="editarMatriculacion(i)">
                       </plex-button>
                     </td>
@@ -199,7 +199,7 @@
 <plex-title *ngIf="edicionGestion" titulo="Edición de matriculación" size="lg">
 </plex-title>
 <div *ngIf="edicionGestion">
-  <form>
+  <form #formularioFecha="ngForm">
     <div class="row">
       <div class="col-md-12">
         <plex-datetime label="Fecha de inicio" type="date" [(ngModel)]="formacion.matriculacion[indexGestion].inicio"
@@ -209,7 +209,8 @@
     </div>
     <div class="row mt-3">
       <div class="col">
-        <plex-button label="Guardar" type="success" class="float-right" (click)="guardarGestion()" validateForm="true">
+        <plex-button label="Guardar" type="success" class="float-right" (click)="guardarGestion()" validateForm="true"
+         [disabled]="!formularioFecha?.valid">
         </plex-button>
         <plex-button label="Cancelar" type="danger" class="float-right" (click)="cancelarEdicionGestion()"
                      validateForm="true"></plex-button>

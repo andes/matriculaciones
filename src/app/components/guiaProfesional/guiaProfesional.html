@@ -35,24 +35,30 @@
                 direction="column" titulo='Sin resultados'
                 subtitulo="No se encontró ningún profesional que coincida con los criterios de búsqueda">
     </plex-label>
-    <plex-table [columns]="columns" #table="plTable" *ngIf="profesionales.length > 0 && !loading">
-      <plex-title titulo="Listado de profesionales">
-        <plex-table-columns>
-        </plex-table-columns>
-      </plex-title>
-      <tr *ngFor="let profesional of profesionales">
-        <td *plTableCol="'profesional'">
-          <plex-label [titulo]="profesional | profesional" [subtitulo]="profesional.documento"></plex-label>
-        </td>
-        <td *plTableCol="'sexo'">{{profesional.sexo}}</td>
-        <td *plTableCol="'nacionalidad'">{{profesional.nacionalidad}}</td>
-        <td *plTableCol="'profesion'">{{profesional.profesion}}</td>
-        <td *plTableCol="'matricula'">{{profesional.matricula}}</td>
-        <td *plTableCol="'estado'">
-          <plex-badge type="success" *ngIf="profesional.matriculado">ACTIVA</plex-badge>
-          <plex-badge type="danger" *ngIf="!profesional.matriculado">VENCIDA</plex-badge>
-        </td>
-      </tr>
-    </plex-table>
+
+    <plex-list *ngIf="profesionales.length > 0 && !loading">
+      <plex-title titulo="Listado de profesionales"></plex-title>
+      <plex-heading>
+        <plex-label justify="start">&nbsp;&nbsp;PROFESIONAL</plex-label>
+        <plex-label justify="start">SEXO</plex-label>
+        <plex-label justify="start">NACIONALIDAD</plex-label>
+        <plex-label justify="start">PROFESIÓN</plex-label>
+      </plex-heading>
+
+      <plex-item *ngFor="let profesional of profesionales">
+
+        <plex-label [titulo]="profesional | profesional" [subtitulo]="profesional.documento"></plex-label>
+        <plex-label>{{profesional.sexo}}</plex-label>
+        <plex-label>{{profesional.nacionalidad}}</plex-label>
+        <plex-label>{{profesional.profesion}}</plex-label>
+        <plex-badge type="success" *ngIf="profesional.matriculado">MATRÍCULA N°{{profesional.matricula}}
+          ACTIVA</plex-badge>
+        <plex-badge type="danger" *ngIf="!profesional.matriculado">MATRÍCULA N°{{profesional.matricula}}
+          VENCIDA</plex-badge>
+
+      </plex-item>
+      <hr class="bg-white">
+    </plex-list>
+
   </plex-layout-main>
 </plex-layout>

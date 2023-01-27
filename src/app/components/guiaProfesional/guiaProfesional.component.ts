@@ -23,6 +23,7 @@ export class GuiaProfesionalComponent implements OnInit {
         formacionGrado: null,
         numeroMatricula: null
     };
+    public scanned; // true si se llegó a la guia escaneando qr del profesional
     public columns = [
         {
             key: 'profesional',
@@ -71,11 +72,12 @@ export class GuiaProfesionalComponent implements OnInit {
         this.parametros = this.router.parseUrl(this.router.url);
         if (this.router.parseUrl(this.router.url).queryParams['documento']) {
             this.busqueda.documento = this.parametros.queryParams['documento'];
-
+            this.scanned = true;
             this.filtro = {
                 'id': 0,
                 'nombre': 'Documento'
             };
+            this.buscar();
         }
     }
 

@@ -130,6 +130,12 @@
             <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora"
                        (change)='otraEntidad(formacionSelected)' name="otra"></plex-bool>
           </div>
+          <div class="col-md-6">
+            <plex-select label="Profesión" [(ngModel)]="formacionSelected.profesion" name='formacionPosgrado'
+                         (getData)="loadProfesiones($event)" [required]="true"
+                         [disabled]=" !formacionSelected.papelesVerificados || formacionSelected.matriculacion !== null  ">
+            </plex-select>
+          </div>
         </div>
         <hr>
         <div class="row">

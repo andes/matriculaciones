@@ -135,6 +135,9 @@ export class FormacionGradoComponent implements OnInit {
                 }
             });
     }
+    loadProfesiones(event) {
+        this._profesionService.getProfesiones({ gestionaColegio: false }).pipe(catchError(() => of(null))).subscribe(event.callback);
+    }
 
     generarCertificadoEtica(i) {
         const grado = this.profesional.formacionGrado[i];

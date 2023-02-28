@@ -42,12 +42,15 @@ export class FormacionGradoDetalleComponent implements OnInit {
     private hoy = null;
     public edicionBajas = false;
     public edicionGestion = false;
+    public edicionRechazo = false;
     public indexGestion;
     public indexBaja;
     public tieneBajas = false;
-    constructor(private _profesionalService: ProfesionalService,
-                private _numeracionesService: NumeracionMatriculasService,
-                private _pdfUtils: PDFUtils, private plex: Plex, public auth: Auth) { }
+    public motivoRechazo;
+    constructor(
+        private _profesionalService: ProfesionalService,
+        private _numeracionesService: NumeracionMatriculasService,
+        private _pdfUtils: PDFUtils, private plex: Plex, public auth: Auth) { }
 
 
 
@@ -122,6 +125,9 @@ export class FormacionGradoDetalleComponent implements OnInit {
                                         this.profesional.formacionGrado[this.index].matriculacion.push(oMatriculacion);
                                     }
                                     this.actualizar();
+                                    this.plex.toast('success', 'Se aprobó con exito la renovacion!', 'informacion', 2000);
+                                }, () => {
+                                    this.plex.toast('danger', 'Se rechazó la renovacion de matrícula!', 'informacion', 2000);
                                 });
                         }
                     });
@@ -133,6 +139,14 @@ export class FormacionGradoDetalleComponent implements OnInit {
     papelesVerificados() {
         this.formacion.papelesVerificados = true;
         this.formacion.matriculado = false;
+        if (this.formacion.renovacionOnline) {
+            this.formacion.renovacionOnline = {
+                estado: 'aprobada',
+                descripcion: 'aprobada',
+                fecha: new Date()
+            };
+        }
+
         this.profesional.supervisor = {
             id: this.auth.usuario.id,
             nombreCompleto: this.auth.usuario.nombreCompleto
@@ -141,13 +155,36 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
                 this.profesional = resp;
+                this.plex.toast('success', 'Se guardo con exito el verificar papeles!', 'informacion', 2000);
+            }, () => {
+                this.plex.toast('danger', 'Error en el guardado de papeles verificados!', 'informacion', 2000);
             });
 
+    }
+
+    rechazarRenovacion() {
+        this.edicionRechazo = true;
+    }
+    opcionRechazarRenovacion() {
+        const op = (this.formacion.matriculacion && this.formacion.matriculado && !this.formacion.papelesVerificados && this.formacion.renovacionOnline
+            && this.formacion.renovacionOnline.estado === 'pendiente');
+        return (op);
+    }
+
+    opcionPapelesVerificados() {
+        const op = (this.formacion.matriculacion && !this.formacion.papelesVerificados && this.formacion.renovacion === true);
+        return op;
+
+    }
+    opcionRenovar() {
+        const op = (this.formacion.matriculacion && !this.formacion.matriculado && !this.formacion.papelesVerificados && !this.formacion.renovacion);
+        return op;
     }
 
     renovar() {
         this.formacion.papelesVerificados = false;
         this.formacion.renovacion = true;
+        this.formacion.matriculado = true;
         this.profesional.formacionGrado[this.index] = this.formacion;
         this.actualizar();
     }
@@ -173,10 +210,31 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.actualizar();
         this.edicionGestion = false;
     }
+    guardarRechazo() {
+        this.plex.confirm('¿Desea rechazar la renovación de matrícula?').then((resultadoRechazo) => {
+            if (resultadoRechazo) {
+                if (this.formacion.renovacionOnline) {
+                    this.formacion.renovacionOnline = {
+                        estado: 'rechazada',
+                        descripcion: this.motivoRechazo,
+                        fecha: new Date(),
+                    };
+                    this.profesional.formacionGrado[this.index] = this.formacion;
+                }
+                this.actualizar();
+                this.plex.toast('success', 'Se rechazo la renovacion de matricula!', 'informacion', 2000);
+                this.edicionRechazo = false;
+            }
+        });
+    }
 
     cancelarEdicionBaja() {
         this.edicionBajas = false;
         this.indexBaja = null;
+    }
+    cancelarEdicionRechazo() {
+        this.edicionRechazo = false;
+        this.actualizar();
     }
 
     cancelarEdicionGestion() {

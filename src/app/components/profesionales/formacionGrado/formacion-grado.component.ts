@@ -101,7 +101,7 @@ export class FormacionGradoComponent implements OnInit {
                                             firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
                                             administracion: this.supervisor.nombreCompleto
                                         };
-                                        this._profesionService.getProfesiones({gestionaColegio: false}).pipe(catchError(() => of(null))).subscribe(datos => {
+                                        this._profesionService.getProfesiones({ gestionaColegio: false }).pipe(catchError(() => of(null))).subscribe(datos => {
                                             const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
                                             if (!seleccionado.length) {
                                                 this.plex.info('warning', 'Error en los datos del profesional');
@@ -164,7 +164,7 @@ export class FormacionGradoComponent implements OnInit {
                     });
                 }
             });
-            if(posgrados.length){
+            if (posgrados.length) {
                 matricula.posgrados = posgrados;
             }
         }
@@ -238,15 +238,15 @@ export class FormacionGradoComponent implements OnInit {
         const formacionGrado = this.profesional.formacionGrado[i];
         if (formacionGrado.matriculacion && !formacionGrado.renovacion) {
             return formacionGrado.matriculacion.length && formacionGrado.matriculado &&
-        (this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) ||
-        (!this.verificarFecha(i));
+                (this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) ||
+                (!this.verificarFecha(i));
         } else {
             return false;
         }
     }
 
-    verificarVencimiento(i) {
-        const formacionGrado = this.profesional.formacionGrado[i];
+    verificarVencimiento(index) {
+        const formacionGrado = this.profesional.formacionGrado[index];
         if (formacionGrado.matriculacion.length && !formacionGrado.renovacion && formacionGrado.matriculado) {
             if (this.hoy > formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) {
                 return 'vencida';
@@ -255,8 +255,16 @@ export class FormacionGradoComponent implements OnInit {
             }
         }
     }
-    verificarFecha(i) {
-        const formacionGrado = this.profesional.formacionGrado[i];
+    verificarFecha(index) {
+        const formacionGrado = this.profesional.formacionGrado[index];
         return ((this.hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+    }
+    poseeVerificarPapeles(index) {
+        const formacionGrado = this.profesional.formacionGrado[index];
+        return (formacionGrado.matriculacion.length && formacionGrado.renovacion && formacionGrado.renovacionOnline?.estado !== 'rechazada');
+    }
+    poseeRechazoRenovacion(index) {
+        const formacionGrado = this.profesional.formacionGrado[index];
+        return (formacionGrado.matriculacion.length && formacionGrado.renovacionOnline && formacionGrado.renovacionOnline.estado === 'rechazada');
     }
 }

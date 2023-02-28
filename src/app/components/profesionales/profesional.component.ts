@@ -130,6 +130,7 @@ export class ProfesionalComponent implements OnInit {
             fechaEgreso: null,
             fechaTitulo: null,
             renovacion: false,
+            renovacionOnline: null,
             papelesVerificados: false,
             matriculacion: null,
             matriculado: false

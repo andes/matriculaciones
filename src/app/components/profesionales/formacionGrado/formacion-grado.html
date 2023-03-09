@@ -18,11 +18,9 @@
             <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                          title="Generar credencial" type="success" class="float-right btnGrado"
                          icon="card-account-details" (click)="credencialAcciones(i)"></plex-button>
-
             <plex-button title="Generar certificado de ética" type="warning" *ngIf='verificarEmisionCerificado(i)'
                          class="float-right btnGrado" icon="documentos" (click)="generarCertificadoEtica(i)">
             </plex-button>
-
             <plex-button *ngIf="profesional.habilitado" title="Editar" type="success" class="float-right btnGrado"
                          icon="lapiz" (click)="editar(formacionGrado,i)">
             </plex-button>
@@ -32,7 +30,6 @@
         </div>
       </div>
     </header>
-
     <div class="row" *ngIf='!credencial'>
       <div class="col-3">
         <label>Título</label>
@@ -51,14 +48,12 @@
         <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
       </div>
       <div *ngIf="formacionGrado.matriculacion">
-
         <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type='danger'>
           Matricula Vencida
         </plex-badge>
         <plex-badge *ngIf="verificarVencimiento(i) === 'vigente'" type="success"> Matriculado
         </plex-badge>
-
-        <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado"
+        <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado && !poseeRechazoRenovacion(i)"
                     type="danger"> Matricula <br> suspendida
         </plex-badge>
 
@@ -73,7 +68,6 @@
       <div *ngIf="!formacionGrado.matriculacion">
         <plex-badge type="danger">No posee matricula</plex-badge>
       </div>
-
     </div>
   </plex-box>
 </div>
@@ -133,7 +127,7 @@
           <div class="col-md-6">
             <plex-select label="Profesión" [(ngModel)]="formacionSelected.profesion" name='formacionPosgrado'
                          (getData)="loadProfesiones($event)" [required]="true"
-                         [disabled]=" !formacionSelected.papelesVerificados || formacionSelected.matriculacion !== null  ">
+                         [disabled]=" !formacionSelected.papelesVerificados || formacionSelected.matriculacion  ">
             </plex-select>
           </div>
         </div>
@@ -144,7 +138,6 @@
                          validateForm="true"></plex-button>
             <plex-button label="Cerrar" type="danger" class="float-right" (click)="edit = false" validateForm="true">
             </plex-button>
-
           </div>
         </div>
       </form>

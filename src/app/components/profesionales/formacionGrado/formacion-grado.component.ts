@@ -265,6 +265,6 @@ export class FormacionGradoComponent implements OnInit {
     }
     poseeRechazoRenovacion(index) {
         const formacionGrado = this.profesional.formacionGrado[index];
-        return (formacionGrado.matriculacion.length && formacionGrado.renovacionOnline && formacionGrado.renovacionOnline.estado === 'rechazada');
+        return (formacionGrado.matriculacion.length && formacionGrado.renovacionOnline?.estado === 'rechazada');
     }
 }

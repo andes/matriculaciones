@@ -25,6 +25,13 @@ export enum tipoComunicacion {
     'Email'
 }
 
+export enum estadoRenovacionOnline {
+    'Pendiente',
+    'Aprobada',
+    'Rechazada',
+    'No Aplica'
+}
+
 export enum EstadoCivil {
     'casado', 'separado', 'divorciado', 'viudo', 'soltero', 'otro'
 }
@@ -171,6 +178,18 @@ export function getObjSexos() {
         return {
             'id': elem,
             'nombre': titleCase(elem)
+        };
+    });
+    return salida;
+}
+
+export function getObjEstadoRenovacionOnline() {
+    let arrEstadoRenovacion = Object.keys(estadoRenovacionOnline);
+    arrEstadoRenovacion = arrEstadoRenovacion.slice(arrEstadoRenovacion.length / 2);
+    const salida = arrEstadoRenovacion.map(elem => {
+        return {
+            'id': elem,
+            'nombre': elem
         };
     });
     return salida;

@@ -1,19 +1,24 @@
 <form autosave="filtros-profesional" (restore)="filtrar()">
     <plex-wrapper>
         <plex-int (change)="filtrar()" label="Documento" [(ngModel)]="filtro.documento" name="documento"
-                    placeholder="Ingrese documento">
+                  placeholder="Ingrese documento">
         </plex-int>
         <plex-text (change)="filtrar()" label="Apellido" [(ngModel)]="filtro.apellido" name="apellido"
-                    placeholder="Ingrese apellido">
+                   placeholder="Ingrese apellido">
         </plex-text>
         <plex-text (change)="filtrar()" label="Nombre" [(ngModel)]="filtro.nombre" name="nombre"
-                    placeholder="Ingrese nombre">
+                   placeholder="Ingrese nombre">
         </plex-text>
         <plex-select (change)="filtrar()" label="Profesión" [(ngModel)]="filtro.profesion" name="profesion"
-                    [data]="profesiones$ | async">
+                     [data]="profesiones$ | async">
         </plex-select>
-        <plex-int (change)="filtrar()" label="N° Matrícula grado" [(ngModel)]="filtro.numeroMatriculaGrado" name="numeroMatriculaGrado"
-                    placeholder="Ingrese N° de matrícula">
+        <plex-int (change)="filtrar()" label="N° Matrícula grado" [(ngModel)]="filtro.numeroMatriculaGrado"
+                  name="numeroMatriculaGrado" placeholder="Ingrese N° de matrícula">
         </plex-int>
+        <plex-grid cols="2" size="lg" class="mt-0">
+            <plex-select (change)="filtrar()" label="Renovación Online" [(ngModel)]="filtro.renovacionOnline"
+                         name="renovacionOnline" [data]="renovacionOnline">
+            </plex-select>
+        </plex-grid>
     </plex-wrapper>
 </form>

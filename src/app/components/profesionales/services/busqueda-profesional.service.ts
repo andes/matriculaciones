@@ -16,6 +16,7 @@ export class BusquedaProfesionalService {
     public profesionSelected = new BehaviorSubject<IProfesion>(null);
     public numeroMatriculaGrado = new BehaviorSubject<string>(null);
     public numeroMatriculaEspecialidad = new BehaviorSubject<string>(null);
+    public renovacionSelected = new BehaviorSubject<string>(null);
     public profesionalesFiltrados$: Observable<any[]>;
     // Filtros para renovacion
     public fechaDesde = new BehaviorSubject<Date>(null);
@@ -35,9 +36,10 @@ export class BusquedaProfesionalService {
             this.profesionSelected,
             this.numeroMatriculaGrado,
             this.numeroMatriculaEspecialidad,
-            this.lastResults
+            this.lastResults,
+            this.renovacionSelected
         ).debounceTime(400).pipe(
-            switchMap(([documento, apellido, nombre, profesion, numeroMatriculaGrado, numeroMatriculaEspecialidad, lastResults]) => {
+            switchMap(([documento, apellido, nombre, profesion, numeroMatriculaGrado, numeroMatriculaEspecialidad, lastResults, renovacionSelected]) => {
                 if (!lastResults) {
                     this.skip = 0;
                 }
@@ -64,6 +66,10 @@ export class BusquedaProfesionalService {
                 }
                 if (profesion) {
                     params.profesion = profesion.codigo;
+                    filtros = true;
+                }
+                if (renovacionSelected) {
+                    params.renovacionSelected = renovacionSelected;
                     filtros = true;
                 }
                 if (numeroMatriculaGrado) {
@@ -145,7 +151,7 @@ export class BusquedaProfesionalService {
         return this.server.get(this.url, { params: params, showError: true });
     }
 
-    getPendienteRenovacion(params: any): Observable < any > {
+    getPendienteRenovacion(params: any): Observable<any> {
         return this.server.get(this.url + 'renovacion', { params, showError: true });
     }
 }

@@ -18,7 +18,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
     public cancel = false;
 
     profesiones: any[] = [];
-    fechaAlta = new Date();
+    fechaAlta = moment().toDate();
     profesion;
     especialidad;
     matriculaNumero;

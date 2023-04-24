@@ -32,14 +32,16 @@
                 </plex-badge>
             </td>
             <td class="column-right my-3">
-                <plex-badge *ngIf="estaVencida(i)" type="{{estaVencida(i) && !estaEnAnioGracia(i)?'danger':'info'}}">
+                <plex-badge *ngIf="estaVencida(i) && verificarFecha(i) !== 'sinVencimiento'"
+                    type="{{estaVencida(i) && !estaEnAnioGracia(i)?'danger':'info'}}">
                     {{estaVencida(i) && !estaEnAnioGracia(i)?'Vencida':'Año de gracia'}}
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'vigente'" type="success"> vigente
                 </plex-badge>
 
-                <plex-badge style="margin-right: 35px;" *ngIf="verificarFecha(i) === 'suspendida'" type="danger"> Suspendida
+                <plex-badge style="margin-right: 35px;" *ngIf="verificarFecha(i) === 'suspendida'" type="danger">
+                    Suspendida
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'revalida'"
@@ -54,14 +56,9 @@
                 <plex-badge *ngIf="formacionPosgrado.notas?.length" class='ml-2' type="info" size="md">
                     <plex-icon name="documento" type="info" size="sm"></plex-icon>
                 </plex-badge>
-<<<<<<< HEAD
-                <plex-dropdown *ngIf="profesional.formacionPosgrado[i].matriculado" #drop icon="dots-vertical" size="sm" type="link" [right]="true" [items]="itemsDropdown"
-                               (onOpen)="setDropDown(i, drop)">
-=======
 
-                <plex-dropdown #drop icon="dots-vertical" size="sm" type="link" [right]="true" [items]="itemsDropdown"
-                    (onOpen)="setDropDown(i, drop)">
->>>>>>> 6070343 (Feat(Modif.Front formacionesPosgrado))
+                <plex-dropdown *ngIf="profesional.formacionPosgrado[i].matriculado" #drop icon="dots-vertical" size="sm"
+                    type="link" [right]="true" [items]="itemsDropdown" (onOpen)="setDropDown(i, drop)">
                 </plex-dropdown>
 
             </td>

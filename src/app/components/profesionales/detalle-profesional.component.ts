@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Plex } from '@andes/plex';
 import { FotoGeneralComponent } from './foto-general.component';
 import { ProfesionalService } from './../../services/profesional.service';
-import { IProfesional } from './../../interfaces/IProfesional';
+import { IProfesional, IformacionPosgrado } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
 import { Auth } from '@andes/auth';
@@ -241,7 +241,7 @@ export class DetalleProfesionalComponent implements OnInit {
         this.showAdd = false;
     }
 
-    formacionPosgradoSelected(posgrado: any) {
+    formacionPosgradoSelected(posgrado: IformacionPosgrado) {
         this.mostrarGrado = true;
         this.mostrar = false;
         this.indexFormacionPosgradoSelected = posgrado;

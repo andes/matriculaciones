@@ -13,7 +13,7 @@ import { Auth } from '@andes/auth';
 })
 export class FormacionPosgradoDetalleComponent implements OnInit {
 
-    @Input() formacion: any;
+    @Input() formacion: IformacionPosgrado;
     @Input('index')
     set _index(value) {
         this.index = value;
@@ -51,36 +51,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     ultMat: number;
     ultPer: number;
     public pos;
-    public matricula = [
-        {
-            key: 'matriculaNumero',
-            label: 'MATRÍCULA NRO'
-        },
-        {
-            key: 'inicio',
-            label: 'INICIO/FIN'
-        },
-        {}
-    ];
-    public revalida = [
-        {
-            key: 'revalidacionNumero',
-            label: 'NRO.'
-        },
-        {
-            key: 'matriculaNumero',
-            label: 'MAT NRO.'
-        },
-        {
-            key: 'inicio',
-            label: 'INICIO/FIN'
-        },
-        {
-            key: 'estado',
-            label: 'ESTADO'
-        },
-        {}
-    ];
+
     constructor(private _profesionalService: ProfesionalService, private plex: Plex, public auth: Auth) { }
 
     actualizarIndice() {
@@ -309,6 +280,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.editarRevalida = true;
     }
 
+    obtenerMatricula() {
+        return !this.editarObtencion && !this.editarRevalida && !this.altaRevalida && !this.altaObtencion;
+    }
+
     guardar(event, tipo) {
         if (event.form.valid) {
             const cambio = {
@@ -319,10 +294,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 this.formacion.matriculacion[this.ultMat].matriculaNumero = this.matriculaNumero;
                 this.formacion.matriculacion[this.ultMat].fechaAlta = this.fechaAlta;
                 this.formacion.matriculacion[this.ultMat].periodos[0].inicio = this.fechaAlta;
-                this.formacion.matriculacion[this.ultMat].periodos[0].fin = moment(this.fechaAlta).startOf('year').add(5, 'years');
+                this.formacion.matriculacion[this.ultMat].periodos[0].fin = moment(this.fechaAlta).startOf('year').add(5, 'years').toDate();
             } else {
                 this.formacion.matriculacion[this.ultMat].periodos[this.ultPer].inicio = this.inicio;
-                this.formacion.matriculacion[this.ultMat].periodos[this.ultPer].fin = moment(this.inicio).startOf('year').add(5, 'years');
+                this.formacion.matriculacion[this.ultMat].periodos[this.ultPer].fin = moment(this.inicio).startOf('year').add(5, 'years').toDate();
             }
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
                 this.plex.toast('success', 'Los datos se han actualizado con éxito!', 'Mensaje de la confirmación', 1000);

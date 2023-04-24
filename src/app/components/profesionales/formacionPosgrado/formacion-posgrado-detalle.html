@@ -14,7 +14,8 @@
         date:'dd/MM/yyyy'}}
     </plex-badge>
 
-    <plex-badge *ngIf="estaVencida()" type="{{estaVencida() && !estaEnAnioGracia()?'danger':'info'}}">
+    <plex-badge *ngIf="estaVencida() && verificarFecha(index) !== 'sinVencimiento'"
+        type="{{estaVencida() && !estaEnAnioGracia()?'danger':'info'}}">
         {{estaVencida() && !estaEnAnioGracia()?'Vencida':'Año de gracia'}}
     </plex-badge>
 
@@ -38,7 +39,7 @@
     <plex-label titulo="Modalidad" subtitulo="{{ formacion.certificacion?.modalidad.nombre }}"></plex-label>
 </plex-detail>
 
-<div *ngIf="!editarObtencion && !editarRevalida && !altaRevalida && !altaObtencion">
+<div *ngIf="obtenerMatricula()">
     <plex-title titulo="Obtención de matricula" size="sm">
         <plex-button class="mr-1" type="success" size="sm" label="{{ puedeRenovar()? 'Renovar' : 'Revalidar' }}"
             (click)="RevalidarRenovar()" [disabled]="!puedeRenovar() && !puedeRevalidar()">
@@ -47,7 +48,7 @@
     <plex-accordion>
         <plex-panel tituloPrincipal="Fecha de Alta: {{ matricula.fechaAlta | date: 'dd/MM/yyyy'}}"
             *ngFor="let matricula of formacion.matriculacion.slice().reverse(); let i = index" [active]="i == 0">
-            <plex-table [columns]="matricula" #table="plTable">
+            <plex-table [columns]="" #table="plTable">
                 <tr *ngIf="matricula.periodos.length > 1">
                     <th>Reválida</th>
                     <th>Inicio</th>
@@ -67,18 +68,18 @@
                     </td>
                     <td class="columns"
                         *ngIf="j > 0 && j === (matricula.periodos.length - 1) && !formacion.tieneVencimiento">
-                        <plex-badge>
-                            size="lg" type="warning"> Sin vencimiento &nbsp;
+                        <plex-badge size="lg" type="warning"> Sin vencimiento &nbsp;
                         </plex-badge>
                     </td>
-                    <td class="columns" *ngIf="j > 0 && j === (matricula.periodos.length - 1) && formacion.matriculado">
+                    <td class="columns"
+                        *ngIf="j > 0 && j === (matricula.periodos.length - 1) && formacion.matriculado && formacion.tieneVencimiento">
                         <plex-badge size="lg"
                             type="{{ periodo.fin >= hoy?'success': !estaEnAnioGracia() ? 'warning' : 'info'}}">
                             {{periodo.fin >= hoy? 'Vigente' : !estaEnAnioGracia() ? 'Vencida' : 'Año de gracia'}}
                         </plex-badge>
                     </td>
                     <td class="columns"
-                        *ngIf="j > 0 && (j !== (matricula.periodos.length - 1) || !formacion.matriculado)">
+                        *ngIf="j > 0 && (j !== (matricula.periodos.length - 1) || !formacion.matriculado) ">
                         <plex-badge size="lg" type="danger"> NO VIGENTE
                         </plex-badge>
                     </td>

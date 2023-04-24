@@ -52,96 +52,8 @@ export class ProfesionalComponent implements OnInit {
     @Output() editado = new EventEmitter();
     public noPoseedomicilioProfesional = false;
     @Input() showOtraEntidadFormadora: Boolean = false;
-    @Input() public profesional: IProfesional = {
-        id: null,
-        habilitado: true,
-        nombre: null,
-        apellido: null,
-        tipoDocumento: null,
-        documento: null,
-        documentoViejo: null,
-        documentoVencimiento: null,
-        cuit: null,
-        fechaNacimiento: null,
-        lugarNacimiento: '',
-        nacionalidad: null,
-        sexo: undefined,
-        contactos: [{
-            tipo: 'email',
-            valor: '',
-            rank: 0,
-            activo: true,
-            ultimaActualizacion: new Date()
-        }],
-        domicilios: [{
-            tipo: 'real',
-            valor: null,
-            codigoPostal: '',
-            ubicacion: {
-                localidad: '',
-                provincia: '',
-                pais: {
-                    'id': '57f3b5c469fe79a598e6281f',
-                    'nombre': 'Argentina'
-                },
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        },
-                     {
-                         tipo: 'legal',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     },
-                     {
-                         tipo: 'profesional',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     }],
-        fotoArchivo: null,
-        firmas: null,
-        profesionalMatriculado: false,
-        formacionGrado: [{
-            exportadoSisa: null,
-            profesion: null,
-            entidadFormadora: null,
-            titulo: null,
-            fechaEgreso: null,
-            fechaTitulo: null,
-            renovacion: false,
-            papelesVerificados: false,
-            matriculacion: null,
-            matriculado: false
-        }],
-        formacionPosgrado: null,
-        origen: null,
-        sanciones: null,
-        notas: null,
-        rematriculado: 0,
-        agenteMatriculador: '',
-        OtrosDatos: null,
-        idRenovacion: null,
-    };
+    @Input() public profesional: IProfesional;
+
     localidadesReal: any[] = [];
     localidadesLegal: any[] = [];
     localidadesProfesional: any[] = [];
@@ -220,7 +132,8 @@ export class ProfesionalComponent implements OnInit {
                 ];
             }
         }
-        if (this.confirmar) {
+
+        if (this.confirmar && this.profesional) {
             if (this.profesional.formacionGrado.length && this.profesional.formacionGrado[0].entidadFormadora?.codigo === null) {
                 this.showOtraEntidadFormadora = true;
             } else {

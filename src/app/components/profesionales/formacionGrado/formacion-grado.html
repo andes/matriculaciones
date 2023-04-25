@@ -12,7 +12,8 @@
               1].matriculaNumero }}
             </span>
             <plex-button *ngIf="!formacionGrado.matriculacion?.matriculacionNumero" type="primary"
-                         class="float-right btnGrado" icon="information-outline" tooltip="Información" (click)="showFormacion(i)">
+                         class="float-right btnGrado" icon="information-outline" tooltip="Información"
+                         (click)="showFormacion(i)">
             </plex-button>
             <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                          title="Generar credencial" type="success" class="float-right btnGrado"
@@ -25,8 +26,8 @@
             <plex-button *ngIf="profesional.habilitado" title="Editar" type="success" class="float-right btnGrado"
                          icon="lapiz" (click)="editar(formacionGrado,i)">
             </plex-button>
-            <plex-button class="float-right btnGrado" type="danger" title="Imprimir"
-                         (click)="pdf(i)" icon='impresora'> </plex-button>
+            <plex-button class="float-right btnGrado" type="danger" title="Imprimir" (click)="pdf(i)" icon='impresora'>
+            </plex-button>
           </div>
         </div>
       </div>
@@ -50,10 +51,10 @@
         <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
       </div>
       <div *ngIf="formacionGrado.matriculacion">
-        <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type="{{verificarFecha(i)?'danger':'info'}}">
-          {{verificarFecha(i)?' Matricula Vencida':'Año de gracia'}}
-        </plex-badge>
 
+        <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type='danger'>
+          Matricula Vencida
+        </plex-badge>
         <plex-badge *ngIf="verificarVencimiento(i) === 'vigente'" type="success"> Matriculado
         </plex-badge>
 

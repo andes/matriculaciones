@@ -61,11 +61,13 @@
                                 {{profesionalGrado.profesion?.nombre +' - ' +
                                 obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
                             </plex-badge>
+
                             <plex-badge *ngIf="verificarEstadoGrado(indiceProfesional,indiceGrado) === 'vencida' "
-                                        type="{{verificarFechaGrado(indiceProfesional,indiceGrado)?'danger':'info'}}">
+                                        type='danger'>
                                 {{profesionalGrado.profesion?.nombre +' - ' +
                                 obtenerMatriculaGrado(indiceProfesional,indiceGrado)}}
                             </plex-badge>
+
                         </div>
                     </td>
 

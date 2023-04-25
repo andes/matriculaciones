@@ -213,15 +213,6 @@ export class ListarProfesionalesComponent implements OnInit {
         return '';
     }
 
-    verificarFechaGrado(iProfesional, iGrado) {
-        if (!this.listadoActual?.length) {
-            return;
-        }
-        const profesional = this.listadoActual[iProfesional].formacionGrado[iGrado];
-        return ((this.hoy.getTime() - profesional.matriculacion[profesional.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
-    }
-
-
     verificarEstadoPosgrado(iProfesional, iGrado) {
         if (!this.listadoActual?.length) {
             return;

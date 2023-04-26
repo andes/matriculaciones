@@ -36,7 +36,7 @@
                 <plex-badge *ngIf="verificarFecha(i) === 'vigente'" type="success"> vigente
                 </plex-badge>
 
-                <plex-badge *ngIf="verificarFecha(i) === 'suspendida'" type="danger"> Suspendida
+                <plex-badge style="margin-right: 35px;" *ngIf="verificarFecha(i) === 'suspendida'" type="danger"> Suspendida
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'revalida'"
@@ -51,7 +51,7 @@
                 <plex-badge *ngIf="formacionPosgrado.notas?.length" class='ml-2' type="info" size="md">
                     <plex-icon name="documento" type="info" size="sm"></plex-icon>
                 </plex-badge>
-                <plex-dropdown #drop icon="dots-vertical" size="sm" type="link" [right]="true" [items]="itemsDropdown"
+                <plex-dropdown *ngIf="profesional.formacionPosgrado[i].matriculado" #drop icon="dots-vertical" size="sm" type="link" [right]="true" [items]="itemsDropdown"
                                (onOpen)="setDropDown(i, drop)">
                 </plex-dropdown>
 

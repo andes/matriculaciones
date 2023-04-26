@@ -1,6 +1,6 @@
 <plex-layout main="{{ seleccionado || verExportador  ? '8' : (nuevoProfesional || editar || isMobile()? '12' : '10') }}"
              foco="{{this.seleccionado || this.verExportador? 'sidebar' : (isMobile()?'main':'')}}" resizable="true"
-             [min]="4" [max]="8" [steps]="2">
+             [min]="4" [max]="4" [steps]="2">
     <plex-layout-main>
         <div *ngIf="!nuevoProfesional && !editar">
             <plex-title titulo="Buscar profesional" size="md">

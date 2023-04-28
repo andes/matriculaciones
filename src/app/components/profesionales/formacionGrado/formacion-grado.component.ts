@@ -101,7 +101,7 @@ export class FormacionGradoComponent implements OnInit {
                                             firma: 'data:image/jpeg;base64,' + respFirmaAdmin.firma,
                                             administracion: this.supervisor.nombreCompleto
                                         };
-                                        this._profesionService.getProfesiones({gestionaColegio: false}).pipe(catchError(() => of(null))).subscribe(datos => {
+                                        this._profesionService.getProfesiones({ gestionaColegio: false }).pipe(catchError(() => of(null))).subscribe(datos => {
                                             const seleccionado = datos.filter((p) => p.codigo === this.profesional.formacionGrado[grado].profesion.codigo);
                                             if (!seleccionado.length) {
                                                 this.plex.info('warning', 'Error en los datos del profesional');
@@ -156,15 +156,20 @@ export class FormacionGradoComponent implements OnInit {
             const hoy = new Date();
             const posgrados = [];
             this.profesional.formacionPosgrado.forEach(formacion => {
-                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida && (hoy <= formacion.matriculacion[formacion.matriculacion.length - 1].fin || ((hoy.getTime() - formacion.matriculacion[formacion.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365) || !formacion.tieneVencimiento)) {
+                const ultMat = formacion.matriculacion.length - 1;
+                const ultPer = formacion.matriculacion[ultMat].periodos.length - 1;
+                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida &&
+                    (hoy <= formacion.matriculacion[ultMat].periodos[ultPer].fin ||
+                        ((hoy.getTime() - formacion.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) < 365)
+                        || !formacion.tieneVencimiento)) {
                     posgrados.push({
                         titulo: formacion.especialidad.nombre,
                         matriculaNumero: formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero,
-                        fechaAlta: formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1].fecha || null
+                        fechaAlta: formacion.matriculacion[ultMat].fechaAlta || null
                     });
                 }
             });
-            if(posgrados.length){
+            if (posgrados.length) {
                 matricula.posgrados = posgrados;
             }
         }
@@ -238,8 +243,8 @@ export class FormacionGradoComponent implements OnInit {
         const formacionGrado = this.profesional.formacionGrado[i];
         if (formacionGrado.matriculacion && !formacionGrado.renovacion) {
             return formacionGrado.matriculacion.length && formacionGrado.matriculado &&
-        (this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) ||
-        (!this.verificarFecha(i));
+                (this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) ||
+                (!this.verificarFecha(i));
         } else {
             return false;
         }

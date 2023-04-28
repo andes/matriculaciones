@@ -1,5 +1,48 @@
 import { Sexo } from './../utils/enumerados';
+import { SIISAObject, SIISAEspecialidad } from './ISiisa';
 
+export interface Iperiodos {
+    notificacionVencimiento: Boolean;
+    inicio: Date;
+    fin: Date;
+    revalidacionNumero: Number;
+    revalida: Boolean;
+};
+
+export interface Imatriculacion {
+    fechaAlta: Date;
+    matriculaNumero: Number;
+    baja: {
+        motivo: String;
+        fecha: Date;
+    };
+    periodos: Iperiodos[];
+};
+
+export interface Icertificacion {
+    fecha: Date;
+    modalidad: SIISAObject;
+    establecimiento: SIISAObject;
+};
+
+export interface IformacionPosgrado {
+    profesion: SIISAObject;
+    institucionFormadora: SIISAObject;
+    especialidad: SIISAEspecialidad;
+    fechaIngreso: Date;
+    fechaEgreso: Date;
+    tituloFileId: String;
+    observacion: String;
+    certificacion: Icertificacion;
+    matriculacion: Imatriculacion[];
+    matriculado: Boolean;
+    revalida: Boolean;
+    papelesVerificados: Boolean;
+    fechaDeVencimiento: Date;
+    exportadoSisa: Boolean;
+    tieneVencimiento: Boolean;
+    notas: [String];
+}
 export interface IProfesional {
     id: String;
     habilitado: Boolean;
@@ -96,52 +139,7 @@ export interface IProfesional {
         matriculado: boolean;
         fechaDeInscripcion?: Date;
     }];
-    formacionPosgrado: [{
-        profesion: {
-            nombre: String;
-            codigo: number;
-        };
-        institucionFormadora: {
-            nombre: String;
-            codigo: number;
-        };
-        especialidad: {
-            nombre: String;
-            codigo: number;
-        };
-        tituloFileId?: String;
-        fechaIngreso: Date;
-        fechaEgreso: Date;
-        observacion: String;
-        certificacion: {
-            fecha: Date;
-            modalidad: {
-                nombre: String;
-                codigo: number;
-            };
-            establecimiento: {
-                nombre: String;
-                codigo: number;
-            };
-        };
-        matriculacion?: [
-            {
-                matriculaNumero: Number;
-                libro: String;
-                folio: String;
-                inicio: Date;
-                notificacionVencimiento: Boolean;
-                fin: Date;
-                revalidacionNumero: Number;
-            }
-        ];
-        fechasDeAltas?: [{ fecha: Date }];
-        tieneVencimiento?: boolean;
-        papelesVerificados: boolean;
-        matriculado: boolean;
-        revalida: boolean;
-        notas: String;
-    }];
+    formacionPosgrado: IformacionPosgrado[];
     documentos?: [{
         fecha: Date;
         tipo: String;
@@ -177,4 +175,4 @@ export interface IProfesional {
     };
     idRenovacion: String;
     documentoViejo: Number;
-}
+};

@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Plex } from '@andes/plex';
-import { IProfesional } from './../../../interfaces/IProfesional';
+import { IProfesional, Icertificacion, IformacionPosgrado, Imatriculacion, Iperiodos } from './../../../interfaces/IProfesional';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
+import * as moment from 'moment';
+
 @Component({
     selector: 'app-formacion-posgrado',
     templateUrl: 'formacion-posgrado.html',
@@ -17,15 +19,12 @@ export class FormacionPosgradoComponent implements OnInit {
     @Output() showPosgradoAdd = new EventEmitter();
     @Output() indice = new EventEmitter();
     public showOtraEntidadFormadora = false;
-    public certificacion = {
-        modalidad: null,
-        fecha: null
-    };
+    public certificacion: Icertificacion;
     itemsDropdown: any = [];
     public hoy;
     public edit = true;
     public agregar = true;
-    public formacionSelected;
+    public formacionSelected: IformacionPosgrado;
     public proximaFechaDeAlta;
     openedDropDown = null;
     public columns = [
@@ -141,9 +140,8 @@ export class FormacionPosgradoComponent implements OnInit {
                 'data': this.profesional.formacionPosgrado
             };
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-                // this.profesional = data;
                 this.edit = false;
-                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+                this.plex.toast('success', 'Se guardó con exito!', 'informacion', 1000);
             });
         }
     }
@@ -155,7 +153,7 @@ export class FormacionPosgradoComponent implements OnInit {
         };
     }
 
-    editar(formacionPosgrado, index) {
+    editar(formacionPosgrado: IformacionPosgrado, index) {
         this.formacionPosgradoSelected.emit(index);
 
         this.edit = true;
@@ -163,7 +161,7 @@ export class FormacionPosgradoComponent implements OnInit {
             this.certificacion = formacionPosgrado.certificacion;
 
         } else {
-            const certificacion = {
+            const certificacion: Icertificacion = {
                 fecha: null,
                 modalidad: {
                     nombre: null,
@@ -182,20 +180,6 @@ export class FormacionPosgradoComponent implements OnInit {
         } else {
             this.showOtraEntidadFormadora = false;
         }
-    }
-
-    pushFechasAlta() {
-        this.plex.confirm('¿Desea agregar esta nueva fecha de alta?').then((resultado) => {
-            if (resultado) {
-                this.formacionSelected.fechasDeAltas.push({ fecha: this.proximaFechaDeAlta });
-                const cambio = {
-                    'op': 'updateEstadoPosGrado',
-                    'data': this.profesional.formacionPosgrado
-                };
-                this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-                });
-            }
-        });
     }
 
     darDeBaja(i) {
@@ -237,7 +221,16 @@ export class FormacionPosgradoComponent implements OnInit {
 
     estaVencida(i) {
         const formacionPosgrado = this.profesional.formacionPosgrado[i];
-        return ((this.hoy.getTime() - new Date(formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin).getTime()) / (1000 * 3600 * 24) > 365);
+        const ultMat = formacionPosgrado.matriculacion.length - 1;
+        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+        return (moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') > 0);
+    }
+
+    estaEnAnioGracia(i) {
+        const formacionPosgrado = this.profesional.formacionPosgrado[i];
+        const ultMat = formacionPosgrado.matriculacion.length - 1;
+        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+        return (this.estaVencida(i) && moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') < 365);
     }
 
     verificarFecha(i) {
@@ -252,8 +245,14 @@ export class FormacionPosgradoComponent implements OnInit {
                     if (!formacionPosgrado.tieneVencimiento) {
                         return 'sinVencimiento';
                     } else {
-                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin) {
-                            return 'vencida';
+                        const ultMat = formacionPosgrado.matriculacion.length - 1;
+                        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+                        if (this.hoy > formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
+                            if (this.estaVencida(i) && !this.estaEnAnioGracia(i)) {
+                                return 'vencida';
+                            } else {
+                                return 'anio de gracia';
+                            }
                         } else {
                             return 'vigente';
                         }

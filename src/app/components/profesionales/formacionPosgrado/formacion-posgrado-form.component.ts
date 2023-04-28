@@ -25,6 +25,7 @@ import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from './../../../services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
 import { ProfesionService } from '../../../services/profesion.service';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-formacion-posgrado-form',
@@ -37,7 +38,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
     numeroMenor = false;
     ultimoNumeroMatricula;
     public showOtraEntidadFormadora = false;
-    vencimientoAnio = (new Date()).getUTCFullYear() + 5;
+    fechaFin = moment().startOf('year').add(5, 'years');
     profesionalP: any = {
         exportadoSisa: false,
         profesion: null,
@@ -69,7 +70,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
             folio: '',
             inicio: new Date(),
             notificacionVencimiento: false,
-            fin: new Date(new Date('01/01/2000').setFullYear(this.vencimientoAnio)),
+            fin: this.fechaFin.toDate(),
             revalidacionNumero: 1,
         }],
         tieneVencimiento: true,

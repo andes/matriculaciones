@@ -12,8 +12,6 @@ import { Auth } from '@andes/auth';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
-const jsPDF = require('jspdf');
-
 @Component({
     selector: 'app-detalle-profesional',
     templateUrl: 'detalle-profesional.html'
@@ -36,103 +34,10 @@ export class DetalleProfesionalComponent implements OnInit {
 
     @ViewChild('fotoHijo') fotoHijo: FotoGeneralComponent;
     @Input() public flag = null;
-    @Input() public profesional: IProfesional = {
-        id: null,
-        habilitado: true,
-        nombre: null,
-        apellido: null,
-        tipoDocumento: null,
-        documento: null,
-        documentoVencimiento: null,
-        cuit: null,
-        fechaNacimiento: null,
-        lugarNacimiento: '',
-        nacionalidad: {
-            nombre: null,
-            codigo: null,
-        },
-        sexo: undefined,
-        contactos: [{
-            tipo: 'celular',
-            valor: '',
-            rank: 0,
-            activo: true,
-            ultimaActualizacion: new Date()
-        }],
-        domicilios: [{
-            tipo: 'real',
-            valor: '',
-            codigoPostal: '',
-            ubicacion: {
-                localidad: '',
-                provincia: '',
-                pais: '',
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }, {
-            tipo: 'legal',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }, {
-            tipo: 'profesional',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }],
-        fotoArchivo: null,
-        firmas: null,
-        formacionGrado: [{
-            profesion: {
-                nombre: null,
-                codigo: null,
-                tipoDeFormacion: null
-            },
-            entidadFormadora: {
-                nombre: null,
-                codigo: null,
-            },
-            titulo: null,
-            fechaEgreso: null,
-            fechaTitulo: null,
-            renovacion: false,
-            renovacionOnline: null,
-            papelesVerificados: false,
-            matriculacion: [{
-                matriculaNumero: null,
-                libro: null,
-                folio: null,
-                inicio: null,
-                fin: null,
-                baja: null,
-                notificacionVencimiento: false,
-                revalidacionNumero: null,
-            }],
-            matriculado: false
-        }],
-        formacionPosgrado: null,
-        origen: null,
-        sanciones: null,
-        notas: null,
-        rematriculado: 0,
-        agenteMatriculador: '',
-        OtrosDatos: null,
-        idRenovacion: null,
-        documentoViejo: null
-    };
+    @Input() public profesional: IProfesional;
+
+    @Output() onShowListado = new EventEmitter();
+    @Output() showFormacion = new EventEmitter();
     @Output() showFoto = new EventEmitter();
     public tieneOtraEntidad;
 
@@ -143,7 +48,8 @@ export class DetalleProfesionalComponent implements OnInit {
         private route: ActivatedRoute,
         public auth: Auth,
         private plex: Plex,
-        private location: Location) { }
+        private location: Location
+    ) { }
 
     ngOnInit() {
         this.route.params.pipe(

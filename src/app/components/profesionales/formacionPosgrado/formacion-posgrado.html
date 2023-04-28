@@ -9,28 +9,31 @@
     <plex-table [columns]="columns" #table="plTable">
         <plex-table-columns>
         </plex-table-columns>
-        <tr *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;" (click)="showPosgrado(i)" class="selectable">
+        <tr *ngFor="let formacionPosgrado of profesional.formacionPosgrado; let i = index;" (click)="showPosgrado(i)"
+            class="selectable">
             <td>
                 <plex-label icon="estetoscopio" type="info" case="capitalize" size="lg"
-                            titulo="{{ formacionPosgrado.especialidad?.nombre }}"
-                            subtitulo="Profesión: {{formacionPosgrado.profesion?.nombre}}">
+                    titulo="{{ formacionPosgrado.especialidad?.nombre }}"
+                    subtitulo="Profesión: {{formacionPosgrado.profesion?.nombre}}">
                 </plex-label>
             </td>
             <td>
                 <plex-label size="lg"
-                            titulo="Nro. {{formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].matriculaNumero}}"
-                            subtitulo="{{formacionPosgrado.institucionFormadora?.nombre}}">
+                    titulo="Nro. {{formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].matriculaNumero}}"
+                    subtitulo="{{formacionPosgrado.institucionFormadora?.nombre}}">
                 </plex-label>
             </td>
             <td>
-                <plex-badge *ngIf="formacionPosgrado.fechasDeAltas[formacionPosgrado.fechasDeAltas.length - 1]?.fecha" size="lg" type="info">
-                    {{formacionPosgrado.fechasDeAltas[formacionPosgrado.fechasDeAltas.length - 1]?.fecha |
-                    date:'dd/MM/yyyy'}}</plex-badge>
-
+                <plex-badge
+                    *ngIf="formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1]?.fechaAlta"
+                    size="lg" type="info">
+                    {{ formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fechaAlta |
+                    date:'dd/MM/yyyy' }}
+                </plex-badge>
             </td>
             <td class="column-right my-3">
-                <plex-badge *ngIf="verificarFecha(i) === 'vencida'" type="{{estaVencida(i)?'danger':'info'}}">
-                    {{estaVencida(i)?'Vencida':'Año de gracia'}}
+                <plex-badge *ngIf="estaVencida(i)" type="{{estaVencida(i) && !estaEnAnioGracia(i)?'danger':'info'}}">
+                    {{estaVencida(i) && !estaEnAnioGracia(i)?'Vencida':'Año de gracia'}}
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'vigente'" type="success"> vigente
@@ -40,7 +43,7 @@
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'revalida'"
-                            type="{{formacionPosgrado.papelesVerificados ? 'success' : 'warning' }}">
+                    type="{{formacionPosgrado.papelesVerificados ? 'success' : 'warning' }}">
                     {{formacionPosgrado.papelesVerificados ? 'Papeles verificados' : 'Papeles sin verificar'}}
                 </plex-badge>
 
@@ -51,8 +54,14 @@
                 <plex-badge *ngIf="formacionPosgrado.notas?.length" class='ml-2' type="info" size="md">
                     <plex-icon name="documento" type="info" size="sm"></plex-icon>
                 </plex-badge>
+<<<<<<< HEAD
                 <plex-dropdown *ngIf="profesional.formacionPosgrado[i].matriculado" #drop icon="dots-vertical" size="sm" type="link" [right]="true" [items]="itemsDropdown"
                                (onOpen)="setDropDown(i, drop)">
+=======
+
+                <plex-dropdown #drop icon="dots-vertical" size="sm" type="link" [right]="true" [items]="itemsDropdown"
+                    (onOpen)="setDropDown(i, drop)">
+>>>>>>> 6070343 (Feat(Modif.Front formacionesPosgrado))
                 </plex-dropdown>
 
             </td>

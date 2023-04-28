@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProfesionalService } from '../../services/profesional.service';
 import * as Enums from './../../utils/enumerados';
 import { ProfesionService } from '../../services/profesion.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-guia-profesional',
@@ -14,6 +15,7 @@ export class GuiaProfesionalComponent implements OnInit {
     public profesionales = [];
     public loading = false;
     public mostrarInfo = false;
+    public parametros;
     public busqueda: any = {
         nombre: null,
         apellido: null,
@@ -21,6 +23,7 @@ export class GuiaProfesionalComponent implements OnInit {
         formacionGrado: null,
         numeroMatricula: null
     };
+    public scanned; // true si se llegó a la guia escaneando qr del profesional
     public columns = [
         {
             key: 'profesional',
@@ -61,14 +64,25 @@ export class GuiaProfesionalComponent implements OnInit {
     ];
     constructor(
         private _profesionalService: ProfesionalService,
-        private _profesionService: ProfesionService) { }
+        private _profesionService: ProfesionService,
+        private router: Router) { }
 
     ngOnInit() {
         this.guiaProfesionalEnum = Enums.getObjGuiaProfesional();
+        this.parametros = this.router.parseUrl(this.router.url);
+        if (this.router.parseUrl(this.router.url).queryParams['documento']) {
+            this.busqueda.documento = this.parametros.queryParams['documento'];
+            this.scanned = true;
+            this.filtro = {
+                'id': 0,
+                'nombre': 'Documento'
+            };
+            this.buscar();
+        }
     }
 
     loadProfesiones(event) {
-        this._profesionService.getProfesiones({gestionaColegio : false}).subscribe(event.callback);
+        this._profesionService.getProfesiones({ gestionaColegio: false }).subscribe(event.callback);
     }
 
     buscar() {
@@ -88,7 +102,7 @@ export class GuiaProfesionalComponent implements OnInit {
                         nacionalidad: profesional.nacionalidad,
                         profesion: profesion.profesion.nombre,
                         matricula: profesion.matriculacion[profesion.matriculacion.length -
-              1].matriculaNumero,
+                            1].matriculaNumero,
                         matriculado: profesion.matriculado
                     };
                     this.profesionales.push(datos);

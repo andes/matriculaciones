@@ -1,58 +1,71 @@
 <plex-layout>
-  <plex-layout-main>
-    <plex-title titulo="Consulta de estado">
-      <plex-button *ngIf='filtro' type='success' class="float-right" (click)='buscar()' label='Buscar'
-                   [disabled]="!formNumeracion?.valid">
-      </plex-button>
-    </plex-title>
-    <form #formNumeracion="ngForm">
-      <plex-wrapper>
-        <plex-select label="Seleccione una opción" (change)='limpiaFiltro()' [(ngModel)]="filtro" name="seleccionOpcion"
-                     [data]="guiaProfesionalEnum" [required]="true"></plex-select>
-        <plex-text *ngIf=' filtro && filtro.id === 0' label="Documento" [(ngModel)]="busqueda.documento"
-                   name='documento' placeholder="Ingrese un documento" [required]="true">
-        </plex-text>
-        <plex-select *ngIf=' filtro && filtro.id === 1' label="profesión" [(ngModel)]="busqueda.formacionGrado"
-                     name='formacionGrado' (getData)="loadProfesiones($event)" placeholder="Seleccione una profesión"
-                     [required]="true">
-        </plex-select>
-        <plex-int *ngIf=' filtro && filtro.id === 1' label="Número Matrícula" name='numMatricula'
-                  [(ngModel)]="busqueda.numeroMatricula" placeholder="Ingrese una matrícula" [required]="true">
-        </plex-int>
-        <plex-text *ngIf=' filtro && filtro.id === 2' label="Nombre" [(ngModel)]="busqueda.nombre" name='nombre'>
-        </plex-text>
-        <plex-text *ngIf=' filtro && filtro.id === 2' label="Apellido" name='apellido' [(ngModel)]="busqueda.apellido"
-                   placeholder="Ingrese un apellido" [required]="true">
-        </plex-text>
-        <plex-select *ngIf=' filtro && filtro.id === 2' label="profesión" [(ngModel)]="busqueda.formacionGrado"
-                     name='formacionGrado' (getData)="loadProfesiones($event)" placeholder="Seleccione una profesión"
-                     [required]="true">
-        </plex-select>
-      </plex-wrapper>
-    </form>
-    <plex-loader *ngIf="loading" type="ball-pulse-sync"></plex-loader>
-    <plex-label *ngIf="profesionales.length === 0 && mostrarInfo && !loading" type="warning" size="xl" direction="column"
-                titulo='Sin resultados'
-                subtitulo="No se encontró ningún profesional que coincida con los criterios de búsqueda">
-    </plex-label>
-    <plex-table [columns]="columns" #table="plTable" *ngIf="profesionales.length > 0 && !loading">
-      <plex-title titulo="Listado de profesionales">
-        <plex-table-columns>
-        </plex-table-columns>
-      </plex-title>
-      <tr *ngFor="let profesional of profesionales">
-        <td *plTableCol="'profesional'">
-          <plex-label [titulo]="profesional | profesional" [subtitulo]="profesional.documento"></plex-label>
-        </td>
-        <td *plTableCol="'sexo'">{{profesional.sexo}}</td>
-        <td *plTableCol="'nacionalidad'">{{profesional.nacionalidad}}</td>
-        <td *plTableCol="'profesion'">{{profesional.profesion}}</td>
-        <td *plTableCol="'matricula'">{{profesional.matricula}}</td>
-        <td *plTableCol="'estado'">
-          <plex-badge type="success" *ngIf="profesional.matriculado">ACTIVA</plex-badge>
-          <plex-badge type="danger" *ngIf="!profesional.matriculado">VENCIDA</plex-badge>
-        </td>
-      </tr>
-    </plex-table>
-  </plex-layout-main>
+    <plex-layout-main>
+        <plex-title titulo="Consulta de estado">
+            <plex-button *ngIf='filtro && !scanned' type='success' class="float-right" (click)='buscar()' label='Buscar'
+                         [disabled]="!formNumeracion?.valid">
+            </plex-button>
+        </plex-title>
+        <form #formNumeracion="ngForm">
+            <ng-container *ngIf="!scanned">
+                <plex-wrapper>
+                    <plex-select label="Seleccione una opción" (change)='limpiaFiltro()' [(ngModel)]="filtro"
+                                 name="seleccionOpcion" [data]="guiaProfesionalEnum" [required]="true">
+                    </plex-select>
+                    <plex-text *ngIf='filtro && filtro.id === 0' label="Documento" [(ngModel)]="busqueda.documento"
+                               name='documento' placeholder="Ingrese un documento" [required]="true">
+                    </plex-text>
+                    <plex-select *ngIf=' filtro && filtro.id === 1' label="profesión"
+                                 [(ngModel)]="busqueda.formacionGrado" name='formacionGrado'
+                                 (getData)="loadProfesiones($event)" placeholder="Seleccione una profesión"
+                                 [required]="true">
+                    </plex-select>
+                    <plex-int *ngIf=' filtro && filtro.id === 1' label="Número Matrícula" name='numMatricula'
+                              [(ngModel)]="busqueda.numeroMatricula" placeholder="Ingrese una matrícula"
+                              [required]="true">
+                    </plex-int>
+                    <plex-text *ngIf=' filtro && filtro.id === 2' label="Nombre" [(ngModel)]="busqueda.nombre"
+                               name='nombre'>
+                    </plex-text>
+                    <plex-text *ngIf=' filtro && filtro.id === 2' label="Apellido" name='apellido'
+                               [(ngModel)]="busqueda.apellido" placeholder="Ingrese un apellido" [required]="true">
+                    </plex-text>
+                    <plex-select *ngIf=' filtro && filtro.id === 2' label="profesión"
+                                 [(ngModel)]="busqueda.formacionGrado" name='formacionGrado'
+                                 (getData)="loadProfesiones($event)" placeholder="Seleccione una profesión"
+                                 [required]="true">
+                    </plex-select>
+                </plex-wrapper>
+            </ng-container>
+        </form>
+        <plex-loader *ngIf="loading" type="ball-pulse-sync"></plex-loader>
+        <plex-label *ngIf="profesionales.length === 0 && mostrarInfo && !loading" type="warning" size="xl"
+                    direction="column" titulo='Sin resultados'
+                    subtitulo="No se encontró ningún profesional que coincida con los criterios de búsqueda">
+        </plex-label>
+
+        <plex-list *ngIf="profesionales.length && !loading">
+            <plex-title *ngIf="!scanned" titulo="Listado de profesionales"></plex-title>
+            <plex-heading>
+                <plex-label justify="start">&nbsp;&nbsp;PROFESIONAL</plex-label>
+                <plex-label justify="start">SEXO</plex-label>
+                <plex-label justify="start">NACIONALIDAD</plex-label>
+                <plex-label justify="start">PROFESIÓN</plex-label>
+            </plex-heading>
+
+            <plex-item *ngFor="let profesional of profesionales">
+
+                <plex-label [titulo]="profesional | profesional" [subtitulo]="profesional.documento"></plex-label>
+                <plex-label>{{profesional.sexo}}</plex-label>
+                <plex-label>{{profesional.nacionalidad}}</plex-label>
+                <plex-label>{{profesional.profesion}}</plex-label>
+                <plex-badge type="success" *ngIf="profesional.matriculado">MATRÍCULA N°{{profesional.matricula}}
+                    ACTIVA</plex-badge>
+                <plex-badge type="danger" *ngIf="!profesional.matriculado">MATRÍCULA N°{{profesional.matricula}}
+                    VENCIDA</plex-badge>
+
+            </plex-item>
+            <hr class="bg-white">
+        </plex-list>
+
+    </plex-layout-main>
 </plex-layout>

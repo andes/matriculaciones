@@ -11,7 +11,7 @@
             </ng-container>
             <plex-button *ngIf="!editable && confirmar" type="success" label="Confirmar Datos"
                          (click)="confirmarDatosAdmin()" class="pull-right" justify="end"
-                         [disabled]="formNuevoProf.invalid">
+                         [disabled]="formNuevoProf.invalid || deshabilitarBoton">
             </plex-button>
             <ng-container *ngIf="!editable && !confirmar">
                 <plex-badge class="mr-1" *ngIf="!confirmar" size="sm" type="success">
@@ -22,7 +22,7 @@
                                  (click)="volverProfesional()">
                     </plex-button>
                     <plex-button class="ml-1" *ngIf="!confirmar" type="success" size="md" label="Confirmar"
-                                 (click)="confirmarDatos()" [disabled]="formNuevoProf.invalid">
+                                 (click)="confirmarDatos()" [disabled]="formNuevoProf.invalid || deshabilitarBoton">
                     </plex-button>
                 </div>
                 <div *mobile justify="end">
@@ -30,7 +30,7 @@
                                  (click)="volverProfesional()">
                     </plex-button>
                     <plex-button class="ml-1" *ngIf="!confirmar" type="success" size="sm" label="confirmar"
-                                 (click)="confirmarDatos()" [disabled]="formNuevoProf.invalid">
+                                 (click)="confirmarDatos()" [disabled]="formNuevoProf.invalid || deshabilitarBoton">
                     </plex-button>
                 </div>
             </ng-container>

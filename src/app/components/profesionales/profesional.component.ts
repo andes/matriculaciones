@@ -27,6 +27,7 @@ import * as moment from 'moment';
 })
 export class ProfesionalComponent implements OnInit {
     @ViewChild('formNuevoProf', { static: true }) formProf: NgForm;
+    public deshabilitarBoton = false;
     public formProfesionalComp: FormGroup;
     public sexos: any;
     match = new Matching();
@@ -88,36 +89,36 @@ export class ProfesionalComponent implements OnInit {
             ultimaActualizacion: new Date(),
             activo: true
         },
-                     {
-                         tipo: 'legal',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     },
-                     {
-                         tipo: 'profesional',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     }],
+        {
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: {
+                    'id': '57f3b5c469fe79a598e6281f',
+                    'nombre': 'Argentina'
+                },
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        },
+        {
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: {
+                    'id': '57f3b5c469fe79a598e6281f',
+                    'nombre': 'Argentina'
+                },
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }],
         fotoArchivo: null,
         firmas: null,
         profesionalMatriculado: false,
@@ -246,6 +247,7 @@ export class ProfesionalComponent implements OnInit {
 
     confirmarDatos() {
         // Carga de datos de profesionales matriculados por primera vez (profesional sin loguearse)
+        this.deshabilitarBoton = true;
         if (this.formProf.valid) {
             const matcheo = false;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
@@ -276,6 +278,7 @@ export class ProfesionalComponent implements OnInit {
 
     confirmarDatosAdmin() {
         // Carga/edicion desde un usuario logueado en el sistema
+        this.deshabilitarBoton = true;
         if (this.formProf.valid) {
             this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
             this.profesional.formacionGrado[0].exportadoSisa = false;
@@ -468,6 +471,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     actualizar() {
+        this.deshabilitarBoton = true;
         if (this.formProf.valid) {
 
             this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;

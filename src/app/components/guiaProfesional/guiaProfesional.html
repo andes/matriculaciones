@@ -53,18 +53,15 @@
             </plex-heading>
 
             <plex-item *ngFor="let profesional of profesionales">
-
-                <plex-label *ngIf="profesional.matriculado" [titulo]="profesional | profesional"
-                            [subtitulo]="profesional.documento"></plex-label>
-                <plex-label *ngIf="profesional.matriculado">{{profesional.sexo}}</plex-label>
-                <plex-label *ngIf="profesional.matriculado">{{profesional.nacionalidad}}</plex-label>
-                <plex-label *ngIf="profesional.matriculado">{{profesional.profesion}}</plex-label>
-                <plex-badge type="success" *ngIf="profesional.matriculado && profesional.matriculaVigente">MATRÍCULA
+                <plex-label [titulo]="profesional | profesional" [subtitulo]="profesional.documento"></plex-label>
+                <plex-label>{{profesional.sexo}}</plex-label>
+                <plex-label>{{profesional.nacionalidad}}</plex-label>
+                <plex-label>{{profesional.profesion}}</plex-label>
+                <plex-badge type="success" *ngIf="profesional.matriculado && profesional.matriculaVigente  ">MATRÍCULA
                     N°{{profesional.matricula}}
                     ACTIVA</plex-badge>
-                <plex-badge type="danger" *ngIf="profesional.matriculado && !profesional.matriculaVigente ">MATRÍCULA
-                    N°{{profesional.matricula}}
-                    VENCIDA</plex-badge>
+                <plex-badge type="danger" *ngIf="!profesional.matriculado || !profesional.matriculaVigente  ">MATRÍCULA
+                    INACTIVA</plex-badge>
             </plex-item>
             <hr class="bg-white">
         </plex-list>

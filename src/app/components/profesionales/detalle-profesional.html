@@ -1,6 +1,6 @@
 <plex-layout main="{{ (mostrar || mostrarGrado || showAdd ) ? 8 : 12 }}">
     <plex-layout-main>
-        <ng-container id="wrapper" *ngIf="flag">
+        <ng-container id="wrapper" *ngIf="flag && profesional">
             <plex-title titulo="Edición de datos del matriculado" size="lg">
                 <plex-button type="danger" label="volver" (click)="volver()"></plex-button>
             </plex-title>
@@ -16,19 +16,17 @@
                 <!-- Formación de Grado -->
                 <plex-tab label="Formación de Grado">
                     <app-formacion-grado [profesional]="profesional"
-                                         (formacionGradoSelected)="formacionGradoSelected($event)"
-                                         [tieneFirma]="tieneFirma" [tieneFirmaAdmin]="tieneFirmaAdmin"
-                                         (updateProfesional)="guardarGrado($event)">
+                        (formacionGradoSelected)="formacionGradoSelected($event)" [tieneFirma]="tieneFirma"
+                        [tieneFirmaAdmin]="tieneFirmaAdmin" (updateProfesional)="guardarGrado($event)">
                     </app-formacion-grado>
                 </plex-tab>
                 <!-- Formacion Posgrado -->
                 <plex-tab label="Formación de Posgrado">
                     <div *ngIf=' habilitaPosgrado() !== undefined'>
                         <app-formacion-posgrado [profesional]="profesional"
-                                                (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)"
-                                                (updateProfesional)="updateProfesional($event)"
-                                                (showPosgradoEdit)="mostrarEdicion($event)"
-                                                (showPosgradoAdd)="mostrarAdd($event)" (indice)="obtenerIndice($event)">
+                            (formacionPosgradoSelected)="formacionPosgradoSelected($event,true)"
+                            (updateProfesional)="updateProfesional($event)" (showPosgradoEdit)="mostrarEdicion($event)"
+                            (showPosgradoAdd)="mostrarAdd($event)" (indice)="obtenerIndice($event)">
                         </app-formacion-posgrado>
                     </div>
                     <div *ngIf=' habilitaPosgrado() === undefined'>
@@ -46,15 +44,14 @@
                 <plex-tab label="Foto">
 
                     <app-foto-profesional [profesional]="profesional" (onFileUploaded)="guardarFotoGrid($event)"
-                                          (previewImg)="previewImg($event)"></app-foto-profesional>
+                        (previewImg)="previewImg($event)"></app-foto-profesional>
                 </plex-tab>
 
                 <!-- Firmas -->
                 <plex-tab label="Firmas">
                     <app-firmas-profesional [profesional]="profesional" (onFileUploaded)="guardarFirmaGrid($event)"
-                                            (onFileUploadedFirmaAdmin)="guardarFirmaAdminGrid($event)"
-                                            (tieneFirma)="this.tieneFirma = true"
-                                            (tieneFirmaAdmin)="this.tieneFirmaAdmin = true">
+                        (onFileUploadedFirmaAdmin)="guardarFirmaAdminGrid($event)" (tieneFirma)="this.tieneFirma = true"
+                        (tieneFirmaAdmin)="this.tieneFirmaAdmin = true">
                     </app-firmas-profesional>
                 </plex-tab>
 
@@ -73,34 +70,32 @@
 
             </plex-tabs>
         </ng-container>
-        <app-profesional *ngIf="!flag" [profesional]='profesional' [showOtraEntidadFormadora]='tieneOtraEntidad'
-                         [confirmar]='confirmar' (editado)="this.flag = true" [editable]='editable'></app-profesional>
+        <app-profesional *ngIf="!flag && profesional" [profesional]='profesional'
+            [showOtraEntidadFormadora]='tieneOtraEntidad' [confirmar]='confirmar' (editado)="this.flag = true"
+            [editable]='editable'></app-profesional>
     </plex-layout-main>
 
     <!-- SIDEBAR -->
     <plex-layout-sidebar type="invert">
         <app-formacion-grado-detalle *ngIf="mostrar && flag == true"
-                                     [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]"
-                                     [index]="indexFormacionGradoSelected" [profesional]="profesional"
-                                     (cerrarDetalle)='cerrar(true)' (matriculacion)="matricularProfesional($event)">
+            [formacion]="profesional.formacionGrado[indexFormacionGradoSelected]" [index]="indexFormacionGradoSelected"
+            [profesional]="profesional" (cerrarDetalle)='cerrar(true)' (matriculacion)="matricularProfesional($event)">
         </app-formacion-grado-detalle>
         <app-formacion-posgrado-detalle *ngIf="mostrarGrado && flag && !showEdit"
-                                        [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"
-                                        [index]="indexFormacionPosgradoSelected" [profesional]="profesional"
-                                        [nota]="profesional.formacionPosgrado[indexFormacionPosgradoSelected].notas"
-                                        (matriculacion)="matricularProfesionalEspecialidad($event)"
-                                        (anioDeGraciaOutPut)="anioDeGracia($event)" (cerrarDetalle)='cerrar(false)'
-                                        (editarEspecialidad)="editarEspecialidad($event)"
-                                        (indice)="obtenerIndice($event)">
+            [formacion]="profesional.formacionPosgrado[indexFormacionPosgradoSelected]"
+            [index]="indexFormacionPosgradoSelected" [profesional]="profesional"
+            [nota]="profesional.formacionPosgrado[indexFormacionPosgradoSelected].notas"
+            (matriculacion)="matricularProfesionalEspecialidad($event)" (anioDeGraciaOutPut)="anioDeGracia($event)"
+            (cerrarDetalle)='cerrar(false)' (editarEspecialidad)="editarEspecialidad($event)"
+            (indice)="obtenerIndice($event)">
         </app-formacion-posgrado-detalle>
 
         <app-formacion-posgrado-editar *ngIf="showEdit && !showAdd " [profesional]="profesional"
-                                       (cancelarPosgradoEdit)="cancelarPosgradoEdit($event)" [indice]="indiceObtenido">
+            (cancelarPosgradoEdit)="cancelarPosgradoEdit($event)" [indice]="indiceObtenido">
         </app-formacion-posgrado-editar>
 
         <app-formacion-posgrado-agregar *ngIf="showAdd && !showEdit" (cancelarPosgradoAdd)="cancelarPosgradoAdd($event)"
-                                        [profesional]="profesional"
-                                        (agregarPosgrado)="guardarFormacionPosgrado($event)">
+            [profesional]="profesional" (agregarPosgrado)="guardarFormacionPosgrado($event)">
         </app-formacion-posgrado-agregar>
     </plex-layout-sidebar>
 </plex-layout>

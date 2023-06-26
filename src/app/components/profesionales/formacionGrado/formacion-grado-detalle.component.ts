@@ -142,7 +142,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
             .subscribe(resp => {
                 this.profesional = resp;
             });
-
     }
 
     renovar() {

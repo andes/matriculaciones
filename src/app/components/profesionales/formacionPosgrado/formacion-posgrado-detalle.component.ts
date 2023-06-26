@@ -1,10 +1,11 @@
 
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Plex } from '@andes/plex';
-import { IProfesional } from './../../../interfaces/IProfesional';
+import { IProfesional, IformacionPosgrado, Imatriculacion, Iperiodos } from './../../../interfaces/IProfesional';
 import * as moment from 'moment';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { Auth } from '@andes/auth';
+
 @Component({
     selector: 'app-formacion-posgrado-detalle',
     templateUrl: 'formacion-posgrado-detalle.html',
@@ -12,7 +13,7 @@ import { Auth } from '@andes/auth';
 })
 export class FormacionPosgradoDetalleComponent implements OnInit {
 
-    @Input() formacion: any;
+    @Input() formacion: IformacionPosgrado;
     @Input('index')
     set _index(value) {
         this.index = value;
@@ -20,7 +21,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
     @Input() profesional: IProfesional;
     @Input('nota')
-    set nota(value: any){
+    set nota(value: any) {
         this.notaEditada = value;
     }
     @Output() matriculacion = new EventEmitter();
@@ -32,9 +33,9 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     public esSupervisor;
     public edit = true;
     public matriculaNumero;
-    public inicio;
-    public inicioRevalida;
-    public fin;
+    public fechaAlta: Date;
+    public inicio: Date;
+    public fin: Date;
     public notas = false;
     public _nota = null;
     public notaEditada: any = null;
@@ -43,120 +44,110 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     public showBtnSinVencimiento = false;
     public revalidacion = false;
     public columnasFechas = [];
+    public altaObtencion = false;
     public editarObtencion = false;
+    public altaRevalida = false;
+    public editarRevalida = false;
+    ultMat: number;
+    ultPer: number;
     public pos;
-    public matricula = [
-        {
-            key: 'matriculaNumero',
-            label: 'MATRÍCULA NRO'
-        },
-        {
-            key: 'inicio',
-            label: 'INICIO/FIN'
-        },
-        {}
-    ];
-    public revalida = [
-        {
-            key: 'revalidacionNumero',
-            label: 'NRO.'
-        },
-        {
-            key: 'matriculaNumero',
-            label: 'MAT NRO.'
-        },
-        {
-            key: 'inicio',
-            label: 'INICIO/FIN'
-        },
-        {
-            key: 'estado',
-            label: 'ESTADO'
-        },
-        {}
-    ];
-    constructor(private _profesionalService: ProfesionalService,
-                private plex: Plex, public auth: Auth) {
-    }
+
+    constructor(private _profesionalService: ProfesionalService, private plex: Plex, public auth: Auth) { }
 
     actualizarIndice() {
-        this.matriculaNumero = this.formacion.matriculacion[0].matriculaNumero;
+        const ultMat = this.formacion.matriculacion.length - 1;
+        const ultPer = this.formacion.matriculacion[ultMat].periodos.length - 1;
+        this.matriculaNumero = this.formacion.matriculacion[ultMat].matriculaNumero;
+        this.fechaAlta = this.formacion.matriculacion[ultMat].fechaAlta;
         this.editarObtencion = false;
-        this.inicio = this.formacion.matriculacion[0].inicio;
-        this.inicioRevalida = this.formacion.matriculacion[this.formacion.matriculacion.length-1].inicio;
-        this.fin = this.formacion.matriculacion[0].fin;
+        this.editarRevalida = false;
+        this.inicio = this.formacion.matriculacion[ultMat].periodos[ultPer].inicio;
+        this.fin = this.formacion.matriculacion[ultMat].periodos[ultPer].fin;
     }
 
     ngOnInit() {
-        this.hoy = new Date();
+        this.hoy = moment().toDate();
         this.esSupervisor = this.auth.getPermissions('matriculaciones:supervisor:?').length > 0;
+        this.ultMat = this.formacion.matriculacion.length - 1;
+        this.ultPer = this.formacion.matriculacion[this.ultMat].periodos.length - 1;
         if (moment().diff(moment(this.profesional.fechaNacimiento, 'DD-MM-YYYY'), 'years') >= 65) {
             this.showBtnSinVencimiento = true;
         }
     }
 
-    renovarProfesional(formacion: any) {
-        let texto;
-        if (!formacion.tieneVencimiento || this.estaVencida()) {
-            texto = '¿Desea agregar una nueva reválida?';
-        } else {
-            texto = '¿Desea revalidar antes de la fecha de vencimiento?';
+    revalidarMatricula() {
+
+        const formacion: IformacionPosgrado = this.formacion;
+        let texto: string;
+
+        if (this.puedeRevalidar) {
+            if (this.diasAlVencimiento() <= 120) {
+                texto = '¿Desea revalidar la matrícula?';
+            } else {
+                texto = '¿Desea revalidar antes de la fecha de vencimiento?';
+            }
         }
 
         this.plex.confirm(texto).then((resultado) => {
             if (resultado) {
-                let revNumero = null;
+                let revalidaNumero = null;
+                const fechaFin = moment(this.inicio).startOf('year').add(5, 'years');
                 if (formacion.matriculacion === null) {
-                    revNumero = 0;
+                    revalidaNumero = 0;
                 } else {
-                    if (formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero) {
-                        revNumero = formacion.matriculacion[formacion.matriculacion.length - 1].revalidacionNumero;
+                    if (formacion.matriculacion[this.ultMat].periodos.length) {
+                        revalidaNumero = formacion.matriculacion[this.ultMat].periodos.length;
                     } else {
-                        revNumero = formacion.matriculacion.length;
+                        revalidaNumero = formacion.matriculacion.length;
                     }
                 }
-
-                const matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
-                const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-                const oMatriculacion = {
-                    matriculaNumero: matriculaNumero,
-                    libro: this.formacion.matriculacion[formacion.matriculacion.length - 1].libro,
-                    folio: this.formacion.matriculacion[formacion.matriculacion.length - 1].folio,
-                    inicio: new Date(),
+                const periodo: Iperiodos = {
+                    inicio: this.inicio,
+                    fin: fechaFin.toDate(),
+                    revalida: true,
+                    revalidacionNumero: revalidaNumero,
                     notificacionVencimiento: false,
-                    fin: new Date(new Date().setFullYear(vencimientoAnio)),
-                    revalidacionNumero: revNumero + 1
                 };
+                this.formacion.revalida = true;
+                this.formacion.matriculado = true;
+                this.profesional.formacionPosgrado[this.index].matriculacion[this.ultMat].periodos.push(periodo);
+                this.actualizar();
+            }
+        });
+    }
 
+    renovarMatricula() {
+
+        const formacion: IformacionPosgrado = this.formacion;
+        const texto = '¿Desea renovar la Matrícula?';
+
+        this.plex.confirm(texto).then((resultado) => {
+            if (resultado) {
+                const matriculaNumero = formacion.matriculacion[this.ultMat].matriculaNumero;
+                const fechaFin = moment(this.inicio).startOf('year').add(5, 'years');
+                const periodo: Iperiodos = {
+                    inicio: this.inicio,
+                    fin: fechaFin.toDate(),
+                    revalida: false,
+                    revalidacionNumero: 0,
+                    notificacionVencimiento: false,
+                };
+                const matriculacion: Imatriculacion = {
+                    matriculaNumero: matriculaNumero,
+                    fechaAlta: this.inicio,
+                    baja: { fecha: null, motivo: null },
+                    periodos: [periodo]
+                };
                 this.formacion.revalida = false;
                 this.formacion.matriculado = true;
-                if (this.profesional.formacionPosgrado[this.index].matriculacion === null) {
-                    this.profesional.formacionPosgrado[this.index].matriculacion = [oMatriculacion];
-                } else {
-                    this.profesional.formacionPosgrado[this.index].matriculacion.push(oMatriculacion);
-                }
+                this.profesional.formacionPosgrado[this.index].matriculacion.push(matriculacion);
                 this.actualizar();
             }
         });
     }
 
-    borrarFechaAlta(fechas, i) {
-        this.plex.confirm('¿Desea eliminar la siguiente fecha de alta : <strong>' + moment(fechas[i].fecha).format('DD MMMM YYYY') + '</strong>').then((resultado) => {
-            if (resultado) {
-                fechas.splice(i, 1);
-                this.actualizar();
-            }
-        });
-    }
-
-    papelesVerificados() {
-        this.profesional.supervisor = {
-            id: this.auth.usuario.id,
-            nombreCompleto: this.auth.usuario.nombreCompleto
-        };
-        this.formacion.papelesVerificados = true;
-        this.formacion.matri = true;
-        this.profesional.formacionPosgrado[this.index] = this.formacion;
+    puedeRenovar() {
+        return this.estaVencida() && !this.estaEnAnioGracia();
     }
 
     darDeBaja() {
@@ -165,20 +156,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 this.profesional.formacionPosgrado[this.index].matriculado = false;
                 this.profesional.formacionPosgrado[this.index].papelesVerificados = false;
                 this.actualizar();
-            }
-        });
-    }
-
-    anioDeGracia() {
-        this.plex.confirm('¿Desea otorgarle un año de gracia a este profesional?').then((resultado) => {
-            if (resultado) {
-                this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.setFullYear(this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin.getFullYear() + 1);
-                this.formacion.papelesVerificados = true;
-                this.formacion.revalida = false;
-                this.formacion.matriculado = true;
-                this.profesional.formacionPosgrado[this.index] = this.formacion;
-                this.actualizar();
-                this.anioDeGraciaOutPut.emit(this.formacion.matriculacion);
             }
         });
     }
@@ -198,6 +175,19 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
             'data': this.profesional.formacionPosgrado
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+        this.actualizarVariables();
+    }
+
+    actualizarVariables() {
+        this.ultMat = this.formacion.matriculacion.length - 1;
+        this.ultPer = this.formacion.matriculacion[this.ultMat].periodos.length - 1;
+        this.fechaAlta = this.formacion.matriculacion[this.ultMat].fechaAlta;
+        this.inicio = this.formacion.matriculacion[this.ultMat].periodos[this.ultPer].inicio;
+        this.fin = this.formacion.matriculacion[this.ultMat].periodos[this.ultPer].fin;
+        this.altaObtencion = false;
+        this.altaRevalida = false;
+        this.editarObtencion = false;
+        this.editarRevalida = false;
     }
 
     sinVencimiento() {
@@ -216,8 +206,23 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     estaVencida() {
-        const formacionPosgrado = this.profesional.formacionPosgrado[this.profesional.formacionPosgrado.length - 1];
-        return (moment().diff(moment(formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin, 'DD-MM-YYYY'), 'days') > 365);
+        return (moment().diff(moment(this.fin), 'days') > 0);
+    }
+
+    estaEnAnioGracia() {
+        return this.estaVencida() && (moment().diff(moment(this.fin, 'DD-MM-YYYY'), 'days') < 365);
+    }
+
+    puedeRevalidar() {
+        return (this.estaVencida() && this.estaEnAnioGracia()) || (this.diasAlVencimiento() > 0 && this.diasAlVencimiento() <= 120);
+    }
+
+    diasAlVencimiento() {
+        return moment(this.fin).diff(moment(), 'days');
+    }
+
+    setIndex(index: number) {
+        this.pos = index;
     }
 
     verificarFecha(i) {
@@ -232,8 +237,12 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     if (!formacionPosgrado.tieneVencimiento) {
                         return 'sinVencimiento';
                     } else {
-                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin) {
-                            return 'vencida';
+                        if (this.hoy > this.fin) {
+                            if (this.estaEnAnioGracia()) {
+                                return 'anioDeGracia';
+                            } else {
+                                return 'vencida';
+                            }
                         } else {
                             return 'vigente';
                         }
@@ -243,16 +252,36 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         }
     }
 
-    editarObtencionMatricula() {
+    RevalidarRenovar() {
+        if (this.puedeRevalidar()) {
+            this.altaRevalidar();
+        } else {
+            if (this.puedeRenovar()) {
+                this.altaMatricula();
+            }
+        }
+    }
+
+    altaMatricula() {
+        this.inicio = moment().toDate();
+        this.altaObtencion = true;
+    }
+
+    editarMatricula() {
         this.editarObtencion = true;
     }
 
-    cerrarEditar(tipo) {
-        if(tipo === 'matricula'){
-            this.editarObtencion = !this.editarObtencion;
-        }else{
-            this.revalidacion = !this.revalidacion;
-        }
+    altaRevalidar() {
+        this.inicio = moment().toDate();
+        this.altaRevalida = true;
+    }
+
+    editarRevalidar() {
+        this.editarRevalida = true;
+    }
+
+    obtenerMatricula() {
+        return !this.editarObtencion && !this.editarRevalida && !this.altaRevalida && !this.altaObtencion;
     }
 
     guardar(event, tipo) {
@@ -261,42 +290,57 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 'op': 'updateEstadoPosGrado',
                 'data': this.profesional.formacionPosgrado
             };
-            if(tipo === 'matricula'){
-                this.formacion.matriculacion[0].matriculaNumero = this.matriculaNumero;
-                this.formacion.matriculacion[0].inicio = this.inicio;
-                this.formacion.matriculacion[0].fin = moment(this.inicio).add(5, 'years');;
-            } else{
-                this.formacion.matriculacion[this.formacion.matriculacion.length-1].inicio = this.inicioRevalida;
-                this.formacion.matriculacion[this.formacion.matriculacion.length-1].fin = moment(this.inicioRevalida).add(5, 'years');
+            if (tipo === 'matricula') {
+                this.formacion.matriculacion[this.ultMat].matriculaNumero = this.matriculaNumero;
+                this.formacion.matriculacion[this.ultMat].fechaAlta = this.fechaAlta;
+                this.formacion.matriculacion[this.ultMat].periodos[0].inicio = this.fechaAlta;
+                this.formacion.matriculacion[this.ultMat].periodos[0].fin = moment(this.fechaAlta).startOf('year').add(5, 'years').toDate();
+            } else {
+                this.formacion.matriculacion[this.ultMat].periodos[this.ultPer].inicio = this.inicio;
+                this.formacion.matriculacion[this.ultMat].periodos[this.ultPer].fin = moment(this.inicio).startOf('year').add(5, 'years').toDate();
             }
-            this.formacion.revalida = false;
-            this.formacion.matriculado = true;
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
                 this.plex.toast('success', 'Los datos se han actualizado con éxito!', 'Mensaje de la confirmación', 1000);
             });
-            this.cerrarEditar(tipo);
+            this.actualizarVariables();
         }
     }
 
-    agregarNota(tipo){
+    cerrarAlta(tipo) {
+        if (tipo === 'matricula') {
+            this.altaObtencion = false;
+        } else {
+            this.altaRevalida = false;
+        }
+    }
+
+    cerrarEditar(tipo) {
+        if (tipo === 'matricula') {
+            this.editarObtencion = false;
+        } else {
+            this.editarRevalida = false;
+        }
+    }
+
+    agregarNota(tipo) {
         this.notas = !this.notas;
         this.accion = tipo;
     }
 
-    guardarNota(eliminar = false){
+    guardarNota(eliminar = false) {
         const cambio = {
             'op': 'updateEstadoPosGrado',
             'data': this.profesional.formacionPosgrado
         };
-        if(eliminar === false){
+        if (eliminar === false) {
             this.formacion.notas[0] = this.notaEditada;
         }
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
-            if(this.formacion.notas.length){
+            if (this.formacion.notas.length) {
                 const mensaje = this.accion === 'agregar' ? 'Nota agregada con éxito!' : 'Nota editada con éxito!';
                 this.plex.toast('success', mensaje);
                 this.notas = !this.notas;
-            }else{
+            } else {
                 this.plex.toast('success', 'Nota eliminada con éxito!');
             }
         }, error => {
@@ -308,8 +352,13 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.notaEditada = this.formacion.notas[0];
         this.notas = !this.notas;
     }
-    eliminarNota(){
-        this.formacion.notas.splice(0,1);
-        this.guardarNota(true);
+
+    eliminarNota() {
+        this.plex.confirm('¿Desea eliminar la Nota?').then((resultado) => {
+            if (resultado) {
+                this.formacion.notas.splice(0, 1);
+                this.guardarNota(true);
+            }
+        });
     }
 }

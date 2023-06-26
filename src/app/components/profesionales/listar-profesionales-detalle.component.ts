@@ -6,6 +6,7 @@ import { Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import * as moment from 'moment';
 @Component({
     selector: 'app-listar-profesionales-detalle',
     templateUrl: 'listar-profesionales-detalle.html',
@@ -89,6 +90,8 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
 
     verificarEstado(i) {
         const profesionalPosgrado = this.profesional.formacionPosgrado[i];
+        const ultMat = profesionalPosgrado.matriculacion.length - 1;
+        const ultPer = profesionalPosgrado.matriculacion[ultMat].periodos.length - 1;
         if (profesionalPosgrado.matriculacion?.length) {
             if (!profesionalPosgrado.matriculado) {
                 return 'suspendida';
@@ -99,7 +102,7 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
                     if (profesionalPosgrado.revalida) {
                         return 'verificarPapeles';
                     } else {
-                        if (this.hoy > profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin) {
+                        if (this.hoy > profesionalPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
                             return 'vencida';
                         } else {
                             return 'vigente';
@@ -112,6 +115,23 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
 
     verificarFecha(i) {
         const profesionalPosgrado = this.profesional.formacionPosgrado[i];
-        return ((this.hoy.getTime() - profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+        const ultMat = profesionalPosgrado.matriculacion.length - 1;
+        const ultPer = profesionalPosgrado.matriculacion[ultMat].periodos.length - 1;
+        return ((this.hoy.getTime() - profesionalPosgrado.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) > 365);
     }
+
+    estaVencida(i) {
+        const formacionPosgrado = this.profesional.formacionPosgrado[i];
+        const ultMat = formacionPosgrado.matriculacion.length - 1;
+        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+        return (moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') > 0);
+    }
+
+    estaEnAnioGracia(i) {
+        const formacionPosgrado = this.profesional.formacionPosgrado[i];
+        const ultMat = formacionPosgrado.matriculacion.length - 1;
+        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+        return (this.estaVencida && moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') < 365);
+    }
+
 }

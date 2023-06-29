@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, Params } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { Plex } from '@andes/plex';
 import { FotoGeneralComponent } from './foto-general.component';
@@ -8,7 +8,7 @@ import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
 import { Auth } from '@andes/auth';
-import { catchError } from 'rxjs/operators';
+import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 const jsPDF = require('jspdf');
@@ -29,6 +29,7 @@ export class DetalleProfesionalComponent implements OnInit {
     public vieneDeDetalle = null;
     public confirmar = true;
     public tieneFirma = null;
+    public tieneFirmaAdmin = null;
     public editable = false;
     public showEdit = false;
     public showAdd = false;
@@ -149,37 +150,45 @@ export class DetalleProfesionalComponent implements OnInit {
 
     ngOnInit() {
         this.vieneDeDetalle = true;
-        const parametrosRuta = this.route.params;
-        parametrosRuta.subscribe(params => {
-            if (params && params['id']) {
-                this._profesionalService.getProfesional({ id: params['id'] }).subscribe(profesional => {
-                    if (!profesional.length) {
-                        parametrosRuta
-                            .switchMap((paramsTemporal: Params) =>
-                                this._turnoService.getTurnoSolicitados(paramsTemporal['id']).pipe(catchError(() => of(null)))
-                            ).subscribe(
-                                (profesionalTemporal: any) => {
-                                    this.profesional = profesionalTemporal;
-                                    this.tieneOtraEntidad = (!this.profesional.formacionGrado[0].entidadFormadora.codigo) ? true : false;
-                                    this.habilitaPosgrado();
-                                    this.flag = false;
-                                }
-                            );
-                    } else {
-                        this.profesional = profesional[0];
-                        if (!this.profesional.profesionalMatriculado) {
+        // Este metodo se encarga de buscar, a partir del id del profesional obtenido por parametros de ruteo, un profesional
+        // en la coleccion de profesional. Si dicha coleccion no existe entonces procede a buscarla en la de turnosSolicitado
+        // y de esta forma poder mostrar sus datos en el HTML.
+        this.route.params.pipe(
+            switchMap(params => {
+                if (params && params['id']) {
+                    return this._profesionalService.getProfesional({ id: params['id'] }).pipe(
+                        map(profesional => ({ params, profesional }))
+                    );
+                }
+                return of({ params, profesional: [] });
+            }),
+            switchMap(({ params, profesional }) => {
+                if (!profesional.length) {
+                    return this._turnoService.getTurnoSolicitados(params['id']).pipe(
+                        catchError(() => of(null)),
+                        tap((profesionalTemporal: any) => {
+                            this.profesional = profesionalTemporal;
+                            this.tieneOtraEntidad = !!this.profesional.formacionGrado[0].entidadFormadora.codigo;
+                            this.habilitaPosgrado();
                             this.flag = false;
-                            this._turnoService.getTurnoSolicitados(this.profesional.documento).subscribe((prof) => {
+                        })
+                    );
+                } else {
+                    this.profesional = profesional[0];
+                    if (!this.profesional.profesionalMatriculado) {
+                        return this._turnoService.getTurnoSolicitados(this.profesional.documento).pipe(
+                            tap((prof) => {
                                 this.flag = false;
                                 this.profesional = prof;
-                            });
-                        }
-                        this.flag = true;
-                        this.habilitaPosgrado();
+                            })
+                        );
                     }
-                });
-            }
-        });
+                    this.flag = true;
+                    this.habilitaPosgrado();
+                    return of(null);
+                }
+            })
+        ).subscribe();
     }
 
     updateProfesional(callbackData?: any) {
@@ -191,13 +200,11 @@ export class DetalleProfesionalComponent implements OnInit {
                     callbackData.callback(callbackData.param);
                 }
             });
-
     }
 
     previewImg(img: any) {
         this.img64 = img;
     }
-
 
     guardarFotoGrid(img: any) {
         this.img64 = img;
@@ -215,9 +222,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'firmaP': firma,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesional({ firma: firmaPro }).subscribe(resp => {
-
-        });
+        this._profesionalService.saveProfesional({ firma: firmaPro }).subscribe();
     }
 
     guardarFirmaAdminGrid(oFirma) {
@@ -226,9 +231,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'nombreCompleto': oFirma.nombreCompleto,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
-
-        });
+        this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe();
     }
 
     guardarNotas(textoNotas) {
@@ -237,19 +240,16 @@ export class DetalleProfesionalComponent implements OnInit {
             'data': textoNotas,
             'agente': this.auth.usuario.nombreCompleto
         };
-
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe();
     }
 
     guardarSancion(sancion: any) {
-
         const cambio = {
             'op': 'updateSancion',
             'data': sancion,
             'agente': this.auth.usuario.nombreCompleto
         };
-
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => { });
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe();
     }
 
     guardarFormacionPosgrado(posgrado: any) {
@@ -272,7 +272,6 @@ export class DetalleProfesionalComponent implements OnInit {
             'data': fGrado,
             'agente': this.auth.usuario.nombreCompleto
         };
-
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
             this.profesional = data;
         });
@@ -284,10 +283,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'data': otrosDatos,
             'agente': this.auth.usuario.nombreCompleto
         };
-
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-
-        });
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe();
     }
 
     matricularProfesional(matriculacion: any) {
@@ -316,19 +312,6 @@ export class DetalleProfesionalComponent implements OnInit {
     volver() {
         this.location.back();
     }
-    volverP() {
-        this.router.navigate(['/listarProfesionales']);
-    }
-
-    volverProfesional() {
-        if (this.flag === false && !this.editable) {
-            this.location.back();
-        }
-        if (this.flag === false && this.editable) {
-            this.flag = true;
-        }
-    }
-
 
     formacionGradoSelected(formacion: any) {
         this.mostrar = true;

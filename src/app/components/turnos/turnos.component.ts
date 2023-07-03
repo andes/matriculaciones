@@ -8,12 +8,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 // Services
 import { TurnoService } from './../../services/turno.service';
 import { PDFUtils } from './../../utils/PDFUtils';
+import { PdfService } from '../../services/pdf.service';
 import { Auth } from '@andes/auth';
 import { CambioDniService } from '../../services/cambioDni.service';
 import { ProfesionalService } from '../../services/profesional.service';
 import { ListadoTurnosPdfComponent } from './listado-turnos-pdf.component';
 import { Subject } from 'rxjs/Rx';
-import { catchError } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { of } from 'rxjs';
 
@@ -33,25 +34,30 @@ export class TurnosComponent implements OnInit {
     public showListado: Boolean = true;
     public solicitudesDeCambio;
     public muestraAusente = false;
+    private fechaValida = true;
     public fechaTurno;
+    public fechaDesde;
+    public nombre;
+    public apellido;
+    public documento;
     public horarioTurno;
     public notas;
     offset = 0;
-    limit = 30;
+    limit = 15;
     turnosTotal = null;
-    modalScrollDistance = 2;
-    modalScrollThrottle = 10;
-    public hoy = new Date();
+    private scrollEnd = false;
+    public hoy = moment();
     mySubject = new Subject();
 
     public filtroBuscar = {
         nombre: '',
         apellido: '',
         documento: '',
-        fecha: new Date(),
+        fecha: moment(),
         offset: 0,
-        size: 0,
-        fechaHoy: new Date()
+        size: 15,
+        fechaHoy: moment(),
+        delDia: false
     };
 
     public componentPrint = false;
@@ -82,9 +88,8 @@ export class TurnosComponent implements OnInit {
     ];
     constructor(
         private _turnoService: TurnoService,
-        private _formBuilder: FormBuilder,
         private _pdfUtils: PDFUtils,
-        private route: ActivatedRoute,
+        private pdfService: PdfService,
         private router: Router,
         private _cambioDniService: CambioDniService,
         public auth: Auth,
@@ -96,6 +101,26 @@ export class TurnosComponent implements OnInit {
         this.mySubject
             .debounceTime(1000)
             .subscribe(val => {
+                if (val === 'fecha') {
+                    const fecha = (this.fechaDesde) ? moment(this.fechaDesde).startOf('day') : moment().startOf('day');
+                    if (fecha.isValid()) {
+                        this.filtroBuscar['fecha'] = fecha;
+                        this.fechaValida = true;
+                    } else {
+                        this.fechaValida = false;
+                    }
+                } else {
+                    if (val === 'documento') {
+                        this.filtroBuscar['documento'] = this.documento;
+                    } else if (val === 'apellido') {
+                        this.filtroBuscar['apellido'] = this.apellido;
+                    } else if (val === 'nombre') {
+                        this.filtroBuscar['nombre'] = this.nombre;
+                    }
+
+                }
+                this.filtroBuscar.offset = 0;
+                this.scrollEnd = false;
                 this.buscar();
             });
     }
@@ -114,16 +139,17 @@ export class TurnosComponent implements OnInit {
 
         if (fechaSDesde) {
             if (moment(fechaSHoy.fechaHoy).format('MMM Do YY') === moment(this.hoy).format('MMM Do YY')) {
-                this.filtroBuscar.fecha = new Date(fechaSDesde.fecha);
+                this.filtroBuscar.fecha = moment(fechaSDesde.fecha).startOf('day');
             } else {
-                this.filtroBuscar.fecha = new Date();
+                this.filtroBuscar.fecha = moment().startOf('day');
                 localStorage.removeItem('fechaDesde');
                 localStorage.removeItem('fechaHoy');
             }
         } else {
-            this.filtroBuscar.fecha = new Date();
+            this.filtroBuscar.fecha = moment().startOf('day');
         }
-
+        this.fechaDesde = this.filtroBuscar.fecha;
+        this.filtroBuscar.offset = 0;
         this.buscar();
         this.contadorDeCambiosDni();
     }
@@ -156,33 +182,28 @@ export class TurnosComponent implements OnInit {
     }
 
     buscar(event?: any) {
-
         if (!event) {
             this.turnoElegido = null;
         }
-
-        this.filtroBuscar['offset'] = this.offset;
-        this.filtroBuscar['size'] = this.limit;
-
-        this._turnoService.getTurnosProximos(this.filtroBuscar)
-            .subscribe((resp) => {
-                this.turnos = resp.data;
-                this.turnosDelDia = this.turnos.filter(turno => { return (moment(this.filtroBuscar.fecha).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')); });
+        if (this.filtroBuscar.offset === 0) {
+            this.turnos = [];
+        }
+        if (this.fechaValida) {
+            this._turnoService.getTurnosProximos(this.filtroBuscar).subscribe((resp) => {
                 this.lblTurnos = `Turnos del ${moment(this.filtroBuscar.fecha).format('DD/MM/YYYY')}`;
+                resp.data.forEach(turno => {
+                    this.turnos.push(turno);
+                });
+                this.turnosDelDia = this.turnos.filter(turno => { return (moment(this.filtroBuscar.fecha).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')); });
                 if (event) {
-
                     event.callback(resp);
                 }
-
-                this._turnoService.getTurnosProximos(this.filtroBuscar)
-                    .subscribe((res) => {
-                        this.turnosTotal = res.data.length;
-                        if (event) {
-
-                            event.callback(res);
-                        }
-                    });
+                this.filtroBuscar.offset = this.turnos.length;
+                if (!this.turnos.length || this.turnos.length < this.filtroBuscar.size) {
+                    this.scrollEnd = true;
+                }
             });
+        }
     }
 
     saveFecha() {
@@ -213,11 +234,11 @@ export class TurnosComponent implements OnInit {
         this.turnoElegido = null;
     }
 
-    onModalScrollDown() {
-        this.limit = this.limit + 5;
-        this.buscar();
+    onScroll() {
+        if (!this.scrollEnd) {
+            this.buscar();
+        }
     }
-
 
     contadorDeCambiosDni() {
         let contador = 0;
@@ -231,19 +252,25 @@ export class TurnosComponent implements OnInit {
         });
     }
 
-    imprimir() {
-        const filtrosPdf = {
-            fecha: this.filtroBuscar.fecha,
-            limit: 40
-
+    descargarPDF() {
+        const filtrosTurno = {
+            nombre: this.filtroBuscar.nombre || '',
+            apellido: this.filtroBuscar.apellido || '',
+            documento: this.filtroBuscar.documento || '',
+            fecha: this.filtroBuscar.fecha || null,
+            delDia: true,
+            offset: 0,
+            size: 0
         };
-        this._turnoService.getTurnosProximos(filtrosPdf)
-            .subscribe((resp) => {
-                const totalTurnos = resp.data;
-                const nuevo = totalTurnos.filter(turno => { return (moment(this.filtroBuscar.fecha).format('MMM Do YY') === moment(turno.fecha).format('MMM Do YY')); });
-                this.turnosParaListado = nuevo;
-                this.componentPrint = true;
-            });
+        this._turnoService.getTurnosProximos(filtrosTurno).pipe(
+            switchMap(resp => {
+                const filtrosPDF = {
+                    fecha: this.filtroBuscar.fecha,
+                    turnos: resp.data
+                };
+                return this.pdfService.listadoTurnos(filtrosPDF, 'listadoTurnos');
+            })
+        ).subscribe();
     }
 
     anularTurno() {

@@ -17,4 +17,10 @@ export class PdfService {
             saveAs(nombreArchivo, 'pdf')
         );
     }
+
+    listadoTurnos(params, nombreArchivo: string): Observable<any> {
+        return this.download('listadoTurnos', params).pipe(
+            saveAs(nombreArchivo, 'pdf')
+        );
+    }
 }

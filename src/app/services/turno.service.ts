@@ -51,7 +51,8 @@ export class TurnoService extends BaseService {
             nombre: null,
             apellido: null,
             fecha: null,
-            documento: null
+            documento: null,
+            delDia: false,
         };
 
         if (searchParams.anio) {
@@ -88,6 +89,10 @@ export class TurnoService extends BaseService {
 
         if (searchParams.documento) {
             parametros.documento = searchParams.documento;
+        }
+
+        if(searchParams.delDia){
+            parametros.delDia = searchParams.delDia;
         }
 
         return this._server.get(url, { params: parametros });

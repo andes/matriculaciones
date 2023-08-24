@@ -39,7 +39,8 @@ import { PdfService } from './services/pdf.service';
 import {
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
-    RequisitosMatriculaTecnicaAuxiliarComponent
+    RequisitosMatriculaTecnicaAuxiliarComponent,
+    solicitudBajaMobileComponent
 } from './components/requisitos/requisitos.component';
 import { HomeComponent } from './components/home/home.component';
 import { HomeProfesionalesComponent } from './components/home/homeProfesionales.component';
@@ -145,6 +146,7 @@ import { FiltrosRenovacionComponent } from './components/profesionales/filtros-r
         RequisitosGeneralesComponent,
         RequisitosMatriculaUniversitariaComponent,
         RequisitosMatriculaTecnicaAuxiliarComponent,
+        solicitudBajaMobileComponent,
         AgendaComponent, ConfiguracionAgendaComponent, AgendaFormComponent,
         NuevoTurnoComponent, SolicitarTurnoMatriculacionComponent,
         SolicitarSobreTurnoMatriculacionComponent, SolicitarTurnoRenovacionComponent,

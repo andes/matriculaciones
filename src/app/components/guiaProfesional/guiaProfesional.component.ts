@@ -3,6 +3,7 @@ import { ProfesionalService } from '../../services/profesional.service';
 import * as Enums from './../../utils/enumerados';
 import { ProfesionService } from '../../services/profesion.service';
 import { Router } from '@angular/router';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-guia-profesional',
@@ -101,9 +102,11 @@ export class GuiaProfesionalComponent implements OnInit {
                         documento: profesional.documento,
                         nacionalidad: profesional.nacionalidad,
                         profesion: profesion.profesion.nombre,
-                        matricula: profesion.matriculacion[profesion.matriculacion.length -
-                            1].matriculaNumero,
-                        matriculado: profesion.matriculado
+                        matricula: profesion.matriculacion ? profesion.matriculacion[profesion.matriculacion.length -
+                            1].matriculaNumero : null,
+                        matriculado: profesion.matriculado,
+                        matriculaVigente: profesion.matriculacion ? moment(profesion.matriculacion[profesion.matriculacion.length -
+                            1].fin).isAfter(moment()) : false,
                     };
                     this.profesionales.push(datos);
                 });
@@ -112,6 +115,7 @@ export class GuiaProfesionalComponent implements OnInit {
             this.mostrarInfo = true;
         });
     }
+
 
     limpiaFiltro() {
         this.busqueda = {};

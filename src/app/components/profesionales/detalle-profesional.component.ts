@@ -111,6 +111,7 @@ export class DetalleProfesionalComponent implements OnInit {
             fechaEgreso: null,
             fechaTitulo: null,
             renovacion: false,
+            renovacionOnline: null,
             papelesVerificados: false,
             matriculacion: [{
                 matriculaNumero: null,

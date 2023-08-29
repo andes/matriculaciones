@@ -15,7 +15,8 @@ import { HomeAdministracionComponent } from './components/home/homeAdministracio
 import {
     RequisitosGeneralesComponent,
     RequisitosMatriculaUniversitariaComponent,
-    RequisitosMatriculaTecnicaAuxiliarComponent
+    RequisitosMatriculaTecnicaAuxiliarComponent,
+    solicitudBajaMobileComponent
 } from './components/requisitos/requisitos.component';
 import { AgendaComponent } from './components/turnos/agenda.component';
 import { SolicitarTurnoMatriculacionComponent } from './components/turnos/solicitar-turno-matriculacion.component';
@@ -46,6 +47,7 @@ const appRoutes: Routes = [
     { path: 'requisitosGenerales', component: RequisitosGeneralesComponent },
     { path: 'requisitosMatriculaUniversitaria', component: RequisitosMatriculaUniversitariaComponent },
     { path: 'requisitosMatriculaTecnicaAuxiliar', component: RequisitosMatriculaTecnicaAuxiliarComponent },
+    { path: 'bajaMobile', component: solicitudBajaMobileComponent },
     { path: 'guiaProfesional', component: GuiaProfesionalComponent },
     { path: 'agenda', component: AgendaComponent, canActivate: [RoutingGuard] },
     { path: 'nuevoProfesional', component: ProfesionalComponent, canActivate: [RoutingGuard] },

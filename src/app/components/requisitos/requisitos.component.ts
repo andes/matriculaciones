@@ -53,3 +53,13 @@ export class RequisitosMatriculaTecnicaAuxiliarComponent {
         this.router.navigate(['/solicitarTurnoMatriculacion'], { queryParams: params });
     }
 }
+
+@Component({
+    selector: 'app-solicitud-baja',
+    templateUrl: 'solicitudBajaMobile.html'
+})
+export class solicitudBajaMobileComponent {
+    @HostBinding('class.plex-layout') layout = true; // Permite el uso de flex-box en el componente
+    constructor(private router: Router) { }
+
+}

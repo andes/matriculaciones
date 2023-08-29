@@ -81,6 +81,11 @@ export interface IProfesional {
         fechaEgreso: Date;
         fechaTitulo: Date;
         renovacion: boolean;
+        renovacionOnline?: {
+            estado: String;
+            descripcion: String;
+            fecha: Date;
+        };
         papelesVerificados: boolean;
         matriculacion?: [{
             matriculaNumero: Number;

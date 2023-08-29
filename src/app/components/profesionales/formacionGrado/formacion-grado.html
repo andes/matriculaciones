@@ -62,9 +62,12 @@
                     type="danger"> Matricula <br> suspendida
         </plex-badge>
 
-        <plex-badge *ngIf='formacionGrado.matriculacion.length  && formacionGrado.renovacion'
+        <plex-badge *ngIf="poseeVerificarPapeles(i)"
                     type="{{formacionGrado.papelesVerificados ? 'success' : 'warning' }}">
           {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+        </plex-badge>
+        <plex-badge *ngIf="poseeRechazoRenovacion(i)" type="danger">
+          Renovación rechazada
         </plex-badge>
       </div>
       <div *ngIf="!formacionGrado.matriculacion">
@@ -77,7 +80,7 @@
 <plex-box>
   <div *ngIf='edit  &&  credencial'>
     <div>
-      <div class='row' >
+      <div class='row'>
         <div class="col-3 bool-posicion">
           <plex-bool type="slide" label="¿Es una copia?" (change)='copias = null' [(ngModel)]="copia"
                      name="Medicamento"></plex-bool>

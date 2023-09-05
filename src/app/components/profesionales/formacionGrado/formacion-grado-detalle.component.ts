@@ -4,7 +4,8 @@ import {
     Input,
     Output,
     EventEmitter,
-    OnInit
+    OnInit,
+    ViewChild
 } from '@angular/core';
 // Plex
 import {
@@ -19,6 +20,7 @@ import {
 // Services
 import { ProfesionalService } from './../../../services/profesional.service';
 import { NumeracionMatriculasService } from './../../../services/numeracionMatriculas.service';
+import { PlexPanelComponent } from '@andes/plex/src/lib/accordion/panel.component';
 
 // Utils
 import { PDFUtils } from './../../../utils/PDFUtils';
@@ -36,6 +38,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
     @Input() profesional: IProfesional;
     @Output() matriculacion = new EventEmitter();
     @Output() cerrarDetalle = new EventEmitter();
+    @ViewChild('panelGestion', { static: false }) accordionGestion: PlexPanelComponent;
+    @ViewChild('panelBaja', { static: false }) accordionBaja: PlexPanelComponent;
     public esSupervisor;
     public motivoBaja;
     edit = false;
@@ -47,10 +51,17 @@ export class FormacionGradoDetalleComponent implements OnInit {
     public indexBaja;
     public tieneBajas = false;
     public motivoRechazo;
+    public campoBaja = false;
+    public fechaTemporal = null;
+    public motivoTemporal = null;
+
     constructor(
         private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils, private plex: Plex, public auth: Auth) { }
+        private _pdfUtils: PDFUtils,
+        private plex: Plex,
+        public auth: Auth) { }
+
 
 
 
@@ -190,24 +201,69 @@ export class FormacionGradoDetalleComponent implements OnInit {
     }
 
     editarMatriculacion(index) {
+        this.fechaTemporal = this.formacion.matriculacion[index].inicio;
+        if (this.campoBaja) {
+            this.campoBaja = false;
+        }
+        if (this.edicionBajas) {
+            this.edicionBajas = false;
+        }
         this.edicionGestion = true;
         this.indexGestion = index;
+        this.accordionGestion.active = false;
+        this.accordionBaja ? this.accordionBaja.active = false : null;
+
+
     }
 
     editarBaja(index) {
+        this.motivoTemporal = this.formacion.matriculacion[index].baja.motivo;
+        this.fechaTemporal = this.formacion.matriculacion[index].baja.fecha;
+        if (this.campoBaja) {
+            this.campoBaja = false;
+        }
+        if (this.edicionGestion) {
+            this.edicionGestion = false;
+        }
         this.edicionBajas = true;
         this.indexBaja = index;
+        this.accordionGestion.active = false;
+        this.accordionBaja.active = false;
+
+    }
+
+    mostrarBaja() {
+        this.motivoBaja = '';
+        if (this.edicionBajas) {
+            this.cancelarEdicionBaja();
+        }
+        if (this.edicionGestion) {
+            this.edicionGestion = false;
+        }
+        this.campoBaja = true;
+        this.accordionGestion.active = false;
+        this.accordionBaja ? this.accordionBaja.active = false : null;
+
+
+    }
+    cancelarBaja() {
+        this.campoBaja = false;
+
+
     }
 
     guardarBaja() {
         this.actualizar();
         this.edicionBajas = false;
+        this.plex.toast('success', 'La edición se registró con exito!', 'informacion', 1000);
+
     }
 
     guardarGestion() {
         const vencimientoAnio = (new Date(this.formacion.matriculacion[this.indexGestion].inicio)).getUTCFullYear() + 5;
         this.formacion.matriculacion[this.indexGestion].fin = new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio));
         this.actualizar();
+        this.plex.toast('success', 'La edición se registró con exito!', 'informacion', 1000);
         this.edicionGestion = false;
     }
     guardarRechazo() {
@@ -220,6 +276,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
                         fecha: new Date(),
                     };
                     this.profesional.formacionGrado[this.index] = this.formacion;
+                    this.profesional.formacionGrado[this.index].matriculado = false;
+
                 }
                 this.actualizar();
                 this.plex.toast('success', 'Se rechazo la renovacion de matricula!', 'informacion', 2000);
@@ -229,8 +287,10 @@ export class FormacionGradoDetalleComponent implements OnInit {
     }
 
     cancelarEdicionBaja() {
-        this.edicionBajas = false;
+        this.formacion.matriculacion[this.indexBaja].baja.motivo = this.motivoTemporal;
+        this.formacion.matriculacion[this.indexBaja].baja.fecha = this.fechaTemporal;
         this.indexBaja = null;
+        this.edicionBajas = false;
     }
     cancelarEdicionRechazo() {
         this.edicionRechazo = false;
@@ -238,6 +298,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
     }
 
     cancelarEdicionGestion() {
+        this.formacion.matriculacion[this.indexGestion].inicio = this.fechaTemporal;
         this.edicionGestion = false;
         this.indexGestion = null;
     }
@@ -249,12 +310,12 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 this.profesional.formacionGrado[this.index].papelesVerificados = false;
                 this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.motivo = this.motivoBaja;
                 this.profesional.formacionGrado[this.index].matriculacion[this.profesional.formacionGrado[this.index].matriculacion.length - 1].baja.fecha = new Date();
+                this.formacion = this.profesional.formacionGrado[this.index];
                 this.actualizar();
                 this.compruebaBajas();
             }
         });
-
-
+        this.campoBaja = false;
     }
 
     renovarAntesVencimiento() {

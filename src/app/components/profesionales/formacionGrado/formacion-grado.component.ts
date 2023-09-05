@@ -135,6 +135,9 @@ export class FormacionGradoComponent implements OnInit {
                 }
             });
     }
+    loadProfesiones(event) {
+        this._profesionService.getProfesiones({ gestionaColegio: false }).pipe(catchError(() => of(null))).subscribe(event.callback);
+    }
 
     generarCertificadoEtica(i) {
         const grado = this.profesional.formacionGrado[i];
@@ -156,7 +159,7 @@ export class FormacionGradoComponent implements OnInit {
             const hoy = new Date();
             const posgrados = [];
             this.profesional.formacionPosgrado.forEach(formacion => {
-                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida && (hoy <= formacion.matriculacion[formacion.matriculacion.length - 1].fin || ((hoy.getTime() - formacion.matriculacion[formacion.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) < 365) || !formacion.tieneVencimiento)) {
+                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida && (hoy <= formacion.matriculacion[formacion.matriculacion.length - 1].fin || ((hoy.getTime() - formacion.matriculacion[formacion.matriculacion.length - 1].fin?.getTime()) / (1000 * 3600 * 24) < 365) || !formacion.tieneVencimiento)) {
                     posgrados.push({
                         titulo: formacion.especialidad.nombre,
                         matriculaNumero: formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero,
@@ -257,7 +260,7 @@ export class FormacionGradoComponent implements OnInit {
     }
     verificarFecha(index) {
         const formacionGrado = this.profesional.formacionGrado[index];
-        return ((this.hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365);
+        return ((this.hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin?.getTime()) / (1000 * 3600 * 24) > 365);
     }
     poseeVerificarPapeles(index) {
         const formacionGrado = this.profesional.formacionGrado[index];

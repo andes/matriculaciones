@@ -49,7 +49,8 @@
   </div>
 </div>
 <plex-detail>
-  <plex-badge type="success">Ultima matrícula
+  <plex-badge *ngIf='!formacion.matriculacion?.length' type="info">No Matriculado</plex-badge>
+  <plex-badge *ngIf='formacion.matriculacion?.length' type="success">Última matrícula
     <strong>{{ formacion.matriculacion[formacion.matriculacion?.length - 1].matriculaNumero }}</strong></plex-badge>
   <plex-icon name="medico" left size="xl" type="info"></plex-icon>
   <plex-label titulo="Título" subtitulo="{{profesional.documento}}"></plex-label>

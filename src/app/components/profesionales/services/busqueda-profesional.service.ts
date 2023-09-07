@@ -37,9 +37,11 @@ export class BusquedaProfesionalService {
             this.numeroMatriculaGrado,
             this.numeroMatriculaEspecialidad,
             this.lastResults,
-            this.renovacionSelected
+            this.renovacionSelected,
+            this.fechaDesde,
+            this.fechaHasta
         ).debounceTime(400).pipe(
-            switchMap(([documento, apellido, nombre, profesion, numeroMatriculaGrado, numeroMatriculaEspecialidad, lastResults, renovacionSelected]) => {
+            switchMap(([documento, apellido, nombre, profesion, numeroMatriculaGrado, numeroMatriculaEspecialidad, lastResults, renovacionSelected, fechaDesde, fechaHasta]) => {
                 if (!lastResults) {
                     this.skip = 0;
                 }
@@ -80,7 +82,14 @@ export class BusquedaProfesionalService {
                     params.numeroMatriculaEspecialidad = numeroMatriculaEspecialidad;
                     filtros = true;
                 }
-
+                if (fechaDesde) {
+                    params.fechaDesde = fechaDesde;
+                    filtros = true;
+                }
+                if (fechaHasta) {
+                    params.fechaHasta = fechaHasta;
+                    filtros = true;
+                }
                 params.bajaMatricula = false;
                 params.matriculacion = true;
 

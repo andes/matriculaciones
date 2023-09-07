@@ -67,7 +67,6 @@ export class ListarProfesionalesComponent implements OnInit {
         private breakpointObserver: BreakpointObserver
     ) { }
 
-
     ngOnInit() {
         this.listadoActual = [];
         this.profesionalService.getEstadisticas().subscribe((data) => {
@@ -83,13 +82,12 @@ export class ListarProfesionalesComponent implements OnInit {
         this.permisos.verProfesional = this.auth.check('matriculaciones:profesionales:getProfesional');
         this.permisos.supervisor = this.auth.check('matriculaciones:supervisor:?');
         this.permisos.crearProfesional = this.auth.check('matriculaciones:profesionales:postProfesional');
-
-
     }
 
     isMobile() {
         return this.breakpointObserver.isMatched('(max-width: 599px)');
     }
+
     changeFiltroRenovacionValue() {
         this.busquedaProfesionalService.filtroRenovacionActivo.next(this.filtrosRenovacion);
         this.getListado();

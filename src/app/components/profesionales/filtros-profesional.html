@@ -15,10 +15,18 @@
         <plex-int (change)="filtrar()" label="N° Matrícula grado" [(ngModel)]="filtro.numeroMatriculaGrado"
                   name="numeroMatriculaGrado" placeholder="Ingrese N° de matrícula">
         </plex-int>
-        <plex-grid cols="2" size="lg" class="mt-0">
+        <plex-grid cols="3" size="lg" class="mt-0">
             <plex-select (change)="filtrar()" label="Renovación Online" [(ngModel)]="filtro.renovacionOnline"
                          name="renovacionOnline" [data]="renovacionOnline">
             </plex-select>
+            <plex-datetime *ngIf="filtro.renovacionOnline && filtro.renovacionOnline.id !== 'No Aplica'"
+                           (change)="filtrar()" label="Renovación desde" name="fechaDesde" type="date"
+                           [(ngModel)]="filtro.fechaDesde" [max]="finDelDia" placeholder="{{ inicioDelDia | fecha }}">
+            </plex-datetime>
+            <plex-datetime *ngIf="filtro.renovacionOnline && filtro.renovacionOnline.id !== 'No Aplica'"
+                           (change)="filtrar()" label="Renovación hasta" name="fechaHasta" type="date"
+                           [(ngModel)]="filtro.fechaHasta" [max]="finDelDia" placeholder="{{ finDelDia | fecha }}">
+            </plex-datetime>
         </plex-grid>
     </plex-wrapper>
 </form>

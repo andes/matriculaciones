@@ -29,6 +29,10 @@ export class ProfesionalService extends BaseService {
         return this.server.post(this.profesionalesURL, profesionalModel);
     }
 
+    updateProfesional(id: String, cambios): Observable<any> {
+        return this.server.patch(this.profesionalesURL + 'update/' + id, cambios);
+    }
+
     enviarMail(profesionalModel: any) {
         return this.server.post(this.profesionalesURL + 'sendMail', profesionalModel);
     }

@@ -370,7 +370,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     loadLocalidadesLegal(provincia, completando?) {
-        if (provincia && provincia.id) {
+        if (provincia?.id) {
             this._localidadService.getXProvincia(provincia.id).subscribe(result => {
                 this.localidadesLegal = result;
                 if (completando) {
@@ -383,7 +383,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     loadLocalidadesReal(provincia) {
-        if (provincia && provincia.id) {
+        if (provincia?.id) {
             this._localidadService.getXProvincia(provincia.id).subscribe(result => {
                 this.localidadesReal = result;
                 this.profesional.domicilios[0].ubicacion.localidad = null;
@@ -398,7 +398,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     loadLocalidadesProfesional(provincia, completando?) {
-        if (provincia && provincia.id) {
+        if (provincia?.id) {
             this._localidadService.getXProvincia(provincia.id).subscribe(result => {
                 this.localidadesProfesional = result;
                 if (completando) {

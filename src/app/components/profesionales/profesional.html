@@ -101,13 +101,14 @@
                                         </plex-phone>
                                     </ng-container>
                                     <ng-container class="w-100" *ngIf="_unContacto.tipo && !_unContacto.tipo.id">
-                                        <plex-text *ngIf="_unContacto.tipo !== 'celular'" label="Dato:"
-                                                   [(ngModel)]="_unContacto.valor" name="valor-{{i}}"
+                                        <plex-text *ngIf="_unContacto.tipo !== 'celular' && _unContacto.tipo !== 'fijo'"
+                                                   label="Dato:" [(ngModel)]="_unContacto.valor" name="valor-{{i}}"
                                                    [required]="!noPoseeContacto && (i <= 0)"
                                                    [pattern]="patronContactoAlfabetico">
                                         </plex-text>
 
-                                        <plex-phone label="Número:" *ngIf="_unContacto.tipo === 'celular'"
+                                        <plex-phone label="Número:"
+                                                    *ngIf="_unContacto.tipo === 'celular' || _unContacto.tipo === 'fijo' "
                                                     [(ngModel)]="_unContacto.valor" placeholder="Ej: 2990000000"
                                                     [required]="!noPoseeContacto && (i <= 0)" name="valor-{{i}}"
                                                     [pattern]="patronContactoNumerico">

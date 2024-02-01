@@ -82,7 +82,6 @@ export class BusquedaProfesionalService {
                 }
 
                 params.bajaMatricula = false;
-                params.habilitado = false;
                 params.matriculacion = true;
 
                 if (filtros) {

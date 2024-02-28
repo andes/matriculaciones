@@ -39,7 +39,7 @@
             </plex-title>
 
             <ng-container *ngIf="(listado$ | async)?.length">
-                <plex-table [columns]="columns" #table="plTable" [offset]="180" (scroll)="onScroll()">
+                <plex-table [columns]="columns" #table="plTable" [offset]="255" (scroll)="onScroll()">
                     <plex-table-columns>
                     </plex-table-columns>
                     <tr *ngFor="let profesional of (listado$ | async); let indiceProfesional = index"

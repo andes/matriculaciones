@@ -115,10 +115,11 @@ export class DocumentoProfesionalComponent implements OnInit {
                 archivo: archivos
             };
             const cambio = {
+                'idProfesional': this.profesional.id,
                 'op': 'updateDocumentos',
                 'data': doc
             };
-            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+            this._profesionalService.updateProfesional(cambio.idProfesional, { documentos: cambio }).subscribe((data) => {
                 this.profesional = data;
                 this.plex.toast('success', 'Se adjuntó correctamente', 'Información', 1000);
                 this.cargarArreglos();

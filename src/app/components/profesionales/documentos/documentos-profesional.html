@@ -71,7 +71,7 @@
     </div>
 
     <plex-title titulo="Comprobantes de pago" size="sm"></plex-title>
-    <plex-label *ngIf="!comprobante.length">No se cargó ningún comprobante de pago</plex-label>
+    <plex-label *ngIf="!comprobante?.length">No se cargó ningún comprobante de pago</plex-label>
     <div *ngFor="let doc of comprobante; let i=index">
         <plex-list>
             <plex-item>

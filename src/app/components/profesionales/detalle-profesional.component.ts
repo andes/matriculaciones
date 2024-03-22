@@ -214,8 +214,7 @@ export class DetalleProfesionalComponent implements OnInit {
             'idProfesional': this.profesional.id
         };
         this.showFoto.emit(this.img64);
-        this._profesionalService.saveProfesional({ imagen: imagenPro }).subscribe(resp => {
-        });
+        this._profesionalService.updateProfesional(imagenPro.idProfesional, { imagen: imagenPro }).subscribe();
     }
 
     guardarFirmaGrid(firma) {
@@ -223,16 +222,16 @@ export class DetalleProfesionalComponent implements OnInit {
             'firmaP': firma,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesional({ firma: firmaPro }).subscribe();
+        this._profesionalService.updateProfesional(firmaPro.idProfesional, { firma: firmaPro }).subscribe();
     }
 
     guardarFirmaAdminGrid(oFirma) {
-        const firmaADmin = {
+        const firmaAdmin = {
             'firma': oFirma.firma,
             'nombreCompleto': oFirma.nombreCompleto,
             'idProfesional': this.profesional.id
         };
-        this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe();
+        this._profesionalService.updateProfesional(firmaAdmin.idProfesional, { firmaAdmin: firmaAdmin }).subscribe();
     }
 
     guardarNotas(textoNotas) {

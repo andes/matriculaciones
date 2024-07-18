@@ -49,7 +49,11 @@ export class FirmasProfesionalComponent implements OnInit {
     public firmaAdmin = null;
     loading;
 
-    constructor(private ng2ImgMax: Ng2ImgMaxService, public sanitizer: DomSanitizer, private plex: Plex, private _profesionalService: ProfesionalService) {
+    constructor(
+        private ng2ImgMax: Ng2ImgMaxService,
+        public sanitizer: DomSanitizer,
+        private plex: Plex,
+        private _profesionalService: ProfesionalService) {
     }
 
     ngOnInit() {

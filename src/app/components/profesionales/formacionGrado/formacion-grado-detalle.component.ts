@@ -7,6 +7,9 @@ import {
     OnInit,
     ViewChild
 } from '@angular/core';
+import { catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 // Plex
 import {
     Plex
@@ -55,21 +58,46 @@ export class FormacionGradoDetalleComponent implements OnInit {
     public fechaTemporal = null;
     public motivoTemporal = null;
     public revalidando = false;
+    public urlFirma = null;
+    public foto = null;
+    public tieneFoto = false;
+    public matriculaEdit = null;
+    public firmaSave = null;
+    public fotoSave = null;
 
     constructor(
         private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
         private _pdfUtils: PDFUtils,
+        public sanitizer: DomSanitizer,
         private plex: Plex,
         public auth: Auth) { }
-
-
-
 
     ngOnInit() {
         this.hoy = new Date();
         this.compruebaBajas();
-        this.esSupervisor = this.auth.check('matriculaciones:supervisor:aprobar');
+        this.esSupervisor = this.auth?.check('matriculaciones:supervisor:aprobar');
+        if (this.formacion.matriculacion && this.formacion.renovacionOnline?.estado !== 'rechazada') {
+
+            this._profesionalService.getProfesionalFirma({ id: this.profesional.id, matricula: this.formacion.matriculacion[this.formacion.matriculacion?.length - 1].matriculaNumero }).pipe(catchError(() => of(null))).subscribe(resp => {
+                const base64Data = 'data:image/jpeg;base64,' + resp;
+                this.urlFirma = resp.length ? this.sanitizer.bypassSecurityTrustResourceUrl(base64Data) : null;
+                this.firmaSave = base64Data.replace(/^data:image\/[a-z]+;base64,/, '');
+            });
+
+            this._profesionalService.getProfesionalFoto({
+                id: this.profesional.id,
+                matricula: this.formacion.matriculacion[this.formacion.matriculacion?.length - 1].matriculaNumero
+            })
+                .pipe(catchError(() => of(null))).subscribe(resp => {
+                    if (resp) {
+                        const base64Data = 'data:image/jpeg;base64,' + resp;
+                        this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);
+                        this.fotoSave = base64Data.replace(/^data:image\/[a-z]+;base64,/, '');
+                        this.tieneFoto = true;
+                    }
+                });
+        }
     }
 
     cerrar() {
@@ -137,7 +165,9 @@ export class FormacionGradoDetalleComponent implements OnInit {
                                     } else {
                                         this.profesional.formacionGrado[this.index].matriculacion.push(oMatriculacion);
                                     }
+                                    this.matriculaEdit = matriculaNumero;
                                     this.actualizar();
+
                                     this.plex.toast('success', 'Se aprobó con exito la renovacion!', 'informacion', 2000);
                                 }, () => {
                                     this.plex.toast('danger', 'Se rechazó la renovacion de matrícula!', 'informacion', 2000);
@@ -179,13 +209,14 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.edicionRechazo = true;
     }
     opcionRechazarRenovacion() {
-        const op = (this.formacion.matriculacion && this.formacion.matriculado && !this.formacion.papelesVerificados && this.formacion.renovacionOnline
-            && this.formacion.renovacionOnline.estado === 'pendiente');
+        const op = (this.formacion.matriculacion && !this.formacion.papelesVerificados
+            && this.formacion.renovacionOnline?.estado === 'pendiente');
         return (op);
     }
 
     opcionPapelesVerificados() {
-        const op = (this.formacion.matriculacion && !this.formacion.papelesVerificados && this.formacion.renovacion === true);
+        const op = (this.formacion.matriculacion && !this.formacion.papelesVerificados
+            && this.formacion.renovacion === true && this.formacion.renovacionOnline?.estado !== 'rechazada');
         return op;
 
     }
@@ -279,8 +310,11 @@ export class FormacionGradoDetalleComponent implements OnInit {
                     };
                     this.profesional.formacionGrado[this.index] = this.formacion;
                     this.profesional.formacionGrado[this.index].matriculado = false;
-
+                    this.firmaSave = null;
+                    this.fotoSave = null;
+                    this.matriculaEdit = this.formacion.matriculacion[this.formacion.matriculacion?.length - 1].matriculaNumero;
                 }
+
                 this.actualizar();
                 this.plex.toast('success', 'Se rechazo la renovacion de matricula!', 'informacion', 2000);
                 this.edicionRechazo = false;
@@ -333,11 +367,16 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
     actualizar() {
         const cambio = {
+            'idProfesional': this.profesional.id,
             'op': 'updateEstadoGrado',
             'data': this.profesional.formacionGrado,
-            'agente': this.auth.usuario.nombreCompleto
+            'agente': this.auth.usuario.nombreCompleto,
+            'matricula': this.matriculaEdit,
+            'firmaP': this.firmaSave,
+            'img': this.fotoSave
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
+
             this.profesional = data;
         });
 
@@ -356,7 +395,5 @@ export class FormacionGradoDetalleComponent implements OnInit {
             }
         }
     }
-
-
 
 }

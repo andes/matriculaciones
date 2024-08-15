@@ -93,14 +93,19 @@ export class GuiaProfesionalComponent implements OnInit {
             this.busqueda['codigoProfesion'] = this.busqueda.formacionGrado.codigo;
         }
         this._profesionalService.getGuiaProfesional(this.busqueda).subscribe(resultado => {
-            resultado.forEach(profesional => {
-                profesional.profesiones.forEach(profesion => {
+            resultado.forEach(profesionalBD => {
+                const profesional = {
+                    nombre: profesionalBD.nombre,
+                    apellido: profesionalBD.apellido,
+                    sexo: profesionalBD.sexo,
+                    documento: profesionalBD.documento,
+                    nacionalidad: profesionalBD.nacionalidad,
+                    habilitado: profesionalBD.habilitado,
+                    profesiones: []
+
+                };
+                profesionalBD.profesiones.forEach(profesion => {
                     const datos = {
-                        nombre: profesional.nombre,
-                        apellido: profesional.apellido,
-                        sexo: profesional.sexo,
-                        documento: profesional.documento,
-                        nacionalidad: profesional.nacionalidad,
                         profesion: profesion.profesion.nombre,
                         matricula: profesion.matriculacion ? profesion.matriculacion[profesion.matriculacion.length -
                             1].matriculaNumero : null,
@@ -108,8 +113,9 @@ export class GuiaProfesionalComponent implements OnInit {
                         matriculaVigente: profesion.matriculacion ? moment(profesion.matriculacion[profesion.matriculacion.length -
                             1].fin).isAfter(moment()) : false,
                     };
-                    this.profesionales.push(datos);
+                    profesional.profesiones.push(datos);
                 });
+                profesional.profesiones.length ? this.profesionales.push(profesional) : null;
             });
             this.loading = false;
             this.mostrarInfo = true;
@@ -119,6 +125,7 @@ export class GuiaProfesionalComponent implements OnInit {
 
     limpiaFiltro() {
         this.busqueda = {};
+        this.profesionales = [];
     }
 
 }

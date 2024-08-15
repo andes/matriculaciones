@@ -43,28 +43,86 @@
                     subtitulo="No se encontró ningún profesional que coincida con los criterios de búsqueda">
         </plex-label>
 
-        <plex-list *ngIf="profesionales.length && !loading">
-            <plex-title *ngIf="!scanned" titulo="Listado de profesionales"></plex-title>
-            <plex-heading>
-                <plex-label justify="start">&nbsp;&nbsp;PROFESIONAL</plex-label>
-                <plex-label justify="start">SEXO</plex-label>
-                <plex-label justify="start">NACIONALIDAD</plex-label>
-                <plex-label justify="start">PROFESIÓN</plex-label>
-            </plex-heading>
+        <plex-accordion *ngFor="let profesional of profesionales  ">
+            <plex-panel *mobile="false">
+                <div plex-accordion-title justify>
+                    <section class="w-50">
+                        <plex-label size="lg" case="capitalize"
+                                    titulo="{{ profesional.nombre }},{{profesional.apellido}}"
+                                    subtitulo="{{ profesional.documento }}" icon="medico">
+                        </plex-label>
+                    </section>
+                    <plex-badge type="danger" *ngIf="!profesional.habilitado">
+                        Profesional no habilitado</plex-badge>
+                </div>
+                <plex-grid size="xs" cols="4">
+                    <plex-card *ngFor="let profesion of profesional.profesiones" [selectable]="true"
+                               type="{{( profesion.matriculado && profesion.matriculaVigente) ? 'success' : 'danger'}}"
+                               size="xs">
+                        <plex-badge type="success"
+                                    *ngIf="profesion.matriculado && profesion.matriculaVigente  ">MATRÍCULA
+                            N°{{profesion.matricula}}
+                            ACTIVA</plex-badge>
+                        <plex-badge type="danger"
+                                    *ngIf="!profesion.matriculado || !profesion.matriculaVigente  ">MATRÍCULA
+                            N°{{profesion.matricula}} INACTIVA</plex-badge>
+                        <div class="mb-3">
+                            <plex-label icon="medico" justify="center" direction="column"
+                                        titulo="{{ profesional.nombre }},{{profesional.apellido}}"
+                                        subtitulo="{{ profesional.documento }}" size="lg"></plex-label>
+                            <plex-label justify="center" direction="column" titulo="Profesión"
+                                        subtitulo="{{ profesion.profesion }}" size="lg"></plex-label>
+                            <plex-label justify="center" direction="column" titulo="Sexo"
+                                        subtitulo="{{ profesional.sexo }}" size="lg"></plex-label>
+                            <plex-label justify="center" direction="column" titulo="Nacionalidad"
+                                        subtitulo="{{ profesional.nacionalidad }}" size="lg"></plex-label>
+                        </div>
+                    </plex-card>
+                    <plex-label *ngIf="!profesional.profesiones.length" type="warning" size="xl" justify="center"
+                                titulo='Sin resultados'
+                                subtitulo="No se encontró ningúna profesion de grado matriculada">
+                    </plex-label>
+                </plex-grid>
+            </plex-panel>
+            <plex-panel *mobile>
+                <div plex-accordion-title justify>
+                    <section class=" w-50">
+                        <plex-label size="lg" case="capitalize"
+                                    titulo="{{ profesional.nombre }},{{profesional.apellido}}"
+                                    subtitulo="{{ profesional.documento }}" icon="medico">
+                        </plex-label>
+                        <plex-badge type="danger" *ngIf="!profesional.habilitado">
+                            Profesional no habilitado</plex-badge>
+                    </section>
 
-            <plex-item *ngFor="let profesional of profesionales">
-                <plex-label [titulo]="profesional | profesional" [subtitulo]="profesional.documento"></plex-label>
-                <plex-label>{{profesional.sexo}}</plex-label>
-                <plex-label>{{profesional.nacionalidad}}</plex-label>
-                <plex-label>{{profesional.profesion}}</plex-label>
-                <plex-badge type="success" *ngIf="profesional.matriculado && profesional.matriculaVigente  ">MATRÍCULA
-                    N°{{profesional.matricula}}
-                    ACTIVA</plex-badge>
-                <plex-badge type="danger" *ngIf="!profesional.matriculado || !profesional.matriculaVigente  ">MATRÍCULA
-                    INACTIVA</plex-badge>
-            </plex-item>
-            <hr class="bg-white">
-        </plex-list>
+                </div>
+                <plex-list size="md" cols="3">
+                    <plex-card *ngFor="let profesion of profesional.profesiones" [selectable]="true"
+                               type="{{( profesion.matriculado && profesion.matriculaVigente) ? 'success' : 'danger'}}">
+                        <plex-badge type="success"
+                                    *ngIf="profesion.matriculado && profesion.matriculaVigente  ">MATRÍCULA
+                            N°{{profesion.matricula}}
+                            ACTIVA</plex-badge>
+                        <plex-badge type="danger"
+                                    *ngIf="!profesion.matriculado || !profesion.matriculaVigente  ">MATRÍCULA
+                            N°{{profesion.matricula}} INACTIVA</plex-badge>
+                        <div class="mb-3">
+                            <plex-label icon="medico" justify="center" direction="column"
+                                        titulo="{{ profesional.nombre }},{{profesion.apellido}}"
+                                        subtitulo="{{ profesional.documento }}" size="lg"></plex-label>
+                            <plex-label justify="center" direction="column" titulo="Profesión"
+                                        subtitulo="{{ profesion.profesion }}" size="lg"></plex-label>
+                            <plex-label justify="center" direction="column" titulo="Sexo"
+                                        subtitulo="{{ profesional.sexo }}" size="lg"></plex-label>
+                            <plex-label justify="center" direction="column" titulo="Nacionalidad"
+                                        subtitulo="{{ profesional.nacionalidad }}" size="lg"></plex-label>
+                        </div>
+                    </plex-card>
+                </plex-list>
+            </plex-panel>
+        </plex-accordion>
+
+
 
     </plex-layout-main>
 </plex-layout>

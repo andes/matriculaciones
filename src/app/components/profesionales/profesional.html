@@ -220,41 +220,23 @@
                                        [required]="true"></plex-datetime>
 
                         <div *ngIf='!confirmar'>
-                            <plex-select *ngIf="!showOtraEntidadFormadora" label="Entidad formadora"
+                            <plex-select label="Entidad formadora"
                                          [(ngModel)]="profesional.formacionGrado[0].entidadFormadora"
                                          name='entidadFormadora'
                                          (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)"
                                          (getData)="loadEntidadesFormadoras($event)" [required]="true">
                             </plex-select>
-                            <plex-text *ngIf="showOtraEntidadFormadora" name='otraEntidad'
-                                       label="Otra Entidad Formadora"
-                                       [(ngModel)]="profesional.formacionGrado[0].entidadFormadora.nombre"
-                                       [required]="true">
-                            </plex-text>
                         </div>
                         <div *ngIf='confirmar'>
-                            <plex-select *ngIf="!showOtraEntidadFormadora" label="Entidad formadora"
+                            <plex-select label="Entidad formadora"
                                          [(ngModel)]="profesional.formacionGrado[0].entidadFormadora"
                                          name='entidadFormadora'
                                          (change)="showOtra(profesional.formacionGrado[0].entidadFormadora)"
                                          (getData)="loadEntidadesFormadoras($event)" [required]="true">
                             </plex-select>
-                            <plex-text *ngIf="showOtraEntidadFormadora" name='otraEntidad'
-                                       label="Otra Entidad Formadora"
-                                       [(ngModel)]="profesional.formacionGrado[0].entidadFormadora.nombre"
-                                       [required]="true">
-                            </plex-text>
+
                         </div>
-                        <div *mobile="false" class="centrarBool">
-                            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora"
-                                       (change)='otraEntidad(profesional.formacionGrado[0])' name="otra">
-                            </plex-bool>
-                        </div>
-                        <div *mobile>
-                            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora"
-                                       (change)='otraEntidad(profesional.formacionGrado[0])' name="otra">
-                            </plex-bool>
-                        </div>
+
                     </plex-grid>
                 </plex-tab>
             </plex-tabs>

@@ -89,36 +89,36 @@ export class ProfesionalComponent implements OnInit {
             ultimaActualizacion: new Date(),
             activo: true
         },
-        {
-            tipo: 'legal',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: {
-                    'id': '57f3b5c469fe79a598e6281f',
-                    'nombre': 'Argentina'
-                },
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        },
-        {
-            tipo: 'profesional',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: {
-                    'id': '57f3b5c469fe79a598e6281f',
-                    'nombre': 'Argentina'
-                },
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }],
+                     {
+                         tipo: 'legal',
+                         valor: null,
+                         codigoPostal: null,
+                         ubicacion: {
+                             localidad: null,
+                             provincia: null,
+                             pais: {
+                                 'id': '57f3b5c469fe79a598e6281f',
+                                 'nombre': 'Argentina'
+                             },
+                         },
+                         ultimaActualizacion: new Date(),
+                         activo: true
+                     },
+                     {
+                         tipo: 'profesional',
+                         valor: null,
+                         codigoPostal: null,
+                         ubicacion: {
+                             localidad: null,
+                             provincia: null,
+                             pais: {
+                                 'id': '57f3b5c469fe79a598e6281f',
+                                 'nombre': 'Argentina'
+                             },
+                         },
+                         ultimaActualizacion: new Date(),
+                         activo: true
+                     }],
         fotoArchivo: null,
         firmas: null,
         profesionalMatriculado: false,
@@ -494,12 +494,6 @@ export class ProfesionalComponent implements OnInit {
         }
     }
 
-    otraEntidad(f) {
-        f.entidadFormadora = {
-            nombre: null,
-            codigo: null
-        };
-    }
 
     limpiarDomProfesional() {
         this.profesional.domicilios[2] = {

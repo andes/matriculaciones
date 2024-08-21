@@ -114,16 +114,11 @@
                            name='fechaEgreso' [required]="true"></plex-datetime>
           </div>
           <div class="col-6">
-            <plex-select label="Institución Formadora" *ngIf="!showOtraEntidadFormadora"
-                         [(ngModel)]="formacionSelected.entidadFormadora" name="entidadFormadora"
-                         (getData)="loadEntidadesFormadoras($event)" [required]="true"></plex-select>
-            <plex-text *ngIf="showOtraEntidadFormadora" name='entidad' label="Otra Entidad Formadora"
-                       [(ngModel)]="formacionSelected.entidadFormadora.nombre" [required]="true"></plex-text>
+            <plex-select label="Institución Formadora" [(ngModel)]="formacionSelected.entidadFormadora"
+                         name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)"
+                         [required]="true"></plex-select>
           </div>
-          <div class="col">
-            <plex-bool [(ngModel)]="showOtraEntidadFormadora" label="Otra Entidad Formadora"
-                       (change)='otraEntidad(formacionSelected)' name="otra"></plex-bool>
-          </div>
+
           <div class="col-md-6">
             <plex-select label="Profesión" [(ngModel)]="formacionSelected.profesion" name='formacionPosgrado'
                          (getData)="loadProfesiones($event)" [required]="true"

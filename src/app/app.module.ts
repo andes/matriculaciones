@@ -18,6 +18,7 @@ import { ScrollComponent } from './components/base/plex-scroll.component';
 
 // Servicios
 import { AgendaService } from './services/agenda.service';
+import { ValidacionService } from './services/validacion.service';
 import { CambioDniService } from './services/cambioDni.service';
 import { PaisService } from './services/pais.service';
 import { ProvinciaService } from './services/provincia.service';
@@ -210,7 +211,8 @@ import { FiltrosRenovacionComponent } from './components/profesionales/filtros-r
         ListadoTurnosPdfComponent,
         ZonaSanitariaService,
         DriveService,
-        PdfService
+        PdfService,
+        ValidacionService
     ],
     bootstrap: [AppComponent]
 })

@@ -494,12 +494,6 @@ export class ProfesionalComponent implements OnInit {
         }
     }
 
-    otraEntidad(f) {
-        f.entidadFormadora = {
-            nombre: null,
-            codigo: null
-        };
-    }
 
     limpiarDomProfesional() {
         this.profesional.domicilios[2] = {

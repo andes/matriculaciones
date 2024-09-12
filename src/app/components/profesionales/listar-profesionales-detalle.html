@@ -8,13 +8,15 @@
     <img *ngIf='tieneFoto' [src]="foto" class="img-circle" />
     <plex-badge size="lg" type="{{profesional.profesionalMatriculado?'success':'danger'}}">{{
         profesional.profesionalMatriculado?'MATRICULADO':'NO MATRICULADO' }}</plex-badge>
+    <plex-badge type="{{profesional.validadoRenaper ? 'info':'warning'}}">
+        {{profesional.validadoRenaper ? 'VALIDADO':'NO VALIDADO' }}</plex-badge>
     <div title> {{ profesional.apellido + ', '+ profesional.nombre}} </div>
     <div subtitle> {{ profesional.documento }} </div>
     <plex-label titulo="Fecha de nacimiento" subtitulo="{{profesional.fechaNacimiento | fecha}}"></plex-label>
     <plex-label titulo="Edad" subtitulo="{{profesional | edad}}"></plex-label>
     <plex-label titulo="Sexo" subtitulo="{{profesional.sexo}}"></plex-label>
     <plex-label titulo="CUIT" subtitulo="{{profesional.cuit}}"></plex-label>
-    <plex-label titulo="Naciolalidad" subtitulo="{{profesional.nacionalidad.nombre}}"></plex-label>
+    <plex-label titulo="Nacionalidad" subtitulo="{{profesional.nacionalidad.nombre}}"></plex-label>
 </plex-detail>
 <plex-title titulo="Posgrados" size="md">
 </plex-title>

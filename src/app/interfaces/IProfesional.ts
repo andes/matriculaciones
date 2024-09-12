@@ -5,6 +5,7 @@ import {
 export interface IProfesional {
     id: String;
     habilitado: Boolean;
+    validadoRenaper?: Boolean;
     nombre: String;
     apellido: String;
     tipoDocumento: String;

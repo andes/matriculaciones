@@ -1,7 +1,7 @@
 <plex-title titulo="{{formacion.profesion.nombre}}" size="md">
   <plex-button class="pr-1" tooltip="Aprobar matricula"
                *ngIf='formacion.papelesVerificados && formacion.matriculacion && !formacion.matriculado' type="success"
-               icon="check" (click)="matricularProfesional(formacion,true)" size="sm">
+               icon="check" (click)="matricularProfesional(formacion,true)" size="sm" [disabled]="revalidando">
   </plex-button>
   <plex-button class="pr-1" type="primary" icon="plus" tooltip="Agregar nueva matricula"
                *ngIf='formacion.papelesVerificados && this.profesional.formacionGrado[index].matriculado === false && !this.profesional.formacionGrado[index].matriculacion'

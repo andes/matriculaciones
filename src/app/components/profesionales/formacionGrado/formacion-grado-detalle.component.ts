@@ -54,6 +54,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
     public campoBaja = false;
     public fechaTemporal = null;
     public motivoTemporal = null;
+    public revalidando = false;
 
     constructor(
         private _profesionalService: ProfesionalService,
@@ -85,6 +86,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.plex.confirm(texto).then((resultado) => {
             if (resultado) {
                 let revNumero = null;
+                this.revalidando = true;
                 if (formacion.matriculacion === null) {
                     revNumero = 0;
                 } else {

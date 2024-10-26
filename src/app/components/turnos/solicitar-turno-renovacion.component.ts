@@ -38,6 +38,7 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
     @Input() public profesional: IProfesional = {
         id: null,
         habilitado: true,
+        validadoRenaper: false,
         nombre: null,
         apellido: null,
         tipoDocumento: null,

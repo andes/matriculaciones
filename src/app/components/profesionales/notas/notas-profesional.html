@@ -1,15 +1,51 @@
-<plex-box>
-    <div class="row">
-        <div class="col-12">
-            <div class="form-group">
-                <label style="font-weight: bold">Notas</label>                                
-                <textarea class="form-control" [(ngModel)]="textoNotas" style="width: 100%; height: 200px"></textarea>                                    
-            </div>
+<plex-title titulo="Notas del profesional" size="sm">
+    <plex-button *ngIf="!editarAgregar" label="Agregar nota" type="success" size="sm"
+                 (click)="agregarEditarNota('agregar', null)">
+    </plex-button>
+    <plex-button *ngIf="editarAgregar" type="success" icon="check" size="sm" (click)="guardarNota()" tooltip="Guardar"
+                 [disabled]="!formNotas.valid"></plex-button>
+    <plex-button *ngIf="editarAgregar" type="danger" icon="close" size="sm" class="ml-1" tooltip="Cancelar"
+                 (click)="cancelarNota()"></plex-button>
+</plex-title>
+<form #formNotas="ngForm">
+    <ng-container *ngIf="!editarAgregar">
+        <div *ngIf="!profesional.notas.length" style="margin-top: 7em;">
+            <plex-label icon="magnify" type="info" size="xl" direction="column"
+                        titulo='No existen notas para este profesional'
+                        subtitulo='Para agregar una seleccione el boton "AGREGAR NOTA"'>
+            </plex-label>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-12">
-            <plex-button label="Guardar" type="success" (click)="guardarNotas()"></plex-button>
-        </div>
-    </div>
-</plex-box>
+
+        <plex-table *ngIf="profesional.notas?.length" [columns]="columns" #table="plTable">
+            <plex-table-columns>
+            </plex-table-columns>
+            <tr *ngFor="let nota of profesional.notas; let i = index" [class.selectable]="true">
+                <td>
+                    <plex-label titulo="{{ nota.fecha ? (nota.fecha | fecha) : 'Sin fecha' }}">
+                    </plex-label>
+                </td>
+                <td>
+                    <plex-label titulo="{{nota.usuario || 'Sin datos'}}">
+                    </plex-label>
+                </td>
+                <td>
+                    <plex-label titulo="{{nota.descripcion || notaProfesional}}">
+                    </plex-label>
+                </td>
+                <td>
+                    <plex-button size="sm" type="danger" icon="cesto" class="float-right ml-1" tooltip="Eliminar"
+                                 (click)="eliminarNota(i)">
+                    </plex-button>
+                    <plex-button size="sm" type="warning" icon="pencil" class="float-right" tooltip="Editar"
+                                 (click)="agregarEditarNota('editar',i)">
+                    </plex-button>
+                </td>
+            </tr>
+        </plex-table>
+    </ng-container>
+
+    <ng-container *ngIf="editarAgregar">
+        <plex-text [(ngModel)]="descripcionNota" name="descripcionNota" [required]="true"
+                   placeholder="Ingrese una descripción..."></plex-text>
+    </ng-container>
+</form>

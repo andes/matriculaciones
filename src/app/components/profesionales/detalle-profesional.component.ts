@@ -5,6 +5,7 @@ import { Plex } from '@andes/plex';
 import { FotoGeneralComponent } from './foto-general.component';
 import { ProfesionalService } from './../../services/profesional.service';
 import { IProfesional } from './../../interfaces/IProfesional';
+import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
 import { Auth } from '@andes/auth';
@@ -70,31 +71,29 @@ export class DetalleProfesionalComponent implements OnInit {
             },
             ultimaActualizacion: new Date(),
             activo: true
-        },
-                     {
-                         tipo: 'legal',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: null,
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     },
-                     {
-                         tipo: 'profesional',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: null,
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     }],
+        }, {
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }, {
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: null,
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }],
         fotoArchivo: null,
         firmas: null,
         formacionGrado: [{
@@ -143,6 +142,7 @@ export class DetalleProfesionalComponent implements OnInit {
     constructor(
         private _profesionalService: ProfesionalService,
         private _turnoService: TurnoService,
+        private _numeracionMatriculasService: NumeracionMatriculasService,
         private route: ActivatedRoute,
         private router: Router,
         public auth: Auth,
@@ -260,7 +260,11 @@ export class DetalleProfesionalComponent implements OnInit {
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((profesionalSaved) => {
             this.profesional = profesionalSaved;
-            this.plex.toast('success', 'El posgrado se registró con exito!', 'informacion', 1000);
+            this._numeracionMatriculasService.patchNumeracion({}).subscribe(() => {
+                this.plex.toast('success', 'El posgrado se registró con exito!', 'informacion', 1000);
+            }, error => {
+                this.plex.toast('danger', 'Error al guardar numeración', 'informacion', 1000);
+            });
         }, error => {
             this.plex.toast('danger', 'Error al cargar posgrado', 'informacion', 1000);
         });

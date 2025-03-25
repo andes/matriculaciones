@@ -15,9 +15,8 @@
             </plex-select>
         </plex-grid>
         <plex-int label="Matrícula Nro" [(ngModel)]="profesionalP.matriculacion[0].matriculaNumero" name="matriculaNro"
-                  [required]="true" [readonly]="!profesional.habilitado" placeholder="Ingrese nro de matrícula">
+                  [required]="true" [readonly]="true" placeholder="Número de matrícula">
         </plex-int>
-
         <plex-grid cols="2">
             <plex-text label="Libro" [(ngModel)]="profesionalP.matriculacion[0].libro" name="libro" [required]="true"
                        [readonly]="!profesional.habilitado" placeholder="Ingrese un libro"></plex-text>

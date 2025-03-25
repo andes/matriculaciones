@@ -21,7 +21,10 @@ export class NumeracionMatriculasService extends BaseService {
 
     putNumeracion(numeracionModel): Observable<any> {
         return this.server.put(this.numeracionesURL, numeracionModel);
-    // return this.server.post(this.profesionalesURL + 'actualizar', profesionalModel);
+    }
+
+    patchNumeracion(body): Observable<any> {
+        return this.server.patch(this.ultimoPosgradoURL, body);
     }
 
     getNumeraciones(searchParams: any): Observable<any> {

@@ -22,7 +22,8 @@ export class RequisitosGeneralesComponent implements OnInit {
 
 @Component({
     selector: 'app-requisitos-matricula-universitaria',
-    templateUrl: 'requisitosMatUniv.html'
+    templateUrl: 'requisitosMatUniv.html',
+    styleUrls: ['requisitos.scss']
 })
 
 export class RequisitosMatriculaUniversitariaComponent {
@@ -39,7 +40,8 @@ export class RequisitosMatriculaUniversitariaComponent {
 
 @Component({
     selector: 'app-requisitos-matricula-tecnica-auxiliar',
-    templateUrl: 'requisitosMatTecAux.html'
+    templateUrl: 'requisitosMatTecAux.html',
+    styleUrls: ['requisitos.scss']
 })
 
 export class RequisitosMatriculaTecnicaAuxiliarComponent {

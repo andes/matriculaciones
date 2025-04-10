@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { IProfesional } from './../../../interfaces/IProfesional';
 import { SIISAService } from './../../../services/siisa.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
-
+import { ProfesionalService } from './../../../services/profesional.service';
 
 @Component({
     selector: 'app-formacion-posgrado-agregar',
@@ -15,6 +15,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
     @Input() profesional: IProfesional;
 
     public cancel = false;
+
     profesiones: any[] = [];
     vencimientoAnio = (new Date()).getUTCFullYear() + 5;
     profesionalP: any = {
@@ -53,6 +54,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
     constructor(
         private _siisaSrv: SIISAService,
         private _modalidadesCertificacionService: ModalidadesCertificacionService,
+        private _profesionalService: ProfesionalService,
     ) { }
 
     ngOnInit() {
@@ -62,7 +64,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
                     this.profesiones.push(element.profesion);
                 }
             });
-
+            this.ultimaMatricula();
         }
     }
 
@@ -72,6 +74,12 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
 
     loadModalidadesCertificacion(event) {
         this._modalidadesCertificacionService.getModalidadesCertificacion().subscribe(event.callback);
+    }
+
+    ultimaMatricula() {
+        this._profesionalService.getUltimoPosgradoNro().subscribe(data => {
+            this.profesionalP.matriculacion[0].matriculaNumero = data + 1;
+        });
     }
 
     onSubmit(formulario) {

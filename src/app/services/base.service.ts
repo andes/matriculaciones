@@ -19,6 +19,7 @@ export class BaseService {
     protected profesionalesURL = '/core/tm/profesionales/';
     protected siisaURL = '/core/tm/siisa';
     protected numeracionesURL = '/modules/matriculaciones/numeraciones';
+    protected ultimoPosgradoURL = '/modules/matriculaciones/ultimoPosgrado';
     protected profesionesURL = '/core/tm/profesiones';
     protected entidadFormadoraURL = '/modules/matriculaciones/entidadesFormadoras/';
     protected modalidadesCertificacionURL = '/modules/matriculaciones/modalidadesCertificacion/';

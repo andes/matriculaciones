@@ -8,6 +8,7 @@ import { Server } from '@andes/shared';
 export class ProfesionalService extends BaseService {
     profesionalesURL = '/core/tm/profesionales/';
     resumenProfesional = '/core/tm/resumen/';
+    numeracionesURL = '/modules/matriculaciones/';
 
     constructor(_http: HttpClient, private server: Server) {
         super(_http);
@@ -52,8 +53,8 @@ export class ProfesionalService extends BaseService {
         return this.server.get(this.profesionalesURL + 'matricula/' + idProf);
     }
 
-    getUltimoPosgradoNro() {
-        return this.server.get(this.profesionalesURL + 'ultimoPosgrado');
+    getUltimoPosgradoNro(): any {
+        return this.server.get(this.numeracionesURL + 'ultimoPosgrado');
     }
 
     getResumenProfesional(params: any): Observable<any> {

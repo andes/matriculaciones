@@ -73,19 +73,20 @@ export class FormacionPosgradoFormComponent implements OnInit {
             revalidacionNumero: 1,
         }],
         tieneVencimiento: true,
-        fechasDeAltas: [{fecha: new Date()}]
+        fechasDeAltas: [{ fecha: new Date() }]
     };
 
     @Input() profesional: IProfesional;
     @Output() submitPosgrado = new EventEmitter();
 
-    constructor(private _fb: FormBuilder,
-                private _siisaSrv: SIISAService,
-                private _profSrv: ProfesionalService,
-                private _entidadFormadoraService: EntidadFormadoraService,
-                private _modalidadesCertificacionService: ModalidadesCertificacionService,
-                private plex: Plex,
-                private _profesionalService: ProfesionalService,
+    constructor(
+        private _fb: FormBuilder,
+        private _siisaSrv: SIISAService,
+        private _profSrv: ProfesionalService,
+        private _entidadFormadoraService: EntidadFormadoraService,
+        private _modalidadesCertificacionService: ModalidadesCertificacionService,
+        private plex: Plex,
+        private _profesionalService: ProfesionalService,
     ) { }
 
     ngOnInit() {
@@ -94,7 +95,7 @@ export class FormacionPosgradoFormComponent implements OnInit {
             //     return value.profesion;
             // });
             this.profesional.formacionGrado.forEach(element => {
-                if ( element.profesion.codigo === 1 || element.profesion.codigo === 2 ) {
+                if (element.profesion.codigo === 1 || element.profesion.codigo === 2) {
                     this.profesiones.push(element.profesion);
                 }
             });
@@ -134,7 +135,6 @@ export class FormacionPosgradoFormComponent implements OnInit {
     loadEstablecimientosCertificadores(event: any) {
         this._siisaSrv.getEstablecimientosCertificadores(null).subscribe(event.callback);
     }
-
 
     ultimaMatricula() {
         this._profesionalService.getUltimoPosgradoNro().subscribe(data => {

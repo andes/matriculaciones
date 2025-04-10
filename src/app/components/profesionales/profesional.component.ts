@@ -19,6 +19,7 @@ import { TurnoService } from '../../services/turno.service';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { of, Observable } from 'rxjs';
 import * as moment from 'moment';
+import { ValidacionService } from './../../services/validacion.service';
 
 @Component({
     selector: 'app-profesional',
@@ -27,7 +28,7 @@ import * as moment from 'moment';
 })
 export class ProfesionalComponent implements OnInit {
     @ViewChild('formNuevoProf', { static: true }) formProf: NgForm;
-    public deshabilitarBoton = false;
+    public deshabilitarGuardar = false;
     public formProfesionalComp: FormGroup;
     public sexos: any;
     match = new Matching();
@@ -56,6 +57,7 @@ export class ProfesionalComponent implements OnInit {
     @Input() public profesional: IProfesional = {
         id: null,
         habilitado: true,
+        validadoRenaper: false,
         nombre: null,
         apellido: null,
         tipoDocumento: null,
@@ -88,37 +90,35 @@ export class ProfesionalComponent implements OnInit {
             },
             ultimaActualizacion: new Date(),
             activo: true
-        },
-                     {
-                         tipo: 'legal',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     },
-                     {
-                         tipo: 'profesional',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: {
-                                 'id': '57f3b5c469fe79a598e6281f',
-                                 'nombre': 'Argentina'
-                             },
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     }],
+        }, {
+            tipo: 'legal',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: {
+                    'id': '57f3b5c469fe79a598e6281f',
+                    'nombre': 'Argentina'
+                },
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }, {
+            tipo: 'profesional',
+            valor: null,
+            codigoPostal: null,
+            ubicacion: {
+                localidad: null,
+                provincia: null,
+                pais: {
+                    'id': '57f3b5c469fe79a598e6281f',
+                    'nombre': 'Argentina'
+                },
+            },
+            ultimaActualizacion: new Date(),
+            activo: true
+        }],
         fotoArchivo: null,
         firmas: null,
         profesionalMatriculado: false,
@@ -167,7 +167,8 @@ export class ProfesionalComponent implements OnInit {
         public auth: Auth,
         private router: Router,
         private route: ActivatedRoute,
-        private location: Location
+        private location: Location,
+        private validacionService: ValidacionService
     ) { }
 
     ngOnInit() {
@@ -246,11 +247,46 @@ export class ProfesionalComponent implements OnInit {
         }
     }
 
+    /**
+     * Dado un profesional, lo valida con Renaper y actualiza
+     * @param {IProfesional} profesional
+     * @param {boolean} profesionalExistente
+     * @returns profesional validado o null en caso de no encontrarse en renaper
+     */
+    private validarGuardar(profesional: IProfesional, profesionalExistente: boolean): Observable<IProfesional> {
+        return this.validacionService.post({ documento: profesional.documento, sexo: profesional.sexo }).pipe(
+            catchError(() => {
+                this.plex.toast('warning', 'No se pudo validar con Renaper pero puede continuar con el registro.', 'Renaper no disponible');
+                return null;
+            }),
+            switchMap(responseRenaper => {
+                if (responseRenaper) {
+                    if (responseRenaper?.error || responseRenaper?.message) {
+                        // No existe ciudadano con ese dni y sexo
+                        this.plex.info('warning', 'Revise los datos ingresados.', 'Profesional no encontrado en renaper.');
+                        this.deshabilitarGuardar = false;
+                        return null;
+                    } else {
+                        // validación correcta
+                        profesional.validadoRenaper = true;
+                        if (profesionalExistente) {
+                            return this._profesionalService.patchProfesional(profesional.id, profesional);
+                        } else {
+                            return this._profesionalService.saveProfesional({ responseRenaper });
+                        }
+                    }
+                } else {
+                    // Asumimos que Renaper no validó pero el flujo sigue
+                    return of(profesional);
+                }
+            })
+        );
+    }
+
     confirmarDatos() {
         // Carga de datos de profesionales matriculados por primera vez (profesional sin loguearse)
-        this.deshabilitarBoton = true;
+        this.deshabilitarGuardar = true;
         if (this.formProf.valid) {
-            const matcheo = false;
             this.profesional.sexo = this.profesional.sexo ? ((typeof this.profesional.sexo === 'string')) ? this.profesional.sexo : (Object(this.profesional.sexo).id) : null;
 
             this.profesional.tipoDocumento = this.profesional.tipoDocumento ? ((typeof this.profesional.tipoDocumento === 'string')) ? this.profesional.tipoDocumento : (Object(this.profesional.tipoDocumento).id) : null;
@@ -279,7 +315,7 @@ export class ProfesionalComponent implements OnInit {
 
     confirmarDatosAdmin() {
         // Carga/edicion desde un usuario logueado en el sistema
-        this.deshabilitarBoton = true;
+        this.deshabilitarGuardar = true;
         if (this.formProf.valid) {
             this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
             this.profesional.formacionGrado[0].exportadoSisa = false;
@@ -292,31 +328,22 @@ export class ProfesionalComponent implements OnInit {
             });
 
             this.matchingCandidatos(this.profesional.documento, this.profesional.sexo).pipe(
-                map(candidatos => {
-                    // El matching que interesa es por profesionales matriculados (profesionalMatriculado: true)
+                switchMap(candidatos => {
+                    // El matching que interesa comparar es por profesionales matriculados (profesionalMatriculado: true)
                     const candidatosMatriculados = candidatos.filter(c => c.profesional.profesionalMatriculado);
                     if (candidatosMatriculados.length) {
                         this.plex.info('warning', 'Los datos ingresados corresponden a un profesional ya existente.', 'Profesional existente');
-                        return false;
+                        this.profesional.id = undefined;
+                        return of(null); // no actualiza
+
                     } else if (candidatos.length) {
                         // candidatos con matricula externa o similares (profesionalMatriculado: false) se le agrega la informacion de grado, etc
                         this.profesional.id = candidatos[0].profesional.id;
-                        return true;
+                        // actualizar candidato
+                        return this.validarGuardar(this.profesional, true);
                     }
-                    return null;
-                }),
-                switchMap(responseActualizar => {
-                    if (responseActualizar !== null) {
-                        // hubo match
-                        if (responseActualizar) {
-                            // actualizar candidato
-                            return this._profesionalService.patchProfesional(this.profesional.id, this.profesional);
-                        }
-                        this.profesional.id = undefined;
-                        return of(null); // no actualiza
-                    }
-                    // no hubo match
-                    return this._profesionalService.saveProfesional({ profesional: this.profesional });
+                    // no hubo match, se crea nuevo profesional
+                    return this.validarGuardar(this.profesional, false);
                 }),
                 switchMap(profesionalSaved => {
                     if (!profesionalSaved) {
@@ -331,22 +358,28 @@ export class ProfesionalComponent implements OnInit {
                             profesional: profesionalSaved._id
                         };
                         return this._turnosService.saveTurnoSolicitados(profesionalSaved).pipe(
-                            switchMap(() => this._turnosService.saveTurnoMatriculacion({ turno: turno }))
+                            switchMap(() => this._turnosService.saveTurnoMatriculacion({ turno: turno })),
+                            catchError((error) => {
+                                const mensaje = error === 'error-turno' ? 'No se asignó ningún turno ya que el profesional actualmente posee uno.' : error.message;
+                                const type = error === 'error-turno' ? 'warning' : 'danger';
+                                const titulo = error === 'error-turno' ? 'Turno ya asignado' : 'Error al asignar turno';
+                                this.plex.info(type, mensaje, titulo);
+                                return of(error === 'error-turno'); // 'true' en caso de turno pre-existenteo (continúa la ejecución)
+                                // 'false' en caso de otro error (se detiene el flujo y permanecemos en la misma pantalla)
+                            }),
                         );
                     }
                     return of(profesionalSaved);
                 }),
             ).subscribe(response => {
-                if (response) { // puede ser response del patch o post
+                if (response) { // puede ser response de varios origenes
                     this.plex.toast('success', 'Profesional guardado exitosamente', 'informacion', 1000);
                     this.editado.emit(true);
                     this.router.navigate(['/profesional', this.profesional.id]);
+                } else {
+                    this.deshabilitarGuardar = false;
                 }
-            }, error => {
-                const mensaje = error === 'error-turno' ? 'Ha ocurrido un error asignando el turno. Asegurese que el profesional aún no posee uno.' : error.message;
-                this.plex.info('danger', mensaje);
-            }
-            );
+            });
         } else {
             this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
         }
@@ -472,7 +505,7 @@ export class ProfesionalComponent implements OnInit {
     }
 
     actualizar() {
-        this.deshabilitarBoton = true;
+        this.deshabilitarGuardar = true;
         if (this.formProf.valid) {
 
             this.profesional.agenteMatriculador = this.auth.usuario.nombreCompleto;
@@ -482,13 +515,37 @@ export class ProfesionalComponent implements OnInit {
                 elem.tipo = ((typeof elem.tipo === 'string') ? elem.tipo : (Object(elem.tipo).id));
                 return elem;
             });
-            this._profesionalService.putProfesional(this.profesional)
-                .subscribe(resp => {
+
+            this.validacionService.post({
+                documento: this.profesional.documento,
+                sexo: this.profesional.sexo
+            }).pipe(
+                catchError(() => {
+                    this.plex.toast('warning', 'No se pudo validar con Renaper pero puede continuar con el registro.', 'Renaper no disponible');
+                    return of(null);
+                }),
+                switchMap(resultado => {
+                    if (resultado) {
+                        if (resultado?.error || resultado?.message) {
+                            // No existe ciudadano con ese dni y sexo
+                            this.plex.info('warning', 'Revise los datos ingresados.', 'Profesional no encontrado en renaper.');
+                            this.deshabilitarGuardar = false;
+                            return of(null);
+                        } else {
+                            // validación correcta
+                            this.profesional.validadoRenaper = true;
+                        }
+                    }
+                    return this._profesionalService.putProfesional(this.profesional);
+                }),
+            ).subscribe(resp => {
+                if (resp) {
                     this.profesional = resp;
-                    this.plex.toast('success', 'Se modificó con éxito!', 'informacion', 1000);
                     this.editado.emit(true);
-                });
-            this.volverProfesional();
+                    this.plex.toast('success', 'Se modificó con éxito!', 'informacion', 1000);
+                    this.volverProfesional();
+                }
+            });
         } else {
             this.plex.toast('danger', 'Falta completar los campos requeridos', 'informacion', 1000);
         }

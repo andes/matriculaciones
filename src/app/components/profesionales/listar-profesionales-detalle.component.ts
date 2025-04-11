@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, EventEmitter, HostBinding, Output } from '@angular/core';
+import { Component, OnInit, OnChanges, EventEmitter, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { IProfesional } from '../../interfaces/IProfesional';
 import { ProfesionalService } from './../../services/profesional.service';
@@ -6,6 +6,8 @@ import { Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import * as moment from 'moment';
+
 @Component({
     selector: 'app-listar-profesionales-detalle',
     templateUrl: 'listar-profesionales-detalle.html',
@@ -43,6 +45,21 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
         },
     ];
 
+    public columnsNotas = [
+        {
+            key: 'fecha',
+            label: 'FECHA',
+        },
+        {
+            key: 'usuario',
+            label: 'USUARIO',
+        },
+        {
+            key: 'desccripcion',
+            label: 'DESCRIPCIÓN',
+        }
+    ];
+
     constructor(
         private _profesionalService: ProfesionalService,
         private router: Router,
@@ -50,7 +67,7 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
     ) { }
 
     ngOnInit() {
-        this.hoy = new Date();
+        this.hoy = moment().toDate();
         this._profesionalService.getProfesionalFoto({ id: this.profesional.id }).pipe(catchError(() => of(null))).subscribe(resp => {
             if (resp) {
                 this.foto = this.sanitizer.bypassSecurityTrustResourceUrl('data:image/jpeg;base64,' + resp);

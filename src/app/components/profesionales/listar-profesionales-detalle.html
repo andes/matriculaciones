@@ -64,9 +64,24 @@
 <br>
 <plex-title titulo="Notas" size="md">
 </plex-title>
-<div class="d-flex justify-content-start align-items-center">
-    <plex-label *ngIf="!profesional.notas || profesional.notas[0].length === 0" icon="informacion" type="warning"
-                size="md" direction="row" titulo="No hay ninguna nota aún" subtitulo="Para agregar una nota, dirijase a la edición 
-                de datos del matriculado en la pestaña NOTAS"></plex-label>
-    <plex-label *ngIf="profesional.notas && profesional.notas[0].length">{{profesional.notas[0]}}</plex-label>
+<div>
+    <plex-label *ngIf="!profesional.notas?.length" icon="informacion" type="warning" size="md" direction="row"
+                titulo="No hay ningúna nota aún" subtitulo="Para agregar una nota, dirijase a la edición 
+                    de datos del matriculado en la pestaña NOTAS"></plex-label>
+    <plex-table *ngIf="profesional.notas?.length">
+        <tr *ngFor="let nota of profesional.notas; let i = index">
+            <td style="width: 50px;">
+                <plex-label icon="documento" titulo="Fecha" subtitulo="{{nota.fecha | fecha}}">
+                </plex-label>
+            </td>
+            <td style="width: 100px;">
+                <plex-label titulo="Usuario" subtitulo="{{nota.usuario}}">
+                </plex-label>
+            </td>
+            <td>
+                <plex-label titulo="Descripción" subtitulo="{{nota.descripcion}}">
+                </plex-label>
+            </td>
+        </tr>
+    </plex-table>
 </div>

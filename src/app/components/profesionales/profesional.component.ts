@@ -256,28 +256,21 @@ export class ProfesionalComponent implements OnInit {
     private validarGuardar(profesional: IProfesional, profesionalExistente: boolean): Observable<IProfesional> {
         return this.validacionService.post({ documento: profesional.documento, sexo: profesional.sexo }).pipe(
             catchError(() => {
-                this.plex.toast('warning', 'No se pudo validar con Renaper pero puede continuar con el registro.', 'Renaper no disponible');
+                // this.plex.toast('warning', 'No se pudo validar con Renaper pero puede continuar con el registro.', 'Renaper no disponible');
                 return null;
             }),
             switchMap(responseRenaper => {
+                let validado = true;
                 if (responseRenaper) {
                     if (responseRenaper?.error || responseRenaper?.message) {
-                        // No existe ciudadano con ese dni y sexo
-                        this.plex.info('warning', 'Revise los datos ingresados.', 'Profesional no encontrado en renaper.');
-                        this.deshabilitarGuardar = false;
-                        return null;
-                    } else {
-                        // validación correcta
-                        profesional.validadoRenaper = true;
-                        if (profesionalExistente) {
-                            return this._profesionalService.patchProfesional(profesional.id, profesional);
-                        } else {
-                            return this._profesionalService.saveProfesional({ profesional });
-                        }
+                        validado = false;
                     }
-                } else {
-                    // Asumimos que Renaper no validó pero el flujo sigue
-                    return of(profesional);
+                    profesional.validadoRenaper = validado;
+                    if (profesionalExistente) {
+                        return this._profesionalService.patchProfesional(profesional.id, profesional);
+                    } else {
+                        return this._profesionalService.saveProfesional({ profesional });
+                    }
                 }
             })
         );
@@ -521,20 +514,18 @@ export class ProfesionalComponent implements OnInit {
                 sexo: this.profesional.sexo
             }).pipe(
                 catchError(() => {
-                    this.plex.toast('warning', 'No se pudo validar con Renaper pero puede continuar con el registro.', 'Renaper no disponible');
+                    //  this.plex.toast('warning', 'No se pudo validar con Renaper pero puede continuar con el registro.', 'Renaper no disponible');
                     return of(null);
                 }),
                 switchMap(resultado => {
+                    let validado = true;
                     if (resultado) {
                         if (resultado?.error || resultado?.message) {
                             // No existe ciudadano con ese dni y sexo
-                            this.plex.info('warning', 'Revise los datos ingresados.', 'Profesional no encontrado en renaper.');
-                            this.deshabilitarGuardar = false;
-                            return of(null);
-                        } else {
-                            // validación correcta
-                            this.profesional.validadoRenaper = true;
+                            // this.plex.info('warning', 'Revise los datos ingresados.', 'Profesional no encontrado en renaper.');
+                            validado = false;
                         }
+                        this.profesional.validadoRenaper = validado;
                     }
                     return this._profesionalService.putProfesional(this.profesional);
                 }),

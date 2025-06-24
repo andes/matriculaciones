@@ -100,7 +100,16 @@
                             </plex-badge>
                         </td>
 
-                        <td class="column-right my-3 d-flex align-items-center">
+                       <td *plTableCol="'habilitado'">
+                   <plex-badge *ngIf="!profesional.habilitado" type="danger" class="mr-0">
+    Deshabilitado
+        </plex-badge>
+           </td>
+
+
+                        <td *plTableCol="'acciones'" class="column-right my-3 d-flex align-items-center">
+                                       
+
                             <plex-button type="info" icon="eye" size="sm" (click)="showProfesional(profesional)"
                                          tooltip="Ver profesional">
                             </plex-button>

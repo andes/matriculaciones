@@ -25,6 +25,10 @@ export class DocumentoProfesionalComponent implements OnInit {
         {
             id: '3',
             label: 'Certificado'
+        },
+        {
+            id: '4',
+            label: 'Documentación personal'
         }
     ];
 
@@ -34,7 +38,7 @@ export class DocumentoProfesionalComponent implements OnInit {
     public certificado;
     public indice;
     public comprobante;
-
+    public documentacionPersonal; // Nuevo arreglo para Documentación personal
     constructor(
         private _profesionalService: ProfesionalService,
         public auth: Auth,
@@ -55,6 +59,7 @@ export class DocumentoProfesionalComponent implements OnInit {
             this.posgrado = [];
             this.certificado = [];
             this.comprobante = [];
+            this.documentacionPersonal = []; // Nuevo arreglo
 
             for (let index = 0; index < this.profesional.documentos.length; index++) {
                 const doc = {
@@ -75,17 +80,27 @@ export class DocumentoProfesionalComponent implements OnInit {
                             doc.nombreDocumento = data.originalname;
                         });
                         this.posgrado.push(doc);
+
                     } else {
                         if (this.profesional.documentos[index].tipo === 'Comprobante de pago') {
                             this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
                                 doc.nombreDocumento = data.originalname;
                             });
                             this.comprobante.push(doc);
+
                         } else {
-                            this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
-                                doc.nombreDocumento = data.originalname;
-                            });
-                            this.certificado.push(doc);
+                            if (this.profesional.documentos[index].tipo === 'Documentación personal') {
+                                this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
+                                    doc.nombreDocumento = data.originalname;
+                                });
+                                this.documentacionPersonal.push(doc);
+
+                            } else {
+                                this._profesionalService.getDocumentos(this.profesional.documentos[index].archivo.id).subscribe(data => {
+                                    doc.nombreDocumento = data.originalname;
+                                });
+                                this.certificado.push(doc);
+                            }
                         }
                     }
                 }

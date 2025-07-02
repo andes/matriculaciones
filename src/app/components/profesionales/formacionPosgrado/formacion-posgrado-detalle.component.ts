@@ -20,7 +20,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
     @Input() profesional: IProfesional;
     @Input('nota')
-    set nota(value: any){
+    set nota(value: any) {
         this.notaEditada = value;
     }
     @Output() matriculacion = new EventEmitter();
@@ -75,15 +75,16 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         },
         {}
     ];
-    constructor(private _profesionalService: ProfesionalService,
-                private plex: Plex, public auth: Auth) {
+    constructor(
+        private _profesionalService: ProfesionalService,
+        private plex: Plex, public auth: Auth) {
     }
 
     actualizarIndice() {
         this.matriculaNumero = this.formacion.matriculacion[0].matriculaNumero;
         this.editarObtencion = false;
         this.inicio = this.formacion.matriculacion[0].inicio;
-        this.inicioRevalida = this.formacion.matriculacion[this.formacion.matriculacion.length-1].inicio;
+        this.inicioRevalida = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].inicio;
         this.fin = this.formacion.matriculacion[0].fin;
     }
 
@@ -232,7 +233,8 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     if (!formacionPosgrado.tieneVencimiento) {
                         return 'sinVencimiento';
                     } else {
-                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin) {
+                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin &&
+                            this.hoy > formacionPosgrado.matriculacion[0].fin) {
                             return 'vencida';
                         } else {
                             return 'vigente';
@@ -248,9 +250,9 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
     }
 
     cerrarEditar(tipo) {
-        if(tipo === 'matricula'){
+        if (tipo === 'matricula') {
             this.editarObtencion = !this.editarObtencion;
-        }else{
+        } else {
             this.revalidacion = !this.revalidacion;
         }
     }
@@ -261,13 +263,13 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 'op': 'updateEstadoPosGrado',
                 'data': this.profesional.formacionPosgrado
             };
-            if(tipo === 'matricula'){
+            if (tipo === 'matricula') {
                 this.formacion.matriculacion[0].matriculaNumero = this.matriculaNumero;
                 this.formacion.matriculacion[0].inicio = this.inicio;
                 this.formacion.matriculacion[0].fin = moment(this.inicio).add(5, 'years');;
-            } else{
-                this.formacion.matriculacion[this.formacion.matriculacion.length-1].inicio = this.inicioRevalida;
-                this.formacion.matriculacion[this.formacion.matriculacion.length-1].fin = moment(this.inicioRevalida).add(5, 'years');
+            } else {
+                this.formacion.matriculacion[this.formacion.matriculacion.length - 1].inicio = this.inicioRevalida;
+                this.formacion.matriculacion[this.formacion.matriculacion.length - 1].fin = moment(this.inicioRevalida).add(5, 'years');
             }
             this.formacion.revalida = false;
             this.formacion.matriculado = true;
@@ -278,25 +280,25 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         }
     }
 
-    agregarNota(tipo){
+    agregarNota(tipo) {
         this.notas = !this.notas;
         this.accion = tipo;
     }
 
-    guardarNota(eliminar = false){
+    guardarNota(eliminar = false) {
         const cambio = {
             'op': 'updateEstadoPosGrado',
             'data': this.profesional.formacionPosgrado
         };
-        if(eliminar === false){
+        if (eliminar === false) {
             this.formacion.notas[0] = this.notaEditada;
         }
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
-            if(this.formacion.notas.length){
+            if (this.formacion.notas.length) {
                 const mensaje = this.accion === 'agregar' ? 'Nota agregada con éxito!' : 'Nota editada con éxito!';
                 this.plex.toast('success', mensaje);
                 this.notas = !this.notas;
-            }else{
+            } else {
                 this.plex.toast('success', 'Nota eliminada con éxito!');
             }
         }, error => {
@@ -308,8 +310,8 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.notaEditada = this.formacion.notas[0];
         this.notas = !this.notas;
     }
-    eliminarNota(){
-        this.formacion.notas.splice(0,1);
+    eliminarNota() {
+        this.formacion.notas.splice(0, 1);
         this.guardarNota(true);
     }
 }

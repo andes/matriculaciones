@@ -252,7 +252,8 @@ export class FormacionPosgradoComponent implements OnInit {
                     if (!formacionPosgrado.tieneVencimiento) {
                         return 'sinVencimiento';
                     } else {
-                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin) {
+                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin &&
+                            this.hoy > formacionPosgrado.matriculacion[0].fin) {
                             return 'vencida';
                         } else {
                             return 'vigente';

@@ -267,7 +267,8 @@ export class ListarProfesionalesComponent implements OnInit {
                 anioGracia++;
             } else {
                 if (tipo === 'vencida' && element.tieneVencimiento &&
-                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
+                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[element.matriculacion?.length - 1].fin.getTime()) / (1000 * 3600 * 24) > 365) &&
+                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[0].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
                     vencidas++;
                 } else {
                     if (tipo === 'suspendida' && !element.matriculado) {

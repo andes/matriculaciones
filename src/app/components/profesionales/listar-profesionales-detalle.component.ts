@@ -99,7 +99,8 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
                     if (profesionalPosgrado.revalida) {
                         return 'verificarPapeles';
                     } else {
-                        if (this.hoy > profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin) {
+                        if (this.hoy > profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].fin &&
+                            this.hoy > profesionalPosgrado.matriculacion[0].fin) {
                             return 'vencida';
                         } else {
                             return 'vigente';

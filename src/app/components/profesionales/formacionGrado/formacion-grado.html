@@ -54,7 +54,7 @@
         <plex-badge *ngIf="verificarVencimiento(i) === 'vigente'" type="success"> Matriculado
         </plex-badge>
         <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado && !poseeRechazoRenovacion(i)"
-                    type="danger"> Matricula <br> suspendida
+                    type="danger"> Matricula <br> baja
         </plex-badge>
 
         <plex-badge *ngIf="poseeVerificarPapeles(i)"

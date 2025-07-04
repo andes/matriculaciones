@@ -159,6 +159,11 @@ export class DocumentoProfesionalComponent implements OnInit {
                     } else {
                         this.certificado.splice(i, 1);
                     }
+                    if( documento.tipo === 'Documentación personal') {
+                        this.documentacionPersonal.splice(i, 1);
+                    }else {
+                        this.certificado.splice(i, 1);
+                    }
                 }
 
                 for (let index = 0; index < this.profesional.documentos.length; index++) {

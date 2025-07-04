@@ -52,6 +52,23 @@
             </plex-item>
         </plex-list>
     </div>
+    <plex-title titulo="Documentación personal" size="sm"></plex-title>
+<plex-label *ngIf="!documentacionPersonal?.length">No se cargó ninguna documentación personal</plex-label>
+<div *ngFor="let doc of documentacionPersonal; let i=index" class="mb-2">
+    <plex-list>
+        <plex-item>
+            <plex-label type="info" icon="documento" titulo="{{doc.nombreDocumento}}"
+                        subtitulo="{{doc.fecha | fecha}}">
+            </plex-label>
+            <plex-button class="ml-2" type="success" size="sm" icon="download" tooltip="Descargar"
+                         class="float-right" (click)="descargar(doc.fileId)">
+            </plex-button>
+            <plex-button class="ml-2" type="danger" size="sm" icon="cesto" tooltip="Eliminar"
+                         class="float-right" (click)="eliminarDocumento(doc, i)">
+            </plex-button>
+        </plex-item>
+    </plex-list>
+</div>
     <plex-title titulo="Certificados" size="sm"></plex-title>
     <plex-label *ngIf="!certificado?.length">No se cargó ningún certificado</plex-label>
     <div *ngFor="let doc of certificado; let i=index">

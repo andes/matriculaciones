@@ -59,6 +59,7 @@ export class SupervisoresComponent implements OnDestroy {
     ngOnDestroy() {
         if (this.searchSubscribe) {
             this.searchSubscribe.unsubscribe();
+
         }
     }
 
@@ -70,6 +71,7 @@ export class SupervisoresComponent implements OnDestroy {
             const searchTerm = (this.textoLibre && this.textoLibre.length) ? this.textoLibre.trim() : '';
 
             if (this.searchSubscribe) {
+
                 this.searchSubscribe.unsubscribe();
             }
             this.searchSubscribe = this.usuarioService.find({
@@ -129,14 +131,20 @@ export class SupervisoresComponent implements OnDestroy {
     guardarFirmaAdminGrid() {
         const firmaADmin = {
             'firma': this.base64textStringAdmin,
-            'nombreCompleto': 'asda',
+            'nombreCompleto': this.userSeleccionado.apellido + ' ' + this.userSeleccionado.nombre,
             'idSupervisor': this.userSeleccionado.id
         };
-        this._profesionalService.saveProfesional({ firmaAdmin: firmaADmin }).subscribe(resp => {
+
+
+        this._profesionalService.updateProfesional(this.userSeleccionado.id, { firmaAdmin: firmaADmin }).subscribe(resp => {
             this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
             this.base64textStringAdmin = '';
         });
     }
+
+
+
+
 
     modificarPermiso() {
         const permisosUss = this.userSeleccionado.organizaciones[this.indexOrganizacion].permisos;

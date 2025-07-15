@@ -49,27 +49,27 @@
       </div>
       <div *ngIf="formacionGrado.matriculacion">
         <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type='danger'>
-          Matricula Vencida
+          Matrícula Vencida
         </plex-badge>
         <plex-badge *ngIf="verificarVencimiento(i) === 'vigente'" type="success"> Matriculado
         </plex-badge>
         <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado && !poseeRechazoRenovacion(i)"
-                    type="danger"> Matricula <br> baja
+                    type="danger"> Matrícula <br> baja
         </plex-badge>
 
-                <plex-badge *ngIf="poseeVerificarPapeles(i)"
-                            type="{{formacionGrado.papelesVerificados ? 'success' : 'warning' }}">
-                    {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
-                </plex-badge>
-                <plex-badge *ngIf="poseeRechazoRenovacion(i)" type="danger">
-                    Renovación rechazada
-                </plex-badge>
-            </div>
-            <div *ngIf="!formacionGrado.matriculacion">
-                <plex-badge type="danger">No posee matricula</plex-badge>
-            </div>
-        </div>
-    </plex-box>
+        <plex-badge *ngIf="poseeVerificarPapeles(i)"
+                    type="{{formacionGrado.papelesVerificados ? 'success' : 'warning' }}">
+          {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+        </plex-badge>
+        <plex-badge *ngIf="poseeRechazoRenovacion(i)" type="danger">
+          Renovación rechazada
+        </plex-badge>
+      </div>
+      <div *ngIf="!formacionGrado.matriculacion">
+        <plex-badge type="danger">No posee matrícula</plex-badge>
+      </div>
+    </div>
+  </plex-box>
 </div>
 <plex-box>
     <div *ngIf='edit  &&  credencial'>

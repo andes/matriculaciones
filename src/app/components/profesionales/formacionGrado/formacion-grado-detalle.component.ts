@@ -25,6 +25,7 @@ import { PlexPanelComponent } from '@andes/plex/src/lib/accordion/panel.componen
 // Utils
 import { PDFUtils } from './../../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-formacion-grado-detalle',
@@ -113,7 +114,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
                             if (mantenerNumero) {
                                 matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
                             }
-                            const vencimientoAnio = (new Date()).getUTCFullYear() + 5;
+                            const vencimientoAnio: number = moment().year() + 5;
                             const oMatriculacion = {
                                 matriculaNumero: matriculaNumero,
                                 libro: '',
@@ -124,7 +125,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
                                     fecha: ''
                                 },
                                 notificacionVencimiento: false,
-                                fin: new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio)),
+                                fin: moment(this.profesional.fechaNacimiento).year(vencimientoAnio).toDate(),
                                 revalidacionNumero: revNumero + 1
                             };
                             this._numeracionesService.putNumeracion(num[0])
@@ -262,8 +263,9 @@ export class FormacionGradoDetalleComponent implements OnInit {
     }
 
     guardarGestion() {
-        const vencimientoAnio = (new Date(this.formacion.matriculacion[this.indexGestion].inicio)).getUTCFullYear() + 5;
-        this.formacion.matriculacion[this.indexGestion].fin = new Date(new Date(this.profesional.fechaNacimiento).setFullYear(vencimientoAnio));
+        const vencimientoAnio: number = moment(this.formacion.matriculacion[this.indexGestion].inicio).year() + 5;
+        const fechaNacimiento = moment(this.profesional.fechaNacimiento).hour(0).toDate();
+        this.formacion.matriculacion[this.indexGestion].fin = moment(fechaNacimiento).year(vencimientoAnio).toDate();
         this.actualizar();
         this.plex.toast('success', 'La edición se registró con exito!', 'informacion', 1000);
         this.edicionGestion = false;

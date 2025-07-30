@@ -269,7 +269,7 @@ export class ProfesionalComponent implements OnInit {
                     if (profesionalExistente) {
                         return this._profesionalService.patchProfesional(profesional.id, profesional);
                     } else {
-                        return this._profesionalService.saveProfesional({ profesional });
+                        return this._profesionalService.updateProfesional(profesional.id, profesional);
                     }
                 }
             })

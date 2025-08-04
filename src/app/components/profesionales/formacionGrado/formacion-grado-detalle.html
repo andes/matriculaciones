@@ -44,14 +44,12 @@
   <div style="text-align: left;">
     <div>
       <strong>Fecha:</strong>
-      <span style="color: aliceblue;">
         {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.fecha | fecha }}
-      </span>
     </div>
 
     <div style="margin-top: 0.5rem;">
       <strong>Motivo de baja:</strong>
-      <span style="color: aliceblue;display: inline; word-break: break-word; white-space: normal;">
+      <span style="display: inline; word-break: break-word; white-space: normal;">
         {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.motivo }}
       </span>
     </div>

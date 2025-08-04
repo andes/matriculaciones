@@ -35,28 +35,28 @@
 </plex-title>
 
 
- <plex-grid type="full" size="lg">
-   <div class="grow">
-    <plex-badge   block="true" direction="column" type="danger" mode="filled"
-                       aligned="center"  class="mr-3">
-        <strong>Motivo de la baja</strong>
-        <br>
-        <span style="display: block; word-break: break-word;">
-            {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.motivo }}
-        </span>
-       </plex-badge>
-     
-
-       <plex-badge     block="true" direction="column" type="danger" mode="filled" style="width: 40%; align-items: stretch;" >
-        <strong>Fecha</strong>
-        <br>
-        
+<plex-badge
+  *ngIf="formacion.matriculacion[formacion.matriculacion.length - 1].baja?.fecha"
+  size="block"
+  type="danger"
+  class="mr-1"
+>
+  <div style="text-align: left;">
+    <div>
+      <strong>Fecha:</strong>
+      <span style="color: aliceblue;">
         {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.fecha | fecha }}
-   
-      </plex-badge>
-      </div>
-</plex-grid>
-       
+      </span>
+    </div>
+
+    <div style="margin-top: 0.5rem;">
+      <strong>Motivo de baja:</strong>
+      <span style="color: aliceblue;display: inline; word-break: break-word; white-space: normal;">
+        {{ formacion.matriculacion[formacion.matriculacion.length - 1].baja?.motivo }}
+      </span>
+    </div>
+  </div>
+</plex-badge>
 
 
 

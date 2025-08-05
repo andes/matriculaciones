@@ -53,9 +53,9 @@ export class ListarProfesionalesComponent implements OnInit {
             label: 'Posgrados/Estados',
             opcional: true,
         },
-        {
-            key: ''
-        }
+        { key: 'habilitado', label: '' },
+        { key: 'acciones', label: '' }
+
     ];
 
     constructor(

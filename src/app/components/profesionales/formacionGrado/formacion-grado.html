@@ -1,141 +1,147 @@
 <app-formacion-grado-form [profesional]="profesional" (submitGrado)="addFormacionGrado($event)">
 </app-formacion-grado-form>
 <div *ngIf='!edit'>
-  <plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
-    <header>
-      <plex-title [titulo]='formacionGrado.profesion.nombre' size="sm" class="info-subtitle float-left"></plex-title>
-      <div class="row">
-        <div class="col">
-          <div class="btn-group float-right">
-            <span *ngIf="formacionGrado.matriculacion !== null" class="badge badge-info">Nro Matrícula:
-              <br> {{ formacionGrado.matriculacion[formacionGrado.matriculacion.length -
-              1].matriculaNumero }}
-            </span>
-            <plex-button *ngIf="!formacionGrado.matriculacion?.matriculacionNumero" type="primary"
-                         class="float-right btnGrado" icon="information-outline" tooltip="Información"
-                         (click)="showFormacion(i)">
-            </plex-button>
-            <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
-                         title="Generar credencial" type="success" class="float-right btnGrado"
-                         icon="card-account-details" (click)="credencialAcciones(i)"></plex-button>
-            <plex-button title="Generar certificado de ética" type="warning" *ngIf='verificarEmisionCerificado(i)'
-                         class="float-right btnGrado" icon="documentos" (click)="generarCertificadoEtica(i)">
-            </plex-button>
-            <plex-button *ngIf="profesional.habilitado" title="Editar" type="success" class="float-right btnGrado"
-                         icon="lapiz" (click)="editar(formacionGrado,i)">
-            </plex-button>
-            <plex-button class="float-right btnGrado" type="danger" title="Imprimir" (click)="pdf(i)" icon='impresora'>
-            </plex-button>
-          </div>
-        </div>
-      </div>
-    </header>
-    <div class="row" *ngIf='!credencial'>
-      <div class="col-3">
-        <label>Título</label>
-        <div>{{formacionGrado.titulo}}</div>
-      </div>
-      <div class="col-2">
-        <label>Fecha de egreso </label>
-        <div>{{formacionGrado.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
-      </div>
-      <div class="col-3">
-        <label>Entidad Formadora</label>
-        <div>{{formacionGrado.entidadFormadora?.nombre}}</div>
-      </div>
-      <div class="col-2">
-        <label>Fecha de primer matricula</label>
-        <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
-      </div>
-      <div *ngIf="formacionGrado.matriculacion">
-        <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type='danger'>
-          Matricula Vencida
-        </plex-badge>
-        <plex-badge *ngIf="verificarVencimiento(i) === 'vigente'" type="success"> Matriculado
-        </plex-badge>
-        <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado && !poseeRechazoRenovacion(i)"
-                    type="danger"> Matricula <br> suspendida
-        </plex-badge>
+    <plex-box *ngFor="let formacionGrado of profesional.formacionGrado; let i = index;">
+        <header>
+            <plex-title [titulo]='formacionGrado.profesion.nombre' size="sm"
+                        class="info-subtitle float-left"></plex-title>
+            <div class="row">
+                <div class="col">
+                    <div class="btn-group float-right">
+                        <span *ngIf="formacionGrado.matriculacion !== null" class="badge badge-info">Nro Matrícula:
+                            <br> {{ formacionGrado.matriculacion[formacionGrado.matriculacion.length -
+                            1].matriculaNumero }}
+                        </span>
+                        <plex-button *ngIf="!formacionGrado.matriculacion?.matriculacionNumero" type="primary"
+                                     class="float-right btnGrado" icon="information-outline" tooltip="Información"
+                                     (click)="showFormacion(i)">
+                        </plex-button>
+                        <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
+                                     title="Generar credencial" type="success" class="float-right btnGrado"
+                                     icon="card-account-details" (click)="credencialAcciones(i)"></plex-button>
+                        <plex-button title="Generar certificado de ética" type="warning"
+                                     *ngIf='verificarEmisionCerificado(i)' class="float-right btnGrado"
+                                     icon="documentos" (click)="generarCertificadoEtica(i)">
+                        </plex-button>
+                        <plex-button *ngIf="profesional.habilitado" title="Editar" type="success"
+                                     class="float-right btnGrado" icon="lapiz" (click)="editar(formacionGrado,i)">
+                        </plex-button>
+                        <plex-button class="float-right btnGrado" type="danger" title="Imprimir" (click)="pdf(i)"
+                                     icon='impresora'>
+                        </plex-button>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="row" *ngIf='!credencial'>
+            <div class="col-3">
+                <label>Título</label>
+                <div>{{formacionGrado.titulo}}</div>
+            </div>
+            <div class="col-2">
+                <label>Fecha de egreso </label>
+                <div>{{formacionGrado.fechaEgreso | date: 'dd/MM/yyyy'}}</div>
+            </div>
+            <div class="col-3">
+                <label>Entidad Formadora</label>
+                <div>{{formacionGrado.entidadFormadora?.nombre}}</div>
+            </div>
+            <div class="col-2">
+                <label>Fecha de primer matricula</label>
+                <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
+            </div>
+            <div *ngIf="formacionGrado.matriculacion">
+                <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type='danger'>
+                    Matricula Vencida
+                </plex-badge>
+                <plex-badge *ngIf="verificarVencimiento(i) === 'vigente'" type="success"> Matriculado
+                </plex-badge>
+                <plex-badge *ngIf="formacionGrado.matriculacion.length && !formacionGrado.renovacion && !formacionGrado.matriculado && !poseeRechazoRenovacion(i)"
+                            type="danger"> Matricula <br> suspendida
+                </plex-badge>
 
-        <plex-badge *ngIf="poseeVerificarPapeles(i)"
-                    type="{{formacionGrado.papelesVerificados ? 'success' : 'warning' }}">
-          {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
-        </plex-badge>
-        <plex-badge *ngIf="poseeRechazoRenovacion(i)" type="danger">
-          Renovación rechazada
-        </plex-badge>
-      </div>
-      <div *ngIf="!formacionGrado.matriculacion">
-        <plex-badge type="danger">No posee matricula</plex-badge>
-      </div>
-    </div>
-  </plex-box>
+                <plex-badge *ngIf="poseeVerificarPapeles(i)"
+                            type="{{formacionGrado.papelesVerificados ? 'success' : 'warning' }}">
+                    {{formacionGrado.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+                </plex-badge>
+                <plex-badge *ngIf="poseeRechazoRenovacion(i)" type="danger">
+                    Renovación rechazada
+                </plex-badge>
+            </div>
+            <div *ngIf="!formacionGrado.matriculacion">
+                <plex-badge type="danger">No posee matricula</plex-badge>
+            </div>
+        </div>
+    </plex-box>
 </div>
 <plex-box>
-  <div *ngIf='edit  &&  credencial'>
-    <div>
-      <div class='row'>
-        <div class="col-3 bool-posicion">
-          <plex-bool type="slide" label="¿Es una copia?" (change)='copias = null' [(ngModel)]="copia"
-                     name="Medicamento"></plex-bool>
+    <div *ngIf='edit  &&  credencial'>
+        <div>
+            <div class='row'>
+                <div class="col-3 bool-posicion">
+                    <plex-bool type="slide" label="¿Es una copia?" (change)='copias = null' [(ngModel)]="copia"
+                               name="Medicamento"></plex-bool>
+                </div>
+                <div class="col-3" *ngIf="copia">
+                    <plex-select label="Seleccione una opción" name="copias" [(ngModel)]="copias" [data]='copiasObj'>
+                    </plex-select>
+                </div>
+                <div class="col-3">
+                    <plex-datetime label="Fecha de impresión" type="date" [(ngModel)]="fechaImpresion"
+                                   name='fechaImpresion' [required]="true"></plex-datetime>
+                </div>
+                <div class="col-2 centrarBtn">
+                    <plex-button label="Imprimir credencial" (click)='generarCredencial()' type="success"></plex-button>
+                </div>
+            </div>
+            <hr>
+            <div class="row">
+                <div class="col">
+                    <plex-button label="Cerrar" type="danger" class="float-right"
+                                 (click)="cerrarCredencial()"></plex-button>
+                </div>
+            </div>
         </div>
-        <div class="col-3" *ngIf="copia">
-          <plex-select label="Seleccione una opción" name="copias" [(ngModel)]="copias" [data]='copiasObj'>
-          </plex-select>
-        </div>
-        <div class="col-3">
-          <plex-datetime label="Fecha de impresión" type="date" [(ngModel)]="fechaImpresion" name='fechaImpresion'
-                         [required]="true"></plex-datetime>
-        </div>
-        <div class="col-2 centrarBtn">
-          <plex-button label="Imprimir credencial" (click)='generarCredencial()' type="success"></plex-button>
-        </div>
-      </div>
-      <hr>
-      <div class="row">
+    </div>
+    <div class="row" *ngIf='edit  && !credencial'>
         <div class="col">
-          <plex-button label="Cerrar" type="danger" class="float-right" (click)="cerrarCredencial()"></plex-button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row" *ngIf='edit  && !credencial'>
-    <div class="col">
-      <plex-title [titulo]='formacionSelected.profesion.nombre' size="sm">
-      </plex-title>
-      <form #posgrado='ngForm'>
-        <div class="row">
-          <div class="col-md-6">
-            <plex-text label="Título" [(ngModel)]="formacionSelected.titulo" name='titulo' [required]="true">
-            </plex-text>
-          </div>
-          <div class="col-md-6">
-            <plex-datetime label="Fecha de egreso" type="date" [(ngModel)]="formacionSelected.fechaEgreso"
-                           name='fechaEgreso' [required]="true"></plex-datetime>
-          </div>
-          <div class="col-6">
-            <plex-select label="Institución Formadora" [(ngModel)]="formacionSelected.entidadFormadora"
-                         name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)"
-                         [required]="true"></plex-select>
-          </div>
+            <plex-title [titulo]='formacionSelected.profesion.nombre' size="sm">
+            </plex-title>
+            <form #posgrado='ngForm'>
+                <div class="row">
+                    <div class="col-md-6">
+                        <plex-text label="Título" [(ngModel)]="formacionSelected.titulo" name='titulo'
+                                   [required]="true">
+                        </plex-text>
+                    </div>
+                    <div class="col-md-6">
+                        <plex-datetime label="Fecha de egreso" type="date" [(ngModel)]="formacionSelected.fechaEgreso"
+                                       name='fechaEgreso' [required]="true"></plex-datetime>
+                    </div>
+                    <div class="col-6">
+                        <plex-select label="Institución Formadora" [(ngModel)]="formacionSelected.entidadFormadora"
+                                     name="entidadFormadora" (getData)="loadEntidadesFormadoras($event)"
+                                     [required]="true"></plex-select>
+                    </div>
 
-          <div class="col-md-6">
-            <plex-select label="Profesión" [(ngModel)]="formacionSelected.profesion" name='formacionPosgrado'
-                         (getData)="loadProfesiones($event)" [required]="true"
-                         [disabled]=" !formacionSelected.papelesVerificados || formacionSelected.matriculacion  ">
-            </plex-select>
-          </div>
+                    <div class="col-md-6">
+                        <plex-select label="Profesión" [(ngModel)]="formacionSelected.profesion"
+                                     name='formacionPosgrado' (getData)="loadProfesiones($event)" [required]="true"
+                                     [disabled]=" !formacionSelected.papelesVerificados || formacionSelected.matriculacion  ">
+                        </plex-select>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col">
+                        <plex-button label="Guardar" type="success" class="float-right" (click)="actualizar($event)"
+                                     validateForm="true"></plex-button>
+                        <plex-button label="Cerrar" type="danger" class="float-right" (click)="edit = false"
+                                     validateForm="true">
+                        </plex-button>
+                    </div>
+                </div>
+            </form>
         </div>
-        <hr>
-        <div class="row">
-          <div class="col">
-            <plex-button label="Guardar" type="success" class="float-right" (click)="actualizar($event)"
-                         validateForm="true"></plex-button>
-            <plex-button label="Cerrar" type="danger" class="float-right" (click)="edit = false" validateForm="true">
-            </plex-button>
-          </div>
-        </div>
-      </form>
     </div>
-  </div>
 </plex-box>

@@ -23,7 +23,6 @@ import { NumeracionMatriculasService } from './../../../services/numeracionMatri
 import { PlexPanelComponent } from '@andes/plex/src/lib/accordion/panel.component';
 
 // Utils
-import { PDFUtils } from './../../../utils/PDFUtils';
 import { Auth } from '@andes/auth';
 import * as moment from 'moment';
 
@@ -60,11 +59,9 @@ export class FormacionGradoDetalleComponent implements OnInit {
     constructor(
         private _profesionalService: ProfesionalService,
         private _numeracionesService: NumeracionMatriculasService,
-        private _pdfUtils: PDFUtils,
         private plex: Plex,
-        public auth: Auth) { }
-
-
+        public auth: Auth
+    ) { }
 
 
     ngOnInit() {

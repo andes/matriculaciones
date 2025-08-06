@@ -256,7 +256,6 @@ export class ProfesionalComponent implements OnInit {
     private validarGuardar(profesional: IProfesional, profesionalExistente: boolean): Observable<IProfesional> {
         return this.validacionService.post({ documento: profesional.documento, sexo: profesional.sexo }).pipe(
             catchError(() => {
-                // this.plex.toast('warning', 'No se pudo validar con Renaper pero puede continuar con el registro.', 'Renaper no disponible');
                 return null;
             }),
             switchMap(responseRenaper => {
@@ -269,7 +268,7 @@ export class ProfesionalComponent implements OnInit {
                     if (profesionalExistente) {
                         return this._profesionalService.patchProfesional(profesional.id, profesional);
                     } else {
-                        return this._profesionalService.updateProfesional(profesional.id, profesional);
+                        return this._profesionalService.saveProfesional({ profesional });
                     }
                 }
             })

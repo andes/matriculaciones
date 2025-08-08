@@ -176,7 +176,11 @@ export interface IProfesional {
         libro: String;
         anio: Number;
     }];
-    notas: String;
+    notas: [{
+        usuario: String;
+        fecha: Date;
+        descripcion: String;
+    }];
     rematriculado: Number;
     agenteMatriculador: String;
     supervisor?: {

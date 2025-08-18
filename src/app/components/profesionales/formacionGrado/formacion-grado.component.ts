@@ -174,8 +174,7 @@ export class FormacionGradoComponent implements OnInit {
         this.pdfService.descargarCertificadoEtica({
             profesional,
             matricula
-        },
-        'Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf'
+        }, 'Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf'
         ).subscribe();
     }
 

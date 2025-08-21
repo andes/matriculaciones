@@ -91,6 +91,7 @@ import { ReportesComponent } from './components/reportes/reportes.component';
 import { UploadFileComponent } from './shared/components/upload-file.component';
 import { ListarProfesionalesDetalleComponent } from './components/profesionales/listar-profesionales-detalle.component';
 import { DocumentoProfesionalComponent } from './components/profesionales/documentos/documentos-profesional.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 // Locales
 import { AppComponent } from './app.component';
@@ -184,7 +185,8 @@ import { FiltrosRenovacionComponent } from './components/profesionales/filtros-r
         Ng2ImgMaxModule,
         Ng2ImgToolsModule,
         ImageUploadModule.forRoot(),
-        WebcamModule
+        WebcamModule,
+        BrowserAnimationsModule
     ],
     providers: [
         Server,

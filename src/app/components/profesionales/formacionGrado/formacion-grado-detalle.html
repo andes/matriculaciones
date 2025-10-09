@@ -1,37 +1,36 @@
 <plex-title titulo="{{formacion.profesion.nombre}}" size="md">
-    <plex-button class="pr-1" tooltip="Aprobar matricula"
-                 *ngIf='formacion.papelesVerificados && formacion.matriculacion && !formacion.matriculado'
-                 type="success" icon="check" (click)="matricularProfesional(formacion,true)" size="sm"
-                 [disabled]="revalidando">
-    </plex-button>
-    <plex-button class="pr-1" type="primary" icon="plus" tooltip="Agregar nueva matricula"
-                 *ngIf='formacion.papelesVerificados && this.profesional.formacionGrado[index].matriculado === false && !this.profesional.formacionGrado[index].matriculacion'
-                 (click)="matricularProfesional(formacion,false)" size="sm">
-    </plex-button>
-    <plex-button class="pr-1" tooltip="Renovar antes de la fecha del vencimiento" type="info"
-                 *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
-                 icon="calendar" (click)="renovarAntesVencimiento()" size="sm">
-    </plex-button>
-    <plex-button class="pr-1" type="warning" tooltip="Dar de baja"
-                 *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
-                 icon="prohibido " (click)="mostrarBaja()" size="sm">
-    </plex-button>
-    <plex-button class="pr-1" tooltip="Rechazar Renovación" *ngIf="opcionRechazarRenovacion() && esSupervisor "
-                 type="warning" icon="documento-cruz" size="sm" (click)="rechazarRenovacion()">
-    </plex-button>
-    <plex-button class="pr-1" tooltip="Papeles verificados" *ngIf='opcionPapelesVerificados() && esSupervisor '
-                 type="success" icon="check" (click)="papelesVerificados()" size="sm">
-    </plex-button>
+  <plex-button class="pr-1" tooltip="Aprobar matricula"
+               *ngIf='formacion.papelesVerificados && formacion.matriculacion && !formacion.matriculado' type="success"
+               icon="check" (click)="matricularProfesional(formacion,true)" size="sm" [disabled]="revalidando">
+  </plex-button>
+  <plex-button class="pr-1" type="primary" icon="plus" tooltip="Agregar nueva matricula"
+               *ngIf='formacion.papelesVerificados && this.profesional.formacionGrado[index].matriculado === false && !this.profesional.formacionGrado[index].matriculacion'
+               (click)="matricularProfesional(formacion,false)" size="sm">
+  </plex-button>
+  <plex-button class="pr-1" tooltip="Renovar antes de la fecha del vencimiento" type="info"
+               *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
+               icon="calendar" (click)="renovarAntesVencimiento()" size="sm">
+  </plex-button>
+  <plex-button class="pr-1" type="warning" tooltip="Dar de baja"
+               *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
+               icon="prohibido " (click)="mostrarBaja()" size="sm">
+  </plex-button>
+  <plex-button class="pr-1" tooltip="Rechazar Renovación" *ngIf="opcionRechazarRenovacion() && esSupervisor "
+               type="warning" icon="documento-cruz" size="sm" (click)="rechazarRenovacion()">
+  </plex-button>
+  <plex-button class="pr-1" tooltip="Papeles verificados" *ngIf='opcionPapelesVerificados() && esSupervisor '
+               type="success" icon="check" (click)="papelesVerificados()" size="sm">
+  </plex-button>
 
-    <plex-button class="pr-1" tooltip="Papeles verificados"
-                 *ngIf='!profesional.formacionGrado[index].matriculacion && !profesional.formacionGrado[index].papelesVerificados && esSupervisor'
-                 type="success" icon="check" (click)="papelesVerificados()" size="sm">
-    </plex-button>
+  <plex-button class="pr-1" tooltip="Papeles verificados"
+               *ngIf='!profesional.formacionGrado[index].matriculacion && !profesional.formacionGrado[index].papelesVerificados && esSupervisor'
+               type="success" icon="check" (click)="papelesVerificados()" size="sm">
+  </plex-button>
 
-    <plex-button class="pr-1" tooltip="Renovar" type="success" *ngIf='opcionRenovar()' label='Renovar'
-                 (click)="renovar()" size="sm">
-    </plex-button>
-    <plex-button type="danger" size="sm" tooltip="Cerrar" icon="close" (click)="cerrar()"></plex-button>
+  <plex-button class="pr-1" tooltip="Renovar" type="success" *ngIf='opcionRenovar()' label='Renovar' (click)="renovar()"
+               size="sm">
+  </plex-button>
+  <plex-button type="danger" size="sm" tooltip="Cerrar" icon="close" (click)="cerrar()"></plex-button>
 </plex-title>
 
 <ng-container *ngIf="formacion.matriculacion && formacion.matriculacion?.length">
@@ -56,14 +55,15 @@
 
 
 <plex-detail>
-    <plex-badge *ngIf='!formacion.matriculacion?.length' type="info">No Matriculado</plex-badge>
-    <plex-badge *ngIf='formacion.matriculacion?.length' type="success">Última matrícula
-        <strong>{{ formacion.matriculacion[formacion.matriculacion?.length - 1].matriculaNumero }}</strong></plex-badge>
-    <plex-icon name="medico" left size="xl" type="info"></plex-icon>
-    <plex-label titulo="Título" subtitulo="{{profesional.documento}}"></plex-label>
-    <plex-label titulo="Entidad Formadora" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">
-    </plex-label>
-    <plex-label titulo="Fecha de egreso" subtitulo="{{profesional | edad}}"></plex-label>
+  <plex-badge *ngIf='!formacion.matriculacion?.length' type="info">No Matriculado</plex-badge>
+  <plex-badge *ngIf='formacion.matriculacion?.length' type="success">Última matrícula
+    <strong>{{ formacion.matriculacion[formacion.matriculacion?.length - 1].matriculaNumero }}</strong></plex-badge>
+  <plex-icon name="medico" left size="xl" type="info"></plex-icon>
+  <plex-label titulo="Título" subtitulo="{{formacion.titulo}}"></plex-label>
+  <plex-label titulo="Entidad Formadora" subtitulo="{{formacion.entidadFormadora.nombre}}">
+  </plex-label>
+  <plex-label titulo="Fecha de egreso" subtitulo="{{formacion.fechaEgreso | fecha}}"></plex-label>
+  <plex-label titulo="Matrícula SISA." subtitulo="{{formacion.configuracionSisa?.idMatricula}}"></plex-label>
 </plex-detail>
 <div class="row mt-3">
     <div class="col-12">
@@ -137,82 +137,78 @@
     </div>
 </div>
 <form>
-    <div *ngIf='formacion.matriculacion && formacion.matriculado && campoBaja  ' class="espacioTitulo">
-        <plex-title titulo="Baja matrícula" size="md">
-            <plex-button label="Cancelar" size="sm" type="danger" class="float-right pr-1" (click)="cancelarBaja()"
-                         validateForm="true"></plex-button>
-            <plex-button label="Guardar" size="sm" type="success" class="float-left " (click)="darDeBaja()"
-                         validateForm="true" [disabled]="!motivoBaja">
-            </plex-button>
-        </plex-title>
-        <div class="row">
-            <div class="col-md-12">
-                <plex-text label="Motivo de la baja" [(ngModel)]="motivoBaja" name='motivoBaja'
-                           [required]="true"></plex-text>
-            </div>
-        </div>
+  <div *ngIf='formacion.matriculacion && formacion.matriculado && campoBaja  ' class="espacioTitulo">
+    <plex-title titulo="Baja matrícula" size="md">
+      <plex-button label="Cancelar" size="sm" type="danger" class="float-right pr-1" (click)="cancelarBaja()"
+                   validateForm="true"></plex-button>
+      <plex-button label="Guardar" size="sm" type="success" class="float-left " (click)="darDeBaja()"
+                   validateForm="true" [disabled]="!motivoBaja">
+      </plex-button>
+    </plex-title>
+    <div class="row">
+      <div class="col-md-12">
+        <plex-text label="Motivo de la baja" [(ngModel)]="motivoBaja" name='motivoBaja' [required]="true"></plex-text>
+      </div>
     </div>
+  </div>
 </form>
 <form #form="ngForm">
-    <plex-title *ngIf="edicionRechazo" titulo="Rechazar renovación" size="lg">
-        <plex-button class='ml-2' size="sm" type="success" icon="check" tooltip="Guardar" (click)="guardarRechazo()"
-                     [disabled]="!form.valid"></plex-button>
-        <plex-button class='ml-2' size="sm" type="danger" icon="close" tooltip="Cerrar"
-                     (click)="cancelarEdicionRechazo()"></plex-button>
-    </plex-title>
-    <form #form="ngForm">
-        <div *ngIf="edicionRechazo" titulo="Rechazar renovación" size="sm">
-            <div class="row">
-                <div class="col-12">
-                    <div class="form-group">
-                        <plex-text label="Motivo de rechazo" [(ngModel)]="motivoRechazo" name='motivoRechazo'
-                                   [required]="true">
-                        </plex-text>
-                    </div>
-                </div>
-            </div>
+  <plex-title *ngIf="edicionRechazo" titulo="Rechazar renovación" size="lg">
+    <plex-button class='ml-2' size="sm" type="success" icon="check" tooltip="Guardar" (click)="guardarRechazo()"
+                 [disabled]="!form.valid"></plex-button>
+    <plex-button class='ml-2' size="sm" type="danger" icon="close" tooltip="Cerrar"
+                 (click)="cancelarEdicionRechazo()"></plex-button>
+  </plex-title>
+  <form #form="ngForm">
+    <div *ngIf="edicionRechazo" titulo="Rechazar renovación" size="sm">
+      <div class="row">
+        <div class="col-12">
+          <div class="form-group">
+            <plex-text label="Motivo de rechazo" [(ngModel)]="motivoRechazo" name='motivoRechazo' [required]="true">
+            </plex-text>
+          </div>
         </div>
-    </form>
-    <div *ngIf="edicionBajas && !edicionRechazo" class="espacioTitulo">
-        <plex-title titulo="Editar baja" size="md">
-            <plex-button label="Cancelar" size="sm" type="danger" class="float-right pr-1"
-                         (click)="cancelarEdicionBaja()" validateForm="true"></plex-button>
-            <plex-button label="Guardar" size="sm" type="success" class="float-right" (click)="guardarBaja()"
-                         [disabled]="form.invalid">
-            </plex-button>
-        </plex-title>
-        <div class="row">
-            <div class="col-md-12">
-                <plex-text label="Motivo" [(ngModel)]="formacion.matriculacion[indexBaja].baja.motivo" name='motivo'
-                           [required]="true"></plex-text>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <plex-datetime label="Fecha de baja" type="date"
-                               [(ngModel)]="formacion.matriculacion[indexBaja].baja.fecha" name='fecha'
-                               [required]="true">
-                </plex-datetime>
-            </div>
-        </div>
+      </div>
     </div>
-    <div *ngIf="edicionGestion  && !edicionRechazo" class="espacioTitulo">
-        <plex-title titulo="Edición de matriculación" size="md">
-            <plex-button label="Cancelar" size="sm" type="danger" class="float-right pr-1"
-                         (click)="cancelarEdicionGestion()" validateForm="true"></plex-button>
-            <plex-button label="Guardar" size="sm" type="success" class="float-right" (click)="guardarGestion()"
-                         [disabled]="form.invalid">
-            </plex-button>
-        </plex-title>
-        <div class="row">
-            <div class="col-md-12">
-                <plex-datetime label="Fecha de inicio" type="date"
-                               [(ngModel)]="formacion.matriculacion[indexGestion].inicio" name='fecha'
-                               [required]="true">
-                </plex-datetime>
-            </div>
-        </div>
-        <div class="row mt-3">
-            <div class="col">
-            </div>
-        </div>
+  </form>
+  <div *ngIf="edicionBajas && !edicionRechazo" class="espacioTitulo">
+    <plex-title titulo="Editar baja" size="md">
+      <plex-button label="Cancelar" size="sm" type="danger" class="float-right pr-1" (click)="cancelarEdicionBaja()"
+                   validateForm="true"></plex-button>
+      <plex-button label="Guardar" size="sm" type="success" class="float-right" (click)="guardarBaja()"
+                   [disabled]="form.invalid">
+      </plex-button>
+    </plex-title>
+    <div class="row">
+      <div class="col-md-12">
+        <plex-text label="Motivo" [(ngModel)]="formacion.matriculacion[indexBaja].baja.motivo" name='motivo'
+                   [required]="true"></plex-text>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <plex-datetime label="Fecha de baja" type="date" [(ngModel)]="formacion.matriculacion[indexBaja].baja.fecha"
+                       name='fecha' [required]="true">
+        </plex-datetime>
+      </div>
+    </div>
+  </div>
+  <div *ngIf="edicionGestion  && !edicionRechazo" class="espacioTitulo">
+    <plex-title titulo="Edición de matriculación" size="md">
+      <plex-button label="Cancelar" size="sm" type="danger" class="float-right pr-1" (click)="cancelarEdicionGestion()"
+                   validateForm="true"></plex-button>
+      <plex-button label="Guardar" size="sm" type="success" class="float-right" (click)="guardarGestion()"
+                   [disabled]="form.invalid">
+      </plex-button>
+    </plex-title>
+    <div class="row">
+      <div class="col-md-12">
+        <plex-datetime label="Fecha de inicio" type="date" [(ngModel)]="formacion.matriculacion[indexGestion].inicio"
+                       name='fecha' [required]="true">
+        </plex-datetime>
+      </div>
+    </div>
+    <div class="row mt-3">
+      <div class="col">
+      </div>
+    </div>

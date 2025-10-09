@@ -59,42 +59,43 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             activo: true,
             ultimaActualizacion: new Date()
         }],
-        domicilios: [{
-            tipo: 'real',
-            valor: '',
-            codigoPostal: '',
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
+        domicilios: [
+            {
+                tipo: 'real',
+                valor: '',
+                codigoPostal: '',
+                ubicacion: {
+                    localidad: null,
+                    provincia: null,
+                    pais: null,
+                },
+                ultimaActualizacion: new Date(),
+                activo: true
             },
-            ultimaActualizacion: new Date(),
-            activo: true
-        },
-                     {
-                         tipo: 'legal',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: null,
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     },
-                     {
-                         tipo: 'profesional',
-                         valor: null,
-                         codigoPostal: null,
-                         ubicacion: {
-                             localidad: null,
-                             provincia: null,
-                             pais: null,
-                         },
-                         ultimaActualizacion: new Date(),
-                         activo: true
-                     }
+            {
+                tipo: 'legal',
+                valor: null,
+                codigoPostal: null,
+                ubicacion: {
+                    localidad: null,
+                    provincia: null,
+                    pais: null,
+                },
+                ultimaActualizacion: new Date(),
+                activo: true
+            },
+            {
+                tipo: 'profesional',
+                valor: null,
+                codigoPostal: null,
+                ubicacion: {
+                    localidad: null,
+                    provincia: null,
+                    pais: null,
+                },
+                ultimaActualizacion: new Date(),
+                activo: true
+            }
         ],
         fotoArchivo: null,
         firmas: null,
@@ -115,7 +116,8 @@ export class SolicitarTurnoRenovacionComponent implements OnInit {
             renovacionOnline: null,
             papelesVerificados: false,
             matriculacion: null,
-            matriculado: false
+            matriculado: false,
+            configuracionSisa: null
         }],
         formacionPosgrado: null,
         origen: null,

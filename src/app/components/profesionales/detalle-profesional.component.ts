@@ -122,7 +122,8 @@ export class DetalleProfesionalComponent implements OnInit {
                 notificacionVencimiento: false,
                 revalidacionNumero: null,
             }],
-            matriculado: false
+            matriculado: false,
+            configuracionSisa: null
         }],
         formacionPosgrado: null,
         origen: null,

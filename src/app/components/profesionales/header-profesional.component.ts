@@ -6,6 +6,8 @@ import { ProfesionalService } from './../../services/profesional.service';
 import { Auth } from '@andes/auth';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { Router } from '@angular/router';
+
 @Component({
     selector: 'app-header-profesional',
     templateUrl: 'header-profesional.html',
@@ -18,16 +20,18 @@ export class HeaderProfesionalComponent implements OnInit, OnChanges {
     public habilitado: any;
     public estaHabilitado: any;
     public tieneFoto = false;
+    public codigoProfesional = null;
     @Input() profesional: IProfesional;
     @Input() img64 = null;
     @Input() idProfesional;
     @Output() salida = new EventEmitter();
-    constructor(private _profesionalService: ProfesionalService,
-                public sanitizer: DomSanitizer,
-                public auth: Auth, private plex: Plex
-    ) {
+    constructor(
+        private _profesionalService: ProfesionalService,
+        public sanitizer: DomSanitizer,
+        public auth: Auth,
+        private plex: Plex,
+    ) { }
 
-    }
     ngOnInit() {
         this.habilitado = this.profesional.habilitado;
         this.agenteMatriculador = this.auth.usuario.nombreCompleto;
@@ -42,6 +46,11 @@ export class HeaderProfesionalComponent implements OnInit, OnChanges {
             this.estaHabilitado = true;
         } else {
             this.estaHabilitado = false;
+        }
+        for (const formacionGrado of this.profesional.formacionGrado) {
+            if (formacionGrado.configuracionSisa?.codigoProfesional) {
+                this.codigoProfesional = formacionGrado.configuracionSisa.codigoProfesional;
+            }
         }
     }
 
@@ -88,4 +97,11 @@ export class HeaderProfesionalComponent implements OnInit, OnChanges {
         this.salida.emit();
     }
 
+    verificarSISA() {
+        const cambio = {
+            'op': 'updateEstadoGrado',
+            'data': this.profesional.formacionGrado
+        };
+        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe();
+    }
 }

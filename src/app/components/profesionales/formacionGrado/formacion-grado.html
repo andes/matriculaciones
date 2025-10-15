@@ -34,7 +34,7 @@
             </div>
         </header>
         <div class="row" *ngIf='!credencial'>
-            <div class="col-3">
+            <div class="col-2">
                 <label>Título</label>
                 <div>{{formacionGrado.titulo}}</div>
             </div>
@@ -47,8 +47,12 @@
                 <div>{{formacionGrado.entidadFormadora?.nombre}}</div>
             </div>
             <div class="col-2">
-                <label>Fecha de primer matricula</label>
+                <label>Fecha 1° matr.</label>
                 <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
+            </div>
+            <div class="col-2">
+                <label>Matrícula SISA.</label>
+                <div>{{formacionGrado.configuracionSisa?.idMatricula}}</div>
             </div>
             <div *ngIf="formacionGrado.matriculacion">
                 <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type='danger'>

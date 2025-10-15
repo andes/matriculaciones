@@ -103,6 +103,12 @@ export interface IProfesional {
         }];
         matriculado: boolean;
         fechaDeInscripcion?: Date;
+        configuracionSisa: {
+            idProfesional: Number;
+            idProfesion: Number;
+            idMatricula: Number;
+            codigoProfesional: String;
+        };
     }];
     formacionPosgrado: [{
         profesion: {

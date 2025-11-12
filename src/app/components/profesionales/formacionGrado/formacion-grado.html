@@ -16,18 +16,18 @@
                                      class="float-right btnGrado" icon="information-outline" tooltip="Información"
                                      (click)="showFormacion(i)">
                         </plex-button>
+                        <plex-button class="float-right btnGrado" type="info" title="Imprimir" (click)="pdf(i)"
+                                     icon='impresora'>
+                        </plex-button>
                         <plex-button *ngIf='formacionGrado.matriculacion && tieneFirma && tieneFirmaAdmin && formacionGrado.matriculado'
                                      title="Generar credencial" type="success" class="float-right btnGrado"
                                      icon="card-account-details" (click)="credencialAcciones(i)"></plex-button>
-                        <plex-button title="Generar certificado de ética" type="warning"
+                        <plex-button title="Generar certificado de ética" type="success"
                                      *ngIf='verificarEmisionCerificado(i)' class="float-right btnGrado"
                                      icon="documentos" (click)="generarCertificadoEtica(i)">
                         </plex-button>
-                        <plex-button *ngIf="profesional.habilitado" title="Editar" type="success"
-                                     class="float-right btnGrado" icon="lapiz" (click)="editar(formacionGrado,i)">
-                        </plex-button>
-                        <plex-button class="float-right btnGrado" type="danger" title="Imprimir" (click)="pdf(i)"
-                                     icon='impresora'>
+                        <plex-button *ngIf="profesional.habilitado" title="Editar" type="warning"
+                                     class="float-right btnGrado" icon="pencil" (click)="editar(formacionGrado,i)">
                         </plex-button>
                     </div>
                 </div>

@@ -19,11 +19,11 @@
     </plex-badge>
 
     <div subtitle>
-        <plex-button type="info" size="sm" (click)="editar()">editar</plex-button>
-        <plex-button *ngIf="estaHabilitado" class='ml-2' type="warning" size="sm" (click)="habilitar()">Deshabilitar
+        <plex-button *ngIf="estaHabilitado" type="warning" size="sm" (click)="habilitar()">Deshabilitar
         </plex-button>
-        <plex-button *ngIf="!estaHabilitado" class='ml-2' type="success" size="sm" (click)="habilitar()">Habilitar
+        <plex-button *ngIf="!estaHabilitado" type="success" size="sm" (click)="habilitar()">Habilitar
         </plex-button>
+        <plex-button type="warning" size="sm" icon="pencil" tooltip="Editar profesional" class='ml-2' (click)="editar()"></plex-button>
     </div>
     <plex-label titulo="Documento" subtitulo="{{profesional.documento}}"></plex-label>
     <plex-label titulo="Fecha de Nacimiento" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">

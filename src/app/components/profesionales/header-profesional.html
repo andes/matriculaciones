@@ -19,7 +19,7 @@
     </plex-badge>
 
     <div subtitle>
-        <plex-button *ngIf="estaHabilitado" type="warning" size="sm" (click)="habilitar()">Deshabilitar
+        <plex-button *ngIf="estaHabilitado" type="danger" size="sm" (click)="habilitar()">Deshabilitar
         </plex-button>
         <plex-button *ngIf="!estaHabilitado" type="success" size="sm" (click)="habilitar()">Habilitar
         </plex-button>
@@ -52,7 +52,7 @@
 
     <div subtitle>
         <plex-button type="info" size="sm" (click)="editar()">editar</plex-button>
-        <plex-button *ngIf="estaHabilitado" class='ml-2' type="warning" size="sm" (click)="habilitar()">Deshabilitar
+        <plex-button *ngIf="estaHabilitado" class='ml-2' type="danger" size="sm" (click)="habilitar()">Deshabilitar
         </plex-button>
         <plex-button *ngIf="!estaHabilitado" class='ml-2' type="success" size="sm" (click)="habilitar()">Habilitar
         </plex-button>

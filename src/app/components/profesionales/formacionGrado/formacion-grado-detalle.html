@@ -34,9 +34,9 @@
     <plex-button type="danger" size="sm" tooltip="Cerrar" icon="close" (click)="cerrar()"></plex-button>
 </plex-title>
 
-<ng-container *ngIf="formacion.matriculacion && formacion.matriculacion?.length">
-    <plex-badge *ngIf="formacion.matriculacion[formacion.matriculacion.length - 1].baja?.fecha" size="block"
-                type="danger" class="mr-1">
+
+<ng-container *ngIf='visualizarBaja()'>
+    <plex-badge size="block" type="danger" class="mr-1">
         <div style="text-align: left;">
             <div>
                 <strong>Fecha:</strong>
@@ -54,29 +54,31 @@
 </ng-container>
 
 
-
 <plex-detail>
     <plex-badge *ngIf='!formacion.matriculacion?.length' type="info">No Matriculado</plex-badge>
     <plex-badge *ngIf='formacion.matriculacion?.length' type="success">Última matrícula
-        <strong>{{ formacion.matriculacion[formacion.matriculacion?.length - 1].matriculaNumero }}</strong></plex-badge>
+        <strong>{{ formacion.matriculacion[formacion.matriculacion?.length - 1].matriculaNumero
+            }}</strong></plex-badge>
     <plex-icon name="medico" left size="xl" type="info"></plex-icon>
     <plex-label titulo="Título" subtitulo="{{profesional.documento}}"></plex-label>
     <plex-label titulo="Entidad Formadora" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">
     </plex-label>
     <plex-label titulo="Fecha de egreso" subtitulo="{{profesional | edad}}"></plex-label>
 </plex-detail>
+
+
 <div *ngIf="opcionRechazarRenovacion() && esSupervisor">
-  <plex-title titulo="Documentación a Verificar" size="sm"></plex-title>
-  <div class="row">
-    <div class="col-6">
-      <label for="filePicker">Firma</label>
-      <img *ngIf='urlFirma' [src]="urlFirma" height="100px" />
+    <plex-title titulo="Documentación a Verificar" size="sm"></plex-title>
+    <div class="row">
+        <div class="col-6">
+            <label for="filePicker">Firma</label>
+            <img *ngIf='urlFirma' [src]="urlFirma" height="100px" />
+        </div>
+        <div class="col-6">
+            <label for="filePicker">Foto</label>
+            <img *ngIf='foto' [src]="foto" height="100px" />
+        </div>
     </div>
-    <div class="col-6">
-      <label for="filePicker">Foto</label>
-      <img *ngIf='foto' [src]="foto" height="100px" />
-    </div>
-  </div>
 </div>
 
 <div class="row mt-3">
@@ -100,7 +102,8 @@
                                 <tr *ngFor="let matriculacion of formacion.matriculacion; let i = index;">
                                     <td>{{ matriculacion.revalidacionNumero }}</td>
                                     <td>{{ matriculacion.matriculaNumero }}</td>
-                                    <td *ngIf='i === 0'>{{ formacion.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</td>
+                                    <td *ngIf='i === 0'>{{ formacion.fechaDeInscripcion | date:
+                                        'dd/MM/yyyy'}}</td>
                                     <td *ngIf='i !== 0'>{{ matriculacion.inicio | date: 'dd/MM/yyyy'}}</td>
                                     <td>{{ matriculacion.fin | date: 'dd/MM/yyyy'}}</td>
                                     <td>
@@ -131,11 +134,13 @@
                         </thead>
                         <tbody>
                             <tr *ngFor="let matriculacion of formacion.matriculacion; let i = index;">
-                                <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.matriculaNumero }}</td>
+                                <td *ngIf='matriculacion.baja.motivo !== ""'>{{
+                                    matriculacion.matriculaNumero }}</td>
                                 <td *ngIf='matriculacion.baja.motivo !== ""'
                                     style="display: block; word-break: break-word;"> {{
                                     matriculacion.baja?.motivo }}</td>
-                                <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja?.fecha | fecha }}
+                                <td *ngIf='matriculacion.baja.motivo !== ""'>{{ matriculacion.baja?.fecha |
+                                    fecha }}
                                 </td>
                                 <td *ngIf='matriculacion.baja.motivo !== ""'>
                                     <plex-button *ngIf="!edicionBajas" tooltip="Editar fecha" size="sm"

@@ -226,6 +226,13 @@ export class FormacionGradoDetalleComponent implements OnInit {
         return op;
     }
 
+    visualizarBaja() {
+        return this.formacion.matriculado === false
+            && this.formacion.matriculacion && this.formacion.matriculacion[this.formacion.matriculacion.length - 1].baja
+            && this.formacion.matriculacion[this.formacion.matriculacion.length - 1].baja.motivo
+            && this.formacion.renovacionOnline?.estado === 'rechazada';
+    }
+
     renovar() {
         this.formacion.papelesVerificados = false;
         this.formacion.renovacion = true;

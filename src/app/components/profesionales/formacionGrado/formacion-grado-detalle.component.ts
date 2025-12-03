@@ -177,7 +177,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.edicionRechazo = true;
     }
     opcionRechazarRenovacion() {
-        const op = (this.formacion.matriculacion && this.formacion.matriculado && !this.formacion.papelesVerificados && this.formacion.renovacionOnline
+        const op = (this.formacion.matriculacion && !this.formacion.papelesVerificados && this.formacion.renovacionOnline
             && this.formacion.renovacionOnline.estado === 'pendiente');
         return (op);
     }
@@ -190,6 +190,13 @@ export class FormacionGradoDetalleComponent implements OnInit {
     opcionRenovar() {
         const op = (this.formacion.matriculacion && !this.formacion.matriculado && !this.formacion.papelesVerificados && !this.formacion.renovacion);
         return op;
+    }
+
+    visualizarBaja() {
+        return this.formacion.matriculado === false
+            && this.formacion.matriculacion && this.formacion.matriculacion[this.formacion.matriculacion.length - 1].baja
+            && this.formacion.matriculacion[this.formacion.matriculacion.length - 1].baja.motivo
+            && this.formacion.renovacionOnline?.estado === 'rechazada';
     }
 
     renovar() {

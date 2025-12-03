@@ -33,9 +33,7 @@
     </plex-button>
     <plex-button type="danger" size="sm" tooltip="Cerrar" icon="close" (click)="cerrar()"></plex-button>
 </plex-title>
-<div class="col-12 badge badge-danger  " style='margin-top: 15px; margin-bottom: 0px;'
-     *ngIf='formacion.matriculado === false && formacion.matriculacion
-                  && formacion.matriculacion[formacion.matriculacion.length - 1].baja  && formacion.matriculacion[formacion.matriculacion.length - 1].baja.motivo'>
+<div class="col-12 badge badge-danger  " style='margin-top: 15px; margin-bottom: 0px;' *ngIf='visualizarBaja()'>
     <div class="row">
         <div class="form-group col-6 ">
             <strong>Motivo de la baja</strong>

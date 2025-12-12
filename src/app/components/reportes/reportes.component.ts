@@ -15,7 +15,8 @@ import { getObjEstadosMatriculas } from './../../utils/enumerados';
 const limit = 20;
 @Component({
     selector: 'app-reportes',
-    templateUrl: 'reportes.html'
+    templateUrl: 'reportes.html',
+    styleUrls: ['reportes.scss']
 })
 
 export class ReportesComponent implements OnInit {
@@ -43,6 +44,8 @@ export class ReportesComponent implements OnInit {
     private lastRequest: ISubscription;
     public estadosMatriculas;
     public estado;
+    public isCollapsed = false;
+    private selectSnapshot: any;
     public columns = [
         {
             key: 'profesional',
@@ -117,19 +120,22 @@ export class ReportesComponent implements OnInit {
         this.estado = this.estadosMatriculas[0];
     }
 
-    public onChange(event) {
+    public changeCollapse(event) {
+        this.isCollapsed = event;
+    }
+    public onChange() {
         this.fechaMatriculacionDesde = null;
         this.fechaMatriculacionHasta = null;
         this.fechaVencimientoDesde = null;
         this.fechaVencimientoHasta = null;
         this.matriculasVencidas = false;
     }
-    public onChangeVencidas(event) {
+    public onChangeVencidas() {
         this.fechaVencimientoDesde = null;
         this.fechaVencimientoHasta = null;
         this.busquedaMatriculasProxAVencer = false;
     }
-    public onChangeBaja(event) {
+    public onChangeBaja() {
         this.fechaVencimientoDesde = null;
         this.fechaVencimientoHasta = null;
     }
@@ -137,12 +143,14 @@ export class ReportesComponent implements OnInit {
     public generarReporte(exportarPlantilla: boolean) {
         this.loader = true;
         this.deshabilitarExportar = exportarPlantilla;
+        this.selectSnapshot = this.select; // Guardar el valor actual del select
         this.loadDatos(exportarPlantilla, false);
     }
 
-    public nextPage() {
-        if (this.tengoDatos && !this.loader) {
-            this.loader = true;
+    onScroll(event: Event) {
+        const target = event.target as HTMLElement;
+        const atBottom = target.scrollHeight - target.scrollTop === target.clientHeight;
+        if (atBottom && this.tengoDatos && !this.loader) {
             this.skip += limit;
             this.loadDatos(false, true);
         }
@@ -223,8 +231,113 @@ export class ReportesComponent implements OnInit {
             );
     }
 
-    isVencida(fecha) {
-        const fechaVencimiento = new Date(fecha);
-        return (new Date() > fechaVencimiento);
+    isVencidaGrado(profesional) {
+        return this.select?.nombre === 'Grado' && profesional.formacionGrado?.matriculado && profesional.formacionGrado?.papelesVerificados &&
+            !profesional.formacionGrado?.renovacion && moment(profesional.ultimaMatricula?.fin).isBefore(moment().toDate());
+    }
+
+    isVencidaPosgrado(profesional) {
+        return this.select?.nombre === 'Posgrado' && profesional.formacionPosgrado?.matriculado && profesional.formacionPosgrado?.tieneVencimiento
+            && moment(profesional.ultimaMatricula?.fin).isBefore(moment().toDate());
+    }
+
+    isActivaGrado(profesional) {
+        return profesional.formacionGrado?.matriculado && profesional.formacionGrado?.papelesVerificados &&
+            !profesional.formacionGrado?.renovacion && moment(profesional.ultimaMatricula?.fin).isSameOrAfter(moment().toDate());
+    }
+
+    isActivaPosgrado(profesional) {
+        return profesional.formacionPosgrado?.matriculado && moment(profesional.ultimaMatricula?.fin).isSameOrAfter(moment().toDate());
+    }
+
+    isBaja(profesional, tipo) {
+        const esGrado = tipo === 'Grado';
+        const esPosgrado = tipo === 'Posgrado';
+        const formacion = esGrado ? profesional.formacionGrado : profesional.formacionPosgrado;
+
+        if (this.selectSnapshot?.nombre !== tipo || !formacion) { // Usar selectSnapshot en lugar de select
+            return false;
+        }
+        if (esGrado) {
+            return (
+                !formacion.matriculado &&
+                !formacion.renovacion &&
+                !formacion.papelesVerificados &&
+                profesional.ultimaMatricula?.baja?.fecha
+            );
+        }
+        if (esPosgrado) {
+            return (
+                !formacion.matriculado &&
+                !formacion.papelesVerificados &&
+                !formacion.revalida
+            );
+        }
+        return false;
+    }
+
+    isVencida(profesional, tipo) {
+        const esGrado = tipo === 'Grado';
+        const esPosgrado = tipo === 'Posgrado';
+
+        const formacion = esGrado ? profesional.formacionGrado : profesional.formacionPosgrado;
+
+        if (this.selectSnapshot?.nombre !== tipo || !formacion) { // Usar selectSnapshot en lugar de select
+            return false;
+        }
+
+        const fechaFin = profesional.ultimaMatricula?.fin;
+        const vencida = fechaFin ? moment(fechaFin).isBefore(moment()) : false;
+
+        if (esGrado) {
+            return (
+                formacion.matriculado &&
+                formacion.papelesVerificados &&
+                !formacion.renovacion &&
+                vencida
+            );
+        }
+
+        if (esPosgrado) {
+            return (
+                formacion.matriculado &&
+                formacion.tieneVencimiento &&
+                vencida
+            );
+        }
+
+        return false;
+    }
+
+    isActiva(profesional, tipo) {
+        const esGrado = tipo === 'Grado';
+        const esPosgrado = tipo === 'Posgrado';
+
+        const formacion = esGrado ? profesional.formacionGrado : profesional.formacionPosgrado;
+
+        if (!formacion) {
+            return false;
+        }
+
+        const fechaFin = profesional.ultimaMatricula?.fin;
+        const activa = fechaFin ? moment(fechaFin).isSameOrAfter(moment()) : false;
+
+        if (esGrado) {
+            return (
+                formacion.matriculado &&
+                formacion.papelesVerificados &&
+                !formacion.renovacion &&
+                activa
+            );
+        }
+
+        if (esPosgrado) {
+            return (
+                formacion.matriculado &&
+                activa
+            );
+        }
+
+        return false;
     }
 }

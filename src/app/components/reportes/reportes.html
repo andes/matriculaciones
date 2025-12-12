@@ -21,7 +21,7 @@
             </div>
         </plex-title>
         <form #formulario="ngForm">
-            <plex-wrapper>
+            <plex-wrapper (change)="changeCollapse($event)">
                 <plex-datetime grow="4" *ngIf="!busquedaMatriculasProxAVencer" type="date"
                                [(ngModel)]="fechaMatriculacionDesde" name="fechaMatriculacionDesde"
                                label="Fecha Matriculación Desde">
@@ -33,11 +33,11 @@
                 <plex-datetime grow="4"
                                *ngIf="(busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja)"
                                type="date" [(ngModel)]="fechaVencimientoDesde" name="fechaVencimientoDesde"
-                               label="Fecha Vencimiento Matrícula Desde">
+                               label="Fecha Vencimiento Matrícula Desde" [required]="true">
                 </plex-datetime>
                 <plex-datetime grow="4" *ngIf="busquedaMatriculasProxAVencer && !matriculasVencidas && !matriculasBaja"
                                type="date" [(ngModel)]="fechaVencimientoHasta" name="fechaVencimientoHasta"
-                               label="Fecha Vencimiento Matrícula Hasta">
+                               label="Fecha Vencimiento Matrícula Hasta" [required]="true">
                 </plex-datetime>
                 <plex-select grow="4" label="Tipo" [required]="true" name="selectMatriculas" [data]="selectData"
                              [(ngModel)]="select">
@@ -48,96 +48,89 @@
                     <plex-select [(ngModel)]="especialidad" name="especialidad" label="Especialidad"
                                  [data]="especialidades">
                     </plex-select>
-                    <plex-bool type="slide" [(ngModel)]="matriculasBaja" name="matriculasBaja"
-                               (change)="onChangeBaja($event)" label="Dadas de baja" align="center">
+                    <plex-bool type="slide" [(ngModel)]="matriculasBaja" name="matriculasBaja" (change)="onChangeBaja()"
+                               label="Dadas de baja" align="center">
                     </plex-bool>
                     <plex-bool type="slide" [(ngModel)]="matriculasVencidas" name="matriculasVencidas"
-                               (change)="onChangeVencidas($event)" label="Vencidas" align="center">
+                               (change)="onChangeVencidas()" label="Vencidas" align="center">
                     </plex-bool>
                 </div>
             </plex-wrapper>
         </form>
         <div>
-            <plex-table [columns]="columns" #table="plTable" [offset]="175" (scroll)="nextPage()">
-                <plex-title titulo="LISTA DE MATRICULADOS">
-                    <plex-bool type="slide" [(ngModel)]="busquedaMatriculasProxAVencer" (change)="onChange($event)"
-                               name="busquedaMatriculasProxAVencer" label="Matrículas Próximas a Vencer">
-                    </plex-bool>
+            <plex-title titulo="LISTA DE MATRICULADOS">
+                <plex-bool type="slide" [(ngModel)]="busquedaMatriculasProxAVencer" (change)="onChange()"
+                           name="busquedaMatriculasProxAVencer" label="Matrículas Próximas a Vencer">
+                </plex-bool>
+            </plex-title>
+            <div *ngIf="profesionales?.length" (scroll)="onScroll($event)"
+                 [ngClass]="{'scroll-container-collapsed': isCollapsed, 'scroll-container-expanded': !isCollapsed}">
+                <plex-table [columns]="columns" #table="plTable">
                     <plex-table-columns>
                     </plex-table-columns>
-                </plex-title>
+                    <tr *ngFor="let profesional of (profesionales$ | plSort:table | async)">
+                        <td *plTableCol="'profesional'">
+                            <plex-label titulo="{{ profesional | profesional }}"
+                                        subtitulo="{{ profesional.documento }}">
+                            </plex-label>
+                        </td>
+                        <td *plTableCol="'nacimiento'">
+                            <plex-label *ngIf="profesional.fechaNacimiento"
+                                        titulo="{{profesional.fechaNacimiento | fecha}}"
+                                        subtitulo=" {{profesional | edad}}">
+                            </plex-label>
+                            <plex-label *ngIf="!profesional.fechaNacimiento" titulo="Sin fecha de nacimiento">
+                            </plex-label>
+                        </td>
+                        <td *plTableCol="'profesion'">
+                            <plex-label *ngIf="profesional.formacionGrado?.profesion?.nombre"
+                                        titulo="{{profesional.formacionGrado.profesion.nombre}}">
+                            </plex-label>
+                            <plex-label *ngIf="profesional.formacionPosgrado?.profesion?.nombre"
+                                        titulo="{{profesional.formacionPosgrado.profesion.nombre}}">
+                            </plex-label>
+                        </td>
+                        <td *plTableCol="'especialidad'">
+                            <plex-label *ngIf="profesional.formacionPosgrado?.especialidad?.nombre"
+                                        titulo="{{profesional.formacionPosgrado.especialidad.nombre}}">
+                            </plex-label>
+                        </td>
+                        <td *plTableCol="'matriculacion'">
+                            <plex-badge *ngIf="profesional.ultimaMatricula?.inicio" type="warning">
+                                {{profesional.ultimaMatricula.inicio | fecha}}
+                            </plex-badge>
+                            <plex-badge *ngIf="profesional.ultimaMatriculaPosgrado?.inicio" type="warning">
+                                {{profesional.ultimaMatriculaPosgrado.inicio | fecha}}
+                            </plex-badge>
+                        </td>
+                        <td *plTableCol="'numero'">
+                            <plex-badge type="info" *ngIf="profesional.ultimaMatricula?.matriculaNumero">
+                                Matrícula n°
+                                {{profesional.ultimaMatricula.matriculaNumero}}</plex-badge>
+                            <plex-badge type="info" *ngIf="profesional.ultimaMatriculaPosgrado?.matriculaNumero">
+                                Matrícula n°
+                                {{profesional.ultimaMatriculaPosgrado.matriculaNumero}}</plex-badge>
+                        </td>
+                        <td *plTableCol="'estado'">
 
-                <tr *ngFor="let profesional of (profesionales$ | plSort:table | async)">
-                    <td *plTableCol="'profesional'">
-                        <plex-label titulo="{{ profesional | profesional }}" subtitulo="{{ profesional.documento }}">
-                        </plex-label>
-                    </td>
-                    <td *plTableCol="'nacimiento'">
-                        <plex-label *ngIf="profesional.fechaNacimiento" titulo="{{profesional.fechaNacimiento | fecha}}"
-                                    subtitulo=" {{profesional | edad}}">
-                        </plex-label>
-                        <plex-label *ngIf="!profesional.fechaNacimiento" titulo="Sin fecha de nacimiento">
-                        </plex-label>
-                    </td>
-                    <td *plTableCol="'profesion'">
-                        <plex-label *ngIf="profesional.formacionGrado?.profesion?.nombre"
-                                    titulo="{{profesional.formacionGrado.profesion.nombre}}">
-                        </plex-label>
-                        <plex-label *ngIf="profesional.formacionPosgrado?.profesion?.nombre"
-                                    titulo="{{profesional.formacionPosgrado.profesion.nombre}}">
-                        </plex-label>
-                    </td>
-                    <td *plTableCol="'especialidad'">
-                        <plex-label *ngIf="profesional.formacionPosgrado?.especialidad?.nombre"
-                                    titulo="{{profesional.formacionPosgrado.especialidad.nombre}}">
-                        </plex-label>
-                    </td>
-                    <td *plTableCol="'matriculacion'">
-                        <plex-badge *ngIf="profesional.ultimaMatricula?.inicio" type="warning">
-                            {{profesional.ultimaMatricula.inicio | fecha}}
-                        </plex-badge>
-                        <plex-badge *ngIf="profesional.ultimaMatriculaPosgrado?.inicio" type="warning">
-                            {{profesional.ultimaMatriculaPosgrado.inicio | fecha}}
-                        </plex-badge>
-                    </td>
-                    <td *plTableCol="'numero'">
-                        <plex-badge type="info" *ngIf="profesional.ultimaMatricula?.matriculaNumero">
-                            Matrícula n°
-                            {{profesional.ultimaMatricula.matriculaNumero}}</plex-badge>
-                        <plex-badge type="info" *ngIf="profesional.ultimaMatriculaPosgrado?.matriculaNumero">
-                            Matrícula n°
-                            {{profesional.ultimaMatriculaPosgrado.matriculaNumero}}</plex-badge>
-                    </td>
-                    <td *plTableCol="'estado'">
-                        <div *ngIf='!matriculasBaja'>
-                            <plex-badge *ngIf="profesional?.formacionGrado?.matriculado && profesional.ultimaMatricula && profesional.formacionGrado?.profesion?.nombre && !profesional.ultimaMatricula?.baja?.motivo"
-                                        type="success">ACTIVA
+                            <plex-badge *ngIf="isActiva(profesional, 'Grado')" type="success">ACTIVA
                             </plex-badge>
-                            <plex-badge *ngIf="profesional?.formacionGrado && !profesional.formacionGrado.matriculado && profesional.ultimaMatricula && profesional.formacionGrado?.profesion?.nombre  && !profesional.ultimaMatricula?.baja?.motivo"
-                                        type="danger">VENCIDA
+                            <plex-badge *ngIf="isActiva(profesional, 'Posgrado')" type="success">ACTIVA
                             </plex-badge>
-                            <plex-badge *ngIf="profesional?.formacionGrado && !profesional.formacionGrado.matriculado && profesional.ultimaMatricula?.baja?.motivo && profesional.formacionGrado?.profesion?.nombre"
-                                        type="default">SUSPENDIDA
+                            <plex-badge *ngIf="isVencida(profesional, 'Grado')" type="danger">VENCIDA
                             </plex-badge>
-                            <plex-badge *ngIf="profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (!profesional.formacionPosgrado.tieneVencimiento || !isVencida(profesional.ultimaMatriculaPosgrado?.fin)) "
-                                        type="success">ACTIVA
+                            <plex-badge *ngIf="isVencida(profesional, 'Posgrado')" type="danger">VENCIDA
                             </plex-badge>
-                            <plex-badge *ngIf="profesional?.formacionPosgrado && !profesional.formacionPosgrado?.matriculado && profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre && (profesional.formacionPosgrado.tieneVencimiento && !isVencida(profesional.ultimaMatriculaPosgrado?.fin)) "
-                                        type="default">SUSPENDIDA
+                            <plex-badge *ngIf="isBaja(profesional, 'Grado')" type="danger"
+                                        hint="Motivo: {{profesional.ultimaMatricula.baja.motivo }}" hintIcon="bell"
+                                        hintType="danger">DADA DE BAJA
+                                {{profesional.ultimaMatricula.baja.fecha | fecha }}
                             </plex-badge>
-                            <plex-badge *ngIf="profesional.ultimaMatriculaPosgrado && profesional.formacionPosgrado?.especialidad?.nombre
-                && profesional.formacionPosgrado.tieneVencimiento && isVencida(profesional.ultimaMatriculaPosgrado?.fin)  "
-                                        type="danger">VENCIDA
-                            </plex-badge>
-                        </div>
-                        <plex-badge *ngIf='matriculasBaja && profesional.formacionGrado?.matriculacion && profesional.formacionGrado.matriculacion.length > 0 && profesional.ultimaMatricula?.baja && profesional.ultimaMatricula?.baja?.motivo && profesional.ultimaMatricula?.baja?.fecha'
-                                    type="danger">DADA DE BAJA
-                            <br> {{profesional.ultimaMatricula.baja.motivo }}
-                            <br>{{profesional.ultimaMatricula.baja.fecha | fecha }}
-                        </plex-badge>
-                    </td>
-                </tr>
-            </plex-table>
+                            <plex-badge *ngIf="isBaja(profesional, 'Posgrado')" type="danger"> DADA DE BAJA</plex-badge>
+                        </td>
+                    </tr>
+                </plex-table>
+            </div>
         </div>
         <plex-loader *ngIf="loader" type="ball-beat" class=""></plex-loader>
         <div class="h-50" justify="center" *ngIf="!profesionales?.length && !loader">

@@ -69,6 +69,7 @@ export interface IProfesional {
     formacionGrado: [{
         exportadoSisa?: Boolean;
         profesion: {
+            id?: String;
             nombre: String;
             codigo: number;
             tipoDeFormacion: String;

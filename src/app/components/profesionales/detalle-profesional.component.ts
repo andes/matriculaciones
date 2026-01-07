@@ -157,6 +157,7 @@ export class DetalleProfesionalComponent implements OnInit {
             }),
             switchMap(({ params, profesional }) => {
                 if (!profesional.length) {
+                    // profesional no existente, cargar datos temporales de turno
                     return this._turnoService.getTurnoSolicitados(params['id']).pipe(
                         catchError(() => of(null)),
                         tap((profesionalTemporal: any) => {
@@ -168,6 +169,17 @@ export class DetalleProfesionalComponent implements OnInit {
                     );
                 } else {
                     this.profesional = profesional[0];
+                    if (!this.profesional.profesionalMatriculado) {
+                        // profesional existente, pero no matriculado
+                        return this._turnoService.getTurnoSolicitados(params['id']).pipe(
+                            tap((prof) => {
+                                this.flag = false;
+                                delete prof.createdAt;
+                                delete prof.createdBy;
+                                this.profesional = prof;
+                            })
+                        );
+                    }
                     this.flag = true;
                     this.habilitaPosgrado();
                     return of(null);

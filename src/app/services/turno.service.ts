@@ -37,8 +37,8 @@ export class TurnoService extends BaseService {
     saveTurnoSolicitados(turnoSolicitado: any) {
         return this._server.post(this.turnosSolicitados, turnoSolicitado);
     }
-    getTurnoSolicitados(dni: any): Observable<any> {
-        return this._server.get(this.turnosSolicitados + 'traePDni/' + dni);
+    getTurnoSolicitados(id: any): Observable<any> {
+        return this._server.get(this.turnosSolicitados + id);
     }
 
     getTurnos(url: string, searchParams: any): Observable<any> {
@@ -91,7 +91,7 @@ export class TurnoService extends BaseService {
             parametros.documento = searchParams.documento;
         }
 
-        if(searchParams.delDia){
+        if (searchParams.delDia) {
             parametros.delDia = searchParams.delDia;
         }
 

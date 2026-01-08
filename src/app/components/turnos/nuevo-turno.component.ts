@@ -30,16 +30,11 @@ export class NuevoTurnoComponent implements AfterViewInit {
     private format = 'DD/MM/YYYY';
     private agendaConfig: IAgendaMatriculaciones;
     public fechaElegida: Date;
-    private fechaConsulta: Date;
-    public turnoElegido: boolean;
     private lblTurno: string;
     private options: any = {};
-    public boxType: string;
-    public horarioSi = false;
     public horario = new Date();
     public fecha = new Date();
     public fechaComparacion: Date;
-    public sinTurnos = false;
     public showSidebar = false;
     cupoDiario = 0;
     @Input() sobreTurno: any;
@@ -51,15 +46,15 @@ export class NuevoTurnoComponent implements AfterViewInit {
     @ViewChild('input') input: ElementRef;
     @ViewChild('div') div: ElementRef;
 
-    constructor(private _element: ElementRef,
-                private _turnoService: TurnoService,
-                private _agendaService: AgendaService,
-                private plex: Plex,
-                private router: Router) { }
+    constructor(
+        private _turnoService: TurnoService,
+        private _agendaService: AgendaService,
+        private plex: Plex,
+        private router: Router) { }
 
 
     ngAfterViewInit() {
-    // Inicio los objetos jQuery.
+        // Inicio los objetos jQuery.
         if (!this.sobreTurno) {
             this.initjQueryObjects();
             // Obtengo la configuración de la agenda.
@@ -104,7 +99,6 @@ export class NuevoTurnoComponent implements AfterViewInit {
             this.cupoDiario = (Math.round((dif / 1000) / 60) / this.agendaConfig.duracionTurno);
             // Calculo los turnos disponibles por día.[tipoMatricula]="tipoMatricula"
             // Obtengo la cantidad de turnos por fecha del mes.
-            this.fechaConsulta = new Date();
             this.getPrimerDia();
         });
 
@@ -151,12 +145,9 @@ export class NuevoTurnoComponent implements AfterViewInit {
             .subscribe((turnosMes) => {
                 let date = (new Date(inicioMes) > new Date()) ? new Date(inicioMes) : new Date();
                 while (date <= finMes && !hayTurnos) {
-                    const indexDia = date.getDay().toString();
                     if (diasDeshabilitados.indexOf(date.getDay().toString()) < 0) {
-                        // console.log(countTurnosXDia)
                         const resultado = turnosMes.filter((dia) => {
                             return moment(date).isSame(moment(dia.fecha), 'day');
-                            // new Date(dia.fecha).getTime() === date.getTime()
                         });
                         if (resultado.length <= this.cupoDiario) {
                             hayTurnos = true;
@@ -188,6 +179,7 @@ export class NuevoTurnoComponent implements AfterViewInit {
             finMes = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
         }
         let date = new Date(inicioMes);
+        fechasExcluidas.push(hoy);
         while (date <= finMes) {
             const resultado = countTurnosXDia.filter((dia) => {
                 return moment(date).isSame(moment(dia.fecha), 'day');
@@ -215,7 +207,6 @@ export class NuevoTurnoComponent implements AfterViewInit {
         if (this.agendaConfig) {
 
             this.agendaConfig.diasHabilitados.forEach((dia: any) => {
-
                 const indexOfDia = dias.indexOf((dia.id + 1) % 7);
                 dias.splice(indexOfDia, 1);
             });
@@ -232,10 +223,10 @@ export class NuevoTurnoComponent implements AfterViewInit {
         this.fecha.setMinutes(minutos);
         this.lblTurno = moment(this.fecha).format('llll');
         this.lblTurno = diasSemana[this.fecha.getDay()] + ' '
-      + this.fecha.getDate().toString() + ' de '
-      + meses[this.fecha.getMonth()] + ' de '
-      + this.fecha.getFullYear() + ', '
-      + this.fecha.getHours();
+            + this.fecha.getDate().toString() + ' de '
+            + meses[this.fecha.getMonth()] + ' de '
+            + this.fecha.getFullYear() + ', '
+            + this.fecha.getHours();
 
         if (this.fecha.getMinutes() > 0) {
             this.lblTurno += ':' + this.fecha.getMinutes();

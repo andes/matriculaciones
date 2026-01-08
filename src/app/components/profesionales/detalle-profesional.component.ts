@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter, HostBinding, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { Plex } from '@andes/plex';
 import { FotoGeneralComponent } from './foto-general.component';
@@ -27,7 +27,6 @@ export class DetalleProfesionalComponent implements OnInit {
     public mostrar = false;
     public mostrarGrado = false;
     public img64 = null;
-    public vieneDeDetalle = null;
     public confirmar = true;
     public tieneFirma = null;
     public tieneFirmaAdmin = null;
@@ -134,8 +133,6 @@ export class DetalleProfesionalComponent implements OnInit {
         idRenovacion: null,
         documentoViejo: null
     };
-    @Output() onShowListado = new EventEmitter();
-    @Output() showFormacion = new EventEmitter();
     @Output() showFoto = new EventEmitter();
     public tieneOtraEntidad;
 
@@ -144,16 +141,11 @@ export class DetalleProfesionalComponent implements OnInit {
         private _turnoService: TurnoService,
         private _numeracionMatriculasService: NumeracionMatriculasService,
         private route: ActivatedRoute,
-        private router: Router,
         public auth: Auth,
         private plex: Plex,
         private location: Location) { }
 
     ngOnInit() {
-        this.vieneDeDetalle = true;
-        // Este metodo se encarga de buscar, a partir del id del profesional obtenido por parametros de ruteo, un profesional
-        // en la coleccion de profesional. Si dicha coleccion no existe entonces procede a buscarla en la de turnosSolicitado
-        // y de esta forma poder mostrar sus datos en el HTML.
         this.route.params.pipe(
             switchMap(params => {
                 if (params && params['id']) {
@@ -165,6 +157,7 @@ export class DetalleProfesionalComponent implements OnInit {
             }),
             switchMap(({ params, profesional }) => {
                 if (!profesional.length) {
+                    // profesional no existente, cargar datos temporales de turno
                     return this._turnoService.getTurnoSolicitados(params['id']).pipe(
                         catchError(() => of(null)),
                         tap((profesionalTemporal: any) => {
@@ -177,9 +170,12 @@ export class DetalleProfesionalComponent implements OnInit {
                 } else {
                     this.profesional = profesional[0];
                     if (!this.profesional.profesionalMatriculado) {
-                        return this._turnoService.getTurnoSolicitados(this.profesional.documento).pipe(
+                        // profesional existente, pero no matriculado
+                        return this._turnoService.getTurnoSolicitados(params['id']).pipe(
                             tap((prof) => {
                                 this.flag = false;
+                                delete prof.createdAt;
+                                delete prof.createdBy;
                                 this.profesional = prof;
                             })
                         );

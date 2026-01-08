@@ -122,7 +122,7 @@
                                 </plex-wrapper>
                             </ng-container>
                         </div>
-                        <div>
+                        <div *ngIf='profesional.domicilios[0]'>
                             <plex-title titulo="Domicilio {{profesional.domicilios[0].tipo}}" size="sm">
                                 <plex-button type="success" label="completar domicilios" type="primary btn-sm"
                                              (click)="completar()" class="pull-right">
@@ -153,7 +153,7 @@
                     </plex-grid>
 
                     <plex-grid type="full" responsive cols="2" colsSm="1">
-                        <div>
+                        <div *ngIf='profesional.domicilios[1]'>
                             <plex-title titulo="Domicilio {{profesional.domicilios[1].tipo}}" size="sm">
                             </plex-title>
                             <plex-grid type="full" cols="2">
@@ -178,7 +178,7 @@
                                 </plex-int>
                             </plex-grid>
                         </div>
-                        <div *ngIf='!noPoseedomicilioProfesional'>
+                        <div *ngIf='profesional.domicilios[2]'>
                             <plex-title titulo="Domicilio {{profesional.domicilios[2].tipo}}" size="sm">
                             </plex-title>
                             <plex-grid type="full" cols="2">
@@ -207,7 +207,7 @@
                 </plex-tab>
 
                 <!--DATOS DE PROFESIÓN-->
-                <plex-tab *ngIf='!editable' label="Datos de profesion">
+                <plex-tab *ngIf='!editable && profesional.formacionGrado.length' label="Datos de profesion">
                     <plex-grid type="full" responsive cols="3" colsSm="1" colsMd="2">
                         <plex-select label="Profesión" [(ngModel)]="profesional.formacionGrado[0].profesion"
                                      name='formacionPosgrado' (getData)="loadProfesiones($event)" [required]="true">

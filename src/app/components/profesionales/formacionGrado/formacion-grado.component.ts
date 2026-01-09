@@ -171,11 +171,12 @@ export class FormacionGradoComponent implements OnInit {
                 matricula.posgrados = posgrados;
             }
         }
+        const sanciones = this.profesional.sanciones;
         this.pdfService.descargarCertificadoEtica({
             profesional,
-            matricula
-        },
-        'Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf'
+            matricula,
+            sanciones
+        }, 'Certificado de etica para ' + this.profesional.nombre + ' ' + this.profesional.apellido + '.pdf'
         ).subscribe();
     }
 

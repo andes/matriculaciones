@@ -292,6 +292,11 @@ export class ProfesionalComponent implements OnInit {
             ).subscribe(candidatos => {
                 // se filtra por profesionales preexistentes en el sistema (se excluyen los no matriculados y/o con matricula externa)
                 candidatos = candidatos.filter(c => c.profesional.profesionalMatriculado);
+                candidatos = candidatos.filter(c => {
+                    return c.profesional.formacionGrado.some(fg =>
+                        fg.profesion && fg.profesion.id === this.profesional.formacionGrado[0].profesion?.id
+                    );
+                });
                 if (candidatos.length) {
                     this.plex.info('info', 'Ya existe un profesional registrado con estos datos, por favor vaya a la seccion "renovacion" para sacar su turno');
                 } else {

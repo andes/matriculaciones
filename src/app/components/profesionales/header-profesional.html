@@ -17,14 +17,16 @@
     <plex-badge type="{{profesional.validadoRenaper ? 'success':'warning'}}">
         {{profesional.validadoRenaper ? "VALIDADO":"NO VALIDADO"}}
     </plex-badge>
-
     <div subtitle>
         <plex-button *ngIf="estaHabilitado" type="danger" size="sm" (click)="habilitar()">Deshabilitar
         </plex-button>
         <plex-button *ngIf="!estaHabilitado" type="success" size="sm" (click)="habilitar()">Habilitar
         </plex-button>
         <plex-button type="warning" size="sm" icon="pencil" tooltip="Editar profesional" class='ml-2' (click)="editar()"></plex-button>
+        <plex-button *ngIf='!codigoProfesional' class="ml-2" type="success" size="sm" (click)="verificarSISA()">Verif. SISA</plex-button>
     </div>
+
+    <plex-label *ngIf='codigoProfesional' titulo="Cod.Prof.SISA." subtitulo="{{codigoProfesional}}"></plex-label>
     <plex-label titulo="Documento" subtitulo="{{profesional.documento}}"></plex-label>
     <plex-label titulo="Fecha de Nacimiento" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">
     </plex-label>

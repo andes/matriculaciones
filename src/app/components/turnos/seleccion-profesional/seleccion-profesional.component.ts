@@ -111,7 +111,8 @@ export class SeleccionProfesionalComponent implements OnInit {
             renovacionOnline: null,
             papelesVerificados: false,
             matriculacion: null,
-            matriculado: false
+            matriculado: false,
+            configuracionSisa: null
         }],
         formacionPosgrado: null,
         origen: null,

@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col">
                     <div class="btn-group float-right">
-                        <span *ngIf="formacionGrado.matriculacion !== null" class="badge badge-info">Nro Matrícula:
+                        <span *ngIf="formacionGrado.matriculacion?.length" class="badge badge-info">Nro Matrícula:
                             <br> {{ formacionGrado.matriculacion[formacionGrado.matriculacion.length -
                             1].matriculaNumero }}
                         </span>
@@ -50,7 +50,7 @@
                 <label>Fecha de primer matrícula</label>
                 <div>{{formacionGrado.fechaDeInscripcion | date: 'dd/MM/yyyy'}}</div>
             </div>
-            <div *ngIf="formacionGrado.matriculacion">
+            <div *ngIf="formacionGrado.matriculacion?.length">
                 <plex-badge *ngIf="verificarVencimiento(i) === 'vencida'" type='danger'>
                     Matrícula Vencida
                 </plex-badge>
@@ -68,7 +68,7 @@
                     Renovación rechazada
                 </plex-badge>
             </div>
-            <div *ngIf="!formacionGrado.matriculacion">
+            <div *ngIf="!formacionGrado.matriculacion?.length">
                 <plex-badge type="danger">No posee matrícula</plex-badge>
             </div>
         </div>
@@ -105,7 +105,7 @@
     </div>
     <div class="row" *ngIf='edit  && !credencial'>
         <div class="col">
-            <plex-title [titulo]='formacionSelected.profesion.nombre' size="sm">
+            <plex-title [titulo]='formacionSelected?.profesion?.nombre || "Formación de grado"' size="sm">
             </plex-title>
             <form #posgrado='ngForm'>
                 <div class="row">
@@ -124,12 +124,12 @@
                                      [required]="true"></plex-select>
                     </div>
 
-                    <div class="col-md-6">
-                        <plex-select label="Profesión" [(ngModel)]="formacionSelected.profesion"
-                                     name='formacionPosgrado' (getData)="loadProfesiones($event)" [required]="true"
-                                     [disabled]=" !formacionSelected.papelesVerificados || formacionSelected.matriculacion  ">
-                        </plex-select>
-                    </div>
+                     <div class="col-md-6">
+                         <plex-select label="Profesión" [(ngModel)]="formacionSelected.profesion"
+                                      name='formacionPosgrado' (getData)="loadProfesiones($event)" [required]="true"
+                                      [disabled]="tieneMatriculaGenerada(formacionSelected)">
+                         </plex-select>
+                     </div>
                 </div>
                 <hr>
                 <div class="row">

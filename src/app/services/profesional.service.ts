@@ -49,6 +49,14 @@ export class ProfesionalService extends BaseService {
         return this.server.patch(this.profesionalesURL + id, cambios);
     }
 
+    canUndoMatriculaGrado(profesionalId: String, formacionId: String): Observable<any> {
+        return this.server.get(this.profesionalesURL + profesionalId + '/formacionGrado/' + formacionId + '/deshacer-matricula');
+    }
+
+    undoMatriculaGrado(profesionalId: String, formacionId: String): Observable<any> {
+        return this.server.post(this.profesionalesURL + profesionalId + '/formacionGrado/' + formacionId + '/deshacer-matricula', {});
+    }
+
     getCredencial(idProf: String): any {
         return this.server.get(this.profesionalesURL + 'matricula/' + idProf);
     }
@@ -85,5 +93,4 @@ export class ProfesionalService extends BaseService {
         return this.server.delete(this.profesionalesURL + id + '/documentos/' + fileId, { showError: true });
     }
 }
-
 

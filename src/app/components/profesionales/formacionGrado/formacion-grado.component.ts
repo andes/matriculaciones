@@ -70,6 +70,13 @@ export class FormacionGradoComponent implements OnInit {
             });
     }
 
+    obtenerUltimaMatriculacion(formacionGrado) {
+        if (!formacionGrado?.matriculacion?.length) {
+            return null;
+        }
+        return formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1];
+    }
+
     showFormacion(formacion: any) {
         this.formacionGradoSelected.emit(formacion);
     }
@@ -182,14 +189,24 @@ export class FormacionGradoComponent implements OnInit {
 
     actualizar($event) {
         if ($event.formValid) {
+            const formacionesActualizadas = [...this.profesional.formacionGrado];
+            formacionesActualizadas[this.indexGrado] = this.formacionSelected;
             const cambio = {
                 'op': 'updateEstadoGrado',
-                'data': this.profesional.formacionGrado
+                'data': formacionesActualizadas
             };
-            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-                this.edit = false;
-                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
-            });
+            this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(
+                (data) => {
+                    Object.assign(this.profesional, data);
+                    this.formacionSelected = null;
+                    this.edit = false;
+                    this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+                },
+                (error) => {
+                    const mensaje = error?.error?.message || 'No se pudo guardar la formación de grado';
+                    this.plex.info('warning', mensaje);
+                }
+            );
         }
     }
 
@@ -215,8 +232,9 @@ export class FormacionGradoComponent implements OnInit {
         this.formacionGradoSelected.emit(i);
         this.credencial = false;
         this.edit = true;
-        this.formacionSelected = formacionGrado;
-        if (this.formacionSelected.entidadFormadora.codigo === null) {
+        this.indexGrado = i;
+        this.formacionSelected = JSON.parse(JSON.stringify(formacionGrado));
+        if (this.formacionSelected.entidadFormadora?.codigo === null) {
             this.showOtraEntidadFormadora = true;
         } else {
             this.showOtraEntidadFormadora = false;
@@ -225,13 +243,14 @@ export class FormacionGradoComponent implements OnInit {
 
     pdf(grado) {
         let tipoMatricula;
-        if (this.profesional.formacionGrado[grado].matriculacion === null) {
+        const ultimaMatriculacion = this.obtenerUltimaMatriculacion(this.profesional.formacionGrado[grado]);
+        if (!ultimaMatriculacion) {
             tipoMatricula = 'MATRICULACION';
         } else {
             if (moment(this.profesional.formacionGrado[grado].matriculacion[0].inicio).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) {
                 tipoMatricula = 'MATRICULACION';
             } else {
-                tipoMatricula = 'RENOVACION( N° ' + this.profesional.formacionGrado[grado].matriculacion[this.profesional.formacionGrado[grado].matriculacion.length - 1].matriculaNumero + ' )';
+                tipoMatricula = 'RENOVACION( N° ' + ultimaMatriculacion.matriculaNumero + ' )';
             }
         }
         const pdf = this._pdfUtils.comprobanteTurnoDesdeProf(this.profesional, grado, tipoMatricula);
@@ -240,10 +259,9 @@ export class FormacionGradoComponent implements OnInit {
 
     verificarEmisionCerificado(i) {
         const formacionGrado = this.profesional.formacionGrado[i];
-        if (formacionGrado.matriculacion && !formacionGrado.renovacion) {
-            return formacionGrado.matriculacion.length && formacionGrado.matriculado &&
-                (this.hoy <= formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin) ||
-                (!this.verificarFecha(i));
+        const ultimaMatriculacion = this.obtenerUltimaMatriculacion(formacionGrado);
+        if (ultimaMatriculacion && !formacionGrado.renovacion) {
+            return (formacionGrado.matriculado && this.hoy <= ultimaMatriculacion.fin) || !this.verificarFecha(i);
         } else {
             return false;
         }
@@ -261,7 +279,11 @@ export class FormacionGradoComponent implements OnInit {
     }
     verificarFecha(index) {
         const formacionGrado = this.profesional.formacionGrado[index];
-        return ((this.hoy.getTime() - formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1].fin?.getTime()) / (1000 * 3600 * 24) > 365);
+        const ultimaMatriculacion = this.obtenerUltimaMatriculacion(formacionGrado);
+        if (!ultimaMatriculacion?.fin) {
+            return false;
+        }
+        return ((this.hoy.getTime() - ultimaMatriculacion.fin.getTime()) / (1000 * 3600 * 24) > 365);
     }
     poseeVerificarPapeles(index) {
         const formacionGrado = this.profesional.formacionGrado[index];
@@ -270,5 +292,13 @@ export class FormacionGradoComponent implements OnInit {
     poseeRechazoRenovacion(index) {
         const formacionGrado = this.profesional.formacionGrado[index];
         return (formacionGrado.matriculacion.length && formacionGrado.renovacionOnline?.estado === 'rechazada');
+    }
+
+    tieneMatriculaGenerada(formacionGrado) {
+        if (!formacionGrado?.matriculacion?.length) {
+            return false;
+        }
+        const ultimaMatriculacion = formacionGrado.matriculacion[formacionGrado.matriculacion.length - 1];
+        return !!ultimaMatriculacion?.matriculaNumero;
     }
 }

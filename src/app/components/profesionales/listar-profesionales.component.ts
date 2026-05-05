@@ -203,7 +203,7 @@ export class ListarProfesionalesComponent implements OnInit {
             return;
         }
         const profesional = this.listadoActual[iProfesional].formacionGrado[iGrado];
-        if (profesional.matriculacion) {
+        if (profesional.matriculacion?.length) {
             if (profesional.matriculacion[profesional.matriculacion.length - 1].matriculaNumero) {
                 return profesional.matriculacion[profesional.matriculacion.length - 1].matriculaNumero;
             }

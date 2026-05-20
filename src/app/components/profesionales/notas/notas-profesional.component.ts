@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Plex } from '@andes/plex';
 import { IProfesional } from './../../../interfaces/IProfesional';
 import { ProfesionalService } from './../../../services/profesional.service';
@@ -8,11 +8,8 @@ import { Auth } from '@andes/auth';
     selector: 'app-notas-profesional',
     templateUrl: 'notas-profesional.html'
 })
-export class NotasProfesionalComponent implements OnInit {
-    textoNotas: String = '';
+export class NotasProfesionalComponent {
     @Input() profesional: IProfesional;
-    @Output() onSaved = new EventEmitter();
-
 
     constructor(
         private plex: Plex,
@@ -30,7 +27,7 @@ export class NotasProfesionalComponent implements OnInit {
             label: 'USUARIO',
         },
         {
-            key: 'desccripcion',
+            key: 'descripcion',
             label: 'DESCRIPCIÓN',
         },
         {}
@@ -41,12 +38,6 @@ export class NotasProfesionalComponent implements OnInit {
     public accion;
     public editarAgregar = false;
     public notaProfesional = 'Sin datos';
-
-    ngOnInit() {
-        if (!this.profesional.notas[0]._id) {
-            this.notaProfesional = Object.values(this.profesional.notas[0]).filter(nota => nota).join('');
-        }
-    }
 
     agregarEditarNota(accionNota, index) {
         if (accionNota === 'agregar') {

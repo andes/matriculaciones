@@ -62,8 +62,7 @@
     </tr>
 </plex-table>
 <br>
-<plex-title titulo="Notas" size="md">
-</plex-title>
+<plex-title titulo="Notas" size="md"></plex-title>
 <div>
     <plex-label *ngIf="!profesional.notas?.length" icon="informacion" type="warning" size="md" direction="row"
                 titulo="No hay ningúna nota aún" subtitulo="Para agregar una nota, dirijase a la edición 
@@ -71,11 +70,12 @@
     <plex-table *ngIf="profesional.notas?.length">
         <tr *ngFor="let nota of profesional.notas; let i = index">
             <td style="width: 50px;">
-                <plex-label icon="documento" titulo="Fecha" subtitulo="{{nota.fecha | fecha}}">
+                <plex-label icon="documento" titulo="Fecha"
+                            subtitulo="{{nota.fecha ? (nota.fecha | fecha) : 'Sin fecha'}}">
                 </plex-label>
             </td>
             <td style="width: 100px;">
-                <plex-label titulo="Usuario" subtitulo="{{nota.usuario}}">
+                <plex-label titulo="Usuario" subtitulo="{{nota.usuario || 'Sin usuario'}}">
                 </plex-label>
             </td>
             <td>

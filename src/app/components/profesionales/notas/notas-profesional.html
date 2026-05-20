@@ -9,7 +9,7 @@
 </plex-title>
 <form #formNotas="ngForm">
     <ng-container *ngIf="!editarAgregar">
-        <div *ngIf="!profesional.notas.length" style="margin-top: 7em;">
+        <div *ngIf="!profesional.notas?.length" style="margin-top: 7em;">
             <plex-label icon="magnify" type="info" size="xl" direction="column"
                         titulo='No existen notas para este profesional'
                         subtitulo='Para agregar una seleccione el boton "AGREGAR NOTA"'>
@@ -25,7 +25,7 @@
                     </plex-label>
                 </td>
                 <td>
-                    <plex-label titulo="{{nota.usuario || 'Sin datos'}}">
+                    <plex-label titulo="{{nota.usuario || 'Sin usuario'}}">
                     </plex-label>
                 </td>
                 <td>

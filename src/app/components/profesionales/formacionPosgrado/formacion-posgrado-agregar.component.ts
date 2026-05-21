@@ -78,7 +78,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
 
     ultimaMatricula() {
         this._profesionalService.getUltimoPosgradoNro().subscribe(data => {
-            this.profesionalP.matriculacion[0].matriculaNumero = data + 1;
+            this.profesionalP.matriculacion[0].matriculaNumero = data;
         });
     }
 

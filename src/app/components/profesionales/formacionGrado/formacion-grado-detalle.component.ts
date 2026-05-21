@@ -65,6 +65,12 @@ export class FormacionGradoDetalleComponent implements OnInit {
     public matriculaEdit = null;
     public firmaSave = null;
     public fotoSave = null;
+    public estadoDeshacer = {
+        loading: false,
+        canUndo: false,
+        reason: null
+    };
+    private readonly mensajeRevalidacion = 'la formacion de grado ya posee revalidaciones';
 
     constructor(
         private _profesionalService: ProfesionalService,
@@ -78,9 +84,11 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.hoy = new Date();
         this.compruebaBajas();
         this.esSupervisor = this.auth?.check('matriculaciones:supervisor:aprobar');
-        if (this.formacion.matriculacion && this.formacion.renovacionOnline?.estado !== 'rechazada') {
+        this.cargarEstadoDeshacer();
+        if (this.ultimaMatriculacion() && this.formacion.renovacionOnline?.estado !== 'rechazada') {
+            const ultimaMatriculaNumero = this.ultimaMatriculacion().matriculaNumero;
 
-            this._profesionalService.getProfesionalFirma({ id: this.profesional.id, matricula: this.formacion.matriculacion[this.formacion.matriculacion?.length - 1].matriculaNumero }).pipe(catchError(() => of(null))).subscribe(resp => {
+            this._profesionalService.getProfesionalFirma({ id: this.profesional.id, matricula: ultimaMatriculaNumero }).pipe(catchError(() => of(null))).subscribe(resp => {
                 const base64Data = 'data:image/jpeg;base64,' + resp;
                 this.urlFirma = resp.length ? this.sanitizer.bypassSecurityTrustResourceUrl(base64Data) : null;
                 this.firmaSave = base64Data.replace(/^data:image\/[a-z]+;base64,/, '');
@@ -88,7 +96,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
             this._profesionalService.getProfesionalFoto({
                 id: this.profesional.id,
-                matricula: this.formacion.matriculacion[this.formacion.matriculacion?.length - 1].matriculaNumero
+                matricula: ultimaMatriculaNumero
             })
                 .pipe(catchError(() => of(null))).subscribe(resp => {
                     if (resp) {
@@ -107,12 +115,13 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
 
     matricularProfesional(formacion: any, mantenerNumero) {
-        let texto = '¿Desea agregar una nueva matricula?';
-        if (mantenerNumero) {
-            texto = '¿Desea renovar la matricula?';
-        }
+        const fechaAlta = new Date();
+        const vencimientoAnio: number = moment().year() + 5;
+        const fechaVigencia = moment(this.profesional.fechaNacimiento).year(vencimientoAnio).toDate();
+        const accion = mantenerNumero ? 'renovar la matrícula' : 'generar la matrícula';
+        const texto = `¿Desea ${accion}?<br><br><b>Profesión:</b> ${formacion.profesion?.nombre || 'Sin profesión'}<br><b>Fecha de alta:</b> ${moment(fechaAlta).format('DD/MM/YYYY')}<br><b>Vigencia:</b> ${moment(fechaVigencia).format('DD/MM/YYYY')}`;
 
-        this.plex.confirm(texto).then((resultado) => {
+        this.plex.confirm(texto, 'Confirmar matrícula').then((resultado) => {
             if (resultado) {
                 let revNumero = null;
                 this.revalidando = true;
@@ -142,18 +151,17 @@ export class FormacionGradoDetalleComponent implements OnInit {
                             if (mantenerNumero) {
                                 matriculaNumero = this.formacion.matriculacion[this.formacion.matriculacion.length - 1].matriculaNumero;
                             }
-                            const vencimientoAnio: number = moment().year() + 5;
                             const oMatriculacion = {
                                 matriculaNumero: matriculaNumero,
                                 libro: '',
                                 folio: '',
-                                inicio: new Date(),
+                                inicio: fechaAlta,
                                 baja: {
                                     motivo: '',
                                     fecha: ''
                                 },
                                 notificacionVencimiento: false,
-                                fin: moment(this.profesional.fechaNacimiento).year(vencimientoAnio).toDate(),
+                                fin: fechaVigencia,
                                 revalidacionNumero: revNumero + 1
                             };
                             this._numeracionesService.putNumeracion(num[0])
@@ -198,7 +206,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.profesional.formacionGrado[this.index] = this.formacion;
         this._profesionalService.putProfesional(this.profesional)
             .subscribe(resp => {
-                this.profesional = resp;
+                this.actualizarProfesionalLocal(resp);
                 this.plex.toast('success', 'Se guardo con exito el verificar papeles!', 'informacion', 2000);
             }, () => {
                 this.plex.toast('danger', 'Error en el guardado de papeles verificados!', 'informacion', 2000);
@@ -227,9 +235,10 @@ export class FormacionGradoDetalleComponent implements OnInit {
     }
 
     visualizarBaja() {
+        const ultimaMatriculacion = this.ultimaMatriculacion();
         return this.formacion.matriculado === false
-            && this.formacion.matriculacion && this.formacion.matriculacion[this.formacion.matriculacion.length - 1].baja
-            && this.formacion.matriculacion[this.formacion.matriculacion.length - 1].baja.motivo
+            && ultimaMatriculacion?.baja
+            && ultimaMatriculacion.baja.motivo
             && this.formacion.renovacionOnline?.estado === 'rechazada';
     }
 
@@ -385,14 +394,18 @@ export class FormacionGradoDetalleComponent implements OnInit {
             'img': this.fotoSave
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-
-            this.profesional = data;
+            this.actualizarProfesionalLocal(data);
+            this.cargarEstadoDeshacer();
+        }, (error) => {
+            const mensaje = error?.error?.message || 'No se pudo actualizar la matrícula';
+            this.plex.info('warning', mensaje);
         });
 
     }
 
     compruebaBajas() {
         let contador = 0;
+        this.tieneBajas = false;
         if (this.profesional.formacionGrado[this.index].matriculacion) {
             for (let _n = 0; _n < this.profesional.formacionGrado[this.index].matriculacion.length; _n++) {
                 if (this.profesional.formacionGrado[this.index].matriculacion[_n].baja && this.profesional.formacionGrado[this.index].matriculacion[_n].baja.motivo !== '') {
@@ -403,6 +416,115 @@ export class FormacionGradoDetalleComponent implements OnInit {
                 this.tieneBajas = true;
             }
         }
+    }
+
+    ultimaMatriculaNumero() {
+        return this.ultimaMatriculacion()?.matriculaNumero || null;
+    }
+
+    ultimaMatriculacion() {
+        if (!this.formacion?.matriculacion?.length) {
+            return null;
+        }
+        return this.formacion.matriculacion[this.formacion.matriculacion.length - 1] || null;
+    }
+
+    tieneRevalidaciones() {
+        const matriculaciones = Array.isArray(this.formacion?.matriculacion) ? this.formacion.matriculacion.filter(Boolean) : [];
+        return matriculaciones.length > 1 || matriculaciones.some((matriculacion) => Number(matriculacion?.revalidacionNumero) > 1);
+    }
+
+    cargarEstadoDeshacer() {
+        if (!this.esSupervisor || !this.formacion?._id || !this.ultimaMatriculaNumero()) {
+            this.estadoDeshacer = {
+                loading: false,
+                canUndo: false,
+                reason: null
+            };
+            return;
+        }
+
+        if (this.tieneRevalidaciones()) {
+            this.estadoDeshacer = {
+                loading: false,
+                canUndo: false,
+                reason: this.mensajeRevalidacion
+            };
+            return;
+        }
+
+        this.estadoDeshacer = {
+            loading: true,
+            canUndo: false,
+            reason: null
+        };
+
+        this._profesionalService.canUndoMatriculaGrado(this.profesional.id, this.formacion._id).subscribe(
+            (estado) => {
+                this.estadoDeshacer = {
+                    loading: false,
+                    canUndo: !!estado?.canUndo,
+                    reason: estado?.reason || null
+                };
+            },
+            () => {
+                this.estadoDeshacer = {
+                    loading: false,
+                    canUndo: false,
+                    reason: 'No se pudo verificar el estado'
+                };
+            }
+        );
+    }
+
+    deshacerMatricula() {
+        if (this.estadoDeshacer.loading || !this.estadoDeshacer.canUndo || !this.formacion?._id) {
+            return;
+        }
+
+        const texto = `¿Desea deshacer el número de matrícula?<br><br><b>Profesión:</b> ${this.formacion.profesion?.nombre || 'Sin profesión'}<br><b>Matrícula:</b> ${this.ultimaMatriculaNumero()}`;
+        this.plex.confirm(texto, 'Deshacer matrícula').then((resultado) => {
+            if (!resultado) {
+                return;
+            }
+
+            this.estadoDeshacer.loading = true;
+            this._profesionalService.undoMatriculaGrado(this.profesional.id, this.formacion._id).subscribe(
+                () => {
+                    this.recargarProfesional(() => {
+                        this.plex.toast('success', 'Número de matrícula deshecho correctamente', 'informacion', 2000);
+                    });
+                },
+                (error) => {
+                    this.estadoDeshacer.loading = false;
+                    const mensaje = error?.error?.message || 'No fue posible deshacer la matrícula';
+                    this.plex.info('warning', mensaje);
+                    this.cargarEstadoDeshacer();
+                }
+            );
+        });
+    }
+
+    actualizarProfesionalLocal(data) {
+        Object.assign(this.profesional, data);
+        this.formacion = this.profesional.formacionGrado[this.index];
+        this.compruebaBajas();
+    }
+
+    recargarProfesional(callback?) {
+        this._profesionalService.getProfesional({ id: this.profesional.id }).subscribe((profesionales) => {
+            if (profesionales?.length) {
+                this.actualizarProfesionalLocal(profesionales[0]);
+            }
+            this.estadoDeshacer.loading = false;
+            this.cargarEstadoDeshacer();
+            if (callback) {
+                callback();
+            }
+        }, () => {
+            this.estadoDeshacer.loading = false;
+            this.cargarEstadoDeshacer();
+        });
     }
 
 }

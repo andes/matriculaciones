@@ -44,7 +44,7 @@
                     </plex-table-columns>
                     <tr *ngFor="let profesional of (listado$ | async); let indiceProfesional = index"
                         (click)="seleccionar(profesional)" [class.selectable]="true"
-                        [class.selected]="profesional.selected">
+                        [class.selected]="profesional?.id === profesionalSeleccionado?.id">
                         <td>
                             <plex-label icon="medico" titulo="{{profesional.apellido + ', ' + profesional.nombre}}"
                                         subtitulo="{{ (profesional.documento | number) || '' }}">
@@ -100,15 +100,15 @@
                             </plex-badge>
                         </td>
 
-                       <td *plTableCol="'habilitado'">
-                   <plex-badge *ngIf="!profesional.habilitado" type="danger" class="mr-0">
-    Deshabilitado
-        </plex-badge>
-           </td>
+                        <td *plTableCol="'habilitado'">
+                            <plex-badge *ngIf="!profesional.habilitado" type="danger" class="mr-0">
+                                Deshabilitado
+                            </plex-badge>
+                        </td>
 
 
                         <td *plTableCol="'acciones'" class="column-right my-3 d-flex align-items-center">
-                                       
+
 
                             <plex-button type="info" icon="eye" size="sm" (click)="showProfesional(profesional)"
                                          tooltip="Ver profesional">

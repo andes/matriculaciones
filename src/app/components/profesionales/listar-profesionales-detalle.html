@@ -1,5 +1,6 @@
 <plex-title titulo="Detalle del profesional" size="md">
-    <plex-button class='ml-1' size="sm" icon="pencil" type="warning" tooltip="Editar profesional" (click)="editarProfesional()">
+    <plex-button class='ml-1' size="sm" icon="pencil" type="warning" tooltip="Editar profesional"
+                 (click)="editarProfesional()">
     </plex-button>
     <plex-button class='ml-1' size="sm" icon="close" type="danger" tooltip="Cerrar" (click)="volver()"></plex-button>
 </plex-title>
@@ -65,20 +66,21 @@
 <plex-title titulo="Notas" size="md"></plex-title>
 <div>
     <plex-label *ngIf="!profesional.notas?.length" icon="informacion" type="warning" size="md" direction="row"
-                titulo="No hay ningúna nota aún" subtitulo="Para agregar una nota, dirijase a la edición 
-                    de datos del matriculado en la pestaña NOTAS"></plex-label>
+                titulo="No hay ninguna nota aún" subtitulo="Para agregar una nota, diríjase a la edición 
+                    de datos del matriculado en la pestaña NOTAS">
+    </plex-label>
     <plex-table *ngIf="profesional.notas?.length">
         <tr *ngFor="let nota of profesional.notas; let i = index">
-            <td style="width: 50px;">
+            <td style="width: 15%;">
                 <plex-label icon="documento" titulo="Fecha"
                             subtitulo="{{nota.fecha ? (nota.fecha | fecha) : 'Sin fecha'}}">
                 </plex-label>
             </td>
-            <td style="width: 100px;">
+            <td style="width: 25%;">
                 <plex-label titulo="Usuario" subtitulo="{{nota.usuario || 'Sin usuario'}}">
                 </plex-label>
             </td>
-            <td>
+            <td style="width: 50%;">
                 <plex-label titulo="Descripción" subtitulo="{{nota.descripcion}}">
                 </plex-label>
             </td>

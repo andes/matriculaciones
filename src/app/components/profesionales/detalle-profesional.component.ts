@@ -239,15 +239,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe();
     }
 
-    guardarSancion(sancion: any) {
-        const cambio = {
-            'op': 'updateSancion',
-            'data': sancion,
-            'agente': this.auth.usuario.nombreCompleto
-        };
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe();
-    }
-
     guardarFormacionPosgrado(posgrado: any) {
         const cambio = {
             'op': 'updatePosGrado',

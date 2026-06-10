@@ -389,9 +389,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
             'op': 'updateEstadoGrado',
             'data': this.profesional.formacionGrado,
             'agente': this.auth.usuario.nombreCompleto,
-            'matricula': this.matriculaEdit,
-            'firmaP': this.firmaSave,
-            'img': this.fotoSave
+            'matricula': this.matriculaEdit
         };
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
             this.actualizarProfesionalLocal(data);

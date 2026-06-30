@@ -41,7 +41,7 @@ export interface IformacionPosgrado {
     fechaDeVencimiento: Date;
     exportadoSisa: Boolean;
     tieneVencimiento: Boolean;
-    notas: [String];
+    notas?: [String];
 }
 export interface IProfesional {
     id: String;

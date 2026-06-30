@@ -15,21 +15,17 @@
             </plex-select>
         </plex-grid>
         <plex-int label="Matrícula Nro" [(ngModel)]="matriculaNumero" name="matriculaNro" [required]="true"
-                  [readonly]="!profesional.habilitado" placeholder="Ingrese nro de matrícula">
+                  [readonly]="true" placeholder="Ingrese nro de matrícula">
         </plex-int>
 
         <plex-select label="Modalidad" [(ngModel)]="modalidad" name="modalidad" [required]="true"
                      (getData)="loadModalidadesCertificacion($event)" [readonly]="!profesional.habilitado"
                      placeholder="Seleccione una modalidad">
         </plex-select>
-        <br>
         <plex-datetime type="date" label="Fecha de alta" [(ngModel)]="fechaAlta" name="fecha" [required]="true"
                        [readonly]="!profesional.habilitado" placeholder="Ingrese la fecha de alta">
         </plex-datetime>
         <br>
-        <plex-text label="Nota" [(ngModel)]="nota" name="notaText" grow="full" [required]="false" multiline="true">
-        </plex-text>
-
     </form>
 
 </plex-box>

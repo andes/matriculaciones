@@ -18,6 +18,7 @@ export class FormacionPosgradoComponent implements OnInit {
     @Output() showPosgradoEdit = new EventEmitter();
     @Output() showPosgradoAdd = new EventEmitter();
     @Output() indice = new EventEmitter();
+    @Output() abrirSuspensionMatricula = new EventEmitter<number>();
     public showOtraEntidadFormadora = false;
     public certificacion: Icertificacion;
     itemsDropdown: any = [];
@@ -90,7 +91,7 @@ export class FormacionPosgradoComponent implements OnInit {
             }
         }
         if (this.profesional.formacionPosgrado[i].matriculado) {
-            this.itemsDropdown[pos] = { icon: 'cesto', label: ' DAR DE BAJA', handler: () => { this.darDeBaja(i); } };
+            this.itemsDropdown[pos] = { icon: 'cesto', label: ' DAR DE BAJA', handler: () => { this.suspenderMatricula(i); } };
             pos++;
         }
     }
@@ -182,14 +183,9 @@ export class FormacionPosgradoComponent implements OnInit {
         }
     }
 
-    darDeBaja(i) {
-        this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
-            if (resultado) {
-                this.profesional.formacionPosgrado[i].matriculado = false;
-                this.profesional.formacionPosgrado[i].papelesVerificados = false;
-                this.actualizar();
-            }
-        });
+    suspenderMatricula(i) {
+        this.formacionPosgradoSelected.emit(i);
+        this.abrirSuspensionMatricula.emit(i);
     }
 
     actualizar() {
@@ -226,36 +222,21 @@ export class FormacionPosgradoComponent implements OnInit {
         return (moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') > 0);
     }
 
-    estaEnAnioGracia(i) {
-        const formacionPosgrado = this.profesional.formacionPosgrado[i];
-        const ultMat = formacionPosgrado.matriculacion.length - 1;
-        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
-        return (this.estaVencida(i) && moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') < 365);
-    }
-
     verificarFecha(i) {
         const formacionPosgrado = this.profesional.formacionPosgrado[i];
         if (formacionPosgrado.matriculacion.length) {
-            if (formacionPosgrado.revalida) {
-                return 'revalida';
+            if (!formacionPosgrado.matriculado) {
+                return 'suspendida';
             } else {
-                if (!formacionPosgrado.matriculado) {
-                    return 'suspendida';
+                if (!formacionPosgrado.tieneVencimiento) {
+                    return 'sinVencimiento';
                 } else {
-                    if (!formacionPosgrado.tieneVencimiento) {
-                        return 'sinVencimiento';
+                    const ultMat = formacionPosgrado.matriculacion.length - 1;
+                    const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+                    if (this.hoy > formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
+                        return 'vencida';
                     } else {
-                        const ultMat = formacionPosgrado.matriculacion.length - 1;
-                        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
-                        if (this.hoy > formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
-                            if (this.estaVencida(i) && !this.estaEnAnioGracia(i)) {
-                                return 'vencida';
-                            } else {
-                                return 'anio de gracia';
-                            }
-                        } else {
-                            return 'vigente';
-                        }
+                        return 'vigente';
                     }
                 }
             }

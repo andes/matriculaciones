@@ -4,7 +4,7 @@ import { Location } from '@angular/common';
 import { Plex } from '@andes/plex';
 import { FotoGeneralComponent } from './foto-general.component';
 import { ProfesionalService } from './../../services/profesional.service';
-import { IProfesional, IformacionPosgrado } from './../../interfaces/IProfesional';
+import { IProfesional } from './../../interfaces/IProfesional';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
 import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
@@ -31,6 +31,10 @@ export class DetalleProfesionalComponent implements OnInit {
     public editable = false;
     public showEdit = false;
     public showAdd = false;
+    public suspenderMatricula = false;
+    public suspensionRequestId = 0;
+    public fechaSuspender;
+    public motivoSuspender;
 
     @ViewChild('fotoHijo') fotoHijo: FotoGeneralComponent;
     @Input() public flag = null;
@@ -201,10 +205,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateProfesional();
     }
 
-    anioDeGracia(matriculacionEntrante) {
-        this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion = matriculacionEntrante;
-        this.updateProfesional();
-    }
 
     volver() {
         this.location.back();
@@ -217,12 +217,17 @@ export class DetalleProfesionalComponent implements OnInit {
         this.showAdd = false;
     }
 
-    formacionPosgradoSelected(posgrado: IformacionPosgrado) {
+    formacionPosgradoSelected(posgrado: number) {
         this.mostrarGrado = true;
         this.mostrar = false;
         this.indexFormacionPosgradoSelected = posgrado;
         this.showAdd = false;
         this.showEdit = false;
+    }
+
+    abrirSuspensionPosgrado(posgrado: number) {
+        this.formacionPosgradoSelected(posgrado);
+        this.suspensionRequestId++;
     }
 
     mostrarEdicion(mostrarEdit) {
@@ -276,5 +281,13 @@ export class DetalleProfesionalComponent implements OnInit {
     habilitaPosgrado() {
         const res = this.profesional.formacionGrado.find(p => p.profesion.codigo === 1 || p.profesion.codigo === 2);
         return res;
+    }
+
+    suspender() {
+
+    }
+
+    cerrarSuspender() {
+        this.suspenderMatricula = false;
     }
 }

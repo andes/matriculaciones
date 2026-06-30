@@ -1,7 +1,6 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { Plex } from '@andes/plex';
 import { IProfesional } from '../../../interfaces/IProfesional';
-import * as moment from 'moment';
 import { ProfesionalService } from '../../../services/profesional.service';
 import { SIISAService } from '../../../services/siisa.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
@@ -23,7 +22,6 @@ export class FormacionPosgradoEditarComponent implements OnInit {
     public cancel = false;
     profesiones: any[] = [];
     public pos;
-    public existeNota = false;
     public fechaAgregada = false;
     public fechaEditada = false;
     public editarOagregar = false;
@@ -31,7 +29,6 @@ export class FormacionPosgradoEditarComponent implements OnInit {
     public especialidad;
     public matriculaNumero;
     public matriculacion;
-    public nota;
     public modalidad;
     public proximaFechaDeAlta;
 
@@ -58,7 +55,6 @@ export class FormacionPosgradoEditarComponent implements OnInit {
         this.especialidad = this.profesional.formacionPosgrado[this.indice].especialidad;
         this.matriculaNumero = this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].matriculaNumero;
         this.modalidad = this.profesional.formacionPosgrado[this.indice].certificacion?.modalidad;
-        this.nota = this.profesional.formacionPosgrado[this.indice].notas;
         this.matriculacion = this.profesional.formacionPosgrado[this.indice].matriculacion;
     }
 
@@ -110,33 +106,6 @@ export class FormacionPosgradoEditarComponent implements OnInit {
         this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
             this.plex.toast('success', 'Se ha eliminado con éxito!', 'informacion', 1000);
         });
-    }
-
-    cerrarNota() {
-        this.editarOagregar = false;
-        this.existeNota = false;
-    }
-
-    condicionNota() {
-        this.existeNota = true;
-        this.editarOagregar = true;
-        if (this.profesional.formacionPosgrado[this.indice].notas !== null) {
-            this.nota = this.profesional.formacionPosgrado[this.indice].notas;
-        } else {
-            this.nota = '';
-        }
-    }
-
-    guardarNota() {
-        const cambio = {
-            'op': 'updateEstadoPosGrado',
-            'data': this.profesional.formacionPosgrado
-        };
-        this.profesional.formacionPosgrado[this.indice].notas = this.nota;
-        this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-            this.plex.toast('success', 'La nota se modifico con exito!', 'informacion', 1000);
-        });
-        this.cerrarNota();
     }
 
     volver() {

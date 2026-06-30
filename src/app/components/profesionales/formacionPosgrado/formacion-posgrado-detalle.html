@@ -14,221 +14,241 @@
         date:'dd/MM/yyyy'}}
     </plex-badge>
 
-    <plex-badge *ngIf="estaVencida() && verificarFecha(index) !== 'sinVencimiento'"
-        type="{{estaVencida() && !estaEnAnioGracia()?'danger':'info'}}">
-        {{estaVencida() && !estaEnAnioGracia()?'Vencida':'Año de gracia'}}
-    </plex-badge>
-
     <plex-badge *ngIf="verificarFecha(index) == 'vigente'" type="success">
-        vigente
+        VIGENTE
     </plex-badge>
 
-    <plex-badge *ngIf="verificarFecha(index) == 'suspendida'" type="danger"> Suspendida
+    <plex-badge *ngIf="verificarFecha(index) == 'vencida'" type="danger">
+        VENCIDA
     </plex-badge>
 
-    <plex-badge *ngIf="verificarFecha(index) == 'revalida'"
-        type="{{formacion.papelesVerificados ? 'success' : 'warning' }}">
-        {{formacion.papelesVerificados?'Papeles verificados': 'Papeles sin verificar'}}
+    <plex-badge *ngIf="verificarFecha(index) == 'suspendida'" type="danger">
+        SUSPENDIDA
     </plex-badge>
 
     <plex-badge *ngIf="verificarFecha(index) == 'sinVencimiento'" type="warning">
-        Sin vencimiento
+        SIN VENCIMIENTO
     </plex-badge>
 
     <plex-label titulo="Profesión" subtitulo="{{ formacion.profesion.nombre }}"></plex-label>
     <plex-label titulo="Modalidad" subtitulo="{{ formacion.certificacion?.modalidad.nombre }}"></plex-label>
+
+    <plex-label *ngIf="!formacion.matriculado" titulo="Fecha de suspensión"
+                subtitulo="{{ ultimaMatriculacion.baja.fecha | date: 'dd/MM/yyyy' }}"></plex-label>
+    <plex-label *ngIf="!formacion.matriculado" titulo="Motivo de suspensión"
+                subtitulo="{{ ultimaMatriculacion.baja.motivo }}"></plex-label>
+
 </plex-detail>
 
-<div *ngIf="obtenerMatricula()">
-    <plex-title titulo="Obtención de matricula" size="sm">
-        <plex-button class="mr-1" type="success" size="sm" label="{{ puedeRenovar()? 'Renovar' : 'Revalidar' }}"
-            (click)="RevalidarRenovar()" [disabled]="!puedeRenovar() && !puedeRevalidar()">
-        </plex-button>
-    </plex-title>
-    <plex-accordion>
-        <plex-panel tituloPrincipal="Fecha de Alta: {{ matricula.fechaAlta | date: 'dd/MM/yyyy'}}"
-            *ngFor="let matricula of formacion.matriculacion.slice().reverse(); let i = index" [active]="i == 0">
-            <plex-table [columns]="" #table="plTable">
-                <tr *ngIf="matricula.periodos.length > 1">
-                    <th>Reválida</th>
-                    <th>Inicio</th>
-                    <th>Fin</th>
-                    <th>Estado</th>
-                    <th></th>
-                </tr>
-                <tr *ngFor="let periodo of matricula.periodos; let j = index">
-                    <td class="columns" *ngIf="j > 0">
-                        {{ periodo.revalidacionNumero }}
+<ng-container *ngIf="!suspenderMatricula">
+    <div *ngIf="obtenerMatricula()">
+        <plex-title titulo="Obtención de matricula" size="sm">
+            <plex-button class="mr-1" type="success" size="sm" label="{{ esRevalida() ? 'Revalidar' : 'Renovar' }}"
+                         (click)="RevalidarRenovar()"
+                         [disabled]="!formacion.matriculado || (!puedeRenovar() && !puedeRevalidar())">
+            </plex-button>
+        </plex-title>
+        <plex-accordion>
+            <plex-panel tituloPrincipal="Fecha de Alta: {{ matricula.fechaAlta | date: 'dd/MM/yyyy'}}"
+                        *ngFor="let matricula of formacion.matriculacion.slice().reverse(); let i = index"
+                        [active]="i == 0">
+                <plex-table [columns]="" #table="plTable">
+                    <tr *ngIf="matricula.periodos.length > 1">
+                        <th>Reválida</th>
+                        <th>Inicio</th>
+                        <th>Fin</th>
+                        <th>Estado</th>
+                        <th></th>
+                    </tr>
+                    <tr *ngFor="let periodo of matricula.periodos; let j = index">
+                        <td class="columns" *ngIf="j > 0">
+                            {{ periodo.revalidacionNumero }}
+                        </td>
+                        <td class="columns" *ngIf="j > 0">
+                            {{ periodo.inicio | date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td class="columns" *ngIf="j > 0">
+                            {{ periodo.fin | date:'dd/MM/yyyy'}}
+                        </td>
+                        <td class="columns"
+                            *ngIf="j > 0 && j === (matricula.periodos.length - 1) && !formacion.tieneVencimiento">
+                            <plex-badge size="lg" type="warning"> SIN VENCIMIENTO &nbsp;
+                            </plex-badge>
+                        </td>
+                        <td class="columns"
+                            *ngIf="j > 0 && j === (matricula.periodos.length - 1) && formacion.matriculado && formacion.tieneVencimiento">
+                            <plex-badge size="lg" type="{{ periodo.fin >= hoy ? 'success' : 'danger'}}">
+                                {{periodo.fin >= hoy ? 'VIGENTE' : 'VENCIDA'}}
+                            </plex-badge>
+                        </td>
+                        <td class="columns"
+                            *ngIf="j > 0 && j === (matricula.periodos.length - 1) && !formacion.matriculado">
+                            <plex-badge size="lg" type="danger"> NO VIGENTE
+                            </plex-badge>
+                        </td>
+                        <td class="columns" *ngIf="j > 0 && j !== (matricula.periodos.length - 1)">
+                            <plex-badge size="lg" type="danger"> VENCIDA
+                            </plex-badge>
+                        </td>
+                        <td class="float-right" *ngIf="i == 0 && j > 0 && j == (matricula.periodos.length - 1)">
+                            <plex-button class="mr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
+                                         (click)="editarRevalidar()">
+                            </plex-button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="matricula.periodos.length==1">
+                        <td>
+                            No posee revalidaciones.
+                        </td>
+                        <td>
+                            Vencimiento: {{ matricula.periodos[0].fin | date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td class="float-right" *ngIf="i == 0">
+                            <plex-button class="mr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
+                                         (click)="editarMatricula()">
+                            </plex-button>
+                        </td>
+                    </tr>
+                </plex-table>
+            </plex-panel>
+
+        </plex-accordion>
+    </div>
+
+    <div *ngIf="altaObtencion">
+        <plex-title titulo="Renovación de matrícula" size="sm">
+            <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
+                         (click)="renovarMatricula()"></plex-button>
+            <plex-button class='ml-1' type="danger" size="sm" [icon]="'close'" (click)="cerrarAlta('matricula')"
+                         tooltip="Cancelar">
+            </plex-button>
+        </plex-title>
+        <form #formulario='ngForm'>
+            <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicio" [required]="true"
+                           placeholder="Ingrese una fecha" [max]="hoy">
+            </plex-datetime>
+        </form>
+        <br>
+    </div>
+
+    <div *ngIf="editarObtencion">
+        <plex-title titulo="Editar reválida de matrícula" size="sm">
+            <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
+                         (click)="guardar(formulario, 'matricula')"></plex-button>
+            <plex-button class='ml-1' type="danger" size="sm" [icon]="'close'" (click)="cerrarEditar('matricula')"
+                         tooltip="Cancelar">
+            </plex-button>
+        </plex-title>
+        <form #formulario='ngForm'>
+
+            <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="fechaAlta" [required]="true"
+                           placeholder="Ingrese una fecha" [max]="hoy">
+            </plex-datetime>
+
+        </form>
+        <br>
+    </div>
+
+    <div *ngIf="altaRevalida">
+        <plex-title titulo="Revalidación de matrícula" size="sm">
+            <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
+                         (click)="revalidarMatricula()"></plex-button>
+            <plex-button class='ml-1' type="danger" size="sm" [icon]="'close'" (click)="cerrarAlta('revalida')"
+                         tooltip="Cancelar">
+            </plex-button>
+        </plex-title>
+        <form #formulario='ngForm'>
+            <plex-grid cols="1">
+                <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicio"
+                               [required]="true" placeholder="Ingrese una fecha" [max]="hoy">
+                </plex-datetime>
+            </plex-grid>
+        </form>
+        <br>
+    </div>
+
+    <div *ngIf="editarRevalida">
+        <plex-title titulo="Editar fecha reválida" size="sm">
+            <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
+                         (click)="guardar(formulario, 'revalida')"></plex-button>
+            <plex-button class='ml-1' type="danger" size="sm" [icon]="'close'" (click)="cerrarEditar('revalida')"
+                         tooltip="Cancelar">
+            </plex-button>
+        </plex-title>
+        <form #formulario='ngForm'>
+            <plex-grid cols="1">
+                <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicio"
+                               [required]="true" placeholder="Ingrese una fecha">
+                </plex-datetime>
+            </plex-grid>
+        </form>
+        <br>
+    </div>
+
+    <div class="mt-3" *ngIf="revalidacion">
+        <plex-title titulo="Editar revalidaciones" size="sm">
+            <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
+                         (click)="guardar(formulario,'revalida')"></plex-button>
+            <plex-button class="ml-1" type="danger" size="sm" icon="close" (click)="cerrarEditar('renovacion')"
+                         tooltip="Cancelar"></plex-button>
+        </plex-title>
+        <form #formulario='ngForm'>
+            <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicioRevalida"
+                           [required]="true" placeholder="Ingrese una fecha">
+            </plex-datetime>
+        </form>
+    </div>
+
+    <div class="mt-3" *ngIf="!editarRevalida">
+        <plex-title titulo="Notas" size="sm">
+            <plex-button *ngIf="!notas && !formacion.notas?.length" class="ml-1" type="success" size="sm"
+                         label="AGREGAR NOTA" (click)="agregarNota('agregar')"></plex-button>
+            <plex-button class="mr-1" *ngIf="notas" type="success" size="sm" icon="check" tooltip="Guardar"
+                         (click)="guardarNota()" [disabled]="!formularioNota?.valid"></plex-button>
+            <plex-button *ngIf="notas" type="danger" size="sm" icon="close" tooltip="Cancelar"
+                         (click)="cancelarNota()"></plex-button>
+        </plex-title>
+        <form #formularioNota="ngForm" class="mr-1">
+            <plex-table *ngIf="!notas && formacion.notas.length">
+                <tr>
+                    <td>
+                        <plex-label icon="documento" size="md" titulo="{{notaEditada}}"></plex-label>
                     </td>
-                    <td class="columns" *ngIf="j > 0">
-                        {{ periodo.inicio | date: 'dd/MM/yyyy'}}
-                    </td>
-                    <td class="columns" *ngIf="j > 0">
-                        {{ periodo.fin | date:'dd/MM/yyyy'}}
-                    </td>
-                    <td class="columns"
-                        *ngIf="j > 0 && j === (matricula.periodos.length - 1) && !formacion.tieneVencimiento">
-                        <plex-badge size="lg" type="warning"> Sin vencimiento &nbsp;
-                        </plex-badge>
-                    </td>
-                    <td class="columns"
-                        *ngIf="j > 0 && j === (matricula.periodos.length - 1) && formacion.matriculado && formacion.tieneVencimiento">
-                        <plex-badge size="lg"
-                            type="{{ periodo.fin >= hoy?'success': !estaEnAnioGracia() ? 'warning' : 'info'}}">
-                            {{periodo.fin >= hoy? 'Vigente' : !estaEnAnioGracia() ? 'Vencida' : 'Año de gracia'}}
-                        </plex-badge>
-                    </td>
-                    <td class="columns"
-                        *ngIf="j > 0 && (j !== (matricula.periodos.length - 1) || !formacion.matriculado) ">
-                        <plex-badge size="lg" type="danger"> NO VIGENTE
-                        </plex-badge>
-                    </td>
-                    <td class="float-right" *ngIf="i == 0 && j > 0 && j == (matricula.periodos.length - 1)">
-                        <plex-button class="mr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
-                            (click)="editarRevalidar()">
+                    <td class="float-right">
+                        <plex-button size="sm" type="warning" icon="pencil" class="mr-1" tooltip="Editar"
+                                     (click)="agregarNota('editar')">
                         </plex-button>
-                    </td>
-                </tr>
-                <tr *ngIf="matricula.periodos.length==1">
-                    <td>
-                        No posee revalidaciones.
-                    </td>
-                    <td>
-                        Vencimiento: {{ matricula.periodos[0].fin | date: 'dd/MM/yyyy'}}
-                    </td>
-                    <td class="float-right" *ngIf="i == 0">
-                        <plex-button class="mr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
-                            (click)="editarMatricula()">
+                        <plex-button size="sm" type="danger" icon="cesto" class="mr-1" tooltip="Eliminar"
+                                     (click)="eliminarNota()">
                         </plex-button>
                     </td>
                 </tr>
             </plex-table>
-        </plex-panel>
+            <plex-label *ngIf="!notas && !formacion.notas.length" icon="informacion" type="warning" size="md"
+                        direction="row" titulo="No hay ninguna nota aún"
+                        subtitulo="Para agregar una nota, presione el botón AGREGAR NOTA"></plex-label>
+            <plex-text *ngIf="notas" label="Ingrese nota" [(ngModel)]="notaEditada" name="notaText" grow="full"
+                       [required]="true" multiline="true"></plex-text>
+        </form>
+    </div>
+</ng-container>
 
-    </plex-accordion>
-</div>
-
-<div *ngIf="altaObtencion">
-    <plex-title titulo="Alta obtención de matricula" size="sm">
+<div *ngIf="suspenderMatricula">
+    <plex-title titulo="Suspender matrícula" size="sm">
         <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
-            (click)="renovarMatricula()"></plex-button>
-        <plex-button class='ml-2' type="danger" size="sm" [icon]="'close'" (click)="cerrarAlta('matricula')"
-            tooltip="Cancelar">
-        </plex-button>
-    </plex-title>
-    <form #formulario='ngForm'>
-        <plex-grid cols="2">
-            <plex-int label="Matrícula Nro" [(ngModel)]="matriculaNumero" name="matriculaNro" [required]="true"
-                [readonly]="!profesional.habilitado" placeholder="Ingrese nro de matrícula">
-            </plex-int>
-            <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicio" [required]="true"
-                placeholder="Ingrese una fecha">
-            </plex-datetime>
-        </plex-grid>
-    </form>
-    <br>
-</div>
-
-<div *ngIf="editarObtencion">
-    <plex-title titulo="Editar obtención de matricula" size="sm">
-        <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
-            (click)="guardar(formulario, 'matricula')"></plex-button>
-        <plex-button class='ml-2' type="danger" size="sm" [icon]="'close'" (click)="cerrarEditar('matricula')"
-            tooltip="Cancelar">
-        </plex-button>
-    </plex-title>
-    <form #formulario='ngForm'>
-        <plex-grid cols="2">
-            <plex-int label="Matrícula Nro" [(ngModel)]="matriculaNumero" name="matriculaNro" [required]="true"
-                [readonly]="!profesional.habilitado" placeholder="Ingrese nro de matrícula">
-            </plex-int>
-            <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="fechaAlta" [required]="true"
-                placeholder="Ingrese una fecha">
-            </plex-datetime>
-        </plex-grid>
-    </form>
-    <br>
-</div>
-
-<div *ngIf="altaRevalida">
-    <plex-title titulo="Fecha reválida" size="sm">
-        <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
-            (click)="revalidarMatricula()"></plex-button>
-        <plex-button class='ml-2' type="danger" size="sm" [icon]="'close'" (click)="cerrarAlta('revalida')"
-            tooltip="Cancelar">
+                     (click)="suspender()"></plex-button>
+        <plex-button class='ml-1' type="danger" size="sm" [icon]="'close'" (click)="cerrarSuspender()"
+                     tooltip="Cancelar">
         </plex-button>
     </plex-title>
     <form #formulario='ngForm'>
         <plex-grid cols="1">
-            <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicio" [required]="true"
-                placeholder="Ingrese una fecha">
+            <plex-datetime type="date" label="Fecha de suspensión" name="fechaSuspension" [(ngModel)]="fechaSuspender"
+                           [required]="true" placeholder="Ingrese una fecha">
             </plex-datetime>
+            <plex-text label="Motivo de suspensión" name="motivoSuspension" [(ngModel)]="motivoSuspender"
+                       [required]="true" placeholder="Ingrese un motivo" multiline="true">
+            </plex-text>
         </plex-grid>
-    </form>
-    <br>
-</div>
-
-<div *ngIf="editarRevalida">
-    <plex-title titulo="Editar fecha reválida" size="sm">
-        <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
-            (click)="guardar(formulario, 'revalida')"></plex-button>
-        <plex-button class='ml-2' type="danger" size="sm" [icon]="'close'" (click)="cerrarEditar('revalida')"
-            tooltip="Cancelar">
-        </plex-button>
-    </plex-title>
-    <form #formulario='ngForm'>
-        <plex-grid cols="1">
-            <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicio" [required]="true"
-                placeholder="Ingrese una fecha">
-            </plex-datetime>
-        </plex-grid>
-    </form>
-    <br>
-</div>
-
-<div class="mt-3" *ngIf="revalidacion">
-    <plex-title titulo="Editar revalidaciones" size="sm">
-        <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
-            (click)="guardar(formulario,'revalida')"></plex-button>
-        <plex-button class="ml-1" type="danger" size="sm" icon="close" (click)="cerrarEditar('renovacion')"
-            tooltip="Cancelar"></plex-button>
-    </plex-title>
-    <form #formulario='ngForm'>
-        <plex-datetime type="date" label="Fecha inicio" name="fechaInicio" [(ngModel)]="inicioRevalida"
-            [required]="true" placeholder="Ingrese una fecha">
-        </plex-datetime>
-    </form>
-</div>
-
-<div class="mt-3" *ngIf="!editarRevalida">
-    <plex-title titulo="Notas" size="sm">
-        <plex-button *ngIf="!notas && !formacion.notas?.length" class="ml-1" type="success" size="sm"
-            label="AGREGAR NOTA" (click)="agregarNota('agregar')"></plex-button>
-        <plex-button class="mr-2" *ngIf="notas" type="success" size="sm" icon="check" tooltip="Guardar"
-            (click)="guardarNota()" [disabled]="!formularioNota?.valid"></plex-button>
-        <plex-button *ngIf="notas" type="danger" size="sm" icon="close" tooltip="Cancelar"
-            (click)="cancelarNota()"></plex-button>
-    </plex-title>
-    <form #formularioNota="ngForm" class="mr-1">
-        <plex-table *ngIf="!notas && formacion.notas.length">
-            <tr>
-                <td>
-                    <plex-label icon="documento" size="md" titulo="{{notaEditada}}"></plex-label>
-                </td>
-                <td class="float-right">
-                    <plex-button size="sm" type="warning" icon="pencil" class="mr-1" tooltip="Editar"
-                        (click)="agregarNota('editar')">
-                    </plex-button>
-                    <plex-button size="sm" type="danger" icon="cesto" class="mr-1" tooltip="Eliminar"
-                        (click)="eliminarNota()">
-                    </plex-button>
-                </td>
-            </tr>
-        </plex-table>
-        <plex-label *ngIf="!notas && !formacion.notas.length" icon="informacion" type="warning" size="md"
-            direction="row" titulo="No hay ninguna nota aún"
-            subtitulo="Para agregar una nota, presione el botón AGREGAR NOTA"></plex-label>
-        <plex-text *ngIf="notas" label="Ingrese nota" [(ngModel)]="notaEditada" name="notaText" grow="full"
-            [required]="true" multiline="true"></plex-text>
     </form>
 </div>

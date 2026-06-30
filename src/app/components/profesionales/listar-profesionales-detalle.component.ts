@@ -142,11 +142,4 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
         return (moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') > 0);
     }
 
-    estaEnAnioGracia(i) {
-        const formacionPosgrado = this.profesional.formacionPosgrado[i];
-        const ultMat = formacionPosgrado.matriculacion.length - 1;
-        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
-        return (this.estaVencida && moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') < 365);
-    }
-
 }

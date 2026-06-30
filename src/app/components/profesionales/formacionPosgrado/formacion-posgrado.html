@@ -32,25 +32,18 @@
                 </plex-badge>
             </td>
             <td class="column-right my-3">
-                <plex-badge *ngIf="estaVencida(i) && verificarFecha(i) !== 'sinVencimiento'"
-                    type="{{estaVencida(i) && !estaEnAnioGracia(i)?'danger':'info'}}">
-                    {{estaVencida(i) && !estaEnAnioGracia(i)?'Vencida':'Año de gracia'}}
+                <plex-badge *ngIf="verificarFecha(i) === 'vigente'" type="success">VIGENTE
                 </plex-badge>
 
-                <plex-badge *ngIf="verificarFecha(i) === 'vigente'" type="success"> vigente
+                <plex-badge *ngIf="verificarFecha(i) === 'vencida'" type="danger">VENCIDA
                 </plex-badge>
 
                 <plex-badge style="margin-right: 35px;" *ngIf="verificarFecha(i) === 'suspendida'" type="danger">
-                    Suspendida
-                </plex-badge>
-
-                <plex-badge *ngIf="verificarFecha(i) === 'revalida'"
-                    type="{{formacionPosgrado.papelesVerificados ? 'success' : 'warning' }}">
-                    {{formacionPosgrado.papelesVerificados ? 'Papeles verificados' : 'Papeles sin verificar'}}
+                    SUSPENDIDA
                 </plex-badge>
 
                 <plex-badge *ngIf="verificarFecha(i) === 'sinVencimiento'" type="warning">
-                    Sin vencimiento
+                    SIN VENCIMIENTO
                 </plex-badge>
 
                 <plex-badge *ngIf="formacionPosgrado.notas?.length" class='ml-2' type="info" size="md">

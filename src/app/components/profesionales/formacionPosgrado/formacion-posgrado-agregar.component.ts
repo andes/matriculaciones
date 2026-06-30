@@ -23,7 +23,6 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
     especialidad;
     matriculaNumero;
     modalidad;
-    nota;
     formacionPosgrado: IformacionPosgrado = {
         exportadoSisa: false,
         profesion: null,
@@ -60,8 +59,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
                 revalida: false
             }]
         }],
-        tieneVencimiento: true,
-        notas: [null]
+        tieneVencimiento: true
     };
 
     constructor(
@@ -91,7 +89,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
 
     ultimaMatricula() {
         this._profesionalService.getUltimoPosgradoNro().subscribe(data => {
-            this.profesionalP.matriculacion[0].matriculaNumero = data;
+            this.matriculaNumero = data;
         });
     }
 
@@ -121,7 +119,6 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
                 }]
             }];
             this.formacionPosgrado.tieneVencimiento = true;
-            this.formacionPosgrado.notas = [this.nota];
             this.agregarPosgrado.emit(this.formacionPosgrado);
             this.volver();
         }

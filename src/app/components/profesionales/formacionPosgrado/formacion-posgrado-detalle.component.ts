@@ -138,7 +138,6 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                     revalidacionNumero: revalidaNumero,
                     notificacionVencimiento: false,
                 };
-                this.formacion.revalida = true;
                 this.formacion.matriculado = true;
                 this.profesional.formacionPosgrado[this.index].matriculacion[this.ultMat].periodos.push(periodo);
                 this.actualizar();
@@ -165,7 +164,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 const matriculacion: Imatriculacion = {
                     matriculaNumero: matriculaNumero,
                     fechaAlta: this.inicio,
-                    baja: { fecha: null, motivo: null },
+                    baja: { fecha: null, motivo: null, usuario: null },
                     periodos: [periodo]
                 };
                 this.formacion.revalida = false;
@@ -373,7 +372,8 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         };
         this.formacion.matriculacion[this.ultMat].baja = {
             fecha: this.fechaSuspender,
-            motivo: this.motivoSuspender
+            motivo: this.motivoSuspender,
+            usuario: this.auth.usuario.nombreCompleto
         };
         this.formacion.matriculado = false;
         this.formacion.papelesVerificados = false;

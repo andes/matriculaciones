@@ -50,7 +50,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
         matriculacion: [{
             matriculaNumero: null,
             fechaAlta: null,
-            baja: { motivo: null, fecha: null },
+            baja: { motivo: null, fecha: null, usuario: null },
             periodos: [{
                 inicio: null,
                 fin: null,
@@ -109,7 +109,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
             this.formacionPosgrado.matriculacion = [{
                 matriculaNumero: this.matriculaNumero,
                 fechaAlta: this.fechaAlta,
-                baja: { motivo: null, fecha: null },
+                baja: { motivo: null, fecha: null, usuario: null },
                 periodos: [{
                     inicio: this.fechaAlta,
                     fin: fechaFin.toDate(),

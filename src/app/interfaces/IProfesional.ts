@@ -15,6 +15,7 @@ export interface Imatriculacion {
     baja: {
         motivo: String;
         fecha: Date;
+        usuario: String;
     };
     periodos: Iperiodos[];
 };

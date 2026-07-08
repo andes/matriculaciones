@@ -14,19 +14,19 @@
         date:'dd/MM/yyyy'}}
     </plex-badge>
 
-    <plex-badge *ngIf="verificarFecha(index) == 'vigente'" type="success">
+    <plex-badge *ngIf="verificarFecha(index) === 'vigente'" type="success">
         VIGENTE
     </plex-badge>
 
-    <plex-badge *ngIf="verificarFecha(index) == 'vencida'" type="danger">
+    <plex-badge *ngIf="verificarFecha(index) === 'vencida'" type="danger">
         VENCIDA
     </plex-badge>
 
-    <plex-badge *ngIf="verificarFecha(index) == 'suspendida'" type="danger">
+    <plex-badge *ngIf="verificarFecha(index) === 'suspendida'" type="danger">
         SUSPENDIDA
     </plex-badge>
 
-    <plex-badge *ngIf="verificarFecha(index) == 'sinVencimiento'" type="warning">
+    <plex-badge *ngIf="verificarFecha(index) === 'sinVencimiento'" type="warning">
         SIN VENCIMIENTO
     </plex-badge>
 
@@ -35,6 +35,8 @@
 
     <plex-label *ngIf="!formacion.matriculado" titulo="Fecha de suspensión"
                 subtitulo="{{ ultimaMatriculacion.baja.fecha | date: 'dd/MM/yyyy' }}"></plex-label>
+    <plex-label *ngIf="!formacion.matriculado" titulo="Usuario que suspende"
+                subtitulo="{{ ultimaMatriculacion.baja.usuario }}"></plex-label>
     <plex-label *ngIf="!formacion.matriculado" titulo="Motivo de suspensión"
                 subtitulo="{{ ultimaMatriculacion.baja.motivo }}"></plex-label>
 
@@ -51,7 +53,7 @@
         <plex-accordion>
             <plex-panel tituloPrincipal="Fecha de Alta: {{ matricula.fechaAlta | date: 'dd/MM/yyyy'}}"
                         *ngFor="let matricula of formacion.matriculacion.slice().reverse(); let i = index"
-                        [active]="i == 0">
+                        [active]="i === 0">
                 <plex-table [columns]="" #table="plTable">
                     <tr *ngIf="matricula.periodos.length > 1">
                         <th>Reválida</th>
@@ -71,18 +73,18 @@
                             {{ periodo.fin | date:'dd/MM/yyyy'}}
                         </td>
                         <td class="columns"
-                            *ngIf="j > 0 && j === (matricula.periodos.length - 1) && !formacion.tieneVencimiento">
+                            *ngIf="j > 0 && j  ===  (matricula.periodos.length - 1) && !formacion.tieneVencimiento">
                             <plex-badge size="lg" type="warning"> SIN VENCIMIENTO &nbsp;
                             </plex-badge>
                         </td>
                         <td class="columns"
-                            *ngIf="j > 0 && j === (matricula.periodos.length - 1) && formacion.matriculado && formacion.tieneVencimiento">
+                            *ngIf="j > 0 && j  ===  (matricula.periodos.length - 1) && formacion.matriculado && formacion.tieneVencimiento">
                             <plex-badge size="lg" type="{{ periodo.fin >= hoy ? 'success' : 'danger'}}">
                                 {{periodo.fin >= hoy ? 'VIGENTE' : 'VENCIDA'}}
                             </plex-badge>
                         </td>
                         <td class="columns"
-                            *ngIf="j > 0 && j === (matricula.periodos.length - 1) && !formacion.matriculado">
+                            *ngIf="j > 0 && j  ===  (matricula.periodos.length - 1) && !formacion.matriculado">
                             <plex-badge size="lg" type="danger"> NO VIGENTE
                             </plex-badge>
                         </td>
@@ -90,7 +92,7 @@
                             <plex-badge size="lg" type="danger"> VENCIDA
                             </plex-badge>
                         </td>
-                        <td class="float-right" *ngIf="i == 0 && j > 0 && j == (matricula.periodos.length - 1)">
+                        <td class="float-right" *ngIf="i === 0 && j > 0 && j === (matricula.periodos.length - 1)">
                             <plex-button class="mr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
                                          (click)="editarRevalidar()">
                             </plex-button>
@@ -103,7 +105,7 @@
                         <td>
                             Vencimiento: {{ matricula.periodos[0].fin | date: 'dd/MM/yyyy'}}
                         </td>
-                        <td class="float-right" *ngIf="i == 0">
+                        <td class="float-right" *ngIf="i === 0">
                             <plex-button class="mr-1" type="warning" size="sm" icon="pencil" tooltip="Editar"
                                          (click)="editarMatricula()">
                             </plex-button>
@@ -243,11 +245,11 @@
     </plex-title>
     <form #formulario='ngForm'>
         <plex-grid cols="1">
-            <plex-datetime type="date" label="Fecha de suspensión" name="fechaSuspension" [(ngModel)]="fechaSuspender"
+            <plex-datetime type="date" label="Fecha" name="fechaSuspension" [(ngModel)]="fechaSuspender"
                            [required]="true" placeholder="Ingrese una fecha">
             </plex-datetime>
-            <plex-text label="Motivo de suspensión" name="motivoSuspension" [(ngModel)]="motivoSuspender"
-                       [required]="true" placeholder="Ingrese un motivo" multiline="true">
+            <plex-text label="Motivo" name="motivoSuspension" [(ngModel)]="motivoSuspender" [required]="true"
+                       placeholder="Ingrese un motivo" multiline="true">
             </plex-text>
         </plex-grid>
     </form>

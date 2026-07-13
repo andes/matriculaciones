@@ -193,7 +193,7 @@ export class DetalleProfesionalComponent implements OnInit {
         this._profesionalService.putProfesional(this.profesional).pipe(catchError(() => of(null)))
             .subscribe(resp => {
                 this.profesional = resp;
-                if (callbackData) {
+                if (callbackData?.callback && typeof callbackData.callback === 'function') {
                     callbackData.callback(callbackData.param);
                 }
             });

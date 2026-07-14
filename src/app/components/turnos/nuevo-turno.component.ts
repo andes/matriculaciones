@@ -180,6 +180,11 @@ export class NuevoTurnoComponent implements AfterViewInit {
         }
         let date = new Date(inicioMes);
         fechasExcluidas.push(hoy);
+        // Si la hora actual es posterior a las 15:00, deshabilitar el día siguiente
+        if (hoy.getHours() >= 15) {
+            const manana = this.addDays(hoy, 1);
+            fechasExcluidas.push(manana);
+        }
         while (date <= finMes) {
             const resultado = countTurnosXDia.filter((dia) => {
                 return moment(date).isSame(moment(dia.fecha), 'day');

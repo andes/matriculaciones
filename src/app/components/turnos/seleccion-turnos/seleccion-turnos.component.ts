@@ -48,6 +48,22 @@ export class SeleccionTurnosComponent implements OnInit {
             this.tipoMatricula = params['tipoMatricula'];
             this.horarioSi = false;
             this.horarioElegido = undefined;
+            // Validar que no se pueda sacar turno para mañana si es posterior a las 15:00
+            const ahora = new Date();
+            const fechaSeleccionada = new Date(this.fecha);
+            const manana = new Date();
+            manana.setDate(manana.getDate() + 1);
+            manana.setHours(0, 0, 0, 0);
+            fechaSeleccionada.setHours(0, 0, 0, 0);
+            if (ahora.getHours() >= 15 && fechaSeleccionada.getTime() === manana.getTime()) {
+                this.plex.info('danger', 'No es posible sacar turnos para el día siguiente después de las 15:00 hs.');
+                if (this.tipoTurno === 'renovacion') {
+                    this.router.navigate(['/solicitarTurnoRenovacion']);
+                } else {
+                    this.router.navigate(['/solicitarTurnoMatriculacion']);
+                }
+                return;
+            }
             this.onChangeFecha(this.fecha);
         });
     }

@@ -140,11 +140,12 @@
   cursor: default;
 } */
 
-.datepicker table tr td.disabled,
-.datepicker table tr td.disabled:hover {
-  color: rgba(0, 0, 0, 0.87) !important;
-
-  /* content: 'This date is disabled'; */
+.datepicker table tr td.today.disabled,
+.datepicker table tr td.today.disabled:hover {
+  color: #fff !important;
+  background-color: #5f5f5f !important;
+  font-weight: bold;
+  /* content: 'this date is disabled' */
 }
 
 .datepicker table tr td.highlighted {

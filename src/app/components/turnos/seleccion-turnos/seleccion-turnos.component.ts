@@ -57,11 +57,7 @@ export class SeleccionTurnosComponent implements OnInit {
             fechaSeleccionada.setHours(0, 0, 0, 0);
             if (ahora.getHours() >= 15 && fechaSeleccionada.getTime() === manana.getTime()) {
                 this.plex.info('danger', 'No es posible sacar turnos para el día siguiente después de las 15:00 hs.');
-                if (this.tipoTurno === 'renovacion') {
-                    this.router.navigate(['/solicitarTurnoRenovacion']);
-                } else {
-                    this.router.navigate(['/solicitarTurnoMatriculacion']);
-                }
+                this.tipoTurno === 'renovacion' ? this.router.navigate(['/solicitarTurnoRenovacion']) : this.router.navigate(['/solicitarTurnoMatriculacion']);
                 return;
             }
             this.onChangeFecha(this.fecha);

@@ -1,9 +1,11 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Plex } from '@andes/plex';
-import { IProfesional } from './../../../interfaces/IProfesional';
+import { IProfesional, Icertificacion, IformacionPosgrado } from './../../../interfaces/IProfesional';
 import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
+import * as moment from 'moment';
+
 @Component({
     selector: 'app-formacion-posgrado',
     templateUrl: 'formacion-posgrado.html',
@@ -16,16 +18,14 @@ export class FormacionPosgradoComponent implements OnInit {
     @Output() showPosgradoEdit = new EventEmitter();
     @Output() showPosgradoAdd = new EventEmitter();
     @Output() indice = new EventEmitter();
+    @Output() abrirSuspensionMatricula = new EventEmitter<number>();
     public showOtraEntidadFormadora = false;
-    public certificacion = {
-        modalidad: null,
-        fecha: null
-    };
+    public certificacion: Icertificacion;
     itemsDropdown: any = [];
     public hoy;
     public edit = true;
     public agregar = true;
-    public formacionSelected;
+    public formacionSelected: IformacionPosgrado;
     public proximaFechaDeAlta;
     openedDropDown = null;
     public columns = [
@@ -91,7 +91,7 @@ export class FormacionPosgradoComponent implements OnInit {
             }
         }
         if (this.profesional.formacionPosgrado[i].matriculado) {
-            this.itemsDropdown[pos] = { icon: 'cesto', label: ' DAR DE BAJA', handler: () => { this.darDeBaja(i); } };
+            this.itemsDropdown[pos] = { icon: 'cesto', label: ' DAR DE BAJA', handler: () => { this.suspenderMatricula(i); } };
             pos++;
         }
     }
@@ -141,9 +141,8 @@ export class FormacionPosgradoComponent implements OnInit {
                 'data': this.profesional.formacionPosgrado
             };
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-                // this.profesional = data;
                 this.edit = false;
-                this.plex.toast('success', 'Se guardo con exito!', 'informacion', 1000);
+                this.plex.toast('success', 'Se guardó con exito!', 'informacion', 1000);
             });
         }
     }
@@ -155,7 +154,7 @@ export class FormacionPosgradoComponent implements OnInit {
         };
     }
 
-    editar(formacionPosgrado, index) {
+    editar(formacionPosgrado: IformacionPosgrado, index) {
         this.formacionPosgradoSelected.emit(index);
 
         this.edit = true;
@@ -163,7 +162,7 @@ export class FormacionPosgradoComponent implements OnInit {
             this.certificacion = formacionPosgrado.certificacion;
 
         } else {
-            const certificacion = {
+            const certificacion: Icertificacion = {
                 fecha: null,
                 modalidad: {
                     nombre: null,
@@ -184,28 +183,9 @@ export class FormacionPosgradoComponent implements OnInit {
         }
     }
 
-    pushFechasAlta() {
-        this.plex.confirm('¿Desea agregar esta nueva fecha de alta?').then((resultado) => {
-            if (resultado) {
-                this.formacionSelected.fechasDeAltas.push({ fecha: this.proximaFechaDeAlta });
-                const cambio = {
-                    'op': 'updateEstadoPosGrado',
-                    'data': this.profesional.formacionPosgrado
-                };
-                this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe((data) => {
-                });
-            }
-        });
-    }
-
-    darDeBaja(i) {
-        this.plex.confirm('¿Desea dar de baja esta matricula??').then((resultado) => {
-            if (resultado) {
-                this.profesional.formacionPosgrado[i].matriculado = false;
-                this.profesional.formacionPosgrado[i].papelesVerificados = false;
-                this.actualizar();
-            }
-        });
+    suspenderMatricula(i) {
+        this.formacionPosgradoSelected.emit(i);
+        this.abrirSuspensionMatricula.emit(i);
     }
 
     actualizar() {
@@ -237,27 +217,26 @@ export class FormacionPosgradoComponent implements OnInit {
 
     estaVencida(i) {
         const formacionPosgrado = this.profesional.formacionPosgrado[i];
-        return ((this.hoy.getTime() - new Date(formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin).getTime()) / (1000 * 3600 * 24) > 365);
+        const ultMat = formacionPosgrado.matriculacion.length - 1;
+        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+        return (moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') > 0);
     }
 
     verificarFecha(i) {
         const formacionPosgrado = this.profesional.formacionPosgrado[i];
         if (formacionPosgrado.matriculacion.length) {
-            if (formacionPosgrado.revalida) {
-                return 'revalida';
+            if (!formacionPosgrado.matriculado) {
+                return 'suspendida';
             } else {
-                if (!formacionPosgrado.matriculado) {
-                    return 'suspendida';
+                if (!formacionPosgrado.tieneVencimiento) {
+                    return 'sinVencimiento';
                 } else {
-                    if (!formacionPosgrado.tieneVencimiento) {
-                        return 'sinVencimiento';
+                    const ultMat = formacionPosgrado.matriculacion.length - 1;
+                    const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
+                    if (this.hoy > formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
+                        return 'vencida';
                     } else {
-                        if (this.hoy > formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fin &&
-                            this.hoy > formacionPosgrado.matriculacion[0].fin) {
-                            return 'vencida';
-                        } else {
-                            return 'vigente';
-                        }
+                        return 'vigente';
                     }
                 }
             }

@@ -41,8 +41,7 @@
             </plex-label>
         </td>
         <td>
-            <plex-badge *ngIf="verificarEstado(i) === 'vencida'" type="{{verificarFecha(i)?'danger':'info'}}">
-                {{verificarFecha(i)?'Vencida':'Año de gracia'}}
+            <plex-badge *ngIf="verificarEstado(i) === 'vencida'" type="danger"> Vencida
             </plex-badge>
 
             <plex-badge *ngIf="verificarEstado(i) === 'vigente'" type="success"> vigente

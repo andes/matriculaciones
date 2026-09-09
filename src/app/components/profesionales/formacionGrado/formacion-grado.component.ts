@@ -166,11 +166,16 @@ export class FormacionGradoComponent implements OnInit {
             const hoy = new Date();
             const posgrados = [];
             this.profesional.formacionPosgrado.forEach(formacion => {
-                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida && (hoy <= formacion.matriculacion[formacion.matriculacion.length - 1].fin || ((hoy.getTime() - formacion.matriculacion[formacion.matriculacion.length - 1].fin?.getTime()) / (1000 * 3600 * 24) < 365) || !formacion.tieneVencimiento)) {
+                const ultMat = formacion.matriculacion.length - 1;
+                const ultPer = formacion.matriculacion[ultMat].periodos.length - 1;
+                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida &&
+                    (hoy <= formacion.matriculacion[ultMat].periodos[ultPer].fin ||
+                        ((hoy.getTime() - formacion.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) < 365)
+                        || !formacion.tieneVencimiento)) {
                     posgrados.push({
                         titulo: formacion.especialidad.nombre,
                         matriculaNumero: formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero,
-                        fechaAlta: formacion.fechasDeAltas[formacion.fechasDeAltas.length - 1].fecha || null
+                        fechaAlta: formacion.matriculacion[ultMat].fechaAlta || null
                     });
                 }
             });

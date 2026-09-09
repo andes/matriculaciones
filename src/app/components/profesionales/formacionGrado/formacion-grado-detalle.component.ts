@@ -211,7 +211,6 @@ export class FormacionGradoDetalleComponent implements OnInit {
             }, () => {
                 this.plex.toast('danger', 'Error en el guardado de papeles verificados!', 'informacion', 2000);
             });
-
     }
 
     rechazarRenovacion() {

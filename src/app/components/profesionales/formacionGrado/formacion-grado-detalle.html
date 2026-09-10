@@ -16,11 +16,9 @@
                  *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
                  icon="prohibido " (click)="mostrarBaja()" size="sm">
     </plex-button>
-    <plex-button class="pr-1" type="warning" icon="undo" size="sm"
-                 *ngIf="esSupervisor && ultimaMatriculaNumero()"
+    <plex-button class="pr-1" type="warning" icon="undo" size="sm" *ngIf="esSupervisor && ultimaMatriculaNumero()"
                  [disabled]="estadoDeshacer.loading || !estadoDeshacer.canUndo"
-                 [tooltip]="estadoDeshacer.reason || 'Deshacer número de matrícula'"
-                 tooltipPosition="left"
+                 [tooltip]="estadoDeshacer.reason || 'Deshacer número de matrícula'" tooltipPosition="left"
                  (click)="deshacerMatricula()">
     </plex-button>
     <plex-button class="pr-1" tooltip="Rechazar Renovación" *ngIf="opcionRechazarRenovacion() && esSupervisor "

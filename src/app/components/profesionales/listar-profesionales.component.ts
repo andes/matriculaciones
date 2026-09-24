@@ -9,6 +9,7 @@ import { Observable } from 'rxjs';
 import { BusquedaProfesionalService } from './services/busqueda-profesional.service';
 import { tap } from 'rxjs/operators';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { obtenerFechaFinPosgrado } from '../../utils/posgrado.utils';
 
 @Component({
     selector: 'app-listar-profesionales',
@@ -211,53 +212,6 @@ export class ListarProfesionalesComponent implements OnInit {
         return '';
     }
 
-    verificarEstadoPosgrado(iProfesional, iGrado) {
-        if (!this.listadoActual?.length) {
-            return;
-        }
-        const profesionalPosgrado = this.listadoActual[iProfesional].formacionPosgrado[iGrado];
-        const ultMat = profesionalPosgrado.matriculacion.length - 1;
-        const ultPer = profesionalPosgrado.matriculacion[ultMat].periodos.length - 1;
-        if (profesionalPosgrado) {
-            if (!profesionalPosgrado.matriculado) {
-                return 'suspendida';
-            } else {
-                if (!profesionalPosgrado.tieneVencimiento) {
-                    return 'sinVencimiento';
-                } else {
-                    if (this.hoy > profesionalPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
-                        return 'vencida';
-                    } else {
-                        return 'vigente';
-                    }
-                }
-            }
-        }
-    }
-
-    obtenerMatriculaPosgrado(iProfesional, iGrado) {
-        if (!this.listadoActual?.length) {
-            return;
-        }
-        const profesionalPosgrado = this.listadoActual[iProfesional].formacionPosgrado[iGrado];
-        if (profesionalPosgrado.matriculacion !== null) {
-            if (profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1]?.matriculaNumero !== undefined) {
-                return profesionalPosgrado.matriculacion[profesionalPosgrado.matriculacion.length - 1].matriculaNumero;
-            } else {
-                return '';
-            }
-        }
-    }
-    verificarFechaPosgrado(iProfesional, iGrado) {
-        if (!this.listadoActual?.length) {
-            return;
-        }
-        const profesionalPosgrado = this.listadoActual[iProfesional].formacionPosgrado[iGrado];
-        const ultMat = profesionalPosgrado.matriculacion.length - 1;
-        const ultPer = profesionalPosgrado.matriculacion[ultMat].periodos.length - 1;
-        return ((this.hoy.getTime() - profesionalPosgrado.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) > 365);
-    }
-
     contarTiposDePosgrados(iProfesional, tipo) {
         if (!this.listadoActual?.length) {
             return;
@@ -266,21 +220,24 @@ export class ListarProfesionalesComponent implements OnInit {
         let anioGracia = 0, suspendidas = 0, vencidas = 0;
 
         profesionalPosgrado?.forEach(element => {
-            const ultMat = element.matriculacion?.length - 1;
-            const ultPer = element.matriculacion[ultMat].periodos?.length - 1;
-            if (tipo === 'anioDeGracia' && element.tieneVencimiento &&
-                element.matriculado && ((this.hoy.getTime() - element.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) > 0 &&
-                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) < 365))) {
-                anioGracia++;
-            } else {
-                if (tipo === 'vencida' && element.tieneVencimiento &&
-                    element.matriculado && ((this.hoy.getTime() - element.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) > 365)) {
-                    vencidas++;
-                } else {
-                    if (tipo === 'suspendida' && !element.matriculado) {
-                        suspendidas++;
-                    }
+            if (tipo === 'suspendida') {
+                if (!element.matriculado) {
+                    suspendidas++;
                 }
+                return;
+            }
+            if (!element.matriculado || !element.tieneVencimiento) {
+                return;
+            }
+            const fin = obtenerFechaFinPosgrado(element);
+            if (!fin) {
+                return;
+            }
+            const dias = (this.hoy.getTime() - fin.getTime()) / (1000 * 3600 * 24);
+            if (tipo === 'anioDeGracia' && dias > 0 && dias < 365) {
+                anioGracia++;
+            } else if (tipo === 'vencida' && dias > 365) {
+                vencidas++;
             }
         });
         if (tipo === 'anioDeGracia') {

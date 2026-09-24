@@ -4,7 +4,7 @@ import { IProfesional, Icertificacion, IformacionPosgrado } from './../../../int
 import { ProfesionalService } from './../../../services/profesional.service';
 import { EntidadFormadoraService } from '../../../services/entidadFormadora.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
-import * as moment from 'moment';
+import { obtenerFechaFinPosgrado } from './../../../utils/posgrado.utils';
 
 @Component({
     selector: 'app-formacion-posgrado',
@@ -81,7 +81,7 @@ export class FormacionPosgradoComponent implements OnInit {
         this.openedDropDown = drop;
         this.itemsDropdown = [];
         let pos = 0;
-        if (this.profesional.formacionPosgrado[i].matriculado && !this.profesional.formacionPosgrado[i].revalida) {
+        if (this.profesional.formacionPosgrado[i].matriculado && !this.profesional.formacionPosgrado[i].renovacion) {
             if (!this.profesional.formacionPosgrado[i].tieneVencimiento) {
                 this.itemsDropdown[pos] = { icon: 'calendarios', label: ' ACTIVAR VENCIMIENTO', handler: () => { this.sinVencimiento(i); } };
                 pos++;
@@ -215,31 +215,24 @@ export class FormacionPosgradoComponent implements OnInit {
         }
     }
 
-    estaVencida(i) {
-        const formacionPosgrado = this.profesional.formacionPosgrado[i];
-        const ultMat = formacionPosgrado.matriculacion.length - 1;
-        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
-        return (moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') > 0);
-    }
-
     verificarFecha(i) {
         const formacionPosgrado = this.profesional.formacionPosgrado[i];
-        if (formacionPosgrado.matriculacion.length) {
-            if (!formacionPosgrado.matriculado) {
-                return 'suspendida';
-            } else {
-                if (!formacionPosgrado.tieneVencimiento) {
-                    return 'sinVencimiento';
-                } else {
-                    const ultMat = formacionPosgrado.matriculacion.length - 1;
-                    const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
-                    if (this.hoy > formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
-                        return 'vencida';
-                    } else {
-                        return 'vigente';
-                    }
-                }
-            }
+        if (!formacionPosgrado?.matriculacion?.length) {
+            return;
         }
+        if (!formacionPosgrado.matriculado) {
+            return 'suspendida';
+        }
+        if (!formacionPosgrado.tieneVencimiento) {
+            return 'sinVencimiento';
+        }
+        const fin = obtenerFechaFinPosgrado(formacionPosgrado);
+        if (!fin) {
+            return;
+        }
+        if (this.hoy > fin) {
+            return 'vencida';
+        }
+        return 'vigente';
     }
 }

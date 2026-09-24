@@ -46,7 +46,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
         papelesVerificados: true,
         fechaDeVencimiento: null,
         matriculado: true,
-        revalida: false,
+        renovacion: false,
         matriculacion: [{
             matriculaNumero: null,
             fechaAlta: null,
@@ -54,9 +54,9 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
             periodos: [{
                 inicio: null,
                 fin: null,
-                revalidacionNumero: 0,
+                renovacionNumero: 0,
                 notificacionVencimiento: false,
-                revalida: false
+                renovacion: false
             }]
         }],
         tieneVencimiento: true
@@ -113,9 +113,9 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
                 periodos: [{
                     inicio: this.fechaAlta,
                     fin: fechaFin.toDate(),
-                    revalidacionNumero: 0,
+                    renovacionNumero: 0,
                     notificacionVencimiento: false,
-                    revalida: false
+                    renovacion: false
                 }]
             }];
             this.formacionPosgrado.tieneVencimiento = true;

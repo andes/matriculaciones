@@ -5,8 +5,8 @@ export interface Iperiodos {
     notificacionVencimiento: Boolean;
     inicio: Date;
     fin: Date;
-    revalidacionNumero: Number;
-    revalida: Boolean;
+    renovacionNumero: Number;
+    renovacion: Boolean;
 };
 
 export interface Imatriculacion {
@@ -37,7 +37,7 @@ export interface IformacionPosgrado {
     certificacion: Icertificacion;
     matriculacion: Imatriculacion[];
     matriculado: Boolean;
-    revalida: Boolean;
+    renovacion: Boolean;
     papelesVerificados: Boolean;
     fechaDeVencimiento: Date;
     exportadoSisa: Boolean;

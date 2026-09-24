@@ -37,7 +37,7 @@
             </plex-label>
         </td>
         <td>
-            <plex-label titulo="{{posgrados.matriculacion[posgrados.matriculacion.length-1].matriculaNumero}}">
+            <plex-label titulo="{{ (posgrados.matriculacion && posgrados.matriculacion.length) ? posgrados.matriculacion[posgrados.matriculacion.length-1].matriculaNumero : '' }}">
             </plex-label>
         </td>
         <td>

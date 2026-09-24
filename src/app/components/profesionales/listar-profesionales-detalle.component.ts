@@ -7,6 +7,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import * as moment from 'moment';
+import { obtenerFechaFinPosgrado } from '../../utils/posgrado.utils';
 @Component({
     selector: 'app-listar-profesionales-detalle',
     templateUrl: 'listar-profesionales-detalle.html',
@@ -105,41 +106,26 @@ export class ListarProfesionalesDetalleComponent implements OnInit, OnChanges {
 
     verificarEstado(i) {
         const profesionalPosgrado = this.profesional.formacionPosgrado[i];
-        const ultMat = profesionalPosgrado.matriculacion.length - 1;
-        const ultPer = profesionalPosgrado.matriculacion[ultMat].periodos.length - 1;
-        if (profesionalPosgrado.matriculacion?.length) {
-            if (!profesionalPosgrado.matriculado) {
-                return 'suspendida';
-            } else {
-                if (!profesionalPosgrado.tieneVencimiento) {
-                    return 'sinVencimiento';
-                } else {
-                    if (profesionalPosgrado.revalida) {
-                        return 'verificarPapeles';
-                    } else {
-                        if (this.hoy > profesionalPosgrado.matriculacion[ultMat].periodos[ultPer].fin) {
-                            return 'vencida';
-                        } else {
-                            return 'vigente';
-                        }
-                    }
-                }
-            }
+        if (!profesionalPosgrado?.matriculacion?.length) {
+            return;
         }
-    }
-
-    verificarFecha(i) {
-        const profesionalPosgrado = this.profesional.formacionPosgrado[i];
-        const ultMat = profesionalPosgrado.matriculacion.length - 1;
-        const ultPer = profesionalPosgrado.matriculacion[ultMat].periodos.length - 1;
-        return ((this.hoy.getTime() - profesionalPosgrado.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) > 365);
-    }
-
-    estaVencida(i) {
-        const formacionPosgrado = this.profesional.formacionPosgrado[i];
-        const ultMat = formacionPosgrado.matriculacion.length - 1;
-        const ultPer = formacionPosgrado.matriculacion[ultMat].periodos.length - 1;
-        return (moment().diff(moment(formacionPosgrado.matriculacion[ultMat].periodos[ultPer].fin, 'DD-MM-YYYY'), 'days') > 0);
+        if (!profesionalPosgrado.matriculado) {
+            return 'suspendida';
+        }
+        if (!profesionalPosgrado.tieneVencimiento) {
+            return 'sinVencimiento';
+        }
+        if (profesionalPosgrado.renovacion) {
+            return 'verificarPapeles';
+        }
+        const fin = obtenerFechaFinPosgrado(profesionalPosgrado);
+        if (!fin) {
+            return;
+        }
+        if (this.hoy > fin) {
+            return 'vencida';
+        }
+        return 'vigente';
     }
 
 }

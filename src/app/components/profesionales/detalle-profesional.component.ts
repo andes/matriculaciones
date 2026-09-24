@@ -233,11 +233,13 @@ export class DetalleProfesionalComponent implements OnInit {
     mostrarEdicion(mostrarEdit) {
         this.showEdit = mostrarEdit;
         this.showAdd = false;
+        this.suspensionRequestId = 0;
     }
 
     cancelarPosgradoEdit(edit) {
         this.showEdit = edit;
         this.showAdd = false;
+        this.suspensionRequestId = 0;
     }
 
     mostrarAdd(mostrarAgregar) {
@@ -245,12 +247,14 @@ export class DetalleProfesionalComponent implements OnInit {
         this.showEdit = false;
         this.mostrarGrado = false;
         this.mostrar = false;
+        this.suspensionRequestId = 0;
     }
 
     cancelarPosgradoAdd(add) {
         this.showAdd = add;
         this.mostrarGrado = false;
         this.showEdit = false;
+        this.suspensionRequestId = 0;
     }
 
     obtenerIndice(indice) {
@@ -260,6 +264,7 @@ export class DetalleProfesionalComponent implements OnInit {
     editarEspecialidad(editar) {
         this.showEdit = editar;
         this.showAdd = false;
+        this.suspensionRequestId = 0;
     }
 
     cerrar(grado) {
@@ -267,6 +272,7 @@ export class DetalleProfesionalComponent implements OnInit {
             this.mostrar = false;
         } else {
             this.mostrarGrado = false;
+            this.suspensionRequestId = 0;
         }
     }
 

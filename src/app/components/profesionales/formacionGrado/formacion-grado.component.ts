@@ -12,6 +12,7 @@ import { catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { PdfService } from '../../../services/pdf.service';
+import { obtenerFechaFinPosgrado } from '../../../utils/posgrado.utils';
 @Component({
     selector: 'app-formacion-grado',
     templateUrl: 'formacion-grado.html',
@@ -166,16 +167,16 @@ export class FormacionGradoComponent implements OnInit {
             const hoy = new Date();
             const posgrados = [];
             this.profesional.formacionPosgrado.forEach(formacion => {
-                const ultMat = formacion.matriculacion.length - 1;
-                const ultPer = formacion.matriculacion[ultMat].periodos.length - 1;
-                if (formacion.profesion.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.revalida &&
-                    (hoy <= formacion.matriculacion[ultMat].periodos[ultPer].fin ||
-                        ((hoy.getTime() - formacion.matriculacion[ultMat].periodos[ultPer].fin.getTime()) / (1000 * 3600 * 24) < 365)
+                const ultMat = formacion.matriculacion?.length ? formacion.matriculacion.length - 1 : -1;
+                const fin = obtenerFechaFinPosgrado(formacion);
+                if (formacion.profesion?.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.renovacion &&
+                    ((fin && (hoy <= fin ||
+                        ((hoy.getTime() - fin.getTime()) / (1000 * 3600 * 24) < 365)))
                         || !formacion.tieneVencimiento)) {
                     posgrados.push({
-                        titulo: formacion.especialidad.nombre,
-                        matriculaNumero: formacion.matriculacion[formacion.matriculacion.length - 1].matriculaNumero,
-                        fechaAlta: formacion.matriculacion[ultMat].fechaAlta || null
+                        titulo: formacion.especialidad?.nombre,
+                        matriculaNumero: formacion.matriculacion?.[ultMat]?.matriculaNumero,
+                        fechaAlta: formacion.matriculacion?.[ultMat]?.fechaAlta || null
                     });
                 }
             });

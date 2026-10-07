@@ -5,14 +5,12 @@ import { Plex } from '@andes/plex';
 import { FotoGeneralComponent } from './foto-general.component';
 import { ProfesionalService } from './../../services/profesional.service';
 import { IProfesional } from './../../interfaces/IProfesional';
-import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
 import 'rxjs/add/operator/switchMap';
 import { TurnoService } from '../../services/turno.service';
+import { NumeracionMatriculasService } from './../../services/numeracionMatriculas.service';
 import { Auth } from '@andes/auth';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-
-const jsPDF = require('jspdf');
 
 @Component({
     selector: 'app-detalle-profesional',
@@ -33,106 +31,17 @@ export class DetalleProfesionalComponent implements OnInit {
     public editable = false;
     public showEdit = false;
     public showAdd = false;
+    public suspenderMatricula = false;
+    public suspensionRequestId = 0;
+    public fechaSuspender;
+    public motivoSuspender;
 
     @ViewChild('fotoHijo') fotoHijo: FotoGeneralComponent;
     @Input() public flag = null;
-    @Input() public profesional: IProfesional = {
-        id: null,
-        habilitado: true,
-        nombre: null,
-        apellido: null,
-        tipoDocumento: null,
-        documento: null,
-        documentoVencimiento: null,
-        cuit: null,
-        fechaNacimiento: null,
-        lugarNacimiento: '',
-        nacionalidad: {
-            nombre: null,
-            codigo: null,
-        },
-        sexo: undefined,
-        contactos: [{
-            tipo: 'celular',
-            valor: '',
-            rank: 0,
-            activo: true,
-            ultimaActualizacion: new Date()
-        }],
-        domicilios: [{
-            tipo: 'real',
-            valor: '',
-            codigoPostal: '',
-            ubicacion: {
-                localidad: '',
-                provincia: '',
-                pais: '',
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }, {
-            tipo: 'legal',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }, {
-            tipo: 'profesional',
-            valor: null,
-            codigoPostal: null,
-            ubicacion: {
-                localidad: null,
-                provincia: null,
-                pais: null,
-            },
-            ultimaActualizacion: new Date(),
-            activo: true
-        }],
-        fotoArchivo: null,
-        firmas: null,
-        formacionGrado: [{
-            profesion: {
-                nombre: null,
-                codigo: null,
-                tipoDeFormacion: null
-            },
-            entidadFormadora: {
-                nombre: null,
-                codigo: null,
-            },
-            titulo: null,
-            fechaEgreso: null,
-            fechaTitulo: null,
-            renovacion: false,
-            renovacionOnline: null,
-            papelesVerificados: false,
-            matriculacion: [{
-                matriculaNumero: null,
-                libro: null,
-                folio: null,
-                inicio: null,
-                fin: null,
-                baja: null,
-                notificacionVencimiento: false,
-                revalidacionNumero: null,
-            }],
-            matriculado: false
-        }],
-        formacionPosgrado: null,
-        origen: null,
-        sanciones: null,
-        notas: null,
-        rematriculado: 0,
-        agenteMatriculador: '',
-        OtrosDatos: null,
-        idRenovacion: null,
-        documentoViejo: null
-    };
+    @Input() public profesional: IProfesional;
+
+    @Output() onShowListado = new EventEmitter();
+    @Output() showFormacion = new EventEmitter();
     @Output() showFoto = new EventEmitter();
     public tieneOtraEntidad;
 
@@ -143,7 +52,8 @@ export class DetalleProfesionalComponent implements OnInit {
         private route: ActivatedRoute,
         public auth: Auth,
         private plex: Plex,
-        private location: Location) { }
+        private location: Location
+    ) { }
 
     ngOnInit() {
         this.route.params.pipe(
@@ -295,10 +205,6 @@ export class DetalleProfesionalComponent implements OnInit {
         this.updateProfesional();
     }
 
-    anioDeGracia(matriculacionEntrante) {
-        this.profesional.formacionPosgrado[this.indexFormacionPosgradoSelected].matriculacion = matriculacionEntrante;
-        this.updateProfesional();
-    }
 
     volver() {
         this.location.back();
@@ -311,7 +217,7 @@ export class DetalleProfesionalComponent implements OnInit {
         this.showAdd = false;
     }
 
-    formacionPosgradoSelected(posgrado: any) {
+    formacionPosgradoSelected(posgrado: number) {
         this.mostrarGrado = true;
         this.mostrar = false;
         this.indexFormacionPosgradoSelected = posgrado;
@@ -319,14 +225,21 @@ export class DetalleProfesionalComponent implements OnInit {
         this.showEdit = false;
     }
 
+    abrirSuspensionPosgrado(posgrado: number) {
+        this.formacionPosgradoSelected(posgrado);
+        this.suspensionRequestId++;
+    }
+
     mostrarEdicion(mostrarEdit) {
         this.showEdit = mostrarEdit;
         this.showAdd = false;
+        this.suspensionRequestId = 0;
     }
 
     cancelarPosgradoEdit(edit) {
         this.showEdit = edit;
         this.showAdd = false;
+        this.suspensionRequestId = 0;
     }
 
     mostrarAdd(mostrarAgregar) {
@@ -334,12 +247,14 @@ export class DetalleProfesionalComponent implements OnInit {
         this.showEdit = false;
         this.mostrarGrado = false;
         this.mostrar = false;
+        this.suspensionRequestId = 0;
     }
 
     cancelarPosgradoAdd(add) {
         this.showAdd = add;
         this.mostrarGrado = false;
         this.showEdit = false;
+        this.suspensionRequestId = 0;
     }
 
     obtenerIndice(indice) {
@@ -349,6 +264,7 @@ export class DetalleProfesionalComponent implements OnInit {
     editarEspecialidad(editar) {
         this.showEdit = editar;
         this.showAdd = false;
+        this.suspensionRequestId = 0;
     }
 
     cerrar(grado) {
@@ -356,6 +272,7 @@ export class DetalleProfesionalComponent implements OnInit {
             this.mostrar = false;
         } else {
             this.mostrarGrado = false;
+            this.suspensionRequestId = 0;
         }
     }
 
@@ -370,5 +287,13 @@ export class DetalleProfesionalComponent implements OnInit {
     habilitaPosgrado() {
         const res = this.profesional.formacionGrado.find(p => p.profesion.codigo === 1 || p.profesion.codigo === 2);
         return res;
+    }
+
+    suspender() {
+
+    }
+
+    cerrarSuspender() {
+        this.suspenderMatricula = false;
     }
 }

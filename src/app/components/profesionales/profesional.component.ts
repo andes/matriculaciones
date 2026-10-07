@@ -144,6 +144,7 @@ export class ProfesionalComponent implements OnInit {
         OtrosDatos: null,
         idRenovacion: null,
     };
+
     localidadesReal: any[] = [];
     localidadesLegal: any[] = [];
     localidadesProfesional: any[] = [];
@@ -223,7 +224,8 @@ export class ProfesionalComponent implements OnInit {
                 ];
             }
         }
-        if (this.confirmar) {
+
+        if (this.confirmar && this.profesional) {
             if (this.profesional.formacionGrado.length && this.profesional.formacionGrado[0].entidadFormadora?.codigo === null) {
                 this.showOtraEntidadFormadora = true;
             } else {

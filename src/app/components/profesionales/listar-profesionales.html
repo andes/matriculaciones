@@ -86,10 +86,6 @@
                                 POSGRADO': profesional.formacionPosgrado.length + ' POSGRADOS'}}
                             </plex-badge>
 
-                            <plex-badge class="mr-1" type="info" tooltip="Año de gracia"
-                                        *ngIf="profesional.formacionPosgrado?.length && contarTiposDePosgrados(indiceProfesional, 'anioDeGracia')">
-                                {{contarTiposDePosgrados(indiceProfesional, 'anioDeGracia')}}
-                            </plex-badge>
                             <plex-badge class="mr-1" type="danger" tooltip="Vencidas"
                                         *ngIf="profesional.formacionPosgrado?.length && contarTiposDePosgrados(indiceProfesional, 'vencida')">
                                 {{contarTiposDePosgrados(indiceProfesional, 'vencida')}}

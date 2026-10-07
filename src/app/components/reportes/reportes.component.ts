@@ -270,7 +270,7 @@ export class ReportesComponent implements OnInit {
             return (
                 !formacion.matriculado &&
                 !formacion.papelesVerificados &&
-                !formacion.revalida
+                !formacion.renovacion
             );
         }
         return false;

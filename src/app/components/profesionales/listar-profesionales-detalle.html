@@ -37,12 +37,11 @@
             </plex-label>
         </td>
         <td>
-            <plex-label titulo="{{posgrados.matriculacion[posgrados.matriculacion.length-1].matriculaNumero}}">
+            <plex-label titulo="{{ (posgrados.matriculacion && posgrados.matriculacion.length) ? posgrados.matriculacion[posgrados.matriculacion.length-1].matriculaNumero : '' }}">
             </plex-label>
         </td>
         <td>
-            <plex-badge *ngIf="verificarEstado(i) === 'vencida'" type="{{verificarFecha(i)?'danger':'info'}}">
-                {{verificarFecha(i)?'Vencida':'Año de gracia'}}
+            <plex-badge *ngIf="verificarEstado(i) === 'vencida'" type="danger"> Vencida
             </plex-badge>
 
             <plex-badge *ngIf="verificarEstado(i) === 'vigente'" type="success"> vigente

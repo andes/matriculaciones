@@ -1,8 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
-import { IProfesional } from './../../../interfaces/IProfesional';
+import { IProfesional, IformacionPosgrado } from './../../../interfaces/IProfesional';
 import { SIISAService } from './../../../services/siisa.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
 import { ProfesionalService } from './../../../services/profesional.service';
+import { calcularFechaFinPrimeraMatricula } from './../../../utils/posgrado.utils';
+import * as moment from 'moment';
 
 @Component({
     selector: 'app-formacion-posgrado-agregar',
@@ -17,8 +19,12 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
     public cancel = false;
 
     profesiones: any[] = [];
-    vencimientoAnio = (new Date()).getUTCFullYear() + 5;
-    profesionalP: any = {
+    fechaAlta = moment().toDate();
+    profesion;
+    especialidad;
+    matriculaNumero;
+    modalidad;
+    formacionPosgrado: IformacionPosgrado = {
         exportadoSisa: false,
         profesion: null,
         institucionFormadora: {
@@ -26,6 +32,9 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
             codigo: null,
         },
         especialidad: null,
+        fechaIngreso: null,
+        fechaEgreso: null,
+        tituloFileId: null,
         observacion: null,
         certificacion: {
             fecha: null,
@@ -36,25 +45,28 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
             },
         },
         papelesVerificados: true,
+        fechaDeVencimiento: null,
         matriculado: true,
-        revalida: false,
+        renovacion: false,
         matriculacion: [{
             matriculaNumero: null,
-            libro: '',
-            folio: '',
-            inicio: new Date(),
-            notificacionVencimiento: false,
-            fin: new Date(new Date().setFullYear(this.vencimientoAnio)),
-            revalidacionNumero: 1,
+            fechaAlta: null,
+            baja: { motivo: null, fecha: null, usuario: null },
+            periodos: [{
+                inicio: null,
+                fin: null,
+                renovacionNumero: 0,
+                notificacionVencimiento: false,
+                renovacion: false
+            }]
         }],
-        tieneVencimiento: true,
-        fechasDeAltas: [{ fecha: new Date() }]
+        tieneVencimiento: true
     };
 
     constructor(
         private _siisaSrv: SIISAService,
         private _modalidadesCertificacionService: ModalidadesCertificacionService,
-        private _profesionalService: ProfesionalService,
+        private _profesionalService: ProfesionalService
     ) { }
 
     ngOnInit() {
@@ -78,14 +90,37 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
 
     ultimaMatricula() {
         this._profesionalService.getUltimoPosgradoNro().subscribe(data => {
-            this.profesionalP.matriculacion[0].matriculaNumero = data;
+            this.matriculaNumero = data;
         });
     }
 
     onSubmit(formulario) {
         if (formulario.form.valid) {
-            this.profesionalP.matriculacion.revalidacionNumero++;
-            this.agregarPosgrado.emit(this.profesionalP);
+            const fechaFin = calcularFechaFinPrimeraMatricula(this.fechaAlta);
+            this.formacionPosgrado.profesion = {
+                codigo: this.profesion.codigo,
+                nombre: this.profesion.nombre
+            };
+            this.formacionPosgrado.especialidad = this.especialidad;
+            this.formacionPosgrado.certificacion = {
+                fecha: this.fechaAlta,
+                modalidad: this.modalidad,
+                establecimiento: { nombre: null, codigo: null },
+            };
+            this.formacionPosgrado.matriculacion = [{
+                matriculaNumero: this.matriculaNumero,
+                fechaAlta: this.fechaAlta,
+                baja: { motivo: null, fecha: null, usuario: null },
+                periodos: [{
+                    inicio: this.fechaAlta,
+                    fin: fechaFin,
+                    renovacionNumero: 0,
+                    notificacionVencimiento: false,
+                    renovacion: false
+                }]
+            }];
+            this.formacionPosgrado.tieneVencimiento = true;
+            this.agregarPosgrado.emit(this.formacionPosgrado);
             this.volver();
         }
     }

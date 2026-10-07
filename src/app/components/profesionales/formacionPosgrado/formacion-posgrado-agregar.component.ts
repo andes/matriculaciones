@@ -3,6 +3,7 @@ import { IProfesional, IformacionPosgrado } from './../../../interfaces/IProfesi
 import { SIISAService } from './../../../services/siisa.service';
 import { ModalidadesCertificacionService } from '../../../services/modalidadesCertificacion.service';
 import { ProfesionalService } from './../../../services/profesional.service';
+import { calcularFechaFinPrimeraMatricula } from './../../../utils/posgrado.utils';
 import * as moment from 'moment';
 
 @Component({
@@ -95,7 +96,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
 
     onSubmit(formulario) {
         if (formulario.form.valid) {
-            const fechaFin = moment(this.fechaAlta).startOf('year').add(5, 'years');
+            const fechaFin = calcularFechaFinPrimeraMatricula(this.fechaAlta);
             this.formacionPosgrado.profesion = {
                 codigo: this.profesion.codigo,
                 nombre: this.profesion.nombre
@@ -112,7 +113,7 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
                 baja: { motivo: null, fecha: null, usuario: null },
                 periodos: [{
                     inicio: this.fechaAlta,
-                    fin: fechaFin.toDate(),
+                    fin: fechaFin,
                     renovacionNumero: 0,
                     notificacionVencimiento: false,
                     renovacion: false

@@ -4,6 +4,7 @@ import { Plex } from '@andes/plex';
 import { IProfesional, IformacionPosgrado, Imatriculacion, Iperiodos } from './../../../interfaces/IProfesional';
 import * as moment from 'moment';
 import { ProfesionalService } from './../../../services/profesional.service';
+import { calcularFechaFinRenovacion, calcularFechaFinPrimeraMatricula } from './../../../utils/posgrado.utils';
 import { Auth } from '@andes/auth';
 
 @Component({
@@ -147,10 +148,10 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.plex.confirm(texto).then((resultado) => {
             if (resultado) {
                 const matriculaNumero = formacion.matriculacion[this.ultMat].matriculaNumero;
-                const fechaFin = moment(this.inicio).startOf('year').add(5, 'years');
+                const fechaFin = calcularFechaFinRenovacion(this.inicio);
                 const periodo: Iperiodos = {
                     inicio: this.inicio,
-                    fin: fechaFin.toDate(),
+                    fin: fechaFin,
                     renovacion: false,
                     renovacionNumero: 0,
                     notificacionVencimiento: false,
@@ -183,7 +184,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
         this.plex.confirm(texto).then((resultado) => {
             if (resultado) {
                 let renovacionNumero = null;
-                const fechaFin = moment(this.inicio).startOf('year').add(5, 'years');
+                const fechaFin = calcularFechaFinRenovacion(this.inicio);
                 if (formacion.matriculacion === null) {
                     renovacionNumero = 0;
                 } else {
@@ -199,7 +200,7 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 }
                 const periodo: Iperiodos = {
                     inicio: this.inicio,
-                    fin: fechaFin.toDate(),
+                    fin: fechaFin,
                     renovacion: true,
                     renovacionNumero: renovacionNumero,
                     notificacionVencimiento: false,
@@ -388,16 +389,19 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 const periodoRenovacion = this.periodoActual();
                 if (periodoRenovacion) {
                     periodoRenovacion.inicio = this.inicio;
-                    periodoRenovacion.fin = moment(this.inicio).startOf('year').add(5, 'years').toDate();
+                    periodoRenovacion.fin = calcularFechaFinRenovacion(this.inicio);
                 }
             } else {
-                // Revalidación: edita los datos de la nueva matriculación
+                // Primera matrícula o Revalidación: edita los datos de la matriculación
+                const esPrimeraMatricula = this.formacion.matriculacion.length === 1;
                 this.formacion.matriculacion[this.ultMat].matriculaNumero = this.matriculaNumero;
                 this.formacion.matriculacion[this.ultMat].fechaAlta = this.inicio;
                 this.periodoActual();
                 const periodoRevalida = this.formacion.matriculacion[this.ultMat].periodos[0];
                 periodoRevalida.inicio = this.inicio;
-                periodoRevalida.fin = moment(this.inicio).startOf('year').add(5, 'years').toDate();
+                periodoRevalida.fin = esPrimeraMatricula
+                    ? calcularFechaFinPrimeraMatricula(this.inicio)
+                    : calcularFechaFinRenovacion(this.inicio);
             }
             this._profesionalService.patchProfesional(this.profesional.id, cambio).subscribe(() => {
                 this.plex.toast('success', 'Los datos se han actualizado con éxito!', 'Mensaje de la confirmación', 1000);

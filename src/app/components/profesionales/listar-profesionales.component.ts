@@ -217,7 +217,7 @@ export class ListarProfesionalesComponent implements OnInit {
             return;
         }
         const profesionalPosgrado = this.listadoActual[iProfesional]?.formacionPosgrado;
-        let anioGracia = 0, suspendidas = 0, vencidas = 0;
+        let suspendidas = 0, vencidas = 0;
 
         profesionalPosgrado?.forEach(element => {
             if (tipo === 'suspendida') {
@@ -234,20 +234,13 @@ export class ListarProfesionalesComponent implements OnInit {
                 return;
             }
             const dias = (this.hoy.getTime() - fin.getTime()) / (1000 * 3600 * 24);
-            if (tipo === 'anioDeGracia' && dias > 0 && dias < 365) {
-                anioGracia++;
-            } else if (tipo === 'vencida' && dias > 365) {
+            if (tipo === 'vencida' && dias > 0) {
                 vencidas++;
             }
         });
-        if (tipo === 'anioDeGracia') {
-            return anioGracia;
-        } else {
-            if (tipo === 'suspendida') {
-                return suspendidas;
-            } else {
-                return vencidas;
-            }
+        if (tipo === 'suspendida') {
+            return suspendidas;
         }
+        return vencidas;
     }
 }

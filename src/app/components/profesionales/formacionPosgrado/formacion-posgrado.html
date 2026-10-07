@@ -13,20 +13,19 @@
             class="selectable">
             <td>
                 <plex-label icon="estetoscopio" type="info" case="capitalize" size="lg"
-                    titulo="{{ formacionPosgrado.especialidad?.nombre }}"
-                    subtitulo="Profesión: {{formacionPosgrado.profesion?.nombre}}">
+                            titulo="{{ formacionPosgrado.especialidad?.nombre }}"
+                            subtitulo="Profesión: {{formacionPosgrado.profesion?.nombre}}">
                 </plex-label>
             </td>
             <td>
                 <plex-label size="lg"
-                    titulo="Nro. {{formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].matriculaNumero}}"
-                    subtitulo="{{formacionPosgrado.institucionFormadora?.nombre}}">
+                            titulo="Nro. {{formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].matriculaNumero}}"
+                            subtitulo="{{formacionPosgrado.institucionFormadora?.nombre}}">
                 </plex-label>
             </td>
             <td>
-                <plex-badge
-                    *ngIf="formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1]?.fechaAlta"
-                    size="lg" type="info">
+                <plex-badge *ngIf="formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1]?.fechaAlta"
+                            size="lg" type="info">
                     {{ formacionPosgrado.matriculacion[formacionPosgrado.matriculacion.length - 1].fechaAlta |
                     date:'dd/MM/yyyy' }}
                 </plex-badge>
@@ -51,7 +50,7 @@
                 </plex-badge>
 
                 <plex-dropdown *ngIf="profesional.formacionPosgrado[i].matriculado" #drop icon="dots-vertical" size="sm"
-                    type="link" [right]="true" [items]="itemsDropdown" (onOpen)="setDropDown(i, drop)">
+                               type="link" [right]="true" [items]="itemsDropdown" (onOpen)="setDropDown(i, drop)">
                 </plex-dropdown>
 
             </td>

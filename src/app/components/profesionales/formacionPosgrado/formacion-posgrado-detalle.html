@@ -171,7 +171,7 @@
     </div>
 
     <div *ngIf="editarRevalida">
-        <plex-title titulo="Editar revalidación de matrícula" size="sm">
+        <plex-title [titulo]="formacion.matriculacion.length === 1 ? 'Editar matrícula' : 'Editar revalidación de matrícula'" size="sm">
             <plex-button type="success" size="sm" icon="check" [disabled]="!formulario.valid" tooltip="Guardar"
                          (click)="guardar(formulario, 'revalida')"></plex-button>
             <plex-button class='ml-1' type="danger" size="sm" [icon]="'close'" (click)="cerrarEditar('revalida')"

@@ -170,8 +170,7 @@ export class FormacionGradoComponent implements OnInit {
                 const ultMat = formacion.matriculacion?.length ? formacion.matriculacion.length - 1 : -1;
                 const fin = obtenerFechaFinPosgrado(formacion);
                 if (formacion.profesion?.codigo === grado.profesion.codigo && formacion.matriculado && !formacion.renovacion &&
-                    ((fin && (hoy <= fin ||
-                        ((hoy.getTime() - fin.getTime()) / (1000 * 3600 * 24) < 365)))
+                    ((fin && hoy <= fin)
                         || !formacion.tieneVencimiento)) {
                     posgrados.push({
                         titulo: formacion.especialidad?.nombre,

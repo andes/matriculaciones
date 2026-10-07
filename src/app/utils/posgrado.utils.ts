@@ -1,4 +1,23 @@
 import { IformacionPosgrado, Imatriculacion, Iperiodos } from '../interfaces/IProfesional';
+import * as moment from 'moment';
+
+/**
+ * Calcula el vencimiento de la primera matrícula de un posgrado:
+ * 5 años exactos conservando el mismo día y mes de la fecha de alta.
+ * Ej: inicio 03/04/2021 -> fin 03/04/2026.
+ */
+export function calcularFechaFinPrimeraMatricula(fechaInicio: Date): Date {
+    return moment(fechaInicio).add(5, 'years').toDate();
+}
+
+/**
+ * Calcula el vencimiento de una revalida o renovación de posgrado:
+ * 31/12 del año de la fecha de inicio + 5 años.
+ * Ej: inicio 03/04/2021 -> fin 31/12/2026.
+ */
+export function calcularFechaFinRenovacion(fechaInicio: Date): Date {
+    return moment(fechaInicio).endOf('year').add(5, 'years').toDate();
+}
 
 /**
  * Devuelve la última matriculación de un posgrado de forma segura.

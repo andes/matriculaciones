@@ -24,6 +24,8 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
     especialidad;
     matriculaNumero;
     modalidad;
+    libro;
+    folio;
     formacionPosgrado: IformacionPosgrado = {
         exportadoSisa: false,
         profesion: null,
@@ -50,6 +52,8 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
         renovacion: false,
         matriculacion: [{
             matriculaNumero: null,
+            libro: null,
+            folio: null,
             fechaAlta: null,
             baja: { motivo: null, fecha: null, usuario: null },
             periodos: [{
@@ -109,6 +113,8 @@ export class FormacionPosgradoAgregarComponent implements OnInit {
             };
             this.formacionPosgrado.matriculacion = [{
                 matriculaNumero: this.matriculaNumero,
+                libro: this.libro,
+                folio: this.folio,
                 fechaAlta: this.fechaAlta,
                 baja: { motivo: null, fecha: null, usuario: null },
                 periodos: [{

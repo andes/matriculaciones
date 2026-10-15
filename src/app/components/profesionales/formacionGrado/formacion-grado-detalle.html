@@ -1,4 +1,4 @@
-<plex-title titulo="{{formacion.profesion.nombre}}" size="md">
+<plex-title titulo="Detalle de grado" size="md">
     <plex-button class="pr-1" tooltip="Aprobar matricula"
                  *ngIf='formacion.papelesVerificados && formacion.matriculacion && !formacion.matriculado'
                  type="success" icon="check" (click)="matricularProfesional(formacion,true)" size="sm"
@@ -16,11 +16,9 @@
                  *ngIf='formacion.papelesVerificados && formacion.matriculacion && formacion.matriculado === true'
                  icon="prohibido " (click)="mostrarBaja()" size="sm">
     </plex-button>
-    <plex-button class="pr-1" type="warning" icon="undo" size="sm"
-                 *ngIf="esSupervisor && ultimaMatriculaNumero()"
+    <plex-button class="pr-1" type="warning" icon="undo" size="sm" *ngIf="esSupervisor && ultimaMatriculaNumero()"
                  [disabled]="estadoDeshacer.loading || !estadoDeshacer.canUndo"
-                 [tooltip]="estadoDeshacer.reason || 'Deshacer número de matrícula'"
-                 tooltipPosition="left"
+                 [tooltip]="estadoDeshacer.reason || 'Deshacer número de matrícula'" tooltipPosition="left"
                  (click)="deshacerMatricula()">
     </plex-button>
     <plex-button class="pr-1" tooltip="Rechazar Renovación" *ngIf="opcionRechazarRenovacion() && esSupervisor "
@@ -40,7 +38,6 @@
     </plex-button>
     <plex-button type="danger" size="sm" tooltip="Cerrar" icon="close" (click)="cerrar()"></plex-button>
 </plex-title>
-
 
 <ng-container *ngIf='visualizarBaja()'>
     <plex-badge size="block" type="danger" class="mr-1">
@@ -63,14 +60,11 @@
 
 <plex-detail>
     <plex-badge *ngIf='!formacion.matriculacion?.length' type="info">No Matriculado</plex-badge>
-    <plex-badge *ngIf='formacion.matriculacion?.length' type="success">Última matrícula
-        <strong>{{ formacion.matriculacion[formacion.matriculacion?.length - 1].matriculaNumero
-            }}</strong></plex-badge>
+    <plex-badge *ngIf="ultimaMatriculaNumero()">Matrícula N° {{ ultimaMatriculaNumero() }}</plex-badge>
     <plex-icon name="medico" left size="xl" type="info"></plex-icon>
-    <plex-label titulo="Título" subtitulo="{{profesional.documento}}"></plex-label>
-    <plex-label titulo="Entidad Formadora" subtitulo="{{profesional.fechaNacimiento | date: 'dd/MM/yyyy' }}">
-    </plex-label>
-    <plex-label titulo="Fecha de egreso" subtitulo="{{profesional | edad}}"></plex-label>
+    <div title> {{ formacion.profesion?.nombre }}</div>
+    <plex-label titulo="Entidad Formadora" subtitulo="{{ formacion.entidadFormadora?.nombre }}"></plex-label>
+    <plex-label titulo="Fecha de egreso" subtitulo="{{ formacion.fechaEgreso | date: 'dd/MM/yyyy' }}"></plex-label>
 </plex-detail>
 
 

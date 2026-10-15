@@ -30,6 +30,8 @@ export class FormacionPosgradoEditarComponent implements OnInit {
     public matriculaNumero;
     public matriculacion;
     public modalidad;
+    public libro;
+    public folio;
     public proximaFechaDeAlta;
 
     constructor(
@@ -54,6 +56,8 @@ export class FormacionPosgradoEditarComponent implements OnInit {
         this.profesion = this.profesional.formacionPosgrado[this.indice].profesion;
         this.especialidad = this.profesional.formacionPosgrado[this.indice].especialidad;
         this.matriculaNumero = this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].matriculaNumero;
+        this.libro = this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].libro;
+        this.folio = this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].folio;
         this.modalidad = this.profesional.formacionPosgrado[this.indice].certificacion?.modalidad;
         this.matriculacion = this.profesional.formacionPosgrado[this.indice].matriculacion;
     }
@@ -75,6 +79,8 @@ export class FormacionPosgradoEditarComponent implements OnInit {
             this.profesional.formacionPosgrado[this.indice].profesion = this.profesion;
             this.profesional.formacionPosgrado[this.indice].especialidad = this.especialidad;
             this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].matriculaNumero = this.matriculaNumero;
+            this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].libro = this.libro;
+            this.profesional.formacionPosgrado[this.indice].matriculacion[this.pos].folio = this.folio;
             if (this.profesional.formacionPosgrado[this.indice].certificacion) {
                 this.profesional.formacionPosgrado[this.indice].certificacion.modalidad = this.modalidad;
             } else {

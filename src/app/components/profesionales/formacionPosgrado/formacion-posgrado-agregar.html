@@ -25,6 +25,14 @@
         <plex-datetime type="date" label="Fecha de alta" [(ngModel)]="fechaAlta" name="fecha" [required]="true"
                        [readonly]="!profesional.habilitado" placeholder="Ingrese la fecha de alta">
         </plex-datetime>
+        <plex-grid cols="2">
+            <plex-text label="Libro" [(ngModel)]="libro" name="libro" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese el libro">
+            </plex-text>
+            <plex-text label="Folio" [(ngModel)]="folio" name="folio" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese el folio">
+            </plex-text>
+        </plex-grid>
         <br>
     </form>
 

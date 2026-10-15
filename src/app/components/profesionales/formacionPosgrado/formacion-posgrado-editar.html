@@ -23,6 +23,14 @@
                      (getData)="loadModalidadesCertificacion($event)" [readonly]="!profesional.habilitado"
                      placeholder="Seleccione una especialidad">
         </plex-select>
+        <plex-grid cols="2">
+            <plex-text label="Libro" [(ngModel)]="libro" name="libro" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese el libro">
+            </plex-text>
+            <plex-text label="Folio" [(ngModel)]="folio" name="folio" [required]="true"
+                       [readonly]="!profesional.habilitado" placeholder="Ingrese el folio">
+            </plex-text>
+        </plex-grid>
     </form>
     <br>
 </plex-box>

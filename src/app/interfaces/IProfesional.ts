@@ -12,6 +12,8 @@ export interface Iperiodos {
 export interface Imatriculacion {
     fechaAlta: Date;
     matriculaNumero: Number;
+    libro?: String;
+    folio?: String;
     baja: {
         motivo: String;
         fecha: Date;

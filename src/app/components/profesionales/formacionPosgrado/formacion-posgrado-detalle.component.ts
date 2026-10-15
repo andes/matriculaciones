@@ -158,6 +158,8 @@ export class FormacionPosgradoDetalleComponent implements OnInit {
                 };
                 const matriculacion: Imatriculacion = {
                     matriculaNumero: matriculaNumero,
+                    libro: this.formacion.matriculacion[this.ultMat]?.libro,
+                    folio: this.formacion.matriculacion[this.ultMat]?.folio,
                     fechaAlta: this.inicio,
                     baja: { fecha: null, motivo: null, usuario: null },
                     periodos: [periodo]

@@ -32,6 +32,8 @@
 
     <plex-label titulo="Profesión" subtitulo="{{ formacion.profesion.nombre }}"></plex-label>
     <plex-label titulo="Modalidad" subtitulo="{{ formacion.certificacion?.modalidad.nombre }}"></plex-label>
+    <plex-label titulo="Libro" subtitulo="{{ ultimaMatriculacion?.libro || 'sin datos' }}"></plex-label>
+    <plex-label titulo="Folio" subtitulo="{{ ultimaMatriculacion?.folio || 'sin datos' }}"></plex-label>
 
     <plex-label *ngIf="!formacion.matriculado" titulo="Fecha de suspensión"
                 subtitulo="{{ ultimaMatriculacion?.baja?.fecha | date: 'dd/MM/yyyy' }}"></plex-label>

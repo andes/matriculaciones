@@ -1,0 +1,27 @@
+name: Docker image
+
+on:
+  push:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  sha:
+    runs-on: ubuntu-latest
+    outputs:
+      short: ${{ steps.out.outputs.short }}
+    steps:
+      - id: out
+        run: echo "short=${GITHUB_SHA::7}" >> "$GITHUB_OUTPUT"
+
+  image:
+    needs: sha
+    uses: andes/shared-workflows/.github/workflows/docker-image.yml@v1
+    with:
+      image: andesnqn/matriculaciones
+      tags: ${{ needs.sha.outputs.short }}
+    secrets:
+      dockerhub_username: ${{ secrets.DOCKERHUB_USERNAME }}
+      dockerhub_token: ${{ secrets.DOCKERHUB_TOKEN }}

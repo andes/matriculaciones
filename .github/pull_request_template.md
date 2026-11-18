@@ -44,8 +44,13 @@ _____________________________________________
 
 ### Test
 ```
-# imágenes: matriculaciones este commit, sin grupo. api, app, mobile, monitoreo en master
-# corre solo el grupo que descomentes
+# este PR: matriculaciones, sin grupo
+# api: master
+# app: master
+# mobile: master
+# monitoreo: master
+# tests: master
+# descomentá la rama si no es master, y el grupo
 # core
 # citas
 # rup-internacion

@@ -1,0 +1,17 @@
+name: Build
+
+on: [push]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    uses: andes/shared-workflows/.github/workflows/node-ci.yml@v1
+    with:
+      runner: ubuntu-22.04
+      node-version: 10.x
+      cache: npm
+      commands: |
+        npm run lint
+        npm run build:prod

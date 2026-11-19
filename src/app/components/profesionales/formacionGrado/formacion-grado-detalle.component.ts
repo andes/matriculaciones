@@ -229,7 +229,8 @@ export class FormacionGradoDetalleComponent implements OnInit {
 
     }
     opcionRenovar() {
-        const op = (this.formacion.matriculacion && !this.formacion.matriculado && !this.formacion.papelesVerificados && !this.formacion.renovacion);
+        const op = (this.formacion.matriculacion && !this.formacion.matriculado && !this.formacion.papelesVerificados
+            && (!this.formacion.renovacion || this.formacion.renovacionOnline?.estado === 'rechazada'));
         return op;
     }
 
@@ -245,6 +246,9 @@ export class FormacionGradoDetalleComponent implements OnInit {
         this.formacion.papelesVerificados = false;
         this.formacion.renovacion = true;
         this.formacion.matriculado = true;
+        if (this.formacion.renovacionOnline?.estado === 'rechazada') {
+            this.formacion.renovacionOnline = null;
+        }
         this.profesional.formacionGrado[this.index] = this.formacion;
         this.actualizar();
     }
@@ -327,6 +331,7 @@ export class FormacionGradoDetalleComponent implements OnInit {
                     };
                     this.profesional.formacionGrado[this.index] = this.formacion;
                     this.profesional.formacionGrado[this.index].matriculado = false;
+                    this.profesional.formacionGrado[this.index].renovacion = false;
                     this.firmaSave = null;
                     this.fotoSave = null;
                     this.matriculaEdit = this.formacion.matriculacion[this.formacion.matriculacion?.length - 1].matriculaNumero;
